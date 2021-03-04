@@ -1,0 +1,12 @@
+<div class="au-o-layout--small au-o-box">
+  <h2 class="au-u-h4">Concept schemes</h2>
+  <PowerSelect
+    @options={{this.options}}
+    @selected={{this.selected}}
+    @onChange={{this.setSelected}} as |singleselect|>
+    {{singleselect.prefLabel.value}}
+  </PowerSelect>
+  <br>
+  <h2 class="au-u-h4">URI</h2>
+  {{this.selected.uri.value}}
+</div>
