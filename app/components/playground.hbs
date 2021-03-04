@@ -1,0 +1,15 @@
+<!--TODO MIET DO YOUR MAGIC-->
+<AuLabel for="textarea-regular">Configuration</AuLabel>
+<AuTextarea id="textarea-regular" @width="block" @value={{this.spec}} onblur={{this.refresh}} rows="25"/>
+<div class="au-o-box">
+  {{#unless this.refreshing}}
+    <RdfForm
+            @groupClass="au-o-grid__item au-u-1-1 au-u-1-2@medium"
+            @form={{this.form}}
+            @graphs={{this.graphs}}
+            @sourceNode={{this.node}}
+            @formStore={{this.store}}
+            @show={{false}}
+            @forceShowErrors={{false}} />
+  {{/unless}}
+</div>
