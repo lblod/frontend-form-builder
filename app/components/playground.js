@@ -50,4 +50,21 @@ export default class Playground extends Component {
       this.refreshing = false;
     },2);
   }
+
+  @action
+  exportTTL() {
+    // Create a hidden link
+    let downloadLink = document.createElement("a")
+    downloadLink.download = "test.ttl"
+    downloadLink.style.display = "none";
+
+    // generate Blob where file content will exists
+    let blob = new Blob([this.specification], {type:"text/plain"})
+    downloadLink.href = window.URL.createObjectURL(blob)
+
+    // Click file to download then destroy link
+    downloadLink.click();
+    downloadLink.remove();
+
+  }
 }

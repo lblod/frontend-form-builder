@@ -1,6 +1,7 @@
 <!--TODO MIET DO YOUR MAGIC-->
 <AuLabel for="textarea-regular">Configuration</AuLabel>
 <AuTextarea id="textarea-regular" @width="block" @value={{this.specification}} onblur={{this.refresh}} rows="25"/>
+<button {{on 'click' this.exportTTL}}>Export</button>
 <div class="au-o-box">
   {{#unless this.refreshing}}
     <RdfForm
