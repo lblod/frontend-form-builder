@@ -1,11 +1,7 @@
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
 
 export default class FormsPlaygroundController extends Controller {
-
-  @tracked show = false;
-
   @tracked spec = '@prefix form: <http://lblod.data.gift/vocabularies/forms/> .\n' +
     '@prefix sh: <http://www.w3.org/ns/shacl#>.\n' +
     '@prefix mu: <http://mu.semte.ch/vocabularies/core/> .\n' +
@@ -44,14 +40,6 @@ export default class FormsPlaygroundController extends Controller {
     'form:6b70a6f0-cce2-4afe-81f5-5911f45b0b27 a form:Form ;\n' +
     '    mu:uuid "6b70a6f0-cce2-4afe-81f5-5911f45b0b27" ;\n' +
     '    form:hasFieldGroup fieldGroups:main .';
-
-  @action
-  refresh() {
-    this.show = true;
-    setTimeout(()=>{
-      this.show = false;
-    },2);
-  }
 }
 
 

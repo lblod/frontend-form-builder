@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import fetch from 'fetch'
 
-const SPARQL_ENDPOINT = "http://localhost:8890/sparql"
+const SPARQL_ENDPOINT = "/sparql"
 
 export default class ConceptSchemeUriSelectorComponent extends Component {
 
