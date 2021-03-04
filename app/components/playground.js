@@ -1,10 +1,11 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
+import { task } from 'ember-concurrency-decorators';
 import { action } from '@ember/object';
 
 import { sym as RDFNode, Namespace } from 'rdflib';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-
 export const RDF = new Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#');
 export const FORM = new Namespace('http://lblod.data.gift/vocabularies/forms/');
 
@@ -18,7 +19,8 @@ const GRAPHS = {
 
 export default class Playground extends Component {
 
-  @tracked refreshing;
+  @service('meta-data-extractor') meta;
+
   @tracked store;
 
   constructor() {
@@ -29,12 +31,15 @@ export default class Playground extends Component {
      */
     this.node = SOURCE_NODE;
     this.graphs = GRAPHS;
-    this.init(this.specification);
+    this.init.perform(this.specification);
   }
 
-  init(specification) {
+  @task
+  * init(specification) {
     this.store = new ForkingStore();
     this.store.parse(specification, this.graphs.formGraph.value, 'text/turtle');
+    const meta = yield this.meta.extract(this.store, {graphs: this.graphs});
+    this.store.parse(meta, this.graphs.metaGraph.value, 'text/turtle');
   }
 
   get specification() {
@@ -43,15 +48,6 @@ export default class Playground extends Component {
 
   get form() {
     return this.store.any(undefined, RDF('type'), FORM('Form'), GRAPHS.formGraph);
-  }
-
-  @action
-  refresh() {
-    this.refreshing = true;
-    this.init(this.specification);
-    setTimeout(()=>{
-      this.refreshing = false;
-    },2);
   }
 
   @action
