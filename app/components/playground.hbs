@@ -1,7 +1,7 @@
 <!--TODO MIET DO YOUR MAGIC-->
 <AuLabel for="textarea-regular">Configuration</AuLabel>
 <AuTextarea id="textarea-regular" @width="block" @value={{this.specification}} onblur={{perform this.init this.specification}} rows="25"/>
-<button {{on 'click' this.exportTTL}}>Export</button>
+<button type='button' {{on 'click' this.exportTTL}}>Export</button>
 <div class="au-o-box">
   {{#if this.init.isRunning}}
     <span>Rendering your glorious creation...</span>

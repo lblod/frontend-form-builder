@@ -31,6 +31,7 @@ export default class Playground extends Component {
      */
     this.node = SOURCE_NODE;
     this.graphs = GRAPHS;
+    this.specification = this.args.template;
     this.init.perform(this.specification);
   }
 
@@ -40,10 +41,6 @@ export default class Playground extends Component {
     this.store.parse(specification, this.graphs.formGraph.value, 'text/turtle');
     const meta = yield this.meta.extract(this.store, {graphs: this.graphs});
     this.store.parse(meta, this.graphs.metaGraph.value, 'text/turtle');
-  }
-
-  get specification() {
-    return this.args.template;
   }
 
   get form() {

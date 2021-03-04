@@ -27,7 +27,7 @@ export default class FormsPlaygroundController extends Controller {
         # sh:group fields:3803a690-3226-4cf3-b58c-0171921fd3cd . # TODO
     `;
 
-    this.template = ttl;
+    this.ttl = ttl;
   }
 }
 
