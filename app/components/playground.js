@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency-decorators';
+import { action } from '@ember/object';
 
 import { sym as RDFNode, Namespace } from 'rdflib';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
@@ -20,7 +21,6 @@ export default class Playground extends Component {
 
   @service('meta-data-extractor') meta;
 
-  @tracked refreshing;
   @tracked store;
 
   constructor() {
@@ -45,5 +45,21 @@ export default class Playground extends Component {
 
   get form() {
     return this.store.any(undefined, RDF('type'), FORM('Form'), GRAPHS.formGraph);
+  }
+
+  @action
+  exportTTL() {
+    // Create a link
+    let downloadLink = document.createElement("a")
+    downloadLink.download = "test.ttl"
+
+    // generate Blob where file content will exists
+    let blob = new Blob([this.specification], {type:"text/plain"})
+    downloadLink.href = window.URL.createObjectURL(blob)
+
+    // Click file to download then destroy link
+    downloadLink.click();
+    downloadLink.remove();
+
   }
 }
