@@ -4,7 +4,9 @@
 
   <ul>
   {{#each this.sortedInputTypes as |inputType|}}
-    <li>{{inputType.label.value}}</li>
+    <li>
+      <AuButton {{on "click" (fn @insertFieldInForm inputType)}} @size="large">{{inputType.label.value}}</AuButton>
+    </li>
   {{/each}}
   </ul>
 </div>

@@ -12,9 +12,13 @@ export default class InputTypesListComponent extends Component {
   }
 
   query = `
-    SELECT DISTINCT ?concept ?label {
+    PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
+
+    SELECT DISTINCT ?concept ?label ?displayType ?usesConceptScheme {
       ?concept skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
-        skos:prefLabel ?label.
+        skos:prefLabel ?label ;
+        ext:displayType ?displayType ;
+        ext:usesConceptScheme ?usesConceptScheme .
     }
   `
 

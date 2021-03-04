@@ -29,13 +29,16 @@ export default class Playground extends Component {
      */
     this.node = SOURCE_NODE;
     this.graphs = GRAPHS;
-    this.specification = this.args.template
     this.init(this.specification);
   }
 
   init(specification) {
     this.store = new ForkingStore();
     this.store.parse(specification, this.graphs.formGraph.value, 'text/turtle');
+  }
+
+  get specification() {
+    return this.args.template;
   }
 
   get form() {
