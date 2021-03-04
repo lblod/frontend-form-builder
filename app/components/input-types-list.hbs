@@ -1,0 +1,12 @@
+<div>
+  <h3>Stap 1: Kies vraagtype</h3>
+  <p>Klik op een element om ze aan de rij rechts toe te voegen.</p>
+
+  <ul>
+  {{#each this.sortedInputTypes as |inputType|}}
+    <li>{{inputType.label.value}}</li>
+  {{/each}}
+  </ul>
+</div>
+
+{{yield}}

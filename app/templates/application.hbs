@@ -2,6 +2,7 @@
   <AuMainHeader @appTitle="Semantic form builder" @brandLink="https://www.vlaanderen.be/nl" @homeRoute="index"/>
   <main id="main" class="au-c-main-container">
     <div id="content" class="au-c-body-container">
+      <InputTypesList/>
       <ConceptSchemeUriSelector/>
       <Playground @spec={{this.spec}}/>
       {{outlet}}
