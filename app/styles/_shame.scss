@@ -27,15 +27,22 @@
   padding-top: $au-unit*1.5;
 }
 
+.playground__codelist,
 .playground__edit,
 .playground__show {
   flex: 1 1;
   padding: $au-unit*1.5;
 }
 
+.playground__codelist,
 .playground__edit {
   display: flex;
   flex-direction: column;
+}
+
+
+.playground__codelist {
+  overflow: auto;
 }
 
 .playground__edit .playground__edit__header {
@@ -103,4 +110,11 @@
 .au-c-card__toggle .au-c-icon--large {
   width: $au-unit/3*2;
   height: $au-unit/2;
+}
+
+code.language-html {
+  max-width: 20rem !important;
+  width: 20rem !important;
+  overflow: hidden;
+  word-break: break-all;
 }

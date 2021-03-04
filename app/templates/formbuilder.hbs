@@ -1,0 +1,23 @@
+{{page-title "Formbuilder"}}
+<div class="au-c-main-container__sidebar">
+  <div class="au-c-sidebar">
+    <div class="au-c-sidebar__content">
+      <div class="au-c-sidebar__header">
+        <InputTypesList @insertFieldInForm={{this.insertFieldInForm}}/>
+{{!--         <br>
+        <ConceptSchemeUriSelector/>
+        <AuLink @linkRoute="codelijsten">Bekijk inhoud van codelijsten</AuLink> --}}
+      </div>
+    </div>
+    <div class="au-c-sidebar__footer">
+      <AuLink @linkRoute="codelijsten" @icon="documents" @iconAlignment="left">Bekijk inhoud van codelijsten</AuLink>
+    </div>
+  </div>
+</div>
+<div class="au-c-main-container__content">
+  <div class="playground">
+    <Playground @template={{this.template}} />
+    {{outlet}}
+  </div>
+</div>
+{{outlet}}

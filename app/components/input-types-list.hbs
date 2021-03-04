@@ -3,6 +3,64 @@
 </AuHeading>
 <p class="au-u-margin-bottom-small">Klik op een veld om het toe te voegen.</p>
 
+<ul class="au-c-list-navigation">
+  <li class="au-c-list-navigation__item">
+    <AuCard @flex={{true}} class="au-o-box--tiny" as |c|>
+      <c.header @badgeIcon="manual" @badgeSkin="border" @badgeSize="small">
+        <AuHeading @level="3" @skin="6">
+          Tekstveld alinea
+        </AuHeading>
+        <div class="au-c-button-group ">
+          <AuButton @icon="add" @flex={{true}} @hideText={{true}} @skin="tertiary">
+            Voeg toe
+          </AuButton>
+      </div>
+      </c.header>
+    </AuCard>
+    <AuCard @expandable={{true}} @flex={{true}} @divided={{true}} class="au-o-box--tiny" as |c|>
+      <c.header @badgeIcon="manual" @badgeSkin="border" @badgeSize="small">
+        <AuHeading @level="3" @skin="6">
+          Dropdown
+        </AuHeading>
+      </c.header>
+      <c.content>
+        <p>
+          <AuControlCheckbox @label="Maak vereist tekstveld" @identifier="vereist" />
+        </p>
+
+        <p>
+          <AuControlCheckbox @label="Voeg helptekst toe" @identifier="helptekst" />
+        </p>
+
+        <AuButton @icon="add" @iconAlignment="left" @skin="tertiary">
+          Voeg veld toe
+        </AuButton>
+      </c.content>
+    </AuCard>
+    <AuCard @expandable={{true}} @flex={{true}} @divided={{true}} class="au-o-box--tiny" as |c|>
+      <c.header @badgeIcon="manual" @badgeSkin="border" @badgeSize="small">
+        <AuHeading @level="3" @skin="6">
+          Tekstveld kort
+        </AuHeading>
+      </c.header>
+      <c.content>
+        <div>
+          <AuControlCheckbox @label="Maak vereist tekstveld" @identifier="vereist" />
+        </div>
+        <div>
+          <AuControlCheckbox @label="Voeg helptekst toe" @identifier="helptekst" />
+        </div>
+        <div>
+          <AuControlCheckbox @label="Voeg tekstlimiet toe" @identifier="limiet" />
+        </div>
+        <AuButton @icon="add" @iconAlignment="left">
+          Voeg type toe
+        </AuButton>
+      </c.content>
+    </AuCard>
+  </li>
+</ul>
+
 <ul>
 {{#each this.sortedInputTypes as |inputType|}}
   <li>
