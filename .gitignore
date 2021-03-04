@@ -1,5 +1,8 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
+# IDE
+.idea
+
 # compiled output
 /dist/
 /tmp/
@@ -7,6 +10,7 @@
 # dependencies
 /bower_components/
 /node_modules/
+.package-lock.json
 
 # misc
 /.env*
