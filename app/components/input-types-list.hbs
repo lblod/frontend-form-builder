@@ -1,14 +1,14 @@
-<div>
-  <h3>Stap 1: Kies vraagtype</h3>
-  <p>Klik op een element om ze aan de rij rechts toe te voegen.</p>
+<AuHeading @level="2" @skin="4" class="au-u-margin-bottom-small">
+  Stap 1: Kies vraagtype 
+</AuHeading>
+<p class="au-u-margin-bottom-small">Klik op een veld om het toe te voegen.</p>
 
-  <ul>
-  {{#each this.sortedInputTypes as |inputType|}}
-    <li>
-      <AuButton {{on "click" (fn @insertFieldInForm inputType)}} @size="large">{{inputType.label.value}}</AuButton>
-    </li>
-  {{/each}}
-  </ul>
-</div>
+<ul>
+{{#each this.sortedInputTypes as |inputType|}}
+  <li>
+    <AuButton {{on "click" (fn @insertFieldInForm inputType)}} @size="large">{{inputType.label.value}}</AuButton>
+  </li>
+{{/each}}
+</ul>
 
 {{yield}}

@@ -1,21 +1,18 @@
-<div class="au-o-layout--small au-o-box">
-  <h2 class="au-u-h4">Concept schemes</h2>
-  <PowerSelect @options={{this.options}} @selected={{this.selected}} @onChange={{this.setSelected}} as |singleselect|>
-    {{singleselect.prefLabel.value}}
-  </PowerSelect>
-  <br>
+<AuLabel>Concept schemes</AuLabel>
+<PowerSelect @options={{this.options}} @selected={{this.selected}} @onChange={{this.setSelected}} as |singleselect|>
+  {{singleselect.prefLabel.value}}
+</PowerSelect>
 
-  {{#if this.selected}}
-    <h2 class="au-u-h4">URI</h2>
-    {{this.selected.uri.value}}
+{{#if this.selected}}
+  <h2 class="au-u-h4">URI</h2>
+  {{this.selected.uri.value}}
 
-    <h2 class="au-u-h4">Codelist</h2>
-    <ul>
-    {{#each this.codeList as |item|}}
-    <li>
-      {{item.prefLabel.value}}
-      </li>
-    {{/each}}
-    </ul>
-  {{/if}}
-</div>
+  <h2 class="au-u-h4">Codelist</h2>
+  <ul>
+  {{#each this.codeList as |item|}}
+  <li>
+    {{item.prefLabel.value}}
+    </li>
+  {{/each}}
+  </ul>
+{{/if}}
