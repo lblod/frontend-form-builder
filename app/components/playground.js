@@ -19,30 +19,23 @@ const GRAPHS = {
 export default class Playground extends Component {
 
   @tracked refreshing;
-  @tracked spec;
   @tracked store;
 
   constructor() {
     super(...arguments);
-
-    // TODO
 
     /**
      * Statics
      */
     this.node = SOURCE_NODE;
     this.graphs = GRAPHS;
-
-    // TODO parse the user provided form specification/configuration
-    // const spec = this.args.spec || '';
-    // this.store.parse(spec, this.graphs.formGraph.value, 'text/turtle');
-    this.spec = this.args.spec;
-    this.init(this.spec);
+    this.specification = this.args.template
+    this.init(this.specification);
   }
 
-  init(spec) {
+  init(specification) {
     this.store = new ForkingStore();
-    this.store.parse(spec, this.graphs.formGraph.value, 'text/turtle');
+    this.store.parse(specification, this.graphs.formGraph.value, 'text/turtle');
   }
 
   get form() {
@@ -52,7 +45,7 @@ export default class Playground extends Component {
   @action
   refresh() {
     this.refreshing = true;
-    this.init(this.spec);
+    this.init(this.specification);
     setTimeout(()=>{
       this.refreshing = false;
     },2);
