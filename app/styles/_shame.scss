@@ -1,0 +1,106 @@
+/* ==================================
+   SHAME
+   For dirty temporary code
+   ================================== */
+
+.ember-application {
+  height: 100%;
+  overflow: hidden;
+}
+
+.au-c-main-container__sidebar {
+  flex-basis: 35rem;
+}
+
+/* layout */
+
+.au-c-main-container {
+  height: calc(100vh - 13.35rem);
+}
+
+.playground {
+  display: flex;
+  height: 100%;
+}
+
+.au-c-sidebar__header {
+  padding-top: $au-unit*1.5;
+}
+
+.playground__edit,
+.playground__show {
+  flex: 1 1;
+  padding: $au-unit*1.5;
+}
+
+.playground__edit {
+  display: flex;
+  flex-direction: column;
+}
+
+.playground__edit .playground__edit__header {
+  flex-shrink: 0;
+}
+
+.playground__edit .playground__edit__editor {
+  flex-grow: 1;
+}
+
+.playground__edit__footer {
+  margin-top: $au-unit;
+}
+
+.playground__show {
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: $au-gray-100;
+}
+
+.au-c-badge--small {
+  margin-right: $au-unit/2;
+}
+
+.au-c-card + .au-c-card {
+  border-top: 0;
+}
+
+.au-c-card--fill {
+  height: auto;
+}
+
+.au-c-card__header.au-c-card__header--clickable + .au-c-card__content{
+  margin-top: $au-unit/2;
+  padding-top: $au-unit/2;
+}
+
+.au-c-card--flex .au-c-card__header > div {
+  display: flex;
+  align-items: center;
+
+  .au-c-button--tertiary:not(.au-c-card__toggle) {
+    padding-right: $au-unit/2;
+  }
+
+  .au-c-heading {
+    flex-grow: 1;
+  }
+}
+
+.au-c-list-navigation__item .au-c-button,
+.au-c-card__header {
+  margin-bottom: 0;
+}
+
+.au-u-background-gray-300 {
+  background-color: $au-gray-300;
+}
+
+
+.au-c-button.au-c-card__toggle {
+  margin-top: 0;
+}
+
+.au-c-card__toggle .au-c-icon--large {
+  width: $au-unit/3*2;
+  height: $au-unit/2;
+}
