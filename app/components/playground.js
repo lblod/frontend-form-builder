@@ -53,10 +53,9 @@ export default class Playground extends Component {
 
   @action
   exportTTL() {
-    // Create a hidden link
+    // Create a link
     let downloadLink = document.createElement("a")
     downloadLink.download = "test.ttl"
-    downloadLink.style.display = "none";
 
     // generate Blob where file content will exists
     let blob = new Blob([this.specification], {type:"text/plain"})
