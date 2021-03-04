@@ -29,8 +29,10 @@
     "@ember/test-helpers": "^2.1.4",
     "@glimmer/component": "^1.0.3",
     "@glimmer/tracking": "^1.0.3",
+    "@lblod/ember-submission-form-fields": "^0.9.7",
     "babel-eslint": "^10.1.0",
     "broccoli-asset-rev": "^3.0.0",
+    "browser-rdflib": "^1.1.0",
     "ember-auto-import": "^1.10.1",
     "ember-cli": "~3.24.0",
     "ember-cli-app-version": "^4.0.0",
@@ -61,6 +63,7 @@
     "prettier": "^2.2.1",
     "qunit": "^2.13.0",
     "qunit-dom": "^1.6.0",
+    "rdflib": "^2.1.7",
     "sass": "^1.32.8"
   },
   "engines": {
