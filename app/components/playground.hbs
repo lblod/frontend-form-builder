@@ -1,15 +1,19 @@
 <!--TODO MIET DO YOUR MAGIC-->
 <AuLabel for="textarea-regular">Configuration</AuLabel>
-<AuTextarea id="textarea-regular" @width="block" @value={{this.specification}} onblur={{this.refresh}} rows="25"/>
+<AuTextarea id="textarea-regular" @width="block" @value={{this.specification}} onblur={{perform this.init this.specification}} rows="25"/>
 <div class="au-o-box">
-  {{#unless this.refreshing}}
-    <RdfForm
-            @groupClass="au-o-grid__item au-u-1-1 au-u-1-2@medium"
-            @form={{this.form}}
-            @graphs={{this.graphs}}
-            @sourceNode={{this.node}}
-            @formStore={{this.store}}
-            @show={{false}}
-            @forceShowErrors={{false}} />
-  {{/unless}}
+  {{#if this.init.isRunning}}
+    <span>Rendering your glorious creation...</span>
+  {{else}}
+    {{#unless this.refreshing}}
+      <RdfForm
+              @groupClass="au-o-grid__item au-u-1-1 au-u-1-2@medium"
+              @form={{this.form}}
+              @graphs={{this.graphs}}
+              @sourceNode={{this.node}}
+              @formStore={{this.store}}
+              @show={{false}}
+              @forceShowErrors={{false}} />
+    {{/unless}}
+  {{/if}}
 </div>

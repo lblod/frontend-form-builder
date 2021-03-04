@@ -17,6 +17,19 @@ export default
 "    sh:order 1 .\n" +
 "\n" +
 "##########################################################\n" +
+"# basic selector\n" +
+"##########################################################\n" +
+"\n" +
+"fields:68e149ec-1821-477b-a901-72924236ef9c a form:Field ;\n" +
+"    mu:uuid \"68e149ec-1821-477b-a901-72924236ef9c\";\n" +
+"    sh:name \"Kies een optie\" ;\n" +
+"    sh:order 5 ;\n" +
+"    sh:path skos:prefLabel ;\n" +
+"    form:options  \"\"\"{\"conceptScheme\":\"http://lblod.data.gift/concept-schemes/33e233eb-6a9b-4141-b607-2ff72fe2ded2\", \"searchEnabled\": false}\"\"\" ;\n" +
+"    form:displayType displayTypes:conceptSchemeSelector ;\n" +
+"    sh:group fields:8e24d707-0e29-45b5-9bbf-a39e4fdb2c11 .\n" +
+"\n" +
+"##########################################################\n" +
 "# basic field\n" +
 "##########################################################\n" +
 "fields:147a32fe-f3dd-47f0-9dc5-43e46acc32cb a form:Field ;\n" +
@@ -32,8 +45,12 @@ export default
 "##########################################################\n" +
 "fieldGroups:main a form:FieldGroup ;\n" +
 "    mu:uuid \"70eebdf0-14dc-47f7-85df-e1cfd41c3855\" ;\n" +
-"    form:hasField fields:147a32fe-f3dd-47f0-9dc5-43e46acc32cb . ### Basic input-field\n" +
+"    form:hasField \n" +
+"      fields:68e149ec-1821-477b-a901-72924236ef9c ,\n" +
+"      fields:147a32fe-f3dd-47f0-9dc5-43e46acc32cb . ### Basic input-field\n" +
 "\n" +
 "form:6b70a6f0-cce2-4afe-81f5-5911f45b0b27 a form:Form ;\n" +
 "    mu:uuid \"6b70a6f0-cce2-4afe-81f5-5911f45b0b27\" ;\n" +
-"    form:hasFieldGroup fieldGroups:main ."
+"    form:hasFieldGroup fieldGroups:main .\n" +
+"\n" +
+"\n"
