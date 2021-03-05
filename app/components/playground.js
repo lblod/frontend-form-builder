@@ -9,7 +9,13 @@ import { FORM, RDF } from '../util/rdflib';
 
 const SOURCE_NODE = new RDFNode('http://frontend.poc.form.builder/sourcenode');
 
+export const TEXT_AREA = {
+  id: 'playground-text-area'
+}
+
 export default class Playground extends Component {
+
+  textarea = TEXT_AREA;
 
   @service('meta-data-extractor') meta;
 
