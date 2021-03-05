@@ -48,10 +48,16 @@ export default class FormsPlaygroundController extends Controller {
     const group = '8e24d707-0e29-45b5-9bbf-a39e4fdb2c11';
     const uuid = uuidv4();
     const options = {};
+    const validations = []
 
-    if(field.scheme) {
+    if (field.scheme) {
       options['conceptScheme'] = field.scheme.value.uri;
       options['searchEnabled'] = false;
+    }
+
+    let validationPart = '';
+    if (field.validations && field.validations.length) {
+      validationPart = validationsToTtl(field.validations);
     }
 
     const ttl = `
@@ -65,6 +71,7 @@ fields:${uuid} a form:Field ;
     sh:path ext:${uuidv4()} ;
     form:options """${JSON.stringify(options)}""" ;
     form:displayType displayTypes:${displayType} ;
+    ${validationPart}
     sh:group fields:${group} .
 
 fieldGroups:${form} form:hasField fields:${uuid} .`;
@@ -74,4 +81,23 @@ fieldGroups:${form} form:hasField fields:${uuid} .`;
 
 }
 
-
+function validationsToTtl(validations) {
+  let validationPart = `form:validations`;
+  validations.forEach(validation => {
+    validationPart += `
+  [ a form:${validation.validationName.value} ;
+    form:grouping form:${validation.grouping.value} ;`;
+    if (validation.customParameter) {
+      validationPart += `
+    form:${validation.customParameter.value} "Param to replace" ;`;
+    }
+    if (validation.customParerrorMessageameter) {
+      validationPart += `
+    sh:resultMessage "${validation.errorMessage.value}" ;`;
+    }
+    validationPart += `
+    sh:path ext:${uuidv4()} ],`
+  });
+  validationPart = validationPart.slice(0, -1) + ' ;';
+  return validationPart;
+}

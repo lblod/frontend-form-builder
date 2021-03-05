@@ -20,10 +20,13 @@ export default class InputTypesListItemComponent extends Component {
   * init(inputType) {
     const response = yield this.database.query(`PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
 
-    SELECT DISTINCT ?validation ?label ?validationName {
+    SELECT DISTINCT ?validation ?label ?validationName ?grouping ?customParameter ?errorMessage {
       <${inputType.inputType.value}> ext:canHaveValidation ?validation .
       ?validation skos:prefLabel ?label ;
-        ext:validationName ?validationName .
+        ext:validationName ?validationName ;
+        ext:formGrouping ?grouping .
+      OPTIONAL { ?validation ext:customParameter ?customParameter . }
+      OPTIONAL { ?validation ext:errorMessage ?errorMessage . }
     }`);
     const json = yield response.json();
     this.validations = json.results.bindings;
@@ -38,9 +41,21 @@ export default class InputTypesListItemComponent extends Component {
   }
 
   @action
-  update(scheme) {
+  updateScheme(scheme) {
     this.args.inputType['scheme'] = {
       value: scheme
+    }
+  }
+
+  @action
+  updateValidations(validation, event) {
+    if (event.target.checked) {
+      this.args.inputType['validations'] = this.args.inputType['validations'] || [];
+      this.args.inputType['validations'].push(validation);
+    } else {
+      this.args.inputType['validations'] = this.args.inputType['validations'].filter(val => {
+        return val != validation;
+      });
     }
   }
 }
