@@ -1,11 +1,11 @@
 <div class="playground__edit">
   <div class="playground__edit__header">
     <AuHeading @level="2" @skin="4" class="au-u-margin-bottom-small">
-      Stap 2: Vul placeholders in 
+      Stap 2: Vul placeholders in
     </AuHeading>
-    <p class="au-u-margin-bottom-small">Voeg labels (name) en helpteksten (description) toe, en klik op “genereer formulier” om het te bekijken.</p>
+    <p class="au-u-margin-bottom-small">Voeg labels (name) en helpteksten (description)toe, en klik op “genereer formulier” om het te bekijken.</p>
   </div>
-  <AuTextarea id="textarea-regular" @width="block" @value={{this.specification}} onblur={{perform this.init this.specification}}  class="playground__edit__editor"/>
+  <AuTextarea id="textarea-regular" @width="block" @value={{@template}} onblur={{perform this.init @template}}  class="playground__edit__editor"/>
   <div class="playground__edit__footer">
     <AuButton {{on 'click' this.exportTTL}} @skin="secondary">Export</AuButton>
   </div>

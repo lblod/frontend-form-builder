@@ -31,8 +31,7 @@ export default class Playground extends Component {
      */
     this.node = SOURCE_NODE;
     this.graphs = GRAPHS;
-    this.specification = this.args.template;
-    this.init.perform(this.specification);
+    this.init.perform(this.args.template);
   }
 
   @task
@@ -54,7 +53,7 @@ export default class Playground extends Component {
     downloadLink.download = "test.ttl"
 
     // generate Blob where file content will exists
-    let blob = new Blob([this.specification], {type:"text/plain"})
+    let blob = new Blob([this.args.template], {type:"text/plain"})
     downloadLink.href = window.URL.createObjectURL(blob)
 
     // Click file to download then destroy link
