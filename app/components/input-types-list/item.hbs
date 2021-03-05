@@ -18,7 +18,7 @@
   {{#if this.hasContent}}
     <c.content>
       <p>
-        <ConceptSchemeUriSelector/>
+        <ConceptSchemeUriSelector @update={{this.update}}/>
       </p>
       <AuButton @icon="add"
                 @iconAlignment="left"

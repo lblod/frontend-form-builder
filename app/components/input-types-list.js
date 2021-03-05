@@ -29,7 +29,6 @@ export default class InputTypesListComponent extends Component {
         ext:usesConceptScheme ?usesConceptScheme .
     }`);
     const json = yield response.json();
-    console.log(json);
     this.inputTypes = json.results.bindings;
   }
 }

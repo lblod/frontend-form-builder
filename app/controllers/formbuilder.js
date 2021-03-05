@@ -47,6 +47,12 @@ export default class FormsPlaygroundController extends Controller {
     const form = 'main';
     const group = '8e24d707-0e29-45b5-9bbf-a39e4fdb2c11';
     const uuid = uuidv4();
+    const options = {};
+
+    if(field.scheme) {
+      options['conceptScheme'] = field.scheme.value.uri;
+      options['searchEnabled'] = false;
+    }
 
     const ttl = `
 ##########################################################
@@ -57,6 +63,7 @@ fields:${uuid} a form:Field ;
     sh:name "Naamloze vraag" ;
     sh:order ${this.produced * 10} ;
     sh:path ext:${uuidv4()} ;
+    form:options """${JSON.stringify(options)}""" ;
     form:displayType displayTypes:${displayType} ;
     sh:group fields:${group} .
 
