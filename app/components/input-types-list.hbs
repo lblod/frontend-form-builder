@@ -66,6 +66,25 @@
 <ul class="au-c-list-navigation">
   {{#each this.sortedInputTypes as |inputType|}}
     <li class="au-c-list-navigation__item">
+    {{#if inputType.validations}}
+      <AuCard @expandable={{true}} @flex={{true}} @divided={{true}} class="au-o-box--tiny" as |c|>
+        <c.header @badgeIcon="manual" @badgeSkin="border" @badgeSize="small">
+          <AuHeading @level="3" @skin="6">
+            {{inputType.label.value}}
+          </AuHeading>
+        </c.header>
+        <c.content>
+          {{#each inputType.validations as |validation|}}
+            <div>
+              <AuControlCheckbox @label="{{validation.label.value}}" />
+            </div>
+          {{/each}}
+          <AuButton @icon="add" @iconAlignment="left">
+            Voeg validatie toe
+          </AuButton>
+        </c.content>
+      </AuCard>
+    {{else}}
       <AuCard @flex={{true}} class="au-o-box--tiny" as |c|>
         <c.header @badgeIcon="manual" @badgeSkin="border" @badgeSize="small">
           <AuHeading @level="3" @skin="6">
@@ -78,6 +97,7 @@
         </div>
         </c.header>
       </AuCard>
+    {{/if}}
     </li>
   {{/each}}
 </ul>
