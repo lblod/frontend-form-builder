@@ -19,8 +19,6 @@ export default class Playground extends Component {
 
   @service('meta-data-extractor') meta;
 
-  @tracked store;
-
   constructor() {
     super(...arguments);
 
