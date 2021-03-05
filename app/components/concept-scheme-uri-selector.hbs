@@ -4,15 +4,9 @@
 </PowerSelect>
 
 {{#if this.selected}}
-  <h2 class="au-u-h4">URI</h2>
-  {{this.selected.uri.value}}
+  <div class="uri-box ">
+    <h2 class="au-u-h4">URI</h2>
+    {{this.selected.uri.value}}
+  </div>
 
-  <h2 class="au-u-h4">Codelist</h2>
-  <ul>
-  {{#each this.codeList as |item|}}
-  <li>
-    {{item.prefLabel.value}}
-    </li>
-  {{/each}}
-  </ul>
 {{/if}}
