@@ -9,7 +9,6 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
 
   @tracked selected;
   @tracked options;
-  @tracked codeList;
 
   constructor() {
     super(...arguments)
@@ -26,13 +25,14 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
   }
 
   async loadCodeList() {
-    this.codeList = await this.queryDB(`
-      SELECT DISTINCT * {
+    let codeList = await this.queryDB(`
+      SELECT DISTINCT ?prefLabel {
         ?p ?o  <${this.selected.uri.value}>;
         <http://www.w3.org/2004/02/skos/core#prefLabel> ?prefLabel.
       }
-      LIMIT 10
     `)
+
+    this.args.updateCodeList(codeList)
   }
 
 
