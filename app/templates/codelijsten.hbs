@@ -8,20 +8,20 @@
       <AuHeading @level="2" @skin="3" class="au-u-light">Kies een codelijst waarvan u de inhoud wil bekijken</AuHeading>
 
       <div class="au-u-margin-top au-u-margin-bottom">
-        <ConceptSchemeUriSelector @updateCodeList={{this.updateCodeList}}/>
+        <ConceptSchemeUriSelector @update={{this.update}}/>
       </div>
 
-
-
+      <!--
       <div class="au-u-margin-bottom">
         <AuLabel>Naam codelijst</AuLabel>
         <p>All administrative-units with as besluit:classficatie</p>
       </div>
+      -->
 
       <div class="au-u-margin-bottom">
         <AuLabel>URI: geeft meer informatie en activeert de codelijst</AuLabel>
         <AuContent class="au-u-margin-bottom">
-          <p><a class="au-c-link" href="http://data.vlaanderen.be/id/concept/BestuurseenheidClassificatieCode/5ab0e9b8a3b2ca7c5e000001" rel="noopener noreferrer" target="_blank">http://data.vlaanderen.be/id/concept/BestuurseenheidClassificatieCode/5ab0e9b8a3b2ca7c5e000001</a></p>
+          <p><a class="au-c-link" href={{this.scheme.uri}} rel="noopener noreferrer" target="_blank">{{this.scheme.uri}}</a></p>
           <p>Hoe de codelijst gebruiken:</p>
           <ul>
             <li>Kopieer de link en plak ze bij <strong>form:options</strong> en vervang de link achter <strong>conceptScheme</strong> om de codelijst te activeren.</li>
@@ -39,9 +39,9 @@
       <AuContent class="au-u-margin-bottom">
         <AuLabel>Bekijk inhoud van codelijst</AuLabel>
         <ul>
-          {{#each this.codeList as |item|}}
+          {{#each this.scheme.concepts as |concept|}}
             <li>
-              {{item.prefLabel.value}}
+              {{concept}}
             </li>
           {{/each}}
         </ul>

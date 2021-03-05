@@ -1,0 +1,31 @@
+<AuCard @expandable={{this.hasContent}} @divided={{this.hasContent}}  @flex={{true}} class="au-o-box--tiny" as |c|>
+  <c.header @badgeIcon="manual" @badgeSkin="border" @badgeSize="small">
+    <AuHeading @level="3" @skin="6">
+      {{@inputType.label.value}}
+    </AuHeading>
+    {{#unless this.hasContent}}
+      <div class="au-c-button-group ">
+        <AuButton @icon="add"
+                  @flex={{true}}
+                  @hideText={{true}}
+                  @skin="tertiary"
+          {{on "click" (fn @insert @inputType)}}>
+          Voeg toe
+        </AuButton>
+      </div>
+    {{/unless}}
+  </c.header>
+  {{#if this.hasContent}}
+    <c.content>
+      <p>
+        <ConceptSchemeUriSelector @update={{this.update}}/>
+      </p>
+      <AuButton @icon="add"
+                @iconAlignment="left"
+                @skin="tertiary"
+        {{on "click" (fn @insert @inputType)}}>
+        Voeg veld toe
+      </AuButton>
+    </c.content>
+  {{/if}}
+</AuCard>
