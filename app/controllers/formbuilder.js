@@ -33,6 +33,10 @@ export default class FormsPlaygroundController extends Controller {
     this.store.parse(this.template, GRAPHS.formGraph.value, 'text/turtle');
     const meta = yield this.meta.extract(this.store, {graphs: GRAPHS});
     this.store.parse(meta, GRAPHS.metaGraph.value, 'text/turtle');
+
+    // TODO should be done better
+    const textarea = document.getElementById('textarea-regular');
+    textarea.scrollTop = textarea.scrollHeight;
   }
 
   @action
