@@ -6,6 +6,7 @@ export default
 @prefix fields: <http://data.lblod.info/fields/> .
 @prefix displayTypes: <http://lblod.data.gift/display-types/> .
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix ext: <http://mu.semte.ch/vocabularies/ext/> .
 
 ##########################################################
 # form
@@ -23,6 +24,6 @@ form:6b70a6f0-cce2-4afe-81f5-5911f45b0b27 a form:Form ;
 fields:8e24d707-0e29-45b5-9bbf-a39e4fdb2c11 a form:PropertyGroup;
     mu:uuid "8e24d707-0e29-45b5-9bbf-a39e4fdb2c11";
     sh:description "parent property-group, used to group fields and property-groups together";
-    sh:name "This is a simple example form configuration ttl, make sure you correctly mapped your own form configuration" ;
+    sh:name "This is a simple example form." ;
     sh:order 1 .
 `
