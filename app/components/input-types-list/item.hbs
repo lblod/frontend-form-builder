@@ -17,9 +17,18 @@
   </c.header>
   {{#if this.hasContent}}
     <c.content>
-      <p>
-        <ConceptSchemeUriSelector @update={{this.update}}/>
-      </p>
+      {{#if @inputType.usesConceptScheme.value}}
+        <p>
+          <ConceptSchemeUriSelector @update={{this.update}}/>
+        </p>
+      {{/if}}
+      {{#if this.validations}}
+        {{#each this.validations as |validation|}}
+          <p>
+            <AuControlCheckbox @label="{{validation.label.value}}" />
+          </p>
+        {{/each}}
+      {{/if}}
       <AuButton @icon="add"
                 @iconAlignment="left"
                 @skin="tertiary"
