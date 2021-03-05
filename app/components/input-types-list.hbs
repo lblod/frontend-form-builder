@@ -3,6 +3,20 @@
 </AuHeading>
 <p class="au-u-margin-bottom-small">Klik op een veld om het toe te voegen.</p>
 
+{{#if @init.isRunning}}
+  <AuLoader/>
+{{else}}
+  <ul class="au-c-list-navigation">
+    <li class="au-c-list-navigation__item">
+    {{#each this.sortedInputTypes as |inputType|}}
+      <InputTypesList::Item @inputType={{inputType}} @insert={{@insertFieldInForm}} />
+    {{/each}}
+    </li>
+  </ul>
+{{/if}}
+
+--- examples ---
+
 <ul class="au-c-list-navigation">
   <li class="au-c-list-navigation__item">
     <AuCard @flex={{true}} class="au-o-box--tiny" as |c|>
@@ -14,7 +28,7 @@
           <AuButton @icon="add" @flex={{true}} @hideText={{true}} @skin="tertiary">
             Voeg toe
           </AuButton>
-      </div>
+        </div>
       </c.header>
     </AuCard>
     <AuCard @expandable={{true}} @flex={{true}} @divided={{true}} class="au-o-box--tiny" as |c|>
@@ -25,11 +39,11 @@
       </c.header>
       <c.content>
         <p>
-          <AuControlCheckbox @label="Maak vereist tekstveld" @identifier="vereist" />
+          <AuControlCheckbox @label="Maak vereist tekstveld" @identifier="vereist"/>
         </p>
 
         <p>
-          <AuControlCheckbox @label="Voeg helptekst toe" @identifier="helptekst" />
+          <AuControlCheckbox @label="Voeg helptekst toe" @identifier="helptekst"/>
         </p>
 
         <AuButton @icon="add" @iconAlignment="left" @skin="tertiary">
@@ -45,13 +59,13 @@
       </c.header>
       <c.content>
         <div>
-          <AuControlCheckbox @label="Maak vereist tekstveld" @identifier="vereist" />
+          <AuControlCheckbox @label="Maak vereist tekstveld" @identifier="vereist"/>
         </div>
         <div>
-          <AuControlCheckbox @label="Voeg helptekst toe" @identifier="helptekst" />
+          <AuControlCheckbox @label="Voeg helptekst toe" @identifier="helptekst"/>
         </div>
         <div>
-          <AuControlCheckbox @label="Voeg tekstlimiet toe" @identifier="limiet" />
+          <AuControlCheckbox @label="Voeg tekstlimiet toe" @identifier="limiet"/>
         </div>
         <AuButton @icon="add" @iconAlignment="left">
           Voeg type toe
@@ -60,49 +74,3 @@
     </AuCard>
   </li>
 </ul>
-
---- the real deal ---
-
-<ul class="au-c-list-navigation">
-  {{#each this.sortedInputTypes as |inputType|}}
-    <li class="au-c-list-navigation__item">
-      <AuCard @flex={{true}} class="au-o-box--tiny" as |c|>
-        <c.header @badgeIcon="manual" @badgeSkin="border" @badgeSize="small">
-          <AuHeading @level="3" @skin="6">
-            {{inputType.label.value}}
-          </AuHeading>
-          <div class="au-c-button-group ">
-            <AuButton @icon="add" @flex={{true}} @hideText={{true}} @skin="tertiary" {{on "click" (fn @insertFieldInForm inputType)}}>
-              Voeg toe
-            </AuButton>
-        </div>
-        </c.header>
-      </AuCard>
-    </li>
-  {{/each}}
-</ul>
-
---- Special components ---
-
-
-<ul class="au-c-list-navigation">
-  <li class="au-c-list-navigation__item">
-    <AuCard @expandable={{true}} @flex={{true}} @divided={{true}} class="au-o-box--tiny" as |c|>
-      <c.header @badgeIcon="manual" @badgeSkin="border" @badgeSize="small">
-        <AuHeading @level="3" @skin="6">
-          Concept Scheme
-        </AuHeading>
-      </c.header>
-      <c.content>
-        <p>
-          <ConceptSchemeUriSelector />
-        </p>
-        <AuButton @icon="add" @iconAlignment="left" @skin="tertiary">
-          Voeg veld toe
-        </AuButton>
-      </c.content>
-    </AuCard>
-
-  </li>
-</ul>
-{{yield}}
