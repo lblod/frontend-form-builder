@@ -61,12 +61,25 @@
   </li>
 </ul>
 
-<ul>
-{{#each this.sortedInputTypes as |inputType|}}
-  <li>
-    <AuButton {{on "click" (fn @insertFieldInForm inputType)}} @size="large">{{inputType.label.value}}</AuButton>
-  </li>
-{{/each}}
+--- the real deal ---
+
+<ul class="au-c-list-navigation">
+  {{#each this.sortedInputTypes as |inputType|}}
+    <li class="au-c-list-navigation__item">
+      <AuCard @flex={{true}} class="au-o-box--tiny" as |c|>
+        <c.header @badgeIcon="manual" @badgeSkin="border" @badgeSize="small">
+          <AuHeading @level="3" @skin="6">
+            {{inputType.label.value}}
+          </AuHeading>
+          <div class="au-c-button-group ">
+            <AuButton @icon="add" @flex={{true}} @hideText={{true}} @skin="tertiary" {{on "click" (fn @insertFieldInForm inputType)}}>
+              Voeg toe
+            </AuButton>
+        </div>
+        </c.header>
+      </AuCard>
+    </li>
+  {{/each}}
 </ul>
 
 {{yield}}
