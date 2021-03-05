@@ -82,4 +82,27 @@
   {{/each}}
 </ul>
 
+--- Special components ---
+
+
+<ul class="au-c-list-navigation">
+  <li class="au-c-list-navigation__item">
+    <AuCard @expandable={{true}} @flex={{true}} @divided={{true}} class="au-o-box--tiny" as |c|>
+      <c.header @badgeIcon="manual" @badgeSkin="border" @badgeSize="small">
+        <AuHeading @level="3" @skin="6">
+          Concept Scheme
+        </AuHeading>
+      </c.header>
+      <c.content>
+        <p>
+          <ConceptSchemeUriSelector />
+        </p>
+        <AuButton @icon="add" @iconAlignment="left" @skin="tertiary">
+          Voeg veld toe
+        </AuButton>
+      </c.content>
+    </AuCard>
+
+  </li>
+</ul>
 {{yield}}
