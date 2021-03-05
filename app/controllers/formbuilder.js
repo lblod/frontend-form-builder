@@ -7,6 +7,7 @@ import { task } from 'ember-concurrency-decorators';
 import { inject as service } from '@ember/service';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { sym as RDFNode } from 'rdflib';
+import { TEXT_AREA } from '../components/playground';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
@@ -33,6 +34,10 @@ export default class FormsPlaygroundController extends Controller {
     this.store.parse(this.template, GRAPHS.formGraph.value, 'text/turtle');
     const meta = yield this.meta.extract(this.store, {graphs: GRAPHS});
     this.store.parse(meta, GRAPHS.metaGraph.value, 'text/turtle');
+
+    // TODO should be done better
+    const textarea = document.getElementById(TEXT_AREA.id);
+    textarea.scrollTop = textarea.scrollHeight;
   }
 
   @action
@@ -49,7 +54,7 @@ export default class FormsPlaygroundController extends Controller {
 ##########################################################
 fields:${uuid} a form:Field ;
     mu:uuid "${uuid}";
-    sh:name "Name" ;
+    sh:name "Naamloze vraag" ;
     sh:order ${this.produced * 10} ;
     sh:path ext:${uuidv4()} ;
     form:displayType displayTypes:${displayType} ;

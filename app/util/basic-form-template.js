@@ -25,5 +25,4 @@ fields:8e24d707-0e29-45b5-9bbf-a39e4fdb2c11 a form:PropertyGroup;
     mu:uuid "8e24d707-0e29-45b5-9bbf-a39e4fdb2c11";
     sh:description "parent property-group, used to group fields and property-groups together";
     sh:name "This is a simple example form." ;
-    sh:order 1 .
-`
+    sh:order 1 .`
