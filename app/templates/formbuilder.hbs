@@ -4,9 +4,9 @@
     <div class="au-c-sidebar__content">
       <div class="au-c-sidebar__header">
         <InputTypesList @insertFieldInForm={{this.insertFieldInForm}}/>
-{{!--         <br>
-        <ConceptSchemeUriSelector/>
-        <AuLink @linkRoute="codelijsten">Bekijk inhoud van codelijsten</AuLink> --}}
+        {{!--         <br>
+                <ConceptSchemeUriSelector/>
+                <AuLink @linkRoute="codelijsten">Bekijk inhoud van codelijsten</AuLink> --}}
       </div>
     </div>
     <div class="au-c-sidebar__footer">
@@ -16,7 +16,7 @@
 </div>
 <div class="au-c-main-container__content">
   <div class="playground">
-    <Playground @template={{this.template}} />
+    <Playground @store={{this.store}} @template={{this.template}} @refresh={{this.refresh}} />
     {{outlet}}
   </div>
 </div>

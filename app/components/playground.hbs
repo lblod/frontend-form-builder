@@ -5,7 +5,7 @@
     </AuHeading>
     <p class="au-u-margin-bottom-small">Voeg labels (name) en helpteksten (description)toe, en klik op “genereer formulier” om het te bekijken.</p>
   </div>
-  <AuTextarea id="textarea-regular" @width="block" @value={{@template}} onblur={{perform this.init @template}}  class="playground__edit__editor"/>
+  <AuTextarea id="textarea-regular" @width="block" @value={{@template}} onblur={{perform @refresh}}  class="playground__edit__editor"/>
   <div class="playground__edit__footer">
     <AuButton {{on 'click' this.exportTTL}} @skin="secondary">Export</AuButton>
   </div>
@@ -15,7 +15,7 @@
     Stap 3: Exporteer template
   </AuHeading>
   <p class="au-u-margin-bottom-small">Eens je tevreden bent van het formulier kan de template geëxporteerd worden voor development.</p>
-  {{#if this.init.isRunning}}
+  {{#if @refresh.isRunning}}
     <span>Rendering your glorious creation...</span>
   {{else}}
       <RdfForm
@@ -23,7 +23,7 @@
               @form={{this.form}}
               @graphs={{this.graphs}}
               @sourceNode={{this.node}}
-              @formStore={{this.store}}
+              @formStore={{@store}}
               @show={{false}}
               @forceShowErrors={{false}} />
   {{/if}}

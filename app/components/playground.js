@@ -1,21 +1,13 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import { task } from 'ember-concurrency-decorators';
 import { action } from '@ember/object';
 
-import { sym as RDFNode, Namespace } from 'rdflib';
-import { ForkingStore } from '@lblod/ember-submission-form-fields';
-export const RDF = new Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#');
-export const FORM = new Namespace('http://lblod.data.gift/vocabularies/forms/');
+import { sym as RDFNode} from 'rdflib';
+import { GRAPHS } from '../controllers/formbuilder';
+import { FORM, RDF } from '../util/rdflib';
 
 const SOURCE_NODE = new RDFNode('http://frontend.poc.form.builder/sourcenode');
-
-const GRAPHS = {
-  formGraph: new RDFNode('http://data.lblod.info/form'),
-  metaGraph: new RDFNode('http://data.lblod.info/metagraph'),
-  sourceGraph: new RDFNode(`http://data.lblod.info/sourcegraph`),
-};
 
 export default class Playground extends Component {
 
@@ -31,19 +23,11 @@ export default class Playground extends Component {
      */
     this.node = SOURCE_NODE;
     this.graphs = GRAPHS;
-    this.init.perform(this.args.template);
-  }
-
-  @task
-  * init(specification) {
-    this.store = new ForkingStore();
-    this.store.parse(specification, this.graphs.formGraph.value, 'text/turtle');
-    const meta = yield this.meta.extract(this.store, {graphs: this.graphs});
-    this.store.parse(meta, this.graphs.metaGraph.value, 'text/turtle');
+    this.args.refresh.perform();
   }
 
   get form() {
-    return this.store.any(undefined, RDF('type'), FORM('Form'), GRAPHS.formGraph);
+    return this.args.store.any(undefined, RDF('type'), FORM('Form'), GRAPHS.formGraph);
   }
 
   @action
