@@ -54,7 +54,7 @@ export default class FormsPlaygroundController extends Controller {
 ##########################################################
 fields:${uuid} a form:Field ;
     mu:uuid "${uuid}";
-    sh:name "Name" ;
+    sh:name "Naamloze vraag" ;
     sh:order ${this.produced * 10} ;
     sh:path ext:${uuidv4()} ;
     form:displayType displayTypes:${displayType} ;
