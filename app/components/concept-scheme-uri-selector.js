@@ -24,22 +24,25 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
   `)
   }
 
-  async loadCodeList() {
-    let codeList = await this.queryDB(`
+  async update() {
+    let concepts = await this.queryDB(`
       SELECT DISTINCT ?prefLabel {
         ?p ?o  <${this.selected.uri.value}>;
         <http://www.w3.org/2004/02/skos/core#prefLabel> ?prefLabel.
       }
     `)
 
-    this.args.updateCodeList(codeList)
+    this.args.update({
+      uri: this.selected.uri.value,
+      concepts: concepts.map( concept => concept.prefLabel.value)
+    })
   }
 
 
   @action
   setSelected(value){
     this.selected = value
-    this.loadCodeList()
+    this.update()
   }
 
   async queryDB(query) {

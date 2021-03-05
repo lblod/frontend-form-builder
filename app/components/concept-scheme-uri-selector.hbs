@@ -2,11 +2,3 @@
 <PowerSelect @options={{this.options}} @selected={{this.selected}} @onChange={{this.setSelected}} as |singleselect|>
   {{singleselect.prefLabel.value}}
 </PowerSelect>
-
-{{#if this.selected}}
-  <div class="uri-box ">
-    <h2 class="au-u-h4">URI</h2>
-    {{this.selected.uri.value}}
-  </div>
-
-{{/if}}

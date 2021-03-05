@@ -4,9 +4,9 @@ import { tracked } from '@glimmer/tracking';
 
 export default class CodelijstenController extends Controller {
 
-  @tracked codeList;
+  @tracked scheme;
 
-  @action updateCodeList(list) {
-    this.codeList = list
+  @action update(scheme) {
+    this.scheme = scheme
   }
 }
