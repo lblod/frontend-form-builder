@@ -8,20 +8,10 @@
       <AuHeading @level="2" @skin="3" class="au-u-light">Kies een codelijst waarvan u de inhoud wil bekijken</AuHeading>
 
       <div class="au-u-margin-top au-u-margin-bottom">
-        <AuLabel>Kies codelijst</AuLabel>
-        <PowerSelect
-          @allowClear={{true}}
-          @disabled={{disabled}}
-          @searchEnabled={{true}}
-          @loadingMessage="Aan het laden..."
-          @noMatchesMessage="Geen resultaten"
-          @searchMessage="Typ om te zoeken"
-          @options={{this.singleselects}}
-          @selected={{this.singleselect}}
-          @onChange={{fn (mut this.singleselect)}} as |singleselect|>
-          {{singleselect}}
-        </PowerSelect>
+        <ConceptSchemeUriSelector/>
       </div>
+
+
 
       <div class="au-u-margin-bottom">
         <AuLabel>Naam codelijst</AuLabel>
@@ -29,32 +19,20 @@
       </div>
 
       <div class="au-u-margin-bottom">
-        <AuLabel>Ontdek gerelateerde informatie</AuLabel>
-        <AuHelpText>Weinig informatie te zien? Gebruik de links om te ontdekken wat voor codelijst dit is.</AuHelpText>
+        <AuLabel>URI: geeft meer informatie en activeert de codelijst</AuLabel>
         <AuContent class="au-u-margin-bottom">
-          <ul class="au-u-margin-top-small">
-            <li class="au-u-margin-bottom-small">
-              <a class="au-c-link" href="http://lblod.data.gift/concept-schemes/dcfb437e-1219-4d1e-891d-057f262da9d6">http://lblod.data.gift/concept-schemes/dcfb437e-1219-4d1e-891d-057f262da9d6</a>
-            </li>
-            <li class="au-u-margin-bottom-small">
-              <a class="au-c-link" href="http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://www.w3.org/2004/02/skos/core#ConceptScheme">http://www.w3.org/1999/02/22-rdf-syntax-ns#type http://www.w3.org/2004/02/skos/core#ConceptScheme</a>
-            </li>
-            <li class="au-u-margin-bottom-small">
-              <a class="au-c-link" href="http://mu.semte.ch/vocabularies/core/uuid">http://mu.semte.ch/vocabularies/core/uuid "dcfb437e-1219-4d1e-891d-057f262da9d6</a> – dcfb437e-1219-4d1e-891d-057f262da9d6
-            </li>
-            <li class="au-u-margin-bottom-small">
-              <a class="au-c-link" href="http://www.w3.org/2004/02/skos/core#prefLabel">http://www.w3.org/2004/02/skos/core#prefLabel</a> - All administrative-units with as besluit:classficatie
-            </li>
-            <li class="au-u-margin-bottom-small">
-              <a class="au-c-link" href="http://data.vlaanderen.be/id/concept/BestuurseenheidClassificatieCode/5ab0e9b8a3b2ca7c5e000001">http://data.vlaanderen.be/id/concept/BestuurseenheidClassificatieCode/5ab0e9b8a3b2ca7c5e000001</a>
-            </li>
+          <p><a class="au-c-link" href="http://data.vlaanderen.be/id/concept/BestuurseenheidClassificatieCode/5ab0e9b8a3b2ca7c5e000001" rel="noopener noreferrer" target="_blank">http://data.vlaanderen.be/id/concept/BestuurseenheidClassificatieCode/5ab0e9b8a3b2ca7c5e000001</a></p>
+          <p>Hoe de codelijst gebruiken:</p>
+          <ul>
+            <li>Kopieer de link en plak ze bij <strong>form:options</strong> en vervang de link achter <strong>conceptScheme</strong> om de codelijst te activeren.</li>
+            <li>Sommige links omvatten meer informatie over de codelijst zelf. Klik op de link om die informatie te achterhalen.</li>
           </ul>
         </AuContent>
       </div>
 
       <AuHr/>
 
-      <ConceptSchemeUriSelector/>
+
     </div>
     <div class="playground__show">
 
