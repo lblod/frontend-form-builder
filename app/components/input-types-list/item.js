@@ -29,6 +29,10 @@ export default class InputTypesListItemComponent extends Component {
     this.validations = json.results.bindings;
   }
 
+  get hasScheme() {
+    return Boolean(Number(this.args.inputType.usesConceptScheme.value));
+  }
+
   get hasContent() {
     return Boolean(Number(this.args.inputType.usesConceptScheme.value)) || this.validations;
   }
