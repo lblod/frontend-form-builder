@@ -32,6 +32,11 @@ export default class Playground extends Component {
 
   @action
   exportTTL() {
+
+    /*
+    ** SAVE FILE LOCALLY CODE
+    */
+
     // Create a link
     let downloadLink = document.createElement("a")
     downloadLink.download = "test.ttl"
@@ -43,6 +48,24 @@ export default class Playground extends Component {
     // Click file to download then destroy link
     downloadLink.click();
     downloadLink.remove();
+
+
+    /*
+    ** SAVE FILE ON THE SERVER
+    ** important: needs the blob element created above to work
+    */
+
+    // Create a "fake form"
+    let mockForm = new FormData();
+    mockForm.append('file', blob, "schema.ttl")
+
+    fetch('/files', {
+      method: "POST",
+      body: mockForm,
+      redirect: 'follow'
+    })
+
+
 
   }
 }
