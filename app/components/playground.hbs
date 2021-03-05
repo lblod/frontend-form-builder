@@ -14,11 +14,12 @@
   <AuHeading @level="2" @skin="4" class="au-u-margin-bottom-small">
     Stap 3: Exporteer template
   </AuHeading>
-  <p class="au-u-margin-bottom-small">Eens je tevreden bent van het formulier kan de template geëxporteerd worden voor development.</p>
+  <p class="au-u-margin-bottom">Eens je tevreden bent van het formulier kan de template geëxporteerd worden voor development.</p>
   {{#if @refresh.isRunning}}
     <span>Rendering your glorious creation...</span>
   {{else}}
       <RdfForm
+              @groupClass="au-u-margin-left-small"
               @form={{this.form}}
               @graphs={{this.graphs}}
               @sourceNode={{this.node}}

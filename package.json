@@ -30,6 +30,8 @@
     "@glimmer/component": "^1.0.3",
     "@glimmer/tracking": "^1.0.3",
     "@lblod/ember-submission-form-fields": "^0.9.7",
+    "@lblod/ember-vo-mu-file-upload": "^0.6.0",
+    "@lblod/ember-vo-webuniversum": "^0.22.7",
     "babel-eslint": "^10.1.0",
     "broccoli-asset-rev": "^3.0.0",
     "browser-rdflib": "^1.1.0",
