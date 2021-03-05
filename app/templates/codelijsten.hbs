@@ -8,7 +8,7 @@
       <AuHeading @level="2" @skin="3" class="au-u-light">Kies een codelijst waarvan u de inhoud wil bekijken</AuHeading>
 
       <div class="au-u-margin-top au-u-margin-bottom">
-        <ConceptSchemeUriSelector/>
+        <ConceptSchemeUriSelector @updateCodeList={{this.updateCodeList}}/>
       </div>
 
 
@@ -39,16 +39,11 @@
       <AuContent class="au-u-margin-bottom">
         <AuLabel>Bekijk inhoud van codelijst</AuLabel>
         <ul>
-          <li>Huldenberg</li>
-          <li>Galmaarden</li>
-          <li>Affligem</li>
-          <li>Tervuren</li>
-          <li>Lierde</li>
-          <li>Nazareth</li>
-          <li>Westerlo</li>
-          <li>Ham</li>
-          <li>Borgloon</li>
-          <li>Zulte</li>
+          {{#each this.codeList as |item|}}
+            <li>
+              {{item.prefLabel.value}}
+            </li>
+          {{/each}}
         </ul>
       </AuContent>
     </div>
