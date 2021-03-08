@@ -1,5 +1,5 @@
 import Controller from '@ember/controller';
-import template from '../util/basic-form-template';
+import template from '../../util/basic-form-template';
 import { v4 as uuidv4 } from 'uuid';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
@@ -7,7 +7,7 @@ import { task } from 'ember-concurrency-decorators';
 import { inject as service } from '@ember/service';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { sym as RDFNode } from 'rdflib';
-import { TEXT_AREA } from '../components/playground';
+import { TEXT_AREA } from '../../components/playground';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
@@ -15,7 +15,7 @@ export const GRAPHS = {
   sourceGraph: new RDFNode(`http://data.lblod.info/sourcegraph`),
 };
 
-export default class FormsPlaygroundController extends Controller {
+export default class FormbuilderEditController extends Controller {
 
   @service('meta-data-extractor') meta;
 
@@ -73,5 +73,3 @@ fieldGroups:${form} form:hasField fields:${uuid} .`;
   }
 
 }
-
-
