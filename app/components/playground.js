@@ -66,14 +66,14 @@ export default class Playground extends Component {
   async updateForm() {
     const d = new Date();
     const FormattedDateTime = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}, ${d.toLocaleTimeString()}` ;
-    const modifiedForm = await this.store.findRecord('generated-form', this.args.model.id).then((form) => {
+    this.store.findRecord('generated-form', this.args.model.id).then((form) => {
       form.modified = FormattedDateTime;
       form.ttlCode = this.args.template;
       form.label = this.formLabel;
       form.comment = this.formComment;
+      form.save()
      })
 
-    modifiedForm.save()
     // let blob = new Blob([this.args.template], { type: "text/plain" })
 
     // // Create a "fake form"
