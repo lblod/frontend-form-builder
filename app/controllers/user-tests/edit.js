@@ -11,10 +11,15 @@ export default class UserTestsEditController extends Controller {
 
   @task
   * save() {
-    yield this.semanticForm.update(this.model.test, this.model.graph, {graphs: this.model.graphs});
+    yield this.semanticForm.update(this.model.graph, {graphs: this.model.graphs});
+    this.model.test.modified = new Date();
+    this.model.test.save();
   }
 
-  reset() {
+  @task
+  * reset() {
+    yield this.semanticForm.delete(this.model.graph, {graphs: this.model.graphs});
+    this.transitionToRoute('user-tests.edit', this.model.test.id);
   }
 
   @task

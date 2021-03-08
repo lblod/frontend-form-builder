@@ -8,6 +8,19 @@ export default class SemanticFormService extends Service {
   @service database;
   @service('meta-data-extractor') meta;
 
+  async source(form) {
+    const query = `
+CONSTRUCT {?s ?p ?o}
+WHERE {
+ VALUES ?s {
+    <${form.uri}>
+ }
+ ?s ?p ?o.
+}`;
+    const response = await this.database.query(query, {format: 'text/turtle'});
+    return await response.text();
+  }
+
   async setup(form, store, options) {
     if (store === null)
       store = new ForkingStore();
@@ -23,40 +36,19 @@ export default class SemanticFormService extends Service {
     return store;
   }
 
-  async source(form) {
-    const query = `
-CONSTRUCT {?s ?p ?o}
-WHERE {
- VALUES ?s {
-    <${form.uri}>
- }
- ?s ?p ?o.
-}`;
-    const response = await this.database.query(query, {format: 'text/turtle'});
-    return await response.text();
-  }
-
-  async update(form, store, options) {
+  async update(store, options) {
     // TODO for now the graph is hardcoded
-    await this.database.update(`DELETE {
-  GRAPH ?g {
-   ?s ?p ?o .
-  }
-}
-WHERE {
-  GRAPH ?g {
-   VALUES ?s {
-      <${form.uri}>
-   }
-   ?s ?p ?o .
-  }
-}`);
-    const ttl = await serialize(options.graphs.sourceGraph, store, undefined, 'application/n-triples');
+    const {removals, additions } = this.store.serializeDataWithAddAndDelGraph(options.graphs.sourceGraph, 'application/n-triples')
     await this.database.update(`INSERT DATA {
   GRAPH <http://mu.semte.ch/application> {
-${ttl}
+${additions}
   }
-  }`);
+}`);
+    await this.database.update(`DELETE DATA {
+  GRAPH <http://mu.semte.ch/application> {
+${removals}
+  }
+}`);
   }
 
   async delete(store, options) {
