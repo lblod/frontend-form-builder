@@ -1,5 +1,5 @@
 import Controller from '@ember/controller';
-import template from '../../util/basic-form-template';
+
 import { v4 as uuidv4 } from 'uuid';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
@@ -19,18 +19,17 @@ export default class FormbuilderEditController extends Controller {
   @service('meta-data-extractor') meta;
 
   @tracked store;
-  @tracked template;
+  @tracked codeEditor;
 
   constructor() {
     super(...arguments);
     this.produced = 0;
-    this.template = template;
   }
 
   @task
   *refresh() {
     this.store = new ForkingStore();
-    this.store.parse(this.template, GRAPHS.formGraph.value, 'text/turtle');
+    this.store.parse(this.codeEditor, GRAPHS.formGraph.value, 'text/turtle');
     const meta = yield this.meta.extract(this.store, { graphs: GRAPHS });
     this.store.parse(meta, GRAPHS.metaGraph.value, 'text/turtle');
 
@@ -74,7 +73,7 @@ fields:${uuid} a form:Field ;
     sh:group fields:${group} .
 
 fieldGroups:${form} form:hasField fields:${uuid} .`;
-    this.template += `\n${ttl}`;
+    this.codeEditor += `\n${ttl}`;
     this.refresh.perform();
   }
 
