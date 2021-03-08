@@ -7,8 +7,12 @@
   </div>
   <AuTextarea id={{this.textarea.id}} @width="block" @value={{@template}} onblur={{perform @refresh}} class="playground__edit__editor"/>
   <div class="playground__edit__footer">
-    <AuButton {{on 'click' this.saveLocally}} @skin="secondary">Save as</AuButton>
-    <AuButton {{on "click" (fn (mut this.popup) true)}}>Upload</AuButton>
+    <AuButtonGroup>
+      <AuButton {{on 'click' this.saveLocally}} @skin="secondary" @icon="download" @iconAlignment="left">Exporteer code voor development</AuButton>
+      <AuButton {{on 'click' this.updateForm}}>Bewaar formulier</AuButton>
+      <AuButton {{on "click" (fn (mut this.popup) true)}} @skin="tertiary" @icon="pencil" @iconAlignment="left">Bewerk naam</AuButton>
+      <AuButton {{on "click" this.deleteForm }} @skin="tertiary" @icon="bin" @iconAlignment="left" @alert={{true}}>Verwijder</AuButton>
+    </AuButtonGroup>
   </div>
 </div>
 <div class="playground__show">
@@ -38,17 +42,17 @@
   <Modal.Body>
     <p>
       <AuLabel for="input-required-block">
-        Label required
+        Label
         <AuPill>Verplicht</AuPill>
       </AuLabel>
-      <AuInput id="input-required-block" />
+      <AuInput id="input-required-block" @value={{this.formLabel}}/>
       </p>
     <p>
       <AuLabel for="input-filecomment">Comment</AuLabel>
-      <AuTextarea id="input-filecomment" @width="block"/>
+      <AuTextarea id="input-filecomment" @width="block" @value={{this.formComment}}/>
     </p>
   </Modal.Body>
   <Modal.Footer>
-    <AuButton {{on 'click' this.uploadToDB}}>Upload</AuButton>
+    <AuButton {{on 'click' this.updateForm}}>Save</AuButton>
   </Modal.Footer>
 </AuModal>

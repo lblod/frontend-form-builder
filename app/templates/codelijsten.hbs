@@ -1,53 +1,64 @@
 {{page-title "Codelijsten"}}
-
-<div class="au-c-main-container__content">
-  <div class="playground">
-    <div class="playground__codelist">
-
-      <AuLink @linkRoute="formbuilder" class="au-u-margin-bottom-small" @icon="arrow-left" @iconAlignment="left">Terug naar formulierenbouwer</AuLink>
-      <AuHeading @level="2" @skin="3" class="au-u-light">Kies een codelijst waarvan u de inhoud wil bekijken</AuHeading>
-
-      <div class="au-u-margin-top au-u-margin-bottom">
-        <ConceptSchemeUriSelector @update={{this.update}}/>
-      </div>
-
-      <!--
-      <div class="au-u-margin-bottom">
-        <AuLabel>Naam codelijst</AuLabel>
-        <p>All administrative-units with as besluit:classficatie</p>
-      </div>
-      -->
-
-      <div class="au-u-margin-bottom">
-        <AuLabel>URI: geeft meer informatie en activeert de codelijst</AuLabel>
-        <AuContent class="au-u-margin-bottom">
-          <p><a class="au-c-link" href={{this.scheme.uri}} rel="noopener noreferrer" target="_blank">{{this.scheme.uri}}</a></p>
-          <p>Hoe de codelijst gebruiken:</p>
-          <ul>
-            <li>Kopieer de link en plak ze bij <strong>form:options</strong> en vervang de link achter <strong>conceptScheme</strong> om de codelijst te activeren.</li>
-            <li>Sommige links omvatten meer informatie over de codelijst zelf. Klik op de link om die informatie te achterhalen.</li>
-          </ul>
-        </AuContent>
-      </div>
-
-      <AuHr/>
-
-
-    </div>
-    <div class="playground__show">
-
-      <AuContent class="au-u-margin-bottom">
-        <AuLabel>Bekijk inhoud van codelijst</AuLabel>
-        <ul>
-          {{#each this.scheme.concepts as |concept|}}
-            <li>
-              {{concept}}
-            </li>
-          {{/each}}
-        </ul>
-      </AuContent>
-    </div>
+<div class="au-c-toolbar  au-c-toolbar--bottom  au-c-toolbar--large ">
+  <div class="au-c-toolbar__group">
+    <AuHeading @level="1" @skin="2">
+      Semantische Formulierenbouwer Loket
+    </AuHeading>
   </div>
 </div>
+
+<main id="main" class="au-c-main-container">
+
+  <div class="au-c-main-container__content">
+    <div class="playground">
+      <div class="playground__codelist">
+
+        <AuLink @linkRoute="index" class="au-u-margin-bottom-small" @icon="arrow-left" @iconAlignment="left">Terug naar formulierenbouwer</AuLink>
+        <AuHeading @level="2" @skin="3" class="au-u-light">Kies een codelijst waarvan u de inhoud wil bekijken</AuHeading>
+
+        <div class="au-u-margin-top au-u-margin-bottom">
+          <ConceptSchemeUriSelector @update={{this.update}}/>
+        </div>
+
+        <div class="au-u-margin-bottom">
+          <AuLabel>URI: geeft meer informatie en activeert de codelijst</AuLabel>
+          <AuContent class="au-u-margin-bottom">
+            {{#if this.scheme.uri}}
+              <p><a class="au-c-link" href={{this.scheme.uri}} rel="noopener noreferrer" target="_blank">{{this.scheme.uri}}</a></p>
+            {{else}}
+              <AuHelpText @skin="tertiary">Kies eerst een codelijst.</AuHelpText>
+            {{/if}}
+            <AuAlert @alertIcon="info-circle" @alertTitle="Hoe de codelijst gebruiken:" @alertskin={{"info"}} @alertsize={{"small"}}>
+              <ul class="au-u-margin-bottom-small">
+                <li>Kopieer de link en plak ze bij <strong>form:options</strong> en vervang de link achter <strong>conceptScheme</strong> om de codelijst te activeren.</li>
+                <li>Sommige links omvatten meer informatie over de codelijst zelf. Klik op de link om die informatie te achterhalen.</li>
+              </ul>
+              <img src="/img/example-concept-scheme.png" style="border: 1px solid lightgray;">
+            </AuAlert>
+          </AuContent>
+        </div>
+
+      </div>
+      <div class="playground__show">
+
+        <AuContent class="au-u-margin-bottom">
+          <AuLabel>Bekijk inhoud van codelijst</AuLabel>
+          {{#if this.scheme.uri}}
+            <ul>
+              {{#each this.scheme.concepts as |concept|}}
+                <li>
+                  {{concept}}
+                </li>
+              {{/each}}
+            </ul>
+          {{else}}
+            <AuHelpText @skin="tertiary">Kies eerst een codelijst in het linkerveld.</AuHelpText>
+          {{/if}}
+        </AuContent>
+      </div>
+    </div>
+  </div>
+
+</main>
 
 {{outlet}}

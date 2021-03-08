@@ -14,9 +14,13 @@ export const TEXT_AREA = {
 
 export default class Playground extends Component {
   @service store;
+  @service router;
   textarea = TEXT_AREA;
 
   @service('meta-data-extractor') meta;
+
+  @tracked formLabel = this.args.model.label
+  @tracked formComment = this.args.model.comment
 
   constructor() {
     super(...arguments);
@@ -49,16 +53,26 @@ export default class Playground extends Component {
   }
 
   @action
-  async uploadToDB() {
-    const newForm = await this.store.createRecord('generated-form',{
-      created: new Date(),
-      modified: new Date(),
-      label: "form123",
-      comment: "a generated form entity",
-      ttlCode: this.args.template
-    })
+  async deleteForm() {
+    const generatedForm = this.args.model
+    const isDeleted = await generatedForm.destroyRecord()
+    if(isDeleted) {
+      this.router.transitionTo('index')
+    }
+  }
 
-    newForm.save()
+  @action
+  async updateForm() {
+    const d = new Date();
+    const FormattedDateTime = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}, ${d.toLocaleTimeString()}` ;
+    this.store.findRecord('generated-form', this.args.model.id).then((form) => {
+      form.modified = FormattedDateTime;
+      form.ttlCode = this.args.template;
+      form.label = this.formLabel;
+      form.comment = this.formComment;
+      form.save()
+     })
+
     // let blob = new Blob([this.args.template], { type: "text/plain" })
 
     // // Create a "fake form"

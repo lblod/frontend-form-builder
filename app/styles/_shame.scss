@@ -124,3 +124,8 @@ code.language-html {
   padding: $au-unit*1;
   margin-top: $au-unit;
 }
+
+a.au-c-button,
+a.au-c-button:hover {
+  color: $au-white;
+}
