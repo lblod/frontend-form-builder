@@ -44,7 +44,7 @@ export default class Playground extends Component {
   saveLocally() {
     // Create a link
     let downloadLink = document.createElement("a")
-    downloadLink.download = "test.ttl"
+    downloadLink.download = this.formLabel
 
     // generate Blob where file content will exists
     let blob = new Blob([this.args.template], { type: "text/plain" })

@@ -42,20 +42,19 @@
   <Modal.Body>
     <div class="au-o-grid au-o-grid--small">
       <div class="au-o-grid__item au-1-1">
-        <AuLabel for="input-required-block">
+        <AuLabel for="input-filelabel">
           Naam
-          <AuPill>Verplicht</AuPill>
         </AuLabel>
-        <AuInput id="input-required-block" @value={{this.formLabel}}/>
+        <AuInput id="input-filelabel" @value={{this.formLabel}}/>
       </div>
       <div class="au-o-grid__item au-1-1">
         <AuLabel for="input-filecomment">Beschrijving</AuLabel>
-        <AuTextarea id="input-filecomment" @width="block" @value={{this.formComment}}/>
+        <AuTextarea id="input-filecomment" rows="10" @width="block" @value={{this.formComment}}/>
       </div>
     </div>
   </Modal.Body>
   <Modal.Footer>
-    <AuButton {{on 'click' this.updateForm}}>Save</AuButton>
+    <AuButton {{on 'click' this.updateForm}}>Bijwerken</AuButton>
   </Modal.Footer>
 </AuModal>
 
