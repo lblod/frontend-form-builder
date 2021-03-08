@@ -24,14 +24,14 @@
       {{/if}}
       {{#if this.validations}}
         {{#each this.validations as |validation|}}
-          <p>
+          <div>
             <AuControlCheckbox @label="{{validation.label.value}}" onclick={{fn this.updateValidations validation}} />
-          </p>
+          </div>
         {{/each}}
       {{/if}}
       <AuButton @icon="add"
                 @iconAlignment="left"
-                @skin="tertiary"
+                @width="block"
         {{on "click" (fn @insert @inputType)}}>
         Voeg veld toe
       </AuButton>
