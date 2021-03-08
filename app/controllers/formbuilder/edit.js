@@ -79,7 +79,7 @@ fieldGroups:${form} form:hasField fields:${uuid} .`;
     this.refresh.perform();
   }
 
-  function validationsToTtl(validations) {
+  validationsToTtl(validations) {
     let validationPart = `form:validations`;
     validations.forEach(validation => {
       validationPart += `
