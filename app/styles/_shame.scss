@@ -129,3 +129,10 @@ a.au-c-button,
 a.au-c-button:hover {
   color: $au-white !important;
 }
+
+.alert-container {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin-right: 2rem;
+}
