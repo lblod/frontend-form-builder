@@ -2,7 +2,6 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 
 export default class FormsPlaygroundRoute extends Route {
-
   @action
   willTransition(transition) {
     if (this.controller.userHasEnteredData &&
