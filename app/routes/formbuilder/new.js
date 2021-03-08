@@ -2,11 +2,13 @@ import Route from '@ember/routing/route';
 
 export default class FormbuilderNewRoute extends Route {
   async model() {
+    const d = new Date();
+    const FormattedDateTime = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}, ${d.toLocaleTimeString()}` ;
     const newForm = await this.store.createRecord('generated-form',{
-      created: new Date(),
-      modified: new Date(),
+      created: FormattedDateTime,
+      modified: FormattedDateTime,
       label: "New form",
-      comment: `Blank form created at ${new Date().toISOString().replace('-', '/').split('T')[0].replace('-', '/')}`,
+      comment: `Blank form`,
       ttlCode: ""
     })
 
