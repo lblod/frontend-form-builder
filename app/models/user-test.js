@@ -1,7 +1,15 @@
 import Model, { attr, belongsTo } from '@ember-data/model';
 
+const RESOURCE_BASE = "http://data.lblod.info/user-tests/";
+
 export default class UserTestModel extends Model {
-  @attr('string') uri;
+
+  /**
+   * NOTE: using `@attr('string') uri;` causes PATCH to fail on resource
+   */
+  get uri() {
+    return `${RESOURCE_BASE}${this.id}`;
+  }
 
   @attr('date', {
     defaultValue() {
