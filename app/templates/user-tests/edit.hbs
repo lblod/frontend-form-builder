@@ -1,3 +1,11 @@
 {{page-title "Edit"}}
-<h1>TODO</h1>
-{{outlet}}
+<div class="au-o-grid__item au-u-2-3@medium au-u-1-1">
+  <RdfForm
+          @groupClass="au-o-grid__item au-u-2-4 au-u-1-1@small"
+          @form={{this.model.form}}
+          @graphs={{this.model.graphs}}
+          @sourceNode={{this.model.node}}
+          @formStore={{this.model.graph}}
+          @show={{false}}
+          @forceShowErrors={{false}} />
+</div>
