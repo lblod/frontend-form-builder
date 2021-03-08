@@ -42,7 +42,7 @@
               <LinkTo @route="formbuilder.edit" @model={{row}} @icon="pencil" @iconAlignment="left">Bewerk</LinkTo>
             </td>
             <td class="au-u-visible-medium-up">
-              <LinkTo @route="user-tests.new" @model={{row}} @icon="pencil" @iconAlignment="left">Test</LinkTo>
+              <LinkTo @route="user-tests.new" @query={{hash form=row.id}} @icon="pencil" @iconAlignment="left">Test</LinkTo>
             </td>
           </c.body>
         </t.content>

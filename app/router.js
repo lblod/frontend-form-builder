@@ -16,7 +16,7 @@ Router.map(function () {
     this.route('edit', { path: '/:id/edit' });
   });
   this.route('user-tests', function() {
-    this.route('new', { path: '/:id/new' });
+    this.route('new');
     this.route('edit', { path: '/:id/edit' });
   });
 });

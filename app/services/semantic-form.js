@@ -1,7 +1,6 @@
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { serialize } from 'rdflib';
 
 export default class SemanticFormService extends Service {
 
