@@ -51,7 +51,6 @@ export default class Playground extends Component {
 
   @action
   async uploadToDB() {
-
     const newForm = await this.store.createRecord('generated-form',{
       created: new Date(),
       modified: new Date(),
