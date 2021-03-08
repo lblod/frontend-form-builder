@@ -22,6 +22,8 @@ export default class Playground extends Component {
 
   @tracked formLabel = this.args.model.label
   @tracked formComment = this.args.model.comment
+  @tracked saved = false;
+  @tracked error = false;
 
   constructor() {
     super(...arguments);
@@ -64,15 +66,23 @@ export default class Playground extends Component {
 
   @action
   async updateForm() {
+    this.saved = false;
+    this.error = false;
     const d = new Date();
     const FormattedDateTime = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}, ${d.toLocaleTimeString()}` ;
-    this.store.findRecord('generated-form', this.args.model.id).then((form) => {
+    const form = await this.store.findRecord('generated-form', this.args.model.id)
       form.modified = FormattedDateTime;
       form.ttlCode = this.args.template;
       form.label = this.formLabel;
       form.comment = this.formComment;
-      form.save()
-     })
+
+      try {
+        await form.save()
+        this.saved = true;
+      } catch(err) {
+        this.error = true
+      }
+
 
     // let blob = new Blob([this.args.template], { type: "text/plain" })
 

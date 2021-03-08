@@ -1,24 +1,23 @@
 import Route from '@ember/routing/route';
 
-const TEST_FORM_URI = 'http://data.lblod.info/generated-forms/simple-form';
-
 export default class UserTestsNewRoute extends Route {
+  async model(params) {
+    const userTest = (
+      await this.store.query('user-test', {
+        'filter[form][:id:]': params.id,
+      })
+    )[0];
 
-  async beforeModel() {
-    const forms = await this.store.query('generated-form', {
-      'filter[:uri:]': TEST_FORM_URI
-    });
-
-    if (forms.length)
-      this.form = forms.firstObject;
-  }
-
-  async model() {
-    const test = this.store.createRecord('user-test',{
-      form: this.form
-    });
-    await test.save();
-    return test;
+    if (userTest) {
+      return userTest;
+    } else {
+      const form = await this.store.find('generated-form', params.id);
+      const test = this.store.createRecord('user-test', {
+        form: form,
+      });
+      await test.save();
+      return test;
+    }
   }
 
   afterModel(model) {

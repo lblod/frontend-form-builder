@@ -97,4 +97,26 @@ fieldGroups:${form} form:hasField fields:${uuid} .`;
     validationPart = validationPart.slice(0, -1) + ' ;';
     return validationPart;
   }
+
+  @action
+  async deleteForm() {
+    const generatedForm = this.args.model;
+    const isDeleted = await generatedForm.destroyRecord();
+    if (isDeleted) {
+      this.router.transitionTo('index');
+    }
+  }
+
+  @action
+  async updateForm() {
+    const d = new Date();
+    const FormattedDateTime = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}, ${d.toLocaleTimeString()}`;
+    this.store.findRecord('generated-form', this.args.model.id).then((form) => {
+      form.modified = FormattedDateTime;
+      form.ttlCode = this.args.template;
+      form.label = this.formLabel;
+      form.comment = this.formComment;
+      form.save();
+    });
+  }
 }

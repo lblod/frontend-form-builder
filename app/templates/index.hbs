@@ -31,6 +31,7 @@
             <AuDataTableThSortable @label='Aangepast op' @field='modified' @currentSorting={{this.sort}}
               class="au-u-visible-small-up" />
             <th>Rapport</th>
+            <th>User test</th>
           </c.header>
           <c.body as |row|>
             <td class="au-u-visible-medium-up">{{row.label}}</td>
@@ -39,6 +40,9 @@
             <td class="au-u-visible-medium-up">{{row.modified}}</td>
             <td class="au-u-visible-medium-up">
               <LinkTo @route="formbuilder.edit" @model={{row}} @icon="pencil" @iconAlignment="left">Bewerk</LinkTo>
+            </td>
+            <td class="au-u-visible-medium-up">
+              <LinkTo @route="user-tests.new" @model={{row}} @icon="pencil" @iconAlignment="left">Test</LinkTo>
             </td>
           </c.body>
         </t.content>
