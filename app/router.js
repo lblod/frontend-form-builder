@@ -11,5 +11,8 @@ Router.map(function () {
     this.route('playground');
   });
   this.route('codelijsten');
-  this.route('formbuilder');
+  this.route('formbuilder', function() {
+    this.route('new');
+    this.route('edit', { path: '/:id' });
+  });
 });
