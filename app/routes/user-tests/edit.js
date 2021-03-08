@@ -12,7 +12,7 @@ export default class UserTestsEditRoute extends Route {
   async model(params) {
     const test = await this.store.findRecord('user-test', params.id, {
       include: [
-        'form.ttlcode',
+        'form.ttl-code',
       ].join(',')
     });
 
@@ -20,7 +20,7 @@ export default class UserTestsEditRoute extends Route {
 
     // Prepare data in forking store
     const graph = new ForkingStore();
-    graph.parse(test.form.get('ttlcode'), graphs.formGraph, 'text/turtle');
+    graph.parse(test.form.get('ttlCode'), graphs.formGraph, 'text/turtle');
     const meta = await this.meta.extract(graph, {graphs: GRAPHS});
     graph.parse(meta, graphs.metaGraph, 'text/turtle');
     // TODO

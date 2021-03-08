@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
 import { sym as RDFNode } from 'rdflib';
 import { GRAPHS } from '../controllers/formbuilder/edit';
