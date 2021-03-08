@@ -38,14 +38,14 @@
   <Modal.Body>
     <p>
       <AuLabel for="input-required-block">
-        Label required
+        Label
         <AuPill>Verplicht</AuPill>
       </AuLabel>
-      <AuInput id="input-required-block" />
+      <AuInput id="input-required-block" @value={{this.formLabel}}/>
       </p>
     <p>
       <AuLabel for="input-filecomment">Comment</AuLabel>
-      <AuTextarea id="input-filecomment" @width="block"/>
+      <AuTextarea id="input-filecomment" @width="block" @value={{this.formComment}}/>
     </p>
   </Modal.Body>
   <Modal.Footer>

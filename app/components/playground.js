@@ -19,6 +19,9 @@ export default class Playground extends Component {
 
   @service('meta-data-extractor') meta;
 
+  @tracked formLabel;
+  @tracked formComment;
+
   constructor() {
     super(...arguments);
 
@@ -54,10 +57,11 @@ export default class Playground extends Component {
     const newForm = await this.store.createRecord('generated-form',{
       created: new Date(),
       modified: new Date(),
-      label: "form123",
-      comment: "a generated form entity",
+      label: this.formLabel,
+      comment: this.formComment,
       ttlCode: this.args.template
     })
+
 
     newForm.save()
     // let blob = new Blob([this.args.template], { type: "text/plain" })
