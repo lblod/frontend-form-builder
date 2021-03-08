@@ -1,8 +1,7 @@
 import Model, { attr, belongsTo } from '@ember-data/model';
 
 export default class UserTestModel extends Model {
-
-  @attr uri;
+  @attr('string') uri;
 
   @attr('date', {
     defaultValue() {

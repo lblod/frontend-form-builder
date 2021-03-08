@@ -3,10 +3,10 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency-decorators';
 
 export default class UserTestsEditController extends Controller {
-
   @service semanticForm;
 
-  submit() {
+  @task
+  * submit() {
     // TODO somehow inform the user that the form could be successfully submitted
   }
 
@@ -14,7 +14,7 @@ export default class UserTestsEditController extends Controller {
   * save() {
     yield this.semanticForm.update(this.model.graph, {graphs: this.model.graphs});
     this.model.test.modified = new Date();
-    this.model.test.save();
+    yield this.model.test.save();
   }
 
   @task
@@ -29,5 +29,4 @@ export default class UserTestsEditController extends Controller {
     yield this.model.test.destroyRecord();
     this.transitionToRoute('user-tests.index');
   }
-
 }
