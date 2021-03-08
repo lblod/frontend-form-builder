@@ -9,6 +9,8 @@
   <div class="playground__edit__footer">
     <AuButtonGroup>
       <AuButton {{on 'click' this.saveLocally}} @skin="secondary" @icon="download" @iconAlignment="left">Exporteer code voor development</AuButton>
+    </AuButtonGroup>
+    <AuButtonGroup>
       <AuButton {{on 'click' this.updateForm}}>Bewaar formulier</AuButton>
       <AuButton {{on "click" (fn (mut this.popup) true)}} @skin="tertiary" @icon="pencil" @iconAlignment="left">Bewerk naam en beschrijving</AuButton>
       <AuButton {{on "click" this.deleteForm }} @skin="tertiary" @icon="bin" @iconAlignment="left" @alert={{true}}>Verwijder</AuButton>
@@ -16,22 +18,29 @@
   </div>
 </div>
 <div class="playground__show">
-  <AuHeading @level="2" @skin="4" class="au-u-margin-bottom-small">
-    Stap 3: Exporteer template
-  </AuHeading>
-  <p class="au-u-margin-bottom">Eens je tevreden bent van het formulier kan de template geëxporteerd worden voor development.</p>
-  {{#if @refresh.isRunning}}
-    <span>Rendering your glorious creation...</span>
-  {{else}}
-      <RdfForm
-              @groupClass="au-u-margin-left-small"
-              @form={{this.form}}
-              @graphs={{this.graphs}}
-              @sourceNode={{this.node}}
-              @formStore={{@store}}
-              @show={{false}}
-              @forceShowErrors={{false}} />
-  {{/if}}
+  <div>
+    <AuHeading @level="2" @skin="4" class="au-u-margin-bottom-small">
+      Stap 3: Exporteer template
+    </AuHeading>
+    <p class="au-u-margin-top">Eens je tevreden bent van het formulier kan de template geëxporteerd worden voor development.</p>
+    <AuHr />
+  </div>
+  {{#if generatedForm}} yay!{{/if}}
+  <div class="au-u-margin-top-small">
+    {{#if @refresh.isRunning}}
+      <AuLoader />
+    {{else}}
+        <RdfForm
+                @groupClass="au-u-margin-left-small au-u-margin-top"
+                @form={{this.form}}
+                @graphs={{this.graphs}}
+                @sourceNode={{this.node}}
+                @formStore={{@store}}
+                @show={{false}}
+                @forceShowErrors={{false}}
+                class="au-o-grid__item" />
+    {{/if}}
+  </div>
 </div>
 
 
