@@ -8,8 +8,9 @@
   <AuTextarea id={{this.textarea.id}} @width="block" @value={{@template}} onblur={{perform @refresh}} class="playground__edit__editor"/>
   <div class="playground__edit__footer">
     <AuButton {{on 'click' this.saveLocally}} @skin="secondary">Export</AuButton>
-    <AuButton {{on "click" (fn (mut this.popup) true)}}>Save</AuButton>
+    <AuButton {{on 'click' this.updateForm}}>Save</AuButton>
     <AuButton {{on "click" this.deleteForm }} @alert={{true}}>Delete</AuButton>
+    <AuButton {{on "click" (fn (mut this.popup) true)}}>Edit label</AuButton>
   </div>
 </div>
 <div class="playground__show">
@@ -50,6 +51,6 @@
     </p>
   </Modal.Body>
   <Modal.Footer>
-    <AuButton {{on 'click' this.updateForm}}>Upload</AuButton>
+    <AuButton {{on 'click' this.updateForm}}>Save</AuButton>
   </Modal.Footer>
 </AuModal>

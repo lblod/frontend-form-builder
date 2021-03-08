@@ -20,8 +20,8 @@ export default class Playground extends Component {
 
   @service('meta-data-extractor') meta;
 
-  @tracked formLabel;
-  @tracked formComment;
+  @tracked formLabel = this.args.model.label
+  @tracked formComment = this.args.model.comment
 
   constructor() {
     super(...arguments);
