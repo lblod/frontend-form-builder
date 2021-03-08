@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 
 import { sym as RDFNode } from 'rdflib';
-import { GRAPHS } from '../controllers/formbuilder';
+import { GRAPHS } from '../controllers/formbuilder/edit';
 import { FORM, RDF } from '../util/rdflib';
 
 const SOURCE_NODE = new RDFNode('http://frontend.poc.form.builder/sourcenode');
