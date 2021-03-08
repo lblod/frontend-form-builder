@@ -13,7 +13,7 @@
     <div class="playground">
       <div class="playground__codelist">
 
-        <AuLink @linkRoute="index" class="au-u-margin-bottom-small" @icon="arrow-left" @iconAlignment="left">Terug naar formulierenbouwer</AuLink>
+        <AuButton @skin="tertiary" class="au-u-margin-bottom-small" @icon="arrow-left" @iconAlignment="left" {{on 'click' this.previousRoute}}>Terug naar formulierenbouwer</AuButton>
         <AuHeading @level="2" @skin="3" class="au-u-light">Kies een codelijst waarvan u de inhoud wil bekijken</AuHeading>
 
         <div class="au-u-margin-top au-u-margin-bottom">
@@ -33,7 +33,7 @@
                 <li>Kopieer de link en plak ze bij <strong>form:options</strong> en vervang de link achter <strong>conceptScheme</strong> om de codelijst te activeren.</li>
                 <li>Sommige links omvatten meer informatie over de codelijst zelf. Klik op de link om die informatie te achterhalen.</li>
               </ul>
-              <img src="/img/example-concept-scheme.png" style="border: 1px solid lightgray;">
+              <img src="/img/example-concept-scheme.png" style="border: 1px solid lightgray;" alt="concept scheme">
             </AuAlert>
           </AuContent>
         </div>
