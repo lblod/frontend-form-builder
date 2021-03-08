@@ -6,21 +6,19 @@ import { sym as RDFNode } from 'rdflib';
 import { inject as service } from '@ember/service';
 
 export default class UserTestsEditRoute extends Route {
-
   @service('meta-data-extractor') meta;
 
   async model(params) {
     const test = await this.store.findRecord('user-test', params.id, {
-      include: [
-        'form.ttl-code',
-      ].join(',')
+      include: ['form.ttl-code'].join(','),
     });
 
     const graphs = GRAPHS;
 
     // Prepare data in forking store
     const graph = new ForkingStore();
-    graph.parse(test.form.get('ttlCode'), graphs.formGraph, 'text/turtle');
+    const testForm = await test.form;
+    graph.parse(testForm.ttlCode, graphs.formGraph, 'text/turtle');
     const meta = await this.meta.extract(graph, {graphs: GRAPHS});
     graph.parse(meta, graphs.metaGraph, 'text/turtle');
     // TODO
