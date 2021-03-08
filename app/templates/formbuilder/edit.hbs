@@ -1,22 +1,38 @@
 {{page-title "Formbuilder"}}
-<div class="au-c-main-container__sidebar">
-  <div class="au-c-sidebar">
-    <div class="au-c-sidebar__content">
-      <div class="au-c-sidebar__header">
-        <InputTypesList @insertFieldInForm={{this.insertFieldInForm}}/>
-        {{!--         <br>
-                <ConceptSchemeUriSelector/>
-                <AuLink @linkRoute="codelijsten">Bekijk inhoud van codelijsten</AuLink> --}}
+<div class="au-c-toolbar  au-c-toolbar--bottom  au-c-toolbar--large ">
+  <div class="au-c-toolbar__group">
+    <AuHeading @level="1" @skin="2">
+      Semantische Formulierenbouwer Loket
+    </AuHeading>
+  </div>
+
+
+  <div class="au-c-toolbar__group">
+    <AuButton {{on "click" this.deleteForm }} @skin="tertiary" @icon="bin" @iconAlignment="left">Verwijder</AuButton>
+    <AuButton {{on "click" (fn (mut this.popup) true)}}>Bewaar formulier</AuButton>
+  </div>
+</div>
+
+<main id="main" class="au-c-main-container">
+  <div class="au-c-main-container__sidebar">
+    <div class="au-c-sidebar">
+      <div class="au-c-sidebar__content">
+        <div class="au-c-sidebar__header">
+          <InputTypesList @insertFieldInForm={{this.insertFieldInForm}}/>
+          {{!--         <br>
+                  <ConceptSchemeUriSelector/>
+                  <AuLink @linkRoute="codelijsten">Bekijk inhoud van codelijsten</AuLink> --}}
+        </div>
+      </div>
+      <div class="au-c-sidebar__footer">
+        <AuLink @linkRoute="codelijsten" @icon="documents" @iconAlignment="left">Bekijk inhoud van codelijsten</AuLink>
       </div>
     </div>
-    <div class="au-c-sidebar__footer">
-      <AuLink @linkRoute="codelijsten" @icon="documents" @iconAlignment="left">Bekijk inhoud van codelijsten</AuLink>
+  </div>
+  <div class="au-c-main-container__content">
+    <div class="playground">
+      <Playground @store={{this.store}} @template={{this.codeEditor}} @model={{this.model}} @refresh={{this.refresh}} />
+      {{outlet}}
     </div>
   </div>
-</div>
-<div class="au-c-main-container__content">
-  <div class="playground">
-    <Playground @store={{this.store}} @template={{this.codeEditor}} @model={{this.model}} @refresh={{this.refresh}} />
-    {{outlet}}
-  </div>
-</div>
+</main>
