@@ -8,7 +8,7 @@
   <div class="au-c-toolbar__group">
     <AuLink @linkRoute="formbuilder.new" role="button" class="au-c-button au-c-button--large">
       <AuIcon @icon="add" @alignment="left" @size="large" @ariaHidden={{true}} />
-      Create a new form
+      Maak nieuw formulier
     </AuLink>
   </div>
 </div>
@@ -16,7 +16,7 @@
 <main id="main" class="au-c-main-container">
   <div class="au-c-main-container__content">
     <div class="au-c-body-container">
-      <AuDataTable @content={{this.model}} @isLoading={{this.isLoading}} noDataMessage="Geen rapporten gevonden"
+      <AuDataTable @content={{this.model}} @isLoading={{this.isLoading}} noDataMessage="Geen formulieren gevonden"
         @sort={{this.sort}} @page={{this.page}} @size={{this.size}}
         class="container-flex--contain bbcdr-reports-data-table" as |t|>
         <t.content as |c|>
@@ -30,7 +30,7 @@
               class="au-u-visible-small-up" />
             <AuDataTableThSortable @label='Aangepast op' @field='modified' @currentSorting={{this.sort}}
               class="au-u-visible-small-up" />
-            <th>Rapport</th>
+            <th></th>
           </c.header>
           <c.body as |row|>
             <td class="au-u-visible-medium-up">{{row.label}}</td>
