@@ -15,6 +15,7 @@ export const TEXT_AREA = {
 
 export default class Playground extends Component {
   @service store;
+  @service router;
   textarea = TEXT_AREA;
 
   @service('meta-data-extractor') meta;
@@ -50,6 +51,15 @@ export default class Playground extends Component {
     // Click file to download then destroy link
     downloadLink.click();
     downloadLink.remove();
+  }
+
+  @action
+  async deleteForm() {
+    const generatedForm = this.args.model
+    const isDeleted = await generatedForm.destroyRecord()
+    if(isDeleted) {
+      this.router.transitionTo('index')
+    }
   }
 
   @action

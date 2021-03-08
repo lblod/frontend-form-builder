@@ -7,8 +7,9 @@
   </div>
   <AuTextarea id={{this.textarea.id}} @width="block" @value={{@template}} onblur={{perform @refresh}} class="playground__edit__editor"/>
   <div class="playground__edit__footer">
-    <AuButton {{on 'click' this.saveLocally}} @skin="secondary">Save as</AuButton>
-    <AuButton {{on "click" (fn (mut this.popup) true)}}>Upload</AuButton>
+    <AuButton {{on 'click' this.saveLocally}} @skin="secondary">Export</AuButton>
+    <AuButton {{on "click" (fn (mut this.popup) true)}}>Save</AuButton>
+    <AuButton {{on "click" this.deleteForm }} @alert={{true}}>Delete</AuButton>
   </div>
 </div>
 <div class="playground__show">
