@@ -54,14 +54,15 @@ export default class Playground extends Component {
 
   @action
   async uploadToDB() {
+    const d = new Date();
+    const FormattedDateTime = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}, ${d.toLocaleTimeString()}` ;
     const newForm = await this.store.createRecord('generated-form',{
-      created: new Date(),
-      modified: new Date(),
+      created: FormattedDateTime,
+      modified: FormattedDateTime,
       label: this.formLabel,
       comment: this.formComment,
       ttlCode: this.args.template
     })
-
 
     newForm.save()
     // let blob = new Blob([this.args.template], { type: "text/plain" })
