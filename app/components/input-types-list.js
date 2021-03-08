@@ -14,16 +14,16 @@ export default class InputTypesListComponent extends Component {
   }
 
   constructor() {
-    super(...arguments)
-    this.init.perform()
+    super(...arguments);
+    this.init.perform();
   }
 
   @task
   * init() {
     const response = yield this.database.query(` PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
 
-    SELECT DISTINCT ?concept ?label ?displayType ?usesConceptScheme {
-      ?concept skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
+    SELECT DISTINCT ?inputType ?label ?displayType ?usesConceptScheme {
+      ?inputType skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
         skos:prefLabel ?label ;
         ext:displayType ?displayType ;
         ext:usesConceptScheme ?usesConceptScheme .
