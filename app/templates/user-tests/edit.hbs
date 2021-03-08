@@ -8,3 +8,33 @@
           @show={{false}}
           @forceShowErrors={{false}} />
 </div>
+<AuToolbar @border="top" @size="large">
+  <AuToolbarGroup>
+    <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "true"}}
+              @loading={{if this.submit.isRunning "true"}}
+      {{on "click" (perform this.submit)}}>Verstuur
+    </AuButton>
+    <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "true"}}
+              @loading={{if this.save.isRunning "true"}}
+              @skin={{"secondary"}}
+              @icon={{if this.recentlySaved "check"}}
+              @iconAlignment={{if this.recentlySaved "left"}}
+      {{on "click" (perform this.save)}}>
+      Bewaar
+    </AuButton>
+    <AuLink @linkRoute="user-tests.index" @skin="secondary">Annuleer</AuLink>
+  </AuToolbarGroup>
+
+  {{#unless this.model.submitted}}
+    <AuToolbarGroup>
+      <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "true"}}
+                @loading={{if this.delete.isRunning "true"}}
+                @skin={{"tertiary"}}
+                @alert={{"true"}}
+        {{on "click" (perform this.delete)}}>
+        <AuIcon @icon="bin" @alignment="left"/>
+        Verwijder
+      </AuButton>
+    </AuToolbarGroup>
+  {{/unless}}
+</AuToolbar>

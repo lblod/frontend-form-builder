@@ -7,25 +7,22 @@ import { inject as service } from '@ember/service';
 
 export default class UserTestsEditRoute extends Route {
 
+  @service semanticForm;
   @service('meta-data-extractor') meta;
 
   async model(params) {
     const test = await this.store.findRecord('user-test', params.id, {
       include: [
         'form.ttl-code',
-      ].join(',')
+      ].join(','),
     });
 
     const graphs = GRAPHS;
 
     // Prepare data in forking store
-    const graph = new ForkingStore();
+    let graph = new ForkingStore();
     graph.parse(test.form.get('ttlCode'), graphs.formGraph, 'text/turtle');
-    const meta = await this.meta.extract(graph, {graphs: GRAPHS});
-    graph.parse(meta, graphs.metaGraph, 'text/turtle');
-    // TODO
-    // store.parse(content.source, graphs.sourceGraph, 'text/turtle');
-
+    graph = await this.semanticForm.setup(test, graph, {graphs});
     const form = graph.any(undefined, RDF('type'), FORM('Form'), GRAPHS.formGraph);
     const node = new RDFNode(test.uri);
 
@@ -33,7 +30,8 @@ export default class UserTestsEditRoute extends Route {
       graphs,
       graph,
       form,
-      node
-    }
+      node,
+      test
+    };
   }
 }
