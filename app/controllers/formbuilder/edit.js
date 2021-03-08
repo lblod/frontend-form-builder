@@ -16,7 +16,6 @@ export const GRAPHS = {
 };
 
 export default class FormbuilderEditController extends Controller {
-
   @service('meta-data-extractor') meta;
 
   @tracked store;
@@ -29,10 +28,10 @@ export default class FormbuilderEditController extends Controller {
   }
 
   @task
-   * refresh() {
+  *refresh() {
     this.store = new ForkingStore();
     this.store.parse(this.template, GRAPHS.formGraph.value, 'text/turtle');
-    const meta = yield this.meta.extract(this.store, {graphs: GRAPHS});
+    const meta = yield this.meta.extract(this.store, { graphs: GRAPHS });
     this.store.parse(meta, GRAPHS.metaGraph.value, 'text/turtle');
 
     // TODO should be done better
@@ -47,8 +46,8 @@ export default class FormbuilderEditController extends Controller {
     const form = 'main';
     const group = '8e24d707-0e29-45b5-9bbf-a39e4fdb2c11';
     const uuid = uuidv4();
+    const path = uuidv4();
     const options = {};
-    const validations = []
 
     if (field.scheme) {
       options['conceptScheme'] = field.scheme.value.uri;
@@ -57,7 +56,7 @@ export default class FormbuilderEditController extends Controller {
 
     let validationPart = '';
     if (field.validations && field.validations.length) {
-      validationPart = validationsToTtl(field.validations);
+      validationPart = this.validationsToTtl(field.validations, path);
     }
 
     const ttl = `
@@ -68,7 +67,7 @@ fields:${uuid} a form:Field ;
     mu:uuid "${uuid}";
     sh:name "Naamloze vraag" ;
     sh:order ${this.produced * 10} ;
-    sh:path ext:${uuidv4()} ;
+    sh:path ext:${path} ;
     form:options """${JSON.stringify(options)}""" ;
     form:displayType displayTypes:${displayType} ;
     ${validationPart}
@@ -79,9 +78,9 @@ fieldGroups:${form} form:hasField fields:${uuid} .`;
     this.refresh.perform();
   }
 
-  validationsToTtl(validations) {
+  validationsToTtl(validations, formPath) {
     let validationPart = `form:validations`;
-    validations.forEach(validation => {
+    validations.forEach((validation) => {
       validationPart += `
     [ a form:${validation.validationName.value} ;
       form:grouping form:${validation.grouping.value} ;`;
@@ -94,7 +93,7 @@ fieldGroups:${form} form:hasField fields:${uuid} .`;
       sh:resultMessage "${validation.errorMessage.value}" ;`;
       }
       validationPart += `
-      sh:path ext:${uuidv4()} ],`
+      sh:path ext:${formPath} ],`;
     });
     validationPart = validationPart.slice(0, -1) + ' ;';
     return validationPart;
