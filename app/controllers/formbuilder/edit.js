@@ -57,7 +57,7 @@ export default class FormbuilderEditController extends Controller {
 
     let validationPart = '';
     if (field.validations && field.validations.length) {
-      validationPart = validationsToTtl(field.validations);
+      validationPart = this.validationsToTtl(field.validations);
     }
 
     const ttl = `
