@@ -10,7 +10,7 @@
   <div class="au-c-toolbar__group">
     <AuButtonGroup>
       <AuButton {{on "click" this.deleteForm }} @skin="tertiary" @icon="bin" @iconAlignment="left" @alert="{{true}}">Verwijder</AuButton>
-      <AuButton {{on "click" (fn (mut this.popup) true)}} @skin="tertiary" @icon="pencil" @iconAlignment="left">Bewerk naam</AuButton>
+      <AuButton {{on "click" (fn (mut this.popup) true)}} @skin="tertiary" @icon="pencil" @iconAlignment="left">Bewerk naam en beschrijving</AuButton>
       <AuButton {{on 'click' this.updateForm}}>Bewaar formulier</AuButton>
     </AuButtonGroup>
   </div>
