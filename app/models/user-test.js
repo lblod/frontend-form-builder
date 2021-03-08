@@ -1,9 +1,18 @@
-import Model, {attr, belongsTo} from '@ember-data/model';
+import Model, { attr, belongsTo } from '@ember-data/model';
 
 export default class UserTestModel extends Model {
-  @attr('string') title;
-  @attr('string') comment;
-  @attr('string') ttlCode;
 
-  @belongsTo("generated-form") form;
+  @attr('datetime', {
+    defaultValue() {
+      return new Date();
+    },
+  }) created;
+
+  @attr('datetime', {
+    defaultValue() {
+      return new Date();
+    },
+  }) modified;
+
+  @belongsTo('generated-form') form;
 }

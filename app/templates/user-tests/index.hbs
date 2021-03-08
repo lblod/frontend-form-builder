@@ -1,0 +1,27 @@
+<div class="au-c-main-container__content">
+  <div class="au-c-body-container">
+    <AuDataTable @content={{this.model}} @isLoading={{this.isLoading}} noDataMessage="Geen gebruiker-testen gevonden"
+                 @sort={{this.sort}} @page={{this.page}} @size={{this.size}}
+                 class="container-flex--contain" as |t|>
+      <t.content as |c|>
+        <c.header>
+          <AuDataTableThSortable @label='Formulier' @field='form.label' @currentSorting={{this.sort}}
+                                 class="au-u-visible-small-up"/>
+          <AuDataTableThSortable @label='Aangemaakt' @field='created' @currentSorting={{this.sort}}
+                                 class="au-u-visible-small-up"/>
+          <AuDataTableThSortable @label='Gewijzigd' @field='modified' @currentSorting={{this.sort}}
+                                 class="au-u-visible-small-up"/>
+          <th>Acties</th>
+        </c.header>
+        <c.body as |row|>
+          <td class="au-u-visible-medium-up">{{row.form.label}}</td>
+          <td class="au-u-visible-medium-up">{{moment-format row.created "DD/MM/YYYY"}}</td>
+          <td class="au-u-visible-medium-up">{{moment-format row.modified "DD/MM/YYYY HH:mm"}}</td>
+          <!-- <td class="au-u-visible-medium-up">
+            <LinkTo @route="user-test.edit" @model={{row}}>Edit</LinkTo>
+          </td> -->
+        </c.body>
+      </t.content>
+    </AuDataTable>
+  </div>
+</div>
