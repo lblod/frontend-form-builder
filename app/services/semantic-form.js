@@ -1,6 +1,7 @@
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
-import { ForkingStore } from '@lblod/ember-submission-form-fields';
+import { ForkingStore, addGraphFor, delGraphFor } from '@lblod/ember-submission-form-fields';
+import { serialize } from 'rdflib';
 
 export default class SemanticFormService extends Service {
 
@@ -37,12 +38,17 @@ WHERE {
 
   async update(store, options) {
     // TODO for now the graph is hardcoded
-    const {removals, additions } = this.store.serializeDataWithAddAndDelGraph(options.graphs.sourceGraph, 'application/n-triples')
-    await this.database.update(`INSERT DATA {
+    const additions = serialize(addGraphFor(options.graphs.sourceGraph), store.graph, undefined,
+      'application/n-triples');
+    const removals = serialize(delGraphFor(options.graphs.sourceGraph), store.graph, undefined,
+      'application/n-triples');
+    if (additions.length > 0)
+      await this.database.update(`INSERT DATA {
   GRAPH <http://mu.semte.ch/application> {
 ${additions}
   }
 }`);
+    if (removals.length > 0)
     await this.database.update(`DELETE DATA {
   GRAPH <http://mu.semte.ch/application> {
 ${removals}
