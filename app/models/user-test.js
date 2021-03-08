@@ -2,13 +2,13 @@ import Model, { attr, belongsTo } from '@ember-data/model';
 
 export default class UserTestModel extends Model {
 
-  @attr('datetime', {
+  @attr('date', {
     defaultValue() {
       return new Date();
     },
   }) created;
 
-  @attr('datetime', {
+  @attr('date', {
     defaultValue() {
       return new Date();
     },

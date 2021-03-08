@@ -17,9 +17,9 @@
           <td class="au-u-visible-medium-up">{{row.form.label}}</td>
           <td class="au-u-visible-medium-up">{{moment-format row.created "DD/MM/YYYY"}}</td>
           <td class="au-u-visible-medium-up">{{moment-format row.modified "DD/MM/YYYY HH:mm"}}</td>
-          <!-- <td class="au-u-visible-medium-up">
-            <LinkTo @route="user-test.edit" @model={{row}}>Edit</LinkTo>
-          </td> -->
+          <td class="au-u-visible-medium-up">
+            <LinkTo @route="user-tests.edit" @model={{row}}>Edit</LinkTo>
+          </td>
         </c.body>
       </t.content>
     </AuDataTable>
