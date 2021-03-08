@@ -10,13 +10,13 @@ export default class FormbuilderNewRoute extends Route {
       label: "New form",
       comment: `Blank form`,
       ttlCode: ""
-    })
+    });
 
     return await newForm.save();
   }
 
   afterModel(model) {
-    console.log(model)
+    console.log(model);
     this.transitionTo('formbuilder.edit', model.id);
   }
 }

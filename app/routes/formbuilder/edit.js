@@ -8,6 +8,6 @@ export default class FormbuilderEditRoute extends Route {
 
   setupController(controller, model) {
     super.setupController(...arguments);
-    controller.set('codeEditor', model.ttlCode ? model.ttlCode : template)
+    controller.set('codeEditor', model.ttlCode ? model.ttlCode : template);
   }
 }

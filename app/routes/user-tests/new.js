@@ -6,7 +6,7 @@ export default class UserTestsNewRoute extends Route {
     const form = await this.store.find('generated-form', params.form);
 
     const test = this.store.createRecord('user-test', {
-      form: form,
+      form: form
     });
 
     await test.save();
