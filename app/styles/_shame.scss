@@ -130,8 +130,8 @@ code.language-html {
   margin-top: $au-unit;
 }
 
-a.au-c-button,
-a.au-c-button:hover {
+a.au-c-button:not(.au-c-button--secondary):not(.au-c-button--tertiary),
+a.au-c-button:not(.au-c-button--secondary):not(.au-c-button--tertiary):hover {
   color: $au-white !important;
 }
 

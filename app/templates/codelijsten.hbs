@@ -5,6 +5,11 @@
       Semantische Formulierenbouwer Loket
     </AuHeading>
   </div>
+  <div class="au-c-toolbar__group">
+    <AuButtonGroup>
+      <AuButton @skin="secondary" @icon="arrow-left" @iconAlignment="left" {{on 'click' this.previousRoute}}>Terug naar formulierenbouwer</AuButton>
+    </AuButtonGroup>
+  </div>
 </div>
 
 <main id="main" class="au-c-main-container">
@@ -13,7 +18,6 @@
     <div class="playground">
       <div class="playground__codelist">
 
-        <AuButton @skin="tertiary" class="au-u-margin-bottom-small" @icon="arrow-left" @iconAlignment="left" {{on 'click' this.previousRoute}}>Terug naar formulierenbouwer</AuButton>
         <AuHeading @level="2" @skin="3" class="au-u-light">Kies een codelijst waarvan u de inhoud wil bekijken</AuHeading>
 
         <div class="au-u-margin-top au-u-margin-bottom">

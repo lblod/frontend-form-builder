@@ -8,10 +8,8 @@
   <AuTextarea id={{this.textarea.id}} @width="block" @value={{@template}} onblur={{perform @refresh}} class="playground__edit__editor"/>
   <div class="playground__edit__footer">
     <AuButtonGroup>
-      <AuButton {{on 'click' this.saveLocally}} @skin="secondary" @icon="download" @iconAlignment="left">Exporteer code voor development</AuButton>
-    </AuButtonGroup>
-    <AuButtonGroup>
-      <AuButton {{on 'click' this.updateForm}}>Bewaar formulier</AuButton>
+      <AuButton {{on 'click' this.updateForm}}>Bewaar</AuButton>
+      <AuButton {{on 'click' this.saveLocally}} @skin="secondary" @icon="download" @iconAlignment="left">Exporteer code</AuButton>
       <AuButton {{on "click" (fn (mut this.popup) true)}} @skin="tertiary" @icon="pencil" @iconAlignment="left">Bewerk naam en beschrijving</AuButton>
       <AuButton {{on "click" this.deleteForm }} @skin="tertiary" @icon="bin" @iconAlignment="left" @alert={{true}}>Verwijder</AuButton>
     </AuButtonGroup>
