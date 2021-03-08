@@ -1,0 +1,32 @@
+<div class="au-c-main-container__content">
+  <AuLink @linkRoute="formbuilder.new" @skin="primary">Create a new form</AuLink>
+  <div class="au-c-body-container">
+    <AuDataTable @content={{this.model}} @isLoading={{this.isLoading}} noDataMessage="Geen rapporten gevonden"
+      @sort={{this.sort}} @page={{this.page}} @size={{this.size}}
+      class="container-flex--contain bbcdr-reports-data-table" as |t|>
+      <t.content as |c|>
+        <c.header>
+          <AuDataTableThSortable @label='Label' @field='label' @currentSorting={{this.sort}}
+            class="au-u-visible-medium-up" />
+          <AuDataTableThSortable @label='Comment' @field='comment' @currentSorting={{this.sort}}
+            class="au-u-visible-medium-up" />
+
+          <AuDataTableThSortable @label='Created' @field='created' @currentSorting={{this.sort}}
+            class="au-u-visible-small-up" />
+          <AuDataTableThSortable @label='Created' @field='modified' @currentSorting={{this.sort}}
+            class="au-u-visible-small-up" />
+          <th>Rapport</th>
+        </c.header>
+        <c.body as |row|>
+          <td class="au-u-visible-medium-up">{{row.label}}</td>
+          <td class="au-u-visible-medium-up">{{row.comment}}</td>
+          <td class="au-u-visible-medium-up">{{row.created}}</td>
+          <td class="au-u-visible-medium-up">{{row.modified}}</td>
+          <td class="au-u-visible-medium-up">
+            <LinkTo @route="formbuilder.edit" @model={{row}}>Edit</LinkTo>
+          </td>
+        </c.body>
+      </t.content>
+    </AuDataTable>
+  </div>
+</div>
