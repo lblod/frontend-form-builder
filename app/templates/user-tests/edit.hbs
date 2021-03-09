@@ -28,6 +28,14 @@
   {{#unless this.model.submitted}}
     <AuToolbarGroup>
       <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "true"}}
+                @loading={{if this.reset.isRunning "true"}}
+                @skin={{"tertiary"}}
+                @alert={{"true"}}
+        {{on "click" (perform this.reset)}}>
+        <AuIcon @icon="renew" @alignment="left"/>
+        Resetten
+      </AuButton>
+      <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "true"}}
                 @loading={{if this.delete.isRunning "true"}}
                 @skin={{"tertiary"}}
                 @alert={{"true"}}

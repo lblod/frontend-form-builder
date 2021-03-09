@@ -21,7 +21,7 @@ export default class UserTestsEditRoute extends Route {
     let graph = new ForkingStore();
     const testForm = await test.form;
     graph.parse(testForm.ttlCode, graphs.formGraph, 'text/turtle');
-    graph = await this.semanticForm.setup(test, graph, {graphs});
+    graph = await this.semanticForm.setup(graph, {graphs, model: test});
     const form = graph.any(undefined, RDF('type'), FORM('Form'), GRAPHS.formGraph);
     const node = new RDFNode(test.uri);
 
@@ -30,7 +30,7 @@ export default class UserTestsEditRoute extends Route {
       graph,
       form,
       node,
-      test
+      test,
     };
   }
 }
