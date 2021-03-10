@@ -30,7 +30,7 @@ export default class UserTestsEditRoute extends Route {
       graph,
       form,
       node,
-      test,
+      test
     };
   }
 }

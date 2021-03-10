@@ -10,10 +10,10 @@
 </div>
 <AuToolbar @border="top" @size="large">
   <AuToolbarGroup>
-    <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "true"}}
+    {{!-- <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "true"}}
               @loading={{if this.submit.isRunning "true"}}
-      {{on "click" (perform this.submit)}}>Verstuur
-    </AuButton>
+      {{on "click" (perform this.submit)}}>Verstuur (en terug naar overzicht)
+    </AuButton> --}}
     <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "true"}}
               @loading={{if this.save.isRunning "true"}}
               @skin={{"secondary"}}
@@ -22,7 +22,7 @@
       {{on "click" (perform this.save)}}>
       Bewaar
     </AuButton>
-    <AuLink @linkRoute="user-tests.index" @skin="secondary">Annuleer</AuLink>
+    <AuLink @linkRoute="user-tests.index" @skin="secondary">Annuleer (en terug naar overzicht)</AuLink>
   </AuToolbarGroup>
 
   {{#unless this.model.submitted}}
