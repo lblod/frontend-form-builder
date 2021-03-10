@@ -20,8 +20,8 @@ export default class Playground extends Component {
 
   @service('meta-data-extractor') meta;
 
-  @tracked formLabel = this.args.model.label
-  @tracked formComment = this.args.model.comment
+  @tracked formLabel = this.args.model.label;
+  @tracked formComment = this.args.model.comment;
   @tracked saved = false;
   @tracked error = false;
 
@@ -43,12 +43,12 @@ export default class Playground extends Component {
   @action
   saveLocally() {
     // Create a link
-    let downloadLink = document.createElement("a")
-    downloadLink.download = this.formLabel
+    let downloadLink = document.createElement('a');
+    downloadLink.download = this.formLabel;
 
     // generate Blob where file content will exists
-    let blob = new Blob([this.args.template], { type: "text/plain" })
-    downloadLink.href = window.URL.createObjectURL(blob)
+    let blob = new Blob([this.args.template], { type: 'text/plain' });
+    downloadLink.href = window.URL.createObjectURL(blob);
 
     // Click file to download then destroy link
     downloadLink.click();
@@ -57,10 +57,10 @@ export default class Playground extends Component {
 
   @action
   async deleteForm() {
-    const generatedForm = this.args.model
-    const isDeleted = await generatedForm.destroyRecord()
-    if(isDeleted) {
-      this.router.transitionTo('index')
+    const generatedForm = this.args.model;
+    const isDeleted = await generatedForm.destroyRecord();
+    if (isDeleted) {
+      this.router.transitionTo('index');
     }
   }
 
@@ -69,20 +69,19 @@ export default class Playground extends Component {
     this.saved = false;
     this.error = false;
     const d = new Date();
-    const FormattedDateTime = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}, ${d.toLocaleTimeString()}` ;
+    const FormattedDateTime = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}, ${d.toLocaleTimeString()}`;
     const form = await this.store.findRecord('generated-form', this.args.model.id)
-      form.modified = FormattedDateTime;
-      form.ttlCode = this.args.template;
-      form.label = this.formLabel;
-      form.comment = this.formComment;
+    form.modified = FormattedDateTime;
+    form.ttlCode = this.args.template;
+    form.label = this.formLabel;
+    form.comment = this.formComment;
 
-      try {
-        await form.save()
-        this.saved = true;
-      } catch(err) {
-        this.error = true
-      }
-
+    try {
+      await form.save();
+      this.saved = true;
+    } catch (err) {
+      this.error = true;
+    }
 
     // let blob = new Blob([this.args.template], { type: "text/plain" })
 

@@ -7,10 +7,10 @@ export default class CodelijstenController extends Controller {
   @tracked scheme;
 
   @action update(scheme) {
-    this.scheme = scheme
+    this.scheme = scheme;
   }
 
-  @action previousRoute(){
-    window.history.back()
+  @action previousRoute() {
+    window.history.back();
   }
 }

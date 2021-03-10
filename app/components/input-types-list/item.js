@@ -43,8 +43,8 @@ export default class InputTypesListItemComponent extends Component {
   @action
   updateScheme(scheme) {
     this.args.inputType['scheme'] = {
-      value: scheme
-    }
+      value: scheme,
+    };
   }
 
   @action
