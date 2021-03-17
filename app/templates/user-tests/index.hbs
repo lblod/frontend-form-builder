@@ -2,13 +2,13 @@
   <div class="au-c-toolbar__group">
 
     <AuHeading @level="1" @skin="2">
-      Test aangemaakte formulieren
+      Aangemaakte testbare semantische formulieren
     </AuHeading>
   </div>
   <div class="au-c-toolbar__group">
-    <AuLink  role="button" class="au-c-button au-c-button--large">
-      <AuIcon @icon="add" @alignment="left" @size="large" @ariaHidden={{true}} />
-      Maak een nieuwe test
+    <AuLink @linkRoute="index" class="au-c-button au-c-button--secondary">
+      <AuIcon @icon="arrow-left" @alignment="left" @size="large" @ariaHidden={{true}} />
+      Terug naar overzicht formulieren
     </AuLink>
   </div>
 </div>
@@ -23,6 +23,8 @@
           <c.header>
             <AuDataTableThSortable @label='Formulier' @field='form.label' @currentSorting={{this.sort}}
                                    class="au-u-visible-small-up"/>
+            <AuDataTableThSortable @label='Beschrijving' @field='form.comment' @currentSorting={{this.sort}}
+              class="au-u-visible-medium-up" />
             <AuDataTableThSortable @label='Aangemaakt' @field='created' @currentSorting={{this.sort}}
                                    class="au-u-visible-small-up"/>
             <AuDataTableThSortable @label='Gewijzigd' @field='modified' @currentSorting={{this.sort}}
@@ -31,10 +33,11 @@
           </c.header>
           <c.body as |row|>
             <td class="au-u-visible-medium-up">{{row.form.label}}</td>
+            <td class="au-u-visible-medium-up">{{row.form.comment}}</td>
             <td class="au-u-visible-medium-up">{{moment-format row.created "DD/MM/YYYY"}}</td>
             <td class="au-u-visible-medium-up">{{moment-format row.modified "DD/MM/YYYY HH:mm"}}</td>
             <td class="au-u-visible-medium-up">
-              <LinkTo @route="user-tests.edit" @model={{row.id}}>Edit</LinkTo>
+              <AuLink @linkRoute="user-tests.edit" @icon="user-popup" @iconAlignment="left" @model={{row.id}}>Test</AuLink>
             </td>
           </c.body>
         </t.content>
