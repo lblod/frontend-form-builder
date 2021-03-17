@@ -8,7 +8,7 @@
   <div class="au-c-toolbar__group">
     <AuLink @linkRoute="formbuilder.new" role="button" class="au-c-button au-c-button--large">
       <AuIcon @icon="add" @alignment="left" @size="large" @ariaHidden={{true}} />
-      Maak nieuw formulier
+      Maak nieuw semantisch formulier
     </AuLink>
   </div>
 </div>
@@ -30,7 +30,7 @@
               class="au-u-visible-small-up" />
             <AuDataTableThSortable @label='Aangepast op' @field='modified' @currentSorting={{this.sort}}
               class="au-u-visible-small-up" />
-            <th>Acties</th>
+            <th colspan="2">Acties</th>
           </c.header>
           <c.body as |row|>
             <td class="au-u-visible-medium-up">{{row.label}}</td>
@@ -38,8 +38,13 @@
             <td class="au-u-visible-medium-up">{{row.created}}</td>
             <td class="au-u-visible-medium-up">{{row.modified}}</td>
             <td class="au-u-visible-medium-up">
-              <LinkTo @route="formbuilder.edit" @model={{row}} @icon="pencil" @iconAlignment="left">Bewerk formulier</LinkTo>
-              <LinkTo @route="user-tests.new" @query={{hash form=row.id}} @icon="user" @iconAlignment="left">Test formulier</LinkTo>
+              <AuLink @linkRoute="formbuilder.edit" @model={{row}} @icon="pencil" @iconAlignment="left" @ariaHidden={{true}} >Bewerk</AuLink>
+            </td>
+            <td class="au-u-visible-medium-up">
+              <LinkTo @route="user-tests.new" @query={{hash form=row.id}} @icon="user" @iconAlignment="left" class="au-c-link">
+                <AuIcon @icon="user-popup" @alignment="left" @size="large" @ariaHidden={{true}} />
+                Test
+              </LinkTo>
             </td>
           </c.body>
         </t.content>
