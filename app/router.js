@@ -7,15 +7,15 @@ export default class Router extends EmberRouter {
 }
 
 Router.map(function () {
-  this.route('forms', function() {
+  this.route('forms', function () {
     this.route('playground');
   });
   this.route('codelijsten');
-  this.route('formbuilder', function() {
+  this.route('formbuilder', function () {
     this.route('new');
     this.route('edit', { path: '/:id/edit' });
   });
-  this.route('user-tests', function() {
+  this.route('user-tests', function () {
     this.route('new');
     this.route('edit', { path: '/:id/edit' });
   });

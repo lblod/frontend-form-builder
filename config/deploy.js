@@ -1,27 +1,29 @@
 /* eslint-env node */
 'use strict';
 
-module.exports = function(deployTarget) {
-  process.env.GIT_DISCOVERY_ACROSS_FILESYSTEM=1;
+module.exports = function (deployTarget) {
+  process.env.GIT_DISCOVERY_ACROSS_FILESYSTEM = 1;
   let ENV = {
     build: {
-      environment: 'production'
+      environment: 'production',
     },
-    'ssh-index': { // copy and deploy index.html
+    'ssh-index': {
+      // copy and deploy index.html
       username: 'root',
       host: 'poc-form-builder.relance.s.redpencil.io',
       port: 22,
       remoteDir: '/data/app-poc-form-builder/frontend-build',
       allowOverwrite: true,
-      agent: process.env.SSH_AUTH_SOCK
+      agent: process.env.SSH_AUTH_SOCK,
     },
-    'rsync': { // copy assets
+    rsync: {
+      // copy assets
       host: 'root@poc-form-builder.relance.s.redpencil.io',
       port: 22,
       dest: '/data/app-poc-form-builder/frontend-build',
       delete: false,
-      arg:['--verbose']
-    }
+      arg: ['--verbose'],
+    },
   };
 
   if (deployTarget === 'production') {

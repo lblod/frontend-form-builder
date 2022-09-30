@@ -1,9 +1,8 @@
 import Model, { attr, belongsTo } from '@ember-data/model';
 
-const RESOURCE_BASE = "http://data.lblod.info/user-tests/";
+const RESOURCE_BASE = 'http://data.lblod.info/user-tests/';
 
 export default class UserTestModel extends Model {
-
   /**
    * NOTE: using `@attr('string') uri;` causes PATCH to fail on resource
    */
@@ -15,13 +14,15 @@ export default class UserTestModel extends Model {
     defaultValue() {
       return new Date();
     },
-  }) created;
+  })
+  created;
 
   @attr('date', {
     defaultValue() {
       return new Date();
     },
-  }) modified;
+  })
+  modified;
 
   @belongsTo('generated-form') form;
 }

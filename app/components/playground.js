@@ -10,8 +10,8 @@ import { FORM, RDF } from '../util/rdflib';
 const SOURCE_NODE = new RDFNode('http://frontend.poc.form.builder/sourcenode');
 
 export const TEXT_AREA = {
-  id: 'playground-text-area'
-}
+  id: 'playground-text-area',
+};
 
 export default class Playground extends Component {
   @service store;
@@ -37,7 +37,12 @@ export default class Playground extends Component {
   }
 
   get form() {
-    return this.args.store.any(undefined, RDF('type'), FORM('Form'), GRAPHS.formGraph);
+    return this.args.store.any(
+      undefined,
+      RDF('type'),
+      FORM('Form'),
+      GRAPHS.formGraph
+    );
   }
 
   @action
@@ -70,7 +75,10 @@ export default class Playground extends Component {
     this.error = false;
     const d = new Date();
     const FormattedDateTime = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}, ${d.toLocaleTimeString()}`;
-    const form = await this.store.findRecord('generated-form', this.args.model.id)
+    const form = await this.store.findRecord(
+      'generated-form',
+      this.args.model.id
+    );
     form.modified = FormattedDateTime;
     form.ttlCode = this.args.template;
     form.label = this.formLabel;

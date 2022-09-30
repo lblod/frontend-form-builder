@@ -5,7 +5,6 @@ import { task } from 'ember-concurrency-decorators';
 import { inject as service } from '@ember/service';
 
 export default class InputTypesListItemComponent extends Component {
-
   @tracked scheme;
   @tracked validations = [];
 
@@ -17,8 +16,9 @@ export default class InputTypesListItemComponent extends Component {
   }
 
   @task
-  * init(inputType) {
-    const response = yield this.database.query(`PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
+  *init(inputType) {
+    const response = yield this.database
+      .query(`PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
 
     SELECT DISTINCT ?validation ?label ?validationName ?grouping ?customParameter ?errorMessage {
       <${inputType.inputType.value}> ext:canHaveValidation ?validation .
@@ -37,7 +37,10 @@ export default class InputTypesListItemComponent extends Component {
   }
 
   get hasContent() {
-    return Boolean(Number(this.args.inputType.usesConceptScheme.value)) || this.validations;
+    return (
+      Boolean(Number(this.args.inputType.usesConceptScheme.value)) ||
+      this.validations
+    );
   }
 
   @action
@@ -50,10 +53,13 @@ export default class InputTypesListItemComponent extends Component {
   @action
   updateValidations(validation, event) {
     if (event.target.checked) {
-      this.args.inputType['validations'] = this.args.inputType['validations'] || [];
+      this.args.inputType['validations'] =
+        this.args.inputType['validations'] || [];
       this.args.inputType['validations'].push(validation);
     } else {
-      this.args.inputType['validations'] = this.args.inputType['validations'].filter(val => {
+      this.args.inputType['validations'] = this.args.inputType[
+        'validations'
+      ].filter((val) => {
         return val != validation;
       });
     }
