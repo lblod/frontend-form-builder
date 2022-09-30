@@ -6,7 +6,6 @@ import { sym as RDFNode } from 'rdflib';
 import { inject as service } from '@ember/service';
 
 export default class UserTestsEditRoute extends Route {
-
   @service semanticForm;
   @service('meta-data-extractor') meta;
 
@@ -21,8 +20,13 @@ export default class UserTestsEditRoute extends Route {
     let graph = new ForkingStore();
     const testForm = await test.form;
     graph.parse(testForm.ttlCode, graphs.formGraph, 'text/turtle');
-    graph = await this.semanticForm.setup(graph, {graphs, model: test});
-    const form = graph.any(undefined, RDF('type'), FORM('Form'), GRAPHS.formGraph);
+    graph = await this.semanticForm.setup(graph, { graphs, model: test });
+    const form = graph.any(
+      undefined,
+      RDF('type'),
+      FORM('Form'),
+      GRAPHS.formGraph
+    );
     const node = new RDFNode(test.uri);
 
     return {
@@ -30,7 +34,7 @@ export default class UserTestsEditRoute extends Route {
       graph,
       form,
       node,
-      test
+      test,
     };
   }
 }

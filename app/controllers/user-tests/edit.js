@@ -6,26 +6,35 @@ export default class UserTestsEditController extends Controller {
   @service semanticForm;
 
   @task
-  * submit() {
+  *submit() {
     // TODO somehow inform the user that the form could be successfully submitted
   }
 
   @task
-  * save() {
-    yield this.semanticForm.update(this.model.graph, {graphs: this.model.graphs, model: this.model.test});
+  *save() {
+    yield this.semanticForm.update(this.model.graph, {
+      graphs: this.model.graphs,
+      model: this.model.test,
+    });
     this.model.test.modified = new Date();
     yield this.model.test.save();
   }
 
   @task
-  * reset() {
-    yield this.semanticForm.delete(this.model.graph, {graphs: this.model.graphs, model: this.model.test});
+  *reset() {
+    yield this.semanticForm.delete(this.model.graph, {
+      graphs: this.model.graphs,
+      model: this.model.test,
+    });
     this.transitionToRoute('user-tests.edit', this.model.test.id);
   }
 
   @task
-  * delete() {
-    yield this.semanticForm.delete(this.model.graph, {graphs: this.model.graphs, model: this.model.test});
+  *delete() {
+    yield this.semanticForm.delete(this.model.graph, {
+      graphs: this.model.graphs,
+      model: this.model.test,
+    });
     yield this.model.test.destroyRecord();
     this.transitionToRoute('user-tests.index');
   }

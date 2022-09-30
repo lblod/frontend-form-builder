@@ -8,22 +8,22 @@ module.exports = function (defaults) {
     autoImport: {
       webpack: {
         node: {
-          global: true
-        }
-      }
+          global: true,
+        },
+      },
     },
     sassOptions: {
       sourceMapEmbed: true,
       includePaths: [
         'node_modules/@appuniversum/appuniversum',
-        'node_modules/@appuniversum/ember-appuniversum/app/styles'
-      ]
+        'node_modules/@appuniversum/ember-appuniversum/app/styles',
+      ],
     },
     autoprefixer: {
       enabled: true,
       cascade: true,
-      sourcemap: true
-    }
+      sourcemap: true,
+    },
   });
 
   // Use `app.import` to add additional libraries to the generated
