@@ -12,11 +12,11 @@ export default class InputTypesListItemComponent extends Component {
 
   constructor() {
     super(...arguments);
-    this.init.perform(this.args.inputType);
+    this.setup.perform(this.args.inputType);
   }
 
   @task
-  *init(inputType) {
+  *setup(inputType) {
     const response = yield this.database
       .query(`PREFIX ext: <http://mu.semte.ch/vocabularies/ext/>
 

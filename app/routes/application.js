@@ -4,6 +4,8 @@ import { action } from '@ember/object';
 export default class FormsPlaygroundRoute extends Route {
   @action
   willTransition(transition) {
+    /* eslint ember/no-controller-access-in-routes: "warn" */
+    // TODO: replace this with a better setup
     if (
       this.controller.userHasEnteredData &&
       !confirm('Are you sure you want to abandon progress?')

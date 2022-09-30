@@ -41,7 +41,7 @@
               <AuLink @linkRoute="formbuilder.edit" @model={{row}} @icon="pencil" @iconAlignment="left" @ariaHidden={{true}} >Bewerk</AuLink>
             </td>
             <td class="au-u-visible-medium-up">
-              <LinkTo @route="user-tests.new" @query={{hash form=row.id}} @icon="user" @iconAlignment="left" class="au-c-link">
+              <LinkTo @route="user-tests.new" @query={{hash form=row.id}} class="au-c-link">
                 <AuIcon @icon="user-popup" @alignment="left" @size="large" @ariaHidden={{true}} />
                 Test
               </LinkTo>
