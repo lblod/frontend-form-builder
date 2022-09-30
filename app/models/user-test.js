@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-test-import-export */ // False positive since the file has a `-test` suffix
 import Model, { attr, belongsTo } from '@ember-data/model';
 
 const RESOURCE_BASE = 'http://data.lblod.info/user-tests/';
