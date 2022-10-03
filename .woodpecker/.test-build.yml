@@ -4,6 +4,7 @@ pipeline:
     settings:
       repo: "${CI_REPO_OWNER}/${CI_REPO_NAME}"
       dry_run: true
-    when:
-      event:
-        - pull_request
+
+when:
+  event:
+    - pull_request

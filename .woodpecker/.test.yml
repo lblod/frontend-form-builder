@@ -3,24 +3,15 @@ pipeline:
     image: danlynn/ember-cli:3.28.2-node_14.18
     commands:
     - npm install
-    when:
-      event:
-        - pull_request
   lint:
     image: danlynn/ember-cli:3.28.2-node_14.18
     commands:
     - npm run lint
-    when:
-      event:
-        - pull_request
   tests:
     image: danlynn/ember-cli:3.28.2-node_14.18
     commands:
     - npm run test:ember
-    when:
-      event:
-        - pull_request
 
-# TODO: switch to a "global conditional":
-# - https://github.com/woodpecker-ci/woodpecker/issues/283
-# - PR: https://github.com/woodpecker-ci/woodpecker/pull/770
+when:
+  event:
+    - pull_request
