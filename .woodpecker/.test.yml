@@ -2,15 +2,15 @@ pipeline:
   install:
     image: danlynn/ember-cli:3.28.2-node_14.18
     commands:
-    - npm install
+      - npm install
   lint:
     image: danlynn/ember-cli:3.28.2-node_14.18
     commands:
-    - npm run lint
+      - npm run lint
   tests:
     image: danlynn/ember-cli:3.28.2-node_14.18
     commands:
-    - npm run test:ember
+      - npm run test:ember
 when:
   event:
     - pull_request
