@@ -2,7 +2,7 @@
 
 module.exports = function (environment) {
   let ENV = {
-    modulePrefix: 'frontend-poc-form-builder',
+    modulePrefix: 'frontend-form-builder',
     environment,
     rootURL: '/',
     locationType: 'auto',

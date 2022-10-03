@@ -1,5 +1,5 @@
-import Application from 'frontend-poc-form-builder/app';
-import config from 'frontend-poc-form-builder/config/environment';
+import Application from 'frontend-form-builder/app';
+import config from 'frontend-form-builder/config/environment';
 import * as QUnit from 'qunit';
 import { setApplication } from '@ember/test-helpers';
 import { setup } from 'qunit-dom';
