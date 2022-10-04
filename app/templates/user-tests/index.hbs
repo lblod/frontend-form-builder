@@ -33,8 +33,8 @@
           <c.body as |row|>
             <td class="au-u-visible-medium-up">{{row.form.label}}</td>
             <td class="au-u-visible-medium-up">{{row.form.comment}}</td>
-            <td class="au-u-visible-medium-up">{{moment-format row.created "DD/MM/YYYY"}}</td>
-            <td class="au-u-visible-medium-up">{{moment-format row.modified "DD/MM/YYYY HH:mm"}}</td>
+            <td class="au-u-visible-medium-up">{{format-date row.created}}</td>
+            <td class="au-u-visible-medium-up">{{format-date-time row.modified}}</td>
             <td class="au-u-visible-medium-up">
               <AuLink @route="user-tests.edit" @icon="user-popup" @iconAlignment="left" @model={{row.id}}>Test</AuLink>
             </td>
