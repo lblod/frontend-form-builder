@@ -3,6 +3,8 @@
    For dirty temporary code
    ================================== */
 
+@use "sass:math";
+
 .au-c-main-container__sidebar {
   flex-basis: 35rem;
 }
@@ -14,12 +16,12 @@
 }
 
 .au-c-sidebar__header {
-  padding-top: $au-unit*1.5;
+  padding-top: $au-unit * 1.5;
 }
 
 // TODO use a custom selector that is less generic.
 .au-c-badge--small {
-  margin-right: $au-unit/2;
+  margin-right: math.div($au-unit, 2);
 }
 
 .alert-container {
