@@ -13,49 +13,8 @@
   height: calc(100vh - 13.35rem);
 }
 
-.playground {
-  display: flex;
-  height: 100%;
-}
-
 .au-c-sidebar__header {
   padding-top: $au-unit*1.5;
-}
-
-.playground__codelist,
-.playground__edit,
-.playground__show {
-  flex: 1 1;
-  padding: $au-unit*1.5;
-}
-
-.playground__codelist,
-.playground__edit {
-  display: flex;
-  flex-direction: column;
-}
-
-
-.playground__codelist {
-  overflow: auto;
-}
-
-.playground__edit .playground__edit__header {
-  flex-shrink: 0;
-}
-
-.playground__edit .playground__edit__editor {
-  flex-grow: 1;
-}
-
-.playground__edit__footer {
-  margin-top: $au-unit;
-}
-
-.playground__show {
-  overflow-y: auto;
-  overflow-x: hidden;
-  background-color: $au-gray-100;
 }
 
 // TODO use a custom selector that is less generic.
