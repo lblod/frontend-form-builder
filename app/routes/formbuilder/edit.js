@@ -6,7 +6,7 @@ export default class FormbuilderEditRoute extends Route {
   @service store;
 
   async model(params) {
-    return await this.store.find('generated-form', params.id);
+    return await this.store.findRecord('generated-form', params.id);
   }
 
   setupController(controller, model) {
