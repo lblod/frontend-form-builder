@@ -63,28 +63,6 @@
   margin-right: $au-unit/2;
 }
 
-.au-u-background-gray-300 {
-  background-color: $au-gray-300;
-}
-
-code.language-html {
-  max-width: 20rem !important;
-  width: 20rem !important;
-  overflow: hidden;
-  word-break: break-all;
-}
-
-.uri-box {
-  background-color: $au-gray-100;
-  padding: $au-unit*1;
-  margin-top: $au-unit;
-}
-
-a.au-c-button:not(.au-c-button--secondary):not(.au-c-button--tertiary),
-a.au-c-button:not(.au-c-button--secondary):not(.au-c-button--tertiary):hover {
-  color: $au-white !important;
-}
-
 .alert-container {
   position: absolute;
   bottom: 0;
