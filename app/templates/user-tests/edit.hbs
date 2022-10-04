@@ -28,8 +28,8 @@
         </div>
       </div>
     </div>
-    <AuToolbar @border="top" @size="large">
-      <AuToolbarGroup>
+    <AuToolbar @border="top" @size="large" as |Group|>
+      <Group>
         {{!-- <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "true"}}
                   @loading={{if this.submit.isRunning "true"}}
           {{on "click" (perform this.submit)}}>Verstuur (en terug naar overzicht)
@@ -42,10 +42,10 @@
           Bewaar
         </AuButton>
         <AuLink @route="user-tests.index" @skin="secondary">Annuleer</AuLink>
-      </AuToolbarGroup>
+      </Group>
 
       {{#unless this.model.submitted}}
-        <AuToolbarGroup>
+        <Group>
           <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "true"}}
                     @loading={{if this.reset.isRunning "true"}}
                     @skin={{"tertiary"}}
@@ -62,7 +62,7 @@
             <AuIcon @icon="bin" @alignment="left"/>
             Verwijder
           </AuButton>
-        </AuToolbarGroup>
+        </Group>
       {{/unless}}
     </AuToolbar>
   </div>
