@@ -17,8 +17,9 @@ export const GRAPHS = {
 
 export default class FormbuilderEditController extends Controller {
   @service('meta-data-extractor') meta;
+  @service store;
 
-  @tracked store;
+  @tracked forkingStore;
   @tracked codeEditor;
 
   constructor() {
@@ -28,10 +29,14 @@ export default class FormbuilderEditController extends Controller {
 
   @task
   *refresh() {
-    this.store = new ForkingStore();
-    this.store.parse(this.codeEditor, GRAPHS.formGraph.value, 'text/turtle');
-    const meta = yield this.meta.extract(this.store, { graphs: GRAPHS });
-    this.store.parse(meta, GRAPHS.metaGraph.value, 'text/turtle');
+    this.forkingStore = new ForkingStore();
+    this.forkingStore.parse(
+      this.codeEditor,
+      GRAPHS.formGraph.value,
+      'text/turtle'
+    );
+    const meta = yield this.meta.extract(this.forkingStore, { graphs: GRAPHS });
+    this.forkingStore.parse(meta, GRAPHS.metaGraph.value, 'text/turtle');
 
     // TODO should be done better
     const textarea = document.getElementById(TEXT_AREA.id);

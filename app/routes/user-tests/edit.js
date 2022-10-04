@@ -8,6 +8,7 @@ import { inject as service } from '@ember/service';
 export default class UserTestsEditRoute extends Route {
   @service semanticForm;
   @service('meta-data-extractor') meta;
+  @service store;
 
   async model(params) {
     const test = await this.store.findRecord('user-test', params.id, {

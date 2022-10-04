@@ -1,6 +1,9 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
 export default class UserTestsNewRoute extends Route {
+  @service store;
+
   async model(params) {
     const form = await this.store.find('generated-form', params.form);
 

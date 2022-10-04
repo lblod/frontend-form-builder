@@ -34,7 +34,7 @@
   </div>
   <div class="au-c-main-container__content">
     <div class="playground">
-      <Playground @store={{this.store}} @template={{this.codeEditor}} @model={{this.model}} @refresh={{this.refresh}} />
+      <Playground @store={{this.forkingStore}} @template={{this.codeEditor}} @model={{this.model}} @refresh={{this.refresh}} />
       {{outlet}}
     </div>
   </div>
