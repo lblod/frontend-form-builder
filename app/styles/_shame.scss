@@ -63,58 +63,13 @@
   background-color: $au-gray-100;
 }
 
+// TODO use a custom selector that is less generic.
 .au-c-badge--small {
   margin-right: $au-unit/2;
 }
 
-.au-c-card + .au-c-card {
-  margin-top: .5rem;
-}
-
-.au-c-card--fill {
-  height: auto;
-}
-
-.au-c-card__header.au-c-card__header--clickable + .au-c-card__content{
-  margin-top: $au-unit/2;
-  padding-top: $au-unit/2;
-}
-
-.au-c-content > div + div,
-.au-c-content > div + .au-c-button {
-  margin-top: .5rem;
-}
-
-.au-c-card--flex .au-c-card__header > div {
-  display: flex;
-  align-items: center;
-
-  .au-c-button--tertiary:not(.au-c-card__toggle) {
-    padding-right: $au-unit/2;
-  }
-
-  .au-c-heading {
-    flex-grow: 1;
-  }
-}
-
-.au-c-list-navigation__item .au-c-button,
-.au-c-card__header {
-  margin-bottom: 0;
-}
-
 .au-u-background-gray-300 {
   background-color: $au-gray-300;
-}
-
-
-.au-c-button.au-c-card__toggle {
-  margin-top: 0;
-}
-
-.au-c-card__toggle .au-c-icon--large {
-  width: $au-unit/3*2;
-  height: $au-unit/2;
 }
 
 code.language-html {
