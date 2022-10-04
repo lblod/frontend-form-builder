@@ -1,40 +1,55 @@
-<AuCard @expandable={{this.hasContent}} @divided={{this.hasContent}}  @flex={{true}} class="au-o-box--tiny" as |c|>
+<AuCard @expandable={{this.hasContent}} @flex={{true}} @size="small" as |c|>
   <c.header @badgeIcon="manual" @badgeSkin="border" @badgeSize="small">
     <AuHeading @level="3" @skin="6">
       {{@inputType.label.value}}
     </AuHeading>
-    {{#unless this.hasContent}}
-      <div class="au-c-button-group ">
-        <AuButton @icon="add"
-                  @flex={{true}}
-                  @hideText={{true}}
-                  @skin="tertiary"
-          {{on "click" (fn @insert @inputType)}}>
+    {{#if (and this.setup.isIdle (not this.hasContent))}}
+      {{! TODO: Improve the styling or change to a different component instead of the card }}
+      <div class="au-c-button-group">
+        <AuButton
+          @icon="add"
+          @flex={{true}}
+          @hideText={{true}}
+          @skin="tertiary"
+          {{on "click" (fn @insert @inputType)}}
+        >
           Voeg toe
         </AuButton>
       </div>
-    {{/unless}}
+    {{/if}}
   </c.header>
+
   {{#if this.hasContent}}
-    <c.content>
-      {{#if this.hasScheme}}
-        <p>
-          <ConceptSchemeUriSelector @update={{this.updateScheme}}/>
-        </p>
-      {{/if}}
-      {{#if this.validations}}
-        {{#each this.validations as |validation|}}
-          <div>
-            <AuControlCheckbox @label="{{validation.label.value}}" onclick={{fn this.updateValidations validation}} />
-          </div>
-        {{/each}}
-      {{/if}}
-      <AuButton @icon="add"
-                @iconAlignment="left"
-                @width="block"
-        {{on "click" (fn @insert @inputType)}}>
-        Voeg veld toe
-      </AuButton>
-    </c.content>
+    {{! The c.content component uses the content component which adds styles we don't want.
+        Since the Card doesn't expose a different component, we can use this check to only render our custom code when needed.
+    }}
+    {{#if c.content}}
+      <div class="au-o-box au-o-box--small">
+        {{#if this.hasScheme}}
+          <p class="au-u-margin-bottom">
+            <ConceptSchemeUriSelector @update={{this.updateScheme}} />
+          </p>
+        {{/if}}
+        {{#if this.validations}}
+          {{#each this.validations as |validation|}}
+            <div>
+              <AuControlCheckbox
+                @label="{{validation.label.value}}"
+                onclick={{fn this.updateValidations validation}}
+              />
+            </div>
+          {{/each}}
+        {{/if}}
+        <AuButton
+          @icon="add"
+          @iconAlignment="left"
+          @width="block"
+          class="au-u-margin-top-small"
+          {{on "click" (fn @insert @inputType)}}
+        >
+          Voeg veld toe
+        </AuButton>
+      </div>
+    {{/if}}
   {{/if}}
 </AuCard>

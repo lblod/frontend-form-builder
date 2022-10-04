@@ -11,7 +11,7 @@
 
         <div class="au-c-toolbar__group">
           <AuButtonGroup>
-            <AuLink @linkRoute="user-tests.index" @icon="arrow-left" @iconAlignment="left" @skin="secondary">Naar overzicht testbare formulieren</AuLink>
+            <AuLink @route="user-tests.index" @icon="arrow-left" @skin="button-secondary">Naar overzicht testbare formulieren</AuLink>
           </AuButtonGroup>
         </div>
       </div>
@@ -41,7 +41,7 @@
           {{on "click" (perform this.save)}}>
           Bewaar
         </AuButton>
-        <AuLink @linkRoute="user-tests.index" @skin="secondary">Annuleer</AuLink>
+        <AuLink @route="user-tests.index" @skin="secondary">Annuleer</AuLink>
       </AuToolbarGroup>
 
       {{#unless this.model.submitted}}

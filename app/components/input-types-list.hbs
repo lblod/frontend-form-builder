@@ -6,13 +6,11 @@
 {{#if @init.isRunning}}
   <AuLoader/>
 {{else}}
-  <ul class="au-c-list-navigation">
-    <li class="au-c-list-navigation__item">
+  <div class="au-o-flow au-o-flow--tiny">
     {{#each this.sortedInputTypes as |inputType|}}
       <InputTypesList::Item @inputType={{inputType}} @insert={{@insertFieldInForm}} />
     {{/each}}
-    </li>
-  </ul>
+  </div>
 {{/if}}
 
 {{!-- --- examples ---
