@@ -38,7 +38,7 @@
             <td class="au-u-visible-medium-up">{{row.created}}</td>
             <td class="au-u-visible-medium-up">{{row.modified}}</td>
             <td class="au-u-visible-medium-up">
-              <AuLink @linkRoute="formbuilder.edit" @model={{row}} @icon="pencil" @iconAlignment="left" @ariaHidden={{true}} >Bewerk</AuLink>
+              <AuLink @route="formbuilder.edit" @model={{row}} @icon="pencil" @iconAlignment="left" @ariaHidden={{true}} >Bewerk</AuLink>
             </td>
             <td class="au-u-visible-medium-up">
               <LinkTo @route="user-tests.new" @query={{hash form=row.id}} class="au-c-link">

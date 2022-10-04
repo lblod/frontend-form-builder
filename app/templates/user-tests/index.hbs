@@ -6,7 +6,7 @@
     </AuHeading>
   </div>
   <div class="au-c-toolbar__group">
-    <AuLink @linkRoute="index" class="au-c-button au-c-button--secondary">
+    <AuLink @route="index" class="au-c-button au-c-button--secondary">
       <AuIcon @icon="arrow-left" @alignment="left" @size="large" @ariaHidden={{true}} />
       Terug naar overzicht formulieren
     </AuLink>
@@ -37,7 +37,7 @@
             <td class="au-u-visible-medium-up">{{moment-format row.created "DD/MM/YYYY"}}</td>
             <td class="au-u-visible-medium-up">{{moment-format row.modified "DD/MM/YYYY HH:mm"}}</td>
             <td class="au-u-visible-medium-up">
-              <AuLink @linkRoute="user-tests.edit" @icon="user-popup" @iconAlignment="left" @model={{row.id}}>Test</AuLink>
+              <AuLink @route="user-tests.edit" @icon="user-popup" @iconAlignment="left" @model={{row.id}}>Test</AuLink>
             </td>
           </c.body>
         </t.content>
