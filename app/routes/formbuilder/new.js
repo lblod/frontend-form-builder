@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
 export default class FormbuilderNewRoute extends Route {
+  @service router;
   @service store;
 
   async model() {
@@ -19,7 +20,6 @@ export default class FormbuilderNewRoute extends Route {
   }
 
   afterModel(model) {
-    console.log(model);
-    this.transitionTo('formbuilder.edit', model.id);
+    this.router.transitionTo('formbuilder.edit', model.id);
   }
 }

@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { task } from 'ember-concurrency';
 
 export default class UserTestsEditController extends Controller {
+  @service router;
   @service semanticForm;
 
   @task
@@ -26,7 +27,7 @@ export default class UserTestsEditController extends Controller {
       graphs: this.model.graphs,
       model: this.model.test,
     });
-    this.transitionToRoute('user-tests.edit', this.model.test.id);
+    this.router.transitionTo('user-tests.edit', this.model.test.id);
   }
 
   @task
@@ -36,6 +37,6 @@ export default class UserTestsEditController extends Controller {
       model: this.model.test,
     });
     yield this.model.test.destroyRecord();
-    this.transitionToRoute('user-tests.index');
+    this.router.transitionTo('user-tests.index');
   }
 }

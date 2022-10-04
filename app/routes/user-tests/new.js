@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
 export default class UserTestsNewRoute extends Route {
+  @service router;
   @service store;
 
   async model(params) {
@@ -16,6 +17,6 @@ export default class UserTestsNewRoute extends Route {
   }
 
   afterModel(model) {
-    this.transitionTo('user-tests.edit', model.id);
+    this.router.transitionTo('user-tests.edit', model.id);
   }
 }
