@@ -66,14 +66,14 @@
 
 {{#if this.saved}}
   <div class="alert-container">
-    <AuAlert @alertIcon="check" @alertTitle="Formulier werd bijgewerkt" @alertskin={{"success"}} {{on 'click' (fn (mut this.saved) false)}}>
+    <AuAlert @icon="check" @title="Formulier werd bijgewerkt" @skin="success" {{on 'click' (fn (mut this.saved) false)}}>
     </AuAlert>
   </div>
 {{/if}}
 
 {{#if this.error}}
   <div class="alert-container">
-    <AuAlert @alertIcon="cross" @alertTitle="Er is een fout opgetreden" @alertskin={{"error"}} {{on 'click' (fn (mut this.saved) false)}} {{on 'click' (fn (mut this.error) false)}}>
+    <AuAlert @icon="cross" @title="Er is een fout opgetreden" @skin="error" {{on 'click' (fn (mut this.saved) false)}} {{on 'click' (fn (mut this.error) false)}}>
     </AuAlert>
   </div>
 {{/if}}
