@@ -6,7 +6,7 @@ import {
   delGraphFor,
 } from '@lblod/ember-submission-form-fields';
 import { serialize } from 'rdflib';
-import { RDF } from '../util/rdflib';
+import { RDF } from '../utils/rdflib';
 
 export default class SemanticFormService extends Service {
   @service database;

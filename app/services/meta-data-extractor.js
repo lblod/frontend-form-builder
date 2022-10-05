@@ -1,7 +1,7 @@
 import Service from '@ember/service';
 
 import { inject as service } from '@ember/service';
-import { FORM } from '../util/rdflib';
+import { FORM } from '../utils/rdflib';
 
 export default class MetaDataExtractorService extends Service {
   @service database;

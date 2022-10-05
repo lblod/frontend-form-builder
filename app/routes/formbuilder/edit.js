@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import template from '../../util/basic-form-template';
+import template from '../../utils/basic-form-template';
 import { inject as service } from '@ember/service';
 
 export default class FormbuilderEditRoute extends Route {
