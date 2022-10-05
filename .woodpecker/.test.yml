@@ -2,7 +2,7 @@ pipeline:
   install:
     image: danlynn/ember-cli:4.4.0-node_16.15
     commands:
-      - npm install
+      - npm ci
   lint:
     image: danlynn/ember-cli:4.4.0-node_16.15
     commands:
