@@ -22,5 +22,8 @@ module('Integration | Helper | format-date-time', function (hooks) {
 
     this.set('date', '');
     assert.dom().hasText('');
+
+    this.set('date', new Date('invalid date string'));
+    assert.dom().hasText('');
   });
 });

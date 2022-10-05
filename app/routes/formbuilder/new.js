@@ -6,11 +6,10 @@ export default class FormbuilderNewRoute extends Route {
   @service store;
 
   async model() {
-    const d = new Date();
-    const FormattedDateTime = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}, ${d.toLocaleTimeString()}`;
+    const now = new Date();
     const newForm = await this.store.createRecord('generated-form', {
-      created: FormattedDateTime,
-      modified: FormattedDateTime,
+      created: now,
+      modified: now,
       label: 'New form',
       comment: `Blank form`,
       ttlCode: '',
