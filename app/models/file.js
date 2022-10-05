@@ -1,11 +1,11 @@
 import Model, { attr } from '@ember-data/model';
 
 export default class FileModel extends Model {
-  @attr('string') uri;
-  @attr('string') filename;
-  @attr('string') format;
-  @attr('number') size;
-  @attr('string', { defaultValue: 'n/a ' }) extension;
+  @attr uri;
+  @attr filename;
+  @attr format;
+  @attr size;
+  @attr({ defaultValue: 'n/a ' }) extension;
   @attr('datetime') created;
 
   get humanReadableSize() {
