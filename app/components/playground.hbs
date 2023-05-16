@@ -3,6 +3,7 @@
     <AuHeading @level="2" @skin="4" class="au-u-margin-bottom-small">
       Stap 2: Vul placeholders in
     </AuHeading>
+    <div {{editor}}></div>
     <p class="au-u-margin-bottom-small">Voeg labels (name) en helpteksten (description)toe, en klik op “genereer formulier” om het te bekijken.</p>
   </div>
   <AuTextarea id={{this.textarea.id}} @width="block" @value={{@template}} onblur={{perform @refresh}} class="playground__edit__editor"/>
