@@ -3,7 +3,7 @@ import { turtle } from 'codemirror-lang-turtle';
 
 import { modifier } from 'ember-modifier';
 
-export default modifier(function editor(parent, [value, setEditor, onChange]) {
+export default modifier(function editor(parent, [value, onChange]) {
   const extensions = [basicSetup, turtle()];
   const doc = value || '';
 
@@ -24,6 +24,4 @@ export default modifier(function editor(parent, [value, setEditor, onChange]) {
     doc,
     extensions,
   });
-
-  setEditor(editor);
 });
