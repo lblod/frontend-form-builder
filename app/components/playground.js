@@ -24,6 +24,7 @@ export default class Playground extends Component {
   @tracked formComment = this.args.model.comment;
   @tracked saved = false;
   @tracked error = false;
+  @tracked currentView = "CODE";
 
   constructor() {
     super(...arguments);
