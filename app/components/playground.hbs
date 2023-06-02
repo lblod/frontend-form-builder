@@ -16,9 +16,10 @@
   </AuTabs>
 
   {{#if (eq this.currentView "CODE")}}
-    <div {{editor @template}} style="flex: 1; overflow-y: auto;"></div>  
+    <div {{editor @template}} style="overflow: auto; width:800px"></div>  
   {{else if (eq this.currentView "TREE")}}
     <Tree 
+      style="overflow: auto; width:800px;"
       @form={{this.form}}
       @graphs={{this.graphs}}
       @sourceNode={{this.node}}

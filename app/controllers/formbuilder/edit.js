@@ -37,10 +37,6 @@ export default class FormbuilderEditController extends Controller {
     );
     const meta = yield this.meta.extract(this.forkingStore, { graphs: GRAPHS });
     this.forkingStore.parse(meta, GRAPHS.metaGraph.value, 'text/turtle');
-
-    // TODO should be done better
-    const textarea = document.getElementById(TEXT_AREA.id);
-    textarea.scrollTop = textarea.scrollHeight;
   }
 
   @action
