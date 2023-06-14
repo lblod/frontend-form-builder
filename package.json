@@ -26,6 +26,8 @@
   },
   "devDependencies": {
     "@appuniversum/ember-appuniversum": "^2.1.0",
+    "@codemirror/language": "^6.7.0",
+    "@codemirror/lint": "^6.2.2",
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.6.0",
     "@glimmer/component": "^1.0.4",
