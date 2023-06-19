@@ -20,7 +20,7 @@ export default class FormbuilderEditController extends Controller {
   @service store;
 
   @tracked forkingStore;
-  @tracked codeEditor;
+  @tracked code;
 
   constructor() {
     super(...arguments);
@@ -28,10 +28,10 @@ export default class FormbuilderEditController extends Controller {
   }
 
   @task
-  *refresh() {
+  *refresh(value) {
     this.forkingStore = new ForkingStore();
     this.forkingStore.parse(
-      this.codeEditor,
+      value || this.code,
       GRAPHS.formGraph.value,
       'text/turtle'
     );
@@ -64,7 +64,6 @@ export default class FormbuilderEditController extends Controller {
 # ${field.label.value}
 ##########################################################
 fields:${uuid} a form:Field ;
-    mu:uuid "${uuid}";
     sh:name "Naamloze vraag" ;
     sh:order ${this.produced * 10} ;
     sh:path ext:${path} ;
