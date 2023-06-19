@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { FIELDS, FIELD_GROUPS, RDF } from '../utils/rdflib';
-import { namedNode } from 'rdflib';
+import { NamedNode, Statement, namedNode, triple, serialize, graph } from 'rdflib';
 import { action } from "@ember/object";
 
 export default class TreeComponent extends Component {
@@ -80,6 +80,11 @@ export default class TreeComponent extends Component {
           null,
           this.graphs.formGraph
         )
+
+          
+        const fieldUri = fieldProperties.filter((item) => 
+          item.predicate.value == "http://lblod.data.gift/vocabularies/forms/displayType"
+        )
   
         const fieldTypeProperty = fieldProperties.filter((item) => 
           item.predicate.value == "http://lblod.data.gift/vocabularies/forms/displayType"
@@ -110,7 +115,7 @@ export default class TreeComponent extends Component {
         })
   
         return {
-          uri: item.object.value,
+          uri: item.subject.value,
           name: nameProperty[0]?.object.value,
           fieldType: fieldTypeProperty.length ? fieldTypeProperty[0].object.value : "",
           validations: validationList
@@ -141,6 +146,35 @@ export default class TreeComponent extends Component {
 
     alert(code.join("\n"))
     console.log(code.join("\n"))
+  }
+
+  @action updateName(field, e) {
+    const newValue = e.target.value
+
+    // Remove old old
+    this.args.formStore.removeMatches(
+      namedNode(field.uri),
+      namedNode("http://www.w3.org/ns/shacl#name"),
+      null,
+      this.graphs.formGraph
+    )
+
+    // insert new triple
+    const triples = [
+      {
+        subject: namedNode(field.uri),
+        predicate: namedNode("http://www.w3.org/ns/shacl#name"),
+        object: newValue,
+        graph: this.graphs.formGraph,
+      }
+    ]
+
+    this.args.formStore.addAll(triples)
+
+
+    const sourceTtl =  this.args.formStore.serializeDataMergedGraph(this.graphs.sourceGraph);
+
+    this.args.refresh.perform()
   }
 
 }

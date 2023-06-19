@@ -19,7 +19,7 @@
             <summary class="au-u-background-gray-200">Field</summary>
             <label style="margin-left: 10px;">
               <strong>NAME: </strong>
-              <input type="text" value={{field.name}}>
+              <input type="text" value={{field.name}} {{on 'change' (fn this.updateName field)}}>
             </label>
             <div style="margin-left: 10px;">
               <strong>TYPE: </strong>{{field.fieldType}}
