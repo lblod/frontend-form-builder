@@ -1,11 +1,4 @@
 <div class="playground__edit">
-  <div class="playground__edit__header">
-    <AuHeading @level="2" @skin="4" class="au-u-margin-bottom-small">
-      Stap 2: Vul placeholders in
-    </AuHeading>
-
-    <p class="au-u-margin-bottom-small">Voeg labels (name) en helpteksten (description)toe, en klik op “genereer formulier” om het te bekijken.</p>
-  </div>
   <AuTabs as |Tab|>
     <Tab style="margin-bottom: 10px">
       <AuButton onClick={{fn (mut this.currentView) "CODE"}}>Code view</AuButton>
@@ -13,20 +6,34 @@
     <Tab>
       <AuButton onClick={{fn (mut this.currentView) "TREE"}}>Tree view</AuButton>
     </Tab>
+    <Tab>
+      <AuButton onClick={{fn (mut this.currentView) "META"}}>Meta form</AuButton>
+    </Tab>
   </AuTabs>
 
-  {{#if (eq this.currentView "CODE")}}
-    <div {{editor @template}} style="overflow: auto; width:800px"></div>  
-  {{else if (eq this.currentView "TREE")}}
-    <Tree 
-      style="overflow: auto; width:800px;"
-      @form={{this.form}}
-      @graphs={{this.graphs}}
-      @sourceNode={{this.node}}
-      @formStore={{@store}}
-    />
-  {{/if}}
-  
+  <div style="overflow-y: auto;">
+    {{#if (eq this.currentView "CODE")}}
+      <div {{editor @template @refresh}} style="overflow: auto; height: 100%; width:800px"></div>  
+    {{else if (eq this.currentView "TREE")}}
+      <Tree 
+        style="overflow: auto; width:800px;"
+        @form={{this.form}}
+        @graphs={{this.graphs}}
+        @sourceNode={{this.node}}
+        @formStore={{@store}}
+        @refresh={{@refresh}}
+      />
+    {{else if (eq this.currentView "META")}}
+      <RdfForm
+        @groupClass="au-u-margin-left-small au-u-margin-top"
+        @graphs={{this.graphs}}
+        @sourceNode={{this.node}}
+        @formStore={{this.forkingStore}}
+        @show={{false}}
+        @forceShowErrors={{false}}
+        class="au-o-grid__item" />
+    {{/if}}
+  </div>
 
   <div class="playground__edit__footer">
     <AuButtonGroup>
@@ -38,26 +45,18 @@
   </div>
 </div>
 <div class="playground__show">
-  <div>
-    <AuHeading @level="2" @skin="4" class="au-u-margin-bottom-small">
-      Stap 3: Exporteer template
-    </AuHeading>
-    <p class="au-u-margin-top">Eens je tevreden bent van het formulier kan de template geëxporteerd worden voor development.</p>
-    <AuHr />
-  </div>
   <div class="au-u-margin-top-small">
     {{#if @refresh.isRunning}}
       <AuLoader />
     {{else}}
-        <RdfForm
-                @groupClass="au-u-margin-left-small au-u-margin-top"
-                @form={{this.form}}
-                @graphs={{this.graphs}}
-                @sourceNode={{this.node}}
-                @formStore={{@store}}
-                @show={{false}}
-                @forceShowErrors={{false}}
-                class="au-o-grid__item" />
+      <RdfForm
+        @groupClass="au-u-margin-left-small au-u-margin-top"
+        @graphs={{this.graphs}}
+        @sourceNode={{this.node}}
+        @formStore={{@store}}
+        @show={{false}}
+        @forceShowErrors={{false}}
+        class="au-o-grid__item" />
     {{/if}}
   </div>
 </div>
