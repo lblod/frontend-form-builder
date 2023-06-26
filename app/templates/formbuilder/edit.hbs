@@ -17,25 +17,69 @@
 </div>
 
 <main id="main" class="au-c-main-container">
-  <div class="au-c-main-container__sidebar">
-    <div class="au-c-sidebar">
-      <div class="au-c-sidebar__content">
-        <div class="au-c-sidebar__header">
-          <InputTypesList @insertFieldInForm={{this.insertFieldInForm}}/>
-          {{!--         <br>
-                  <ConceptSchemeUriSelector/>
-                  <AuLink @route="codelijsten">Bekijk inhoud van codelijsten</AuLink> --}}
-        </div>
-      </div>
-      <div class="au-c-sidebar__footer">
-        <AuLink @route="codelijsten" @icon="documents">Bekijk inhoud van concept schemes</AuLink>
-      </div>
-    </div>
-  </div>
   <div class="au-c-main-container__content">
     <div class="playground">
-      <Playground @store={{this.forkingStore}} @template={{this.code}} @model={{this.model}} @refresh={{this.refresh}} />
-      {{outlet}}
+      <div class="playground__edit">
+        <AuTabs as |Tab|>
+          <Tab style="margin-bottom: 10px">
+            <AuButton onClick={{fn (mut this.activeTab) "CODE"}}>Code view</AuButton>
+          </Tab>
+          <Tab style="margin-bottom: 10px">
+            <AuButton onClick={{fn (mut this.activeTab) "BUILDER"}}>Form builder</AuButton>
+          </Tab>
+        </AuTabs>
+
+        <div style="overflow-y: auto;">
+          {{#if (eq this.activeTab "CODE")}}
+            <div {{editor this.code this.refresh}} style="overflow: auto; height: 100%; width:100%"></div>  
+          {{else if (eq this.activeTab "BUILDER")}}
+            <div>
+              {{#if this.builderStore}}
+                <RdfForm
+                  @groupClass="au-o-grid__item"
+                  @form={{this.builderForm}}
+                  @graphs={{this.graphs}}
+                  @formStore={{this.builderStore}}
+                  @forceShowErrors={{true}}
+                  @useNewListingLayout={{true}}
+                  @sourceNode={{this.previewForm}}
+                />
+              {{/if}}
+            </div>
+            <AuButton
+              {{on "click" this.serializeSourceToTtl}}>
+              Serialize source to TTL
+            </AuButton>
+          {{/if}}
+        </div>
+
+        <div class="playground__edit__footer">
+          <AuButtonGroup>
+          </AuButtonGroup>
+        </div>
+      </div>
+        {{#if this.refresh.isRunning}}
+          <AuLoader />
+        {{else}}
+          {{#if this.previewStore}}
+
+            <div class="playground__show">
+              <div class="au-u-margin-top-small">
+                <RdfForm
+                  @groupClass="au-u-margin-left-small au-u-margin-top"
+                  @form={{this.previewForm}}
+                  @graphs={{this.graphs}}
+                  @sourceNode={{this.sourceNode}}
+                  @formStore={{this.previewStore}}
+                  @forceShowErrors={{true}}
+                  @useNewListingLayout={{true}}
+                />
+              </div>
+            </div>
+          {{/if}}
+        {{/if}}
     </div>
   </div>
 </main>
+
+

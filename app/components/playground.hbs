@@ -4,34 +4,29 @@
       <AuButton onClick={{fn (mut this.currentView) "CODE"}}>Code view</AuButton>
     </Tab>
     <Tab>
-      <AuButton onClick={{fn (mut this.currentView) "TREE"}}>Tree view</AuButton>
-    </Tab>
-    <Tab>
-      <AuButton onClick={{fn (mut this.currentView) "META"}}>Meta form</AuButton>
+      <AuButton onClick={{fn (mut this.currentView) "VISUAL"}}>Visual form</AuButton>
     </Tab>
   </AuTabs>
 
   <div style="overflow-y: auto;">
     {{#if (eq this.currentView "CODE")}}
-      <div {{editor @template @refresh}} style="overflow: auto; height: 100%; width:800px"></div>  
-    {{else if (eq this.currentView "TREE")}}
-      <Tree 
-        style="overflow: auto; width:800px;"
-        @form={{this.form}}
-        @graphs={{this.graphs}}
-        @sourceNode={{this.node}}
-        @formStore={{@store}}
-        @refresh={{@refresh}}
-      />
-    {{else if (eq this.currentView "META")}}
-      <RdfForm
-        @groupClass="au-u-margin-left-small au-u-margin-top"
-        @graphs={{this.graphs}}
-        @sourceNode={{this.node}}
-        @formStore={{this.forkingStore}}
-        @show={{false}}
-        @forceShowErrors={{false}}
-        class="au-o-grid__item" />
+      <div {{editor @code @refresh}} style="overflow: auto; height: 100%; width:800px"></div>  
+    {{else if (eq this.currentView "VISUAL")}}
+      <div>
+        <RdfForm
+          @groupClass="au-o-grid__item"
+          @form={{this.metaForm}}
+          @graphs={{@graphs}}
+          @sourceNode={{@forms}}
+          @formStore={{this.metaStore}}
+          @forceShowErrors={{true}}
+          @useNewListingLayout={{true}}
+          />
+      </div>
+      <AuButton
+        {{on "click" this.serializeSourceToTtl}}>
+        Serialize source to TTL
+      </AuButton>
     {{/if}}
   </div>
 
@@ -42,22 +37,6 @@
       <AuButton {{on "click" (fn (mut this.popup) true)}} @skin="tertiary" @icon="pencil" @iconAlignment="left">Bewerk naam en beschrijving</AuButton>
       <AuButton {{on "click" this.deleteForm }} @skin="tertiary" @icon="bin" @iconAlignment="left" @alert={{true}}>Verwijder</AuButton>
     </AuButtonGroup>
-  </div>
-</div>
-<div class="playground__show">
-  <div class="au-u-margin-top-small">
-    {{#if @refresh.isRunning}}
-      <AuLoader />
-    {{else}}
-      <RdfForm
-        @groupClass="au-u-margin-left-small au-u-margin-top"
-        @graphs={{this.graphs}}
-        @sourceNode={{this.node}}
-        @formStore={{@store}}
-        @show={{false}}
-        @forceShowErrors={{false}}
-        class="au-o-grid__item" />
-    {{/if}}
   </div>
 </div>
 

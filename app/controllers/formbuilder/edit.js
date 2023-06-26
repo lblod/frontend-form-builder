@@ -3,11 +3,12 @@ import Controller from '@ember/controller';
 import { v4 as uuidv4 } from 'uuid';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { sym as RDFNode } from 'rdflib';
 import { TEXT_AREA } from '../../components/playground';
+import { FORM, RDF } from '../../utils/rdflib';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
@@ -15,108 +16,68 @@ export const GRAPHS = {
   sourceGraph: new RDFNode(`http://data.lblod.info/sourcegraph`),
 };
 
+const SOURCE_NODE = new RDFNode('http://frontend.poc.form.builder/sourcenode');
+
 export default class FormbuilderEditController extends Controller {
   @service('meta-data-extractor') meta;
   @service store;
 
-  @tracked forkingStore;
+  @tracked activeTab = 'CODE';
   @tracked code;
 
-  constructor() {
-    super(...arguments);
-    this.produced = 0;
-  }
+  @tracked previewStore;
+  @tracked previewForm;
 
-  @task
+  @tracked builderStore;
+  @tracked builderForm;
+
+  graphs = GRAPHS;
+  sourceNode = SOURCE_NODE;
+
+  @task({ restartable: true })
   *refresh(value) {
-    this.forkingStore = new ForkingStore();
-    this.forkingStore.parse(
-      value || this.code,
-      GRAPHS.formGraph.value,
-      'text/turtle'
+    if(value) {
+      this.code = value
+    }
+
+    yield timeout(500)
+
+    this.previewStore = new ForkingStore();
+    this.previewStore.parse(this.code, GRAPHS.formGraph.value, 'text/turtle');
+
+    this.previewForm = this.previewStore.any(
+      undefined,
+      RDF('type'),
+      FORM('Form'),
+      GRAPHS.formGraph
     );
-    const meta = yield this.meta.extract(this.forkingStore, { graphs: GRAPHS });
-    this.forkingStore.parse(meta, GRAPHS.metaGraph.value, 'text/turtle');
+
+
+    let formRes = yield fetch(`/forms/form.ttl`);
+    let formTtl = yield formRes.text();
+
+    let metaRes = yield fetch(`/forms/meta.ttl`);
+    let metaTtl = yield metaRes.text();
+
+    this.builderStore = new ForkingStore();
+    this.builderStore.parse(formTtl, GRAPHS.formGraph.value, 'text/turtle');
+    this.builderStore.parse(metaTtl, GRAPHS.metaGraph.value, 'text/turtle');
+    this.builderStore.parse(this.code, GRAPHS.sourceGraph.value, 'text/turtle');
+
+    this.builderForm = this.builderStore.any(
+      undefined,
+      RDF('type'),
+      FORM('Form'),
+      GRAPHS.formGraph
+    );
   }
+
 
   @action
-  insertFieldInForm(field) {
-    this.produced += 1;
-    const displayType = field.displayType.value;
-    const form = 'main';
-    const group = '8e24d707-0e29-45b5-9bbf-a39e4fdb2c11';
-    const uuid = uuidv4();
-    const path = uuidv4();
-    const options = {};
-
-    if (field.scheme) {
-      options['conceptScheme'] = field.scheme.value.uri;
-      options['searchEnabled'] = false;
-    }
-
-    let validationPart = '';
-    if (field.validations && field.validations.length) {
-      validationPart = this.validationsToTtl(field.validations, path);
-    }
-
-    const ttl = `
-##########################################################
-# ${field.label.value}
-##########################################################
-fields:${uuid} a form:Field ;
-    sh:name "Naamloze vraag" ;
-    sh:order ${this.produced * 10} ;
-    sh:path ext:${path} ;
-    form:options """${JSON.stringify(options)}""" ;
-    form:displayType displayTypes:${displayType} ;
-    ${validationPart}
-    sh:group fields:${group} .
-
-fieldGroups:${form} form:hasField fields:${uuid} .`;
-    this.codeEditor += `\n${ttl}`;
-    this.refresh.perform();
-  }
-
-  validationsToTtl(validations, formPath) {
-    let validationPart = `form:validations`;
-    validations.forEach((validation) => {
-      validationPart += `
-    [ a form:${validation.validationName.value} ;
-      form:grouping form:${validation.grouping.value} ;`;
-      if (validation.customParameter) {
-        validationPart += `
-      form:${validation.customParameter.value} "Param to replace" ;`;
-      }
-      if (validation.errorMessage) {
-        validationPart += `
-      sh:resultMessage "${validation.errorMessage.value}" ;`;
-      }
-      validationPart += `
-      sh:path ext:${formPath} ],`;
-    });
-    validationPart = validationPart.slice(0, -1) + ' ;';
-    return validationPart;
-  }
-
-  @action
-  async deleteForm() {
-    const generatedForm = this.args.model;
-    const isDeleted = await generatedForm.destroyRecord();
-    if (isDeleted) {
-      this.router.transitionTo('index');
-    }
-  }
-
-  @action
-  async updateForm() {
-    const d = new Date();
-    const FormattedDateTime = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}, ${d.toLocaleTimeString()}`;
-    this.store.findRecord('generated-form', this.args.model.id).then((form) => {
-      form.modified = FormattedDateTime;
-      form.ttlCode = this.args.template;
-      form.label = this.formLabel;
-      form.comment = this.formComment;
-      form.save();
-    });
+  serializeSourceToTtl() {
+    const sourceTtl = this.builderStore.serializeDataMergedGraph(
+      GRAPHS.sourceGraph
+    );
+    this.refresh.perform(sourceTtl)
   }
 }
