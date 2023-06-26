@@ -1,32 +1,41 @@
 import { EditorView, basicSetup } from 'codemirror';
 import { turtle } from 'codemirror-lang-turtle';
-import {syntaxTree} from "@codemirror/language"
-import {linter, lintGutter} from '@codemirror/lint'
+import { syntaxTree } from '@codemirror/language';
+import { linter, lintGutter } from '@codemirror/lint';
 
 import { modifier } from 'ember-modifier';
 
 function simpleLinter() {
-  return linter(view => {
-    const {state} = view
-    const tree = syntaxTree(state)
+  return linter((view) => {
+    const { state } = view;
+    const tree = syntaxTree(state);
     if (tree.length === state.doc.length) {
-      let pos = null
-      tree.iterate({enter: n => {
-        if (pos == null && n.type.isError) {
-          pos = n.from
-          return false
-        }
-      }})
+      let pos = null;
+      tree.iterate({
+        enter: (n) => {
+          if (pos == null && n.type.isError) {
+            pos = n.from;
+            return false;
+          }
+        },
+      });
 
       if (pos != null)
-        return [{from: pos, to: pos+1, severity: 'error', message: 'syntax error'}]
-    } 
+        return [
+          {
+            from: pos,
+            to: pos + 1,
+            severity: 'error',
+            message: 'syntax error',
+          },
+        ];
+    }
 
-    return []
-  })
+    return [];
+  });
 }
 
-export default modifier(function editor(parent, [value, onChange]) {
+export default modifier(function editor(parent, [value, refresh]) {
   const extensions = [basicSetup, turtle(), simpleLinter(), lintGutter()];
   const doc = value || '';
 
@@ -34,7 +43,7 @@ export default modifier(function editor(parent, [value, onChange]) {
     if (viewUpdate.docChanged) {
       const doc = viewUpdate.state.doc;
       const value = doc.toString();
-      onChange.perform(value)
+      refresh.perform(value);
     }
   });
 
@@ -47,6 +56,6 @@ export default modifier(function editor(parent, [value, onChange]) {
   });
 
   return () => {
-    editor.destroy()
-  }
+    editor.destroy();
+  };
 });

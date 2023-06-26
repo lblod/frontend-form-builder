@@ -1,31 +1,39 @@
-/* ==================================
-   # Form builder
-   ================================== */
-
-// SETTINGS
-@import "ember-appuniversum/a-settings";
-
-// TOOLS
-@import "ember-appuniversum/a-tools";
-
-// GENERIC
-@import "ember-appuniversum/a-generic";
-
-// ELEMENTS
-@import "ember-appuniversum/a-elements";
-
-// OBJECTS
-@import "ember-appuniversum/a-objects";
-
-// COMPONENTS
-@import "ember-appuniversum/a-components";
+@import "ember-appuniversum";
 @import "project/c-playground";
-
-// PLUGINS
-@import "ember-appuniversum/a-plugins";
-
-// UTILITIES
-@import "ember-appuniversum/a-utilities";
-
-// TEMPORARY HACKS AND QUICKFIXES
 @import "shame";
+
+
+// copied from loket
+.au-c-close {
+  position: absolute;
+  appearance: none;
+  border: 0;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  top: $au-unit-small;
+  right: $au-unit-small;
+  color: $au-gray-700;
+
+  &:hover {
+    color: $au-gray-600;
+  }
+
+  &:focus {
+    outline: $au-outline;
+  }
+}
+
+.au-c-close--large {
+  top: $au-unit;
+  right: $au-unit;
+}
+
+.au-c-info-text {
+  @include au-font-size($au-base);
+  font-family: $au-font;
+  font-weight: $au-regular;
+  color: $au-gray-700;
+  font-style: italic;
+}
+
