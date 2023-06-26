@@ -13,7 +13,7 @@ export default `@prefix form: <http://lblod.data.gift/vocabularies/forms/> .
 fieldGroups:main a form:FieldGroup ;
     mu:uuid "70eebdf0-14dc-47f7-85df-e1cfd41c3855" .
 
-form:6b70a6f0-cce2-4afe-81f5-5911f45b0b27 a form:Form ;
+form:6b70a6f0-cce2-4afe-81f5-5911f45b0b27 a form:Form, form:TopLevelForm ;
     mu:uuid "6b70a6f0-cce2-4afe-81f5-5911f45b0b27" ;
     form:hasFieldGroup fieldGroups:main .
 
