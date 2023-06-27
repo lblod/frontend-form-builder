@@ -9,7 +9,6 @@ import { trackedFunction } from 'ember-resources/util/function';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { task } from 'ember-concurrency';
 
-
 export const TEXT_AREA = {
   id: 'playground-text-area',
 };
@@ -30,7 +29,7 @@ export default class Playground extends Component {
   @tracked metaForm;
 
   get graphs() {
-    return this.args.graphs
+    return this.args.graphs;
   }
 
   constructor() {
@@ -52,7 +51,11 @@ export default class Playground extends Component {
 
     this.metaStore.parse(formTtl, this.graphs.formGraph, 'text/turtle');
     this.metaStore.parse(metaTtl, this.graphs.metaGraph, 'text/turtle');
-    this.metaStore.parse(this.args.code, this.graphs.sourceGraph, 'text/turtle');
+    this.metaStore.parse(
+      this.args.code,
+      this.graphs.sourceGraph,
+      'text/turtle'
+    );
 
     this.metaForm = this.metaStore.any(
       undefined,
@@ -126,7 +129,7 @@ export default class Playground extends Component {
 
   @action
   refresh() {
-    console.log("refreshed")
+    console.log('refreshed');
   }
 
   @action

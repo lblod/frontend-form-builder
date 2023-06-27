@@ -53,10 +53,10 @@
           {{/if}}
         </div>
 
-        <div class="playground__edit__footer">
-          <AuButtonGroup>
-          </AuButtonGroup>
-        </div>
+        <Toolbar 
+          @model={{this.model}}
+          @code={{this.code}}
+        />
       </div>
         {{#if this.refresh.isRunning}}
           <AuLoader />

@@ -12,6 +12,6 @@ export default class FormbuilderEditRoute extends Route {
   setupController(controller, model) {
     super.setupController(...arguments);
     controller.set('code', model.ttlCode ? model.ttlCode : template);
-    controller.refresh.perform()
+    controller.refresh.perform();
   }
 }

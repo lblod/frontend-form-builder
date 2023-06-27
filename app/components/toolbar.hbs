@@ -1,0 +1,31 @@
+<div class="playground__edit__footer">
+  <AuButtonGroup>
+    <AuButton {{on 'click' this.updateForm}}>Bewaar</AuButton>
+    <AuButton {{on 'click' this.saveLocally}} @skin="secondary" @icon="download" @iconAlignment="left">Exporteer code</AuButton>
+    <AuButton {{on "click" (fn (mut this.popup) true)}} @skin="tertiary" @icon="pencil" @iconAlignment="left">Bewerk naam en beschrijving</AuButton>
+    <AuButton {{on "click" this.deleteForm }} @skin="tertiary" @icon="bin" @iconAlignment="left" @alert={{true}}>Verwijder</AuButton>
+  </AuButtonGroup>
+</div>
+
+<AuModal
+  @title="Bewerk naam en beschrijving"
+  @modalOpen={{this.popup}}
+  @closeModal={{fn (mut this.popup) false}} as |Modal| >
+  <Modal.Body>
+    <div class="au-o-grid au-o-grid--small">
+      <div class="au-o-grid__item au-1-1">
+        <AuLabel for="input-filelabel">
+          Naam
+        </AuLabel>
+        <AuInput id="input-filelabel" @value={{this.formLabel}}/>
+      </div>
+      <div class="au-o-grid__item au-1-1">
+        <AuLabel for="input-filecomment">Beschrijving</AuLabel>
+        <AuTextarea id="input-filecomment" rows="10" @width="block" @value={{this.formComment}}/>
+      </div>
+    </div>
+  </Modal.Body>
+  <Modal.Footer>
+    <AuButton {{on 'click' this.updateForm}}>Bijwerken</AuButton>
+  </Modal.Footer>
+</AuModal>

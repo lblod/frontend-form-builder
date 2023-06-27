@@ -36,11 +36,11 @@ export default class FormbuilderEditController extends Controller {
 
   @task({ restartable: true })
   *refresh(value) {
-    if(value) {
-      this.code = value
+    if (value) {
+      this.code = value;
     }
 
-    yield timeout(500)
+    yield timeout(500);
 
     this.previewStore = new ForkingStore();
     this.previewStore.parse(this.code, GRAPHS.formGraph.value, 'text/turtle');
@@ -51,7 +51,6 @@ export default class FormbuilderEditController extends Controller {
       FORM('Form'),
       GRAPHS.formGraph
     );
-
 
     let formRes = yield fetch(`/forms/form.ttl`);
     let formTtl = yield formRes.text();
@@ -72,12 +71,11 @@ export default class FormbuilderEditController extends Controller {
     );
   }
 
-
   @action
   serializeSourceToTtl() {
     const sourceTtl = this.builderStore.serializeDataMergedGraph(
       GRAPHS.sourceGraph
     );
-    this.refresh.perform(sourceTtl)
+    this.refresh.perform(sourceTtl);
   }
 }
