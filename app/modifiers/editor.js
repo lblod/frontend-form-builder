@@ -54,8 +54,8 @@ export default modifier(function editor(parent, [value, refresh]) {
     doc,
     extensions,
   });
-
+  
   return () => {
     editor.destroy();
   };
-});
+}, { eager: false });

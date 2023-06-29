@@ -36,11 +36,11 @@ export default class FormbuilderEditController extends Controller {
 
   @task({ restartable: true })
   *refresh(value) {
+    yield timeout(500);
+
     if (value) {
       this.code = value;
     }
-
-    yield timeout(500);
 
     this.previewStore = new ForkingStore();
     this.previewStore.parse(this.code, GRAPHS.formGraph.value, 'text/turtle');
@@ -70,12 +70,19 @@ export default class FormbuilderEditController extends Controller {
       GRAPHS.formGraph
     );
   }
+  
+  @action
+  setActiveTab(value) {
+    this.activeTab = value;
+  }
 
   @action
   serializeSourceToTtl() {
     const sourceTtl = this.builderStore.serializeDataMergedGraph(
       GRAPHS.sourceGraph
     );
+
+    console.log(sourceTtl)
     this.refresh.perform(sourceTtl);
   }
 }
