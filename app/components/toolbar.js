@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking'; 
+import { tracked } from '@glimmer/tracking';
 
 export default class ToolbarComponent extends Component {
   @service store;
@@ -39,7 +39,6 @@ export default class ToolbarComponent extends Component {
 
   @action
   async updateForm() {
-    
     const now = new Date();
     const FormattedDateTime = `${now.getDate()}/${now.getMonth()}/${now.getFullYear()}, ${now.toLocaleTimeString()}`;
     const form = await this.store.findRecord(
@@ -53,11 +52,15 @@ export default class ToolbarComponent extends Component {
 
     try {
       await form.save();
-      this.toaster.success('Formulier bijgewerkt','Success', { timeOut: 5000 })
+      this.toaster.success('Formulier bijgewerkt', 'Success', {
+        timeOut: 5000,
+      });
       this.popup = false;
     } catch (err) {
-      this.toaster.error('Oeps, er is iets mis gegaan','Error', { timeOut: 5000 });
-      console.error(err)
+      this.toaster.error('Oeps, er is iets mis gegaan', 'Error', {
+        timeOut: 5000,
+      });
+      console.error(err);
     }
   }
 }

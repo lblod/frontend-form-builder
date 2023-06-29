@@ -1,11 +1,62 @@
-<div class="playground__edit__footer">
-  <AuButtonGroup>
-    <AuButton {{on 'click' this.updateForm}}>Bewaar</AuButton>
-    <AuButton {{on 'click' this.saveLocally}} @skin="secondary" @icon="download" @iconAlignment="left">Exporteer code</AuButton>
-    <AuButton {{on "click" (fn (mut this.popup) true)}} @skin="tertiary" @icon="pencil" @iconAlignment="left">Bewerk naam en beschrijving</AuButton>
-    <AuButton {{on "click" this.deleteForm }} @skin="tertiary" @icon="bin" @iconAlignment="left" @alert={{true}}>Verwijder</AuButton>
-  </AuButtonGroup>
-</div>
+<nav>
+  <div class="au-c-app-chrome">
+    <AuToolbar @size="small" class="au-u-padding-bottom-none" as |Group|>
+      <Group>
+        <AuLink @route="index" @skin="secondary" @icon="arrow-left">
+          Terug naar overzicht
+        </AuLink>
+        <span class="au-c-app-chrome__entity">{{@model.label}}</span>
+      </Group>
+      <Group>
+        <ul class="au-c-list-horizontal au-u-padding-right-tiny">
+          <li class="au-c-list-horizontal__item">
+            <span class="au-c-app-chrome__status">
+              Bewaard op {{@model.modified}}
+            </span>
+          </li>
+        </ul>
+      </Group>
+    </AuToolbar>
+    <AuToolbar @size="small" class="au-u-padding-top-none" as |Group|>
+      <Group>
+        <AuTabs as |Tab|>
+          <Tab>
+            <AuButton {{on "click" (fn @setActiveTab "CODE")}}>Code view</AuButton>
+          </Tab>
+          <Tab>
+            <AuButton {{on "click" (fn @setActiveTab "BUILDER")}}>Form builder</AuButton>
+          </Tab>
+        </AuTabs>
+      </Group>
+      <Group class="au-c-toolbar__group--actions">
+        <AuDropdown @title="Formulier acties" @alignment="right" role="menu">
+          <AuButton 
+            @skin="tertiary" role="menuitem"
+            {{on "click" (fn (mut this.popup) true)}}
+            >
+            <AuIcon @icon="copy" @alignment="left" />
+            Bewerk naam en beschrijving
+          </AuButton>
+          <AuButton 
+            @skin="tertiary" role="menuitem"
+            {{on 'click' this.saveLocally}}
+            >
+            <AuIcon @icon="export" @alignment="left" />
+            Exporteer code
+          </AuButton>
+          <AuButton
+            @skin="tertiary" role="menuitem" @alert={{true}}
+            {{on "click" this.deleteForm }}
+            >
+            <AuIcon @icon="bin" @alignment="left" />
+            Naar prullenmand
+          </AuButton>
+        </AuDropdown>
+        <AuButton {{on 'click' this.updateForm}}>Bewaar</AuButton>
+      </Group>
+    </AuToolbar>
+  </div>
+</nav>
 
 <AuModal
   @title="Bewerk naam en beschrijving"

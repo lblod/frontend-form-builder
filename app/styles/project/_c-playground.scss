@@ -4,10 +4,13 @@
 }
 
 .playground__codelist,
-.playground__edit,
 .playground__show {
   flex: 1 1;
   padding: $au-unit*1.5;
+}
+
+.playground__edit {
+  flex: 1 1;
 }
 
 .playground__codelist,
