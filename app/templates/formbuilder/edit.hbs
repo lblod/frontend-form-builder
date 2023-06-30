@@ -3,38 +3,27 @@
   @model={{this.model}}
   @code={{this.code}}
   @setActiveTab={{this.setActiveTab}}
+  @formChanged={{this.formChanged}}
+  @refresh={{this.refresh}}
 />
 
 <main id="main" class="au-c-main-container">
   <div class="au-c-main-container__content">
     <div class="playground">
       <div class="playground__edit">
-        <div style="overflow-y: auto;">
-          {{#if (eq this.activeTab "CODE")}}
-            <div {{editor this.code this.refresh}} style="overflow: auto; height: 100%; width:100%"></div>  
-          {{else if (eq this.activeTab "BUILDER")}}
-            <div style="padding: 20px;">
-              {{#if this.builderStore}}
-                <RdfForm
-                  @groupClass="au-o-grid__item"
-                  @form={{this.builderForm}}
-                  @graphs={{this.graphs}}
-                  @formStore={{this.builderStore}}
-                  @forceShowErrors={{true}}
-                  @useNewListingLayout={{true}}
-                  @sourceNode={{this.previewForm}}
-                />
-              {{/if}}
-            </div>
-            <div style="padding: 20px;">
-              <AuButton
-                {{on "click" this.serializeSourceToTtl}}>
-                Serialize source to TTL
-              </AuButton>
-            </div>
+        <div style="overflow-y: auto; padding: 30px">
+          {{#if this.builderStore}}
+            <RdfForm
+              @groupClass="au-o-grid__item"
+              @form={{this.builderForm}}
+              @graphs={{this.graphs}}
+              @formStore={{this.builderStore}}
+              @forceShowErrors={{true}}
+              @useNewListingLayout={{true}}
+              @sourceNode={{this.previewForm}}
+            />
           {{/if}}
         </div>
-
       </div>
       <div class="playground__show">
           <div class="au-u-margin-top-small">
