@@ -42,10 +42,10 @@ export default class FormbuilderEditController extends Controller {
       this.code = value;
     }
 
-    if(resetBuilder) {
-      this.builderStore = "";
+    if (resetBuilder) {
+      this.builderStore = '';
     }
-    
+
     this.previewStore = new ForkingStore();
     this.previewStore.parse(this.code, GRAPHS.formGraph.value, 'text/turtle');
 
