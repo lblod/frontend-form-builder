@@ -24,15 +24,15 @@ ext:mainPg a form:PropertyGroup;
     sh:order 0 .
 
 ext:propertyGroupPg a form:PropertyGroup;
-    sh:name "Edit property group" ;
+    sh:name "Section" ;
     sh:order 1 .
 
 ext:listingPg a form:PropertyGroup;
-    sh:name "Edit listing" ;
+    sh:name "Listing" ;
     sh:order 2 .
 
 ext:formFieldPg a form:PropertyGroup;
-    sh:name "Edit form field" ;
+    sh:name "Field" ;
     sh:order 3 .
 
 ##########################################################
@@ -59,9 +59,9 @@ ext:propertyGroupL a form:Listing;
   form:scope ext:propertyGroupS;
   form:createGenerator ext:propertyGroupGenerator;
   form:canAdd true;
-  form:addLabel "Add new Property Group";
+  form:addLabel "New section";
   form:canRemove true;
-  form:removeLabel "Remove Property Group";
+  form:removeLabel "Remove section";
   sh:group ext:mainPg;
   sh:order 1 .
 
@@ -72,7 +72,7 @@ ext:propertyGroupGenerator a form:Generator;
   form:prototype [
     form:shape [
       a form:PropertyGroup ;
-      sh:name "Provide the a title to the property group"
+      sh:name "Title"
     ]
   ].
 
@@ -81,21 +81,29 @@ ext:propertyGroupGenerator a form:Generator;
 ##########################################################
 ext:propertyGroupItem a form:SubForm;
   form:includes ext:propertyGroupNameF;
+  form:includes ext:propertyGroupDescriptionF;
   form:includes ext:propertyGroupOrderF;
   form:hasFieldGroup ext:propertyGroupPg.
 
 ext:propertyGroupNameF a form:Field ;
-  sh:name "Title of the property group" ;
-  sh:order 1 ;
+  sh:name "Section title" ;
   form:help """
-    A Property group helps to add sections to the form.
+    E.g. Contact informatie, Aanvraag ...,
    """;
+  sh:order 1 ;
   sh:path sh:name ;
   form:displayType displayTypes:textArea  ;
   sh:group ext:propertyGroupPg .
 
+ext:propertyGroupDescriptionF a form:Field ;
+  sh:name "Section description" ;
+  sh:order 1 ;
+  sh:path form:help ;
+  form:displayType displayTypes:textArea  ;
+  sh:group ext:propertyGroupPg .
+  
 ext:propertyGroupOrderF a form:Field ;
-  sh:name "The order the property group should appear" ;
+  sh:name "Order" ;
   sh:order 2 ;
   sh:path sh:order ;
   form:help """
@@ -115,7 +123,7 @@ ext:formNodesL a form:Listing;
   form:scope ext:formNodesS;
   form:createGenerator ext:formNodesGenerator;
   form:canAdd true;
-  form:addLabel "Add new field";
+  form:addLabel "Add field";
   form:canRemove true;
   form:removeLabel "Remove field";
   sh:group ext:mainPg;
@@ -134,17 +142,14 @@ ext:formNodesFormItem a form:SubForm;
   form:hasFieldGroup ext:formFieldPg.
 
 ext:formNodesNameF a form:Field ;
-  sh:name "Name of the field" ;
+  sh:name "Field name" ;
   sh:order 1 ;
-  form:help """
-    Help the user to figure out what is asked? E.g. "First name"; "Book ISBN".
-   """;
   sh:path sh:name ;
   form:displayType displayTypes:defaultInput;
   sh:group ext:formFieldPg .
 
 ext:formNodesOrderF a form:Field ;
-  sh:name "Order of the field" ;
+  sh:name "Field order" ;
   sh:order 2 ;
   sh:path sh:order ;
   form:help """
@@ -154,46 +159,37 @@ ext:formNodesOrderF a form:Field ;
   sh:group ext:formFieldPg .
 
 ext:formNodesTypeF a form:Field ;
-  sh:name "Display type" ;
+  sh:name "Field type" ;
   sh:order 3 ;
   sh:path form:displayType ;
   form:help """
-    Provide the type of field.
+    e.g. text input, date, dropdown...
    """;
   form:displayType displayTypes:conceptSchemeSelector ;
   form:options """{"conceptScheme":"http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6","searchEnabled":true}""" ;
   sh:group ext:formFieldPg .
 
 ext:formNodeHelpTextF a form:Field;
-  sh:name "Help text of the field" ;
+  sh:name "Helptext" ;
   sh:order 4 ;
-  sh:path form:help ;
   form:help """
-    The helptext of the field. \n
-    Note: it won't work in all fields. \n
-    Accepts HTML e.g.: <a href="https://example.com">example<a/>
-  """;
+    Order of the section, calculated from top to bottom.
+   """;
+  sh:path form:help ;
   form:displayType displayTypes:textArea;
   sh:group ext:formFieldPg .
 
 ext:formNodeOptionsF a form:Field;
   sh:name "Extra configuration options as JSON" ;
-  form:help """
-    For some fields (e.g. selectbox) we need to provide extra configuration parameters through JSON. <br>
-    Note: this might be a bit technical 🤓.
-    <br> E.g.: <br>
-    {"conceptScheme":"https://data.vlaanderen.be/id/conceptscheme/BesluitType","searchEnabled":false}
-   """;
   sh:order 5 ;
   sh:path form:options ;
   form:displayType displayTypes:textArea;
   sh:group ext:formFieldPg .
 
 ext:formNodePropertyGroupF a form:Field;
-  sh:name "Link field to property group." ;
+  sh:name "Link to section" ;
   form:help """
-   Here, you'll define what 'section' the field will belong to. <br>
-   The property groups should have been defined earlier.
+   This is required. If you dont specify a section, the field will not be visible.
    """;
   sh:order 6 ;
   sh:path sh:group ;
@@ -207,7 +203,7 @@ ext:formNodesGenerator a form:Generator;
   form:prototype [
     form:shape [
       a form:Field ;
-      sh:name "Provide Name of Field";
+      sh:name "Field name";
       sh:path [];
       form:displayType displayTypes:defaultInput
     ]
@@ -247,7 +243,7 @@ ext:formListingTableL a form:Listing;
   form:scope ext:formListingS;
   form:createGenerator ext:formListingTableGenerator;
   form:canAdd true;
-  form:addLabel "Add new Listing (as table)";
+  form:addLabel "Add new table listing";
   form:canRemove true;
   sh:group ext:mainPg;
   sh:order 4 .
@@ -263,9 +259,9 @@ ext:formListingFormItem a form:SubForm;
   form:hasFieldGroup ext:listingPg.
 
 ext:formListingAddF a form:Field ;
-  sh:name "Edit the add label" ;
+  sh:name "Edit label" ;
   form:help """
-  The add label helps the user to figure out what needs to be added. 'Add Book', 'Add Subsidy Measure', etc..
+  e.g 'Add Book', 'Add Subsidy Measure', etc..
   """;
   sh:order 10 ;
   sh:path form:addLabel ;
@@ -273,9 +269,9 @@ ext:formListingAddF a form:Field ;
   sh:group ext:listingPg .
 
 ext:formListingRemoveF a form:Field ;
-  sh:name "Edit the remove label" ;
+  sh:name "Remove label" ;
   form:help """
-  The remove label helps the user to figure out what needs to be removed. 'Remove Book', 'Remove Subsidy Measure', etc..
+  e.g. 'Remove Book', 'Remove Subsidy Measure', etc..
   """;
   sh:order 20 ;
   sh:path ( form:each form:removeLabel ) ;
@@ -283,10 +279,9 @@ ext:formListingRemoveF a form:Field ;
   sh:group ext:listingPg .
 
 ext:subFormPropertyGroupF a form:Field ;
-  sh:name "Edit the property group of the subform" ;
+  sh:name "Sub-section" ;
   form:help """
-  It creates sections in the form. <br>
-  Typical examples are 'Overview Books', 'Overview Subsidy Measures', etc..
+  e.g. 'Overview Books', 'Overview Subsidy Measures', etc..
   """;
   sh:order 50 ;
   sh:path sh:group ;
