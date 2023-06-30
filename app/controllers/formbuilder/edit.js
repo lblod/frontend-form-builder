@@ -21,7 +21,6 @@ export default class FormbuilderEditController extends Controller {
   @service('meta-data-extractor') meta;
   @service store;
 
-  @tracked activeTab = 'BUILDER';
   @tracked code;
 
   @tracked previewStore;
@@ -30,17 +29,23 @@ export default class FormbuilderEditController extends Controller {
   @tracked builderStore;
   @tracked builderForm;
 
+  @tracked formChanged = false;
+
   graphs = GRAPHS;
   sourceNode = SOURCE_NODE;
 
   @task({ restartable: true })
-  *refresh(value) {
+  *refresh(value, resetBuilder) {
     yield timeout(500);
 
     if (value) {
       this.code = value;
     }
 
+    if(resetBuilder) {
+      this.builderStore = "";
+    }
+    
     this.previewStore = new ForkingStore();
     this.previewStore.parse(this.code, GRAPHS.formGraph.value, 'text/turtle');
 
@@ -68,15 +73,16 @@ export default class FormbuilderEditController extends Controller {
       FORM('Form'),
       GRAPHS.formGraph
     );
-  }
 
-  @action
-  setActiveTab(value) {
-    this.activeTab = value;
+    this.builderStore.registerObserver(() => {
+      this.serializeSourceToTtl();
+    });
   }
 
   @action
   serializeSourceToTtl() {
+    this.formChanged = true;
+
     const sourceTtl = this.builderStore.serializeDataMergedGraph(
       GRAPHS.sourceGraph
     );

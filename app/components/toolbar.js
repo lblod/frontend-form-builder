@@ -8,7 +8,11 @@ export default class ToolbarComponent extends Component {
   @service router;
   @service toaster;
 
-  @tracked popup = false;
+  @tracked showDeleteModal = false;
+  @tracked showCodeModal = false;
+  @tracked showCodeEditModal = false;
+
+  @tracked showEditModal = false;
   @tracked formLabel = this.args.model.label;
   @tracked formComment = this.args.model.comment;
 
@@ -25,7 +29,7 @@ export default class ToolbarComponent extends Component {
     // Click file to download then destroy link
     downloadLink.click();
     downloadLink.remove();
-    this.popup = false;
+    this.showEditModal = false;
   }
 
   @action
@@ -55,7 +59,7 @@ export default class ToolbarComponent extends Component {
       this.toaster.success('Formulier bijgewerkt', 'Success', {
         timeOut: 5000,
       });
-      this.popup = false;
+      this.showEditModal = false;
     } catch (err) {
       this.toaster.error('Oeps, er is iets mis gegaan', 'Error', {
         timeOut: 5000,

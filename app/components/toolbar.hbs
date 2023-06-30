@@ -19,20 +19,26 @@
     </AuToolbar>
     <AuToolbar @size="small" class="au-u-padding-top-none" as |Group|>
       <Group>
-        <AuTabs as |Tab|>
-          <Tab>
-            <AuButton @skin="naked" @icon="html" {{on "click" (fn @setActiveTab "CODE")}}>Code view</AuButton>
-          </Tab>
-          <Tab>
-            <AuButton @skin="naked" @icon="website" {{on "click" (fn @setActiveTab "BUILDER")}}>Form builder</AuButton>
-          </Tab>
-        </AuTabs>
+        <div>
+          {{#if @formChanged}}
+            <AuPill @skin="warning" @icon="alert-triangle">
+              Aanpassingen nog niet bewaard
+            </AuPill>
+          {{else}}
+            <AuPill @skin="success" @icon="circle-check">
+              Formulier up-to-date
+            </AuPill>
+          {{/if}}
+        </div>
+        <h1 class="au-c-app-chrome__title">
+          {{@model.label}}
+        </h1>
       </Group>
       <Group class="au-c-toolbar__group--actions">
         <AuDropdown @title="Formulier acties" @alignment="right" role="menu">
           <AuButton 
             @skin="tertiary" role="menuitem"
-            {{on "click" (fn (mut this.popup) true)}}
+            {{on "click" (fn (mut this.showEditModal) true)}}
             >
             <AuIcon @icon="copy" @alignment="left" />
             Bewerk naam en beschrijving
@@ -44,24 +50,57 @@
             <AuIcon @icon="export" @alignment="left" />
             Exporteer code
           </AuButton>
+          <AuButton 
+            @skin="tertiary" role="menuitem"
+            {{on 'click' (fn (mut this.showCodeEditModal) true)}}
+            >
+            <AuIcon @icon="html" @alignment="left" />
+            Bewerk code
+          </AuButton>
           <AuButton
             @skin="tertiary" role="menuitem" @alert={{true}}
-            {{on "click" this.deleteForm }}
+            {{on "click" (fn (mut this.showDeleteModal) true) }}
             >
             <AuIcon @icon="bin" @alignment="left" />
             Naar prullenmand
           </AuButton>
         </AuDropdown>
-        <AuButton {{on 'click' this.updateForm}}>Bewaar</AuButton>
+        <AuButton 
+          @disabled={{not @formChanged}}
+          {{on 'click' this.updateForm}}
+        >Bewaar</AuButton>
       </Group>
     </AuToolbar>
   </div>
 </nav>
 
+{{#if this.showDeleteModal}}
+  <ConfirmDeletionModal 
+    @onDelete={{this.deleteForm}}
+    @onClose={{fn (mut this.showDeleteModal) false}}
+  />
+{{/if}}
+
+{{#if this.showUnsavedChangesModal}}
+  <UnsavedChangesModal 
+    @onClose={{fn (mut this.showUnsavedChangesModal) false}}
+    @onSave={{this.updateForm}}
+  />
+{{/if}}
+
+{{#if this.showCodeEditModal}}
+  <CodeEditModal 
+    @onClose={{fn (mut this.showCodeEditModal) false}}
+    @refresh={{@refresh}}
+    @code={{@code}}
+  />
+{{/if}}
+
+
 <AuModal
   @title="Bewerk naam en beschrijving"
-  @modalOpen={{this.popup}}
-  @closeModal={{fn (mut this.popup) false}} as |Modal| >
+  @modalOpen={{this.showEditModal}}
+  @closeModal={{fn (mut this.showEditModal) false}} as |Modal| >
   <Modal.Body>
     <div class="au-o-grid au-o-grid--small">
       <div class="au-o-grid__item au-1-1">
