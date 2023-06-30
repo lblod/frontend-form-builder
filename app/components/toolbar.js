@@ -66,5 +66,7 @@ export default class ToolbarComponent extends Component {
       });
       console.error(err);
     }
+
+    this.args.setFormChanged(false)
   }
 }
