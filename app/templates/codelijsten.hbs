@@ -28,7 +28,18 @@
           <AuLabel>URI: geeft meer informatie en activeert de concept scheme</AuLabel>
           <AuContent class="au-u-margin-bottom">
             {{#if this.scheme.uri}}
-              <p><a class="au-c-link" href={{this.scheme.uri}} rel="noopener noreferrer" target="_blank">{{this.scheme.uri}}</a></p>
+              <p>
+                <a class="au-c-link" href={{this.scheme.uri}} rel="noopener noreferrer" target="_blank">{{this.scheme.uri}}</a>
+              </p>
+              <div>
+                code:
+                <code>
+                  {"conceptScheme": 
+                    "{{this.scheme.uri}}",
+                    "searchEnabled": true
+                  }
+                </code>
+              </div>
             {{else}}
               <AuHelpText @skin="tertiary">Kies eerst een concept scheme.</AuHelpText>
             {{/if}}
