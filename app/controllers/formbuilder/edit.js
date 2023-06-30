@@ -3,11 +3,12 @@ import Controller from '@ember/controller';
 import { v4 as uuidv4 } from 'uuid';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { sym as RDFNode } from 'rdflib';
-import { TEXT_AREA } from '../../components/playground';
+import { FORM, RDF } from '../../utils/rdflib';
+import { next } from '@ember/runloop';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
@@ -15,113 +16,92 @@ export const GRAPHS = {
   sourceGraph: new RDFNode(`http://data.lblod.info/sourcegraph`),
 };
 
+const SOURCE_NODE = new RDFNode('http://frontend.poc.form.builder/sourcenode');
+
 export default class FormbuilderEditController extends Controller {
   @service('meta-data-extractor') meta;
   @service store;
 
-  @tracked forkingStore;
-  @tracked codeEditor;
+  @tracked code;
 
-  constructor() {
-    super(...arguments);
-    this.produced = 0;
-  }
+  @tracked previewStore;
+  @tracked previewForm;
 
-  @task
-  *refresh() {
-    this.forkingStore = new ForkingStore();
-    this.forkingStore.parse(
-      this.codeEditor,
-      GRAPHS.formGraph.value,
-      'text/turtle'
+  @tracked builderStore;
+  @tracked builderForm;
+
+  @tracked formChanged = false;
+
+  graphs = GRAPHS;
+  sourceNode = SOURCE_NODE;
+
+  @tracked firstRun = true;
+
+  @task({ restartable: true })
+  *refresh({ value, resetBuilder }) {
+    yield timeout(500);
+
+    if (value) {
+      this.code = value;
+    }
+
+    if (resetBuilder) {
+      this.formChanged = true;
+      this.builderStore.deregisterObserver();
+      this.builderStore = '';
+    }
+
+    this.previewStore = new ForkingStore();
+    this.previewStore.parse(this.code, GRAPHS.formGraph.value, 'text/turtle');
+
+    const meta = yield this.meta.extract(this.previewStore, { graphs: GRAPHS });
+    this.previewStore.parse(meta, GRAPHS.metaGraph.value, 'text/turtle');
+
+    this.previewForm = this.previewStore.any(
+      undefined,
+      RDF('type'),
+      FORM('Form'),
+      GRAPHS.formGraph
     );
-    const meta = yield this.meta.extract(this.forkingStore, { graphs: GRAPHS });
-    this.forkingStore.parse(meta, GRAPHS.metaGraph.value, 'text/turtle');
 
-    // TODO should be done better
-    const textarea = document.getElementById(TEXT_AREA.id);
-    textarea.scrollTop = textarea.scrollHeight;
-  }
+    let formRes = yield fetch(`/forms/form.ttl`);
+    let formTtl = yield formRes.text();
 
-  @action
-  insertFieldInForm(field) {
-    this.produced += 1;
-    const displayType = field.displayType.value;
-    const form = 'main';
-    const group = '8e24d707-0e29-45b5-9bbf-a39e4fdb2c11';
-    const uuid = uuidv4();
-    const path = uuidv4();
-    const options = {};
+    let metaRes = yield fetch(`/forms/meta.ttl`);
+    let metaTtl = yield metaRes.text();
 
-    if (field.scheme) {
-      options['conceptScheme'] = field.scheme.value.uri;
-      options['searchEnabled'] = false;
-    }
+    this.builderStore = new ForkingStore();
+    this.builderStore.parse(formTtl, GRAPHS.formGraph.value, 'text/turtle');
+    this.builderStore.parse(metaTtl, GRAPHS.metaGraph.value, 'text/turtle');
+    this.builderStore.parse(this.code, GRAPHS.sourceGraph.value, 'text/turtle');
 
-    let validationPart = '';
-    if (field.validations && field.validations.length) {
-      validationPart = this.validationsToTtl(field.validations, path);
-    }
+    this.builderForm = this.builderStore.any(
+      undefined,
+      RDF('type'),
+      FORM('Form'),
+      GRAPHS.formGraph
+    );
 
-    const ttl = `
-##########################################################
-# ${field.label.value}
-##########################################################
-fields:${uuid} a form:Field ;
-    mu:uuid "${uuid}";
-    sh:name "Naamloze vraag" ;
-    sh:order ${this.produced * 10} ;
-    sh:path ext:${path} ;
-    form:options """${JSON.stringify(options)}""" ;
-    form:displayType displayTypes:${displayType} ;
-    ${validationPart}
-    sh:group fields:${group} .
-
-fieldGroups:${form} form:hasField fields:${uuid} .`;
-    this.codeEditor += `\n${ttl}`;
-    this.refresh.perform();
-  }
-
-  validationsToTtl(validations, formPath) {
-    let validationPart = `form:validations`;
-    validations.forEach((validation) => {
-      validationPart += `
-    [ a form:${validation.validationName.value} ;
-      form:grouping form:${validation.grouping.value} ;`;
-      if (validation.customParameter) {
-        validationPart += `
-      form:${validation.customParameter.value} "Param to replace" ;`;
-      }
-      if (validation.errorMessage) {
-        validationPart += `
-      sh:resultMessage "${validation.errorMessage.value}" ;`;
-      }
-      validationPart += `
-      sh:path ext:${formPath} ],`;
+    this.builderStore.registerObserver(() => {
+      this.serializeSourceToTtl();
     });
-    validationPart = validationPart.slice(0, -1) + ' ;';
-    return validationPart;
+
+    this.firstRun = false;
   }
 
   @action
-  async deleteForm() {
-    const generatedForm = this.args.model;
-    const isDeleted = await generatedForm.destroyRecord();
-    if (isDeleted) {
-      this.router.transitionTo('index');
-    }
+  setFormChanged(value) {
+    this.formChanged = value;
   }
 
   @action
-  async updateForm() {
-    const d = new Date();
-    const FormattedDateTime = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}, ${d.toLocaleTimeString()}`;
-    this.store.findRecord('generated-form', this.args.model.id).then((form) => {
-      form.modified = FormattedDateTime;
-      form.ttlCode = this.args.template;
-      form.label = this.formLabel;
-      form.comment = this.formComment;
-      form.save();
-    });
+  serializeSourceToTtl() {
+    this.formChanged = true;
+
+    const sourceTtl = this.builderStore.serializeDataMergedGraph(
+      GRAPHS.sourceGraph
+    );
+
+    this.refresh.perform({ value: sourceTtl });
   }
 }

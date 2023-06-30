@@ -1,0 +1,122 @@
+<nav>
+  <div class="au-c-app-chrome">
+    <AuToolbar @size="small" class="au-u-padding-bottom-none" as |Group|>
+      <Group>
+        <AuLink @route="index" @skin="secondary" @icon="arrow-left">
+          Terug naar overzicht
+        </AuLink>
+        <span class="au-c-app-chrome__entity">{{@model.label}}</span>
+      </Group>
+      <Group>
+        <ul class="au-c-list-horizontal au-u-padding-right-tiny">
+          <li class="au-c-list-horizontal__item">
+            <span class="au-c-app-chrome__status">
+              Bewaard op {{or @model.modified @model.created}}
+            </span>
+          </li>
+        </ul>
+      </Group>
+    </AuToolbar>
+    <AuToolbar @size="small" class="au-u-padding-top-none" as |Group|>
+      <Group>
+        <div>
+          {{#if @formChanged}}
+            <AuPill @skin="warning" @icon="alert-triangle">
+              Aanpassingen nog niet bewaard
+            </AuPill>
+          {{else}}
+            <AuPill @skin="success" @icon="circle-check">
+              Formulier up-to-date
+            </AuPill>
+          {{/if}}
+        </div>
+        <h1 class="au-c-app-chrome__title">
+          {{@model.label}}
+        </h1>
+      </Group>
+      <Group class="au-c-toolbar__group--actions">
+        <AuLink @route="codelijsten">Codelijsten</AuLink>
+        <AuDropdown @title="Formulier acties" @alignment="right" role="menu">
+          <AuButton 
+            @skin="tertiary" role="menuitem"
+            {{on "click" (fn (mut this.showEditModal) true)}}
+            >
+            <AuIcon @icon="copy" @alignment="left" />
+            Bewerk naam en beschrijving
+          </AuButton>
+          <AuButton 
+            @skin="tertiary" role="menuitem"
+            {{on 'click' this.saveLocally}}
+            >
+            <AuIcon @icon="export" @alignment="left" />
+            Exporteer code
+          </AuButton>
+          <AuButton 
+            @skin="tertiary" role="menuitem"
+            {{on 'click' (fn (mut this.showCodeEditModal) true)}}
+            >
+            <AuIcon @icon="html" @alignment="left" />
+            Bewerk code
+          </AuButton>
+          <AuButton
+            @skin="tertiary" role="menuitem" @alert={{true}}
+            {{on "click" (fn (mut this.showDeleteModal) true) }}
+            >
+            <AuIcon @icon="bin" @alignment="left" />
+            Naar prullenmand
+          </AuButton>
+        </AuDropdown>
+        <AuButton 
+          @disabled={{not @formChanged}}
+          {{on 'click' this.updateForm}}
+        >Bewaar</AuButton>
+      </Group>
+    </AuToolbar>
+  </div>
+</nav>
+
+{{#if this.showDeleteModal}}
+  <ConfirmDeletionModal 
+    @onDelete={{this.deleteForm}}
+    @onClose={{fn (mut this.showDeleteModal) false}}
+  />
+{{/if}}
+
+{{#if this.showUnsavedChangesModal}}
+  <UnsavedChangesModal 
+    @onClose={{fn (mut this.showUnsavedChangesModal) false}}
+    @onSave={{this.updateForm}}
+  />
+{{/if}}
+
+{{#if this.showCodeEditModal}}
+  <CodeEditModal 
+    @onClose={{fn (mut this.showCodeEditModal) false}}
+    @refresh={{@refresh}}
+    @code={{@code}}
+  />
+{{/if}}
+
+
+<AuModal
+  @title="Bewerk naam en beschrijving"
+  @modalOpen={{this.showEditModal}}
+  @closeModal={{fn (mut this.showEditModal) false}} as |Modal| >
+  <Modal.Body>
+    <div class="au-o-grid au-o-grid--small">
+      <div class="au-o-grid__item au-1-1">
+        <AuLabel for="input-filelabel">
+          Naam
+        </AuLabel>
+        <AuInput id="input-filelabel" @value={{this.formLabel}}/>
+      </div>
+      <div class="au-o-grid__item au-1-1">
+        <AuLabel for="input-filecomment">Beschrijving</AuLabel>
+        <AuTextarea id="input-filecomment" rows="10" @width="block" @value={{this.formComment}}/>
+      </div>
+    </div>
+  </Modal.Body>
+  <Modal.Footer>
+    <AuButton {{on 'click' this.updateForm}}>Bijwerken</AuButton>
+  </Modal.Footer>
+</AuModal>

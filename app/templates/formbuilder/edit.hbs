@@ -1,41 +1,54 @@
 {{page-title "Formbuilder"}}
-<div class="au-c-toolbar  au-c-toolbar--bottom  au-c-toolbar--large ">
-  <div class="au-c-toolbar__group">
-    <AuHeading @level="1" @skin="2">
-      Maak en bewerk semantisch formulier
-    </AuHeading>
-  </div>
-
-
-  <div class="au-c-toolbar__group">
-    <AuButtonGroup>
-      <AuLink @route="index" @skin="button-secondary" @icon="arrow-left">
-        Terug naar overzicht formulieren
-      </AuLink>
-    </AuButtonGroup>
-  </div>
-</div>
+<Toolbar 
+  @model={{this.model}}
+  @code={{this.code}}
+  @setActiveTab={{this.setActiveTab}}
+  @formChanged={{this.formChanged}}
+  @refresh={{this.refresh}}
+  @setFormChanged={{this.setFormChanged}}
+/>
 
 <main id="main" class="au-c-main-container">
-  <div class="au-c-main-container__sidebar">
-    <div class="au-c-sidebar">
-      <div class="au-c-sidebar__content">
-        <div class="au-c-sidebar__header">
-          <InputTypesList @insertFieldInForm={{this.insertFieldInForm}}/>
-          {{!--         <br>
-                  <ConceptSchemeUriSelector/>
-                  <AuLink @route="codelijsten">Bekijk inhoud van codelijsten</AuLink> --}}
-        </div>
-      </div>
-      <div class="au-c-sidebar__footer">
-        <AuLink @route="codelijsten" @icon="documents">Bekijk inhoud van codelijsten</AuLink>
-      </div>
-    </div>
-  </div>
   <div class="au-c-main-container__content">
     <div class="playground">
-      <Playground @store={{this.forkingStore}} @template={{this.codeEditor}} @model={{this.model}} @refresh={{this.refresh}} />
-      {{outlet}}
+      <div class="playground__edit">
+        <div style="overflow-y: auto; padding: 30px">
+          {{#if (and this.refresh.isRunning this.firstRun)}}
+              <AuLoader />
+          {{else}}
+            {{#if this.builderStore}}
+              <RdfForm
+                @groupClass="au-o-grid__item"
+                @form={{this.builderForm}}
+                @graphs={{this.graphs}}
+                @formStore={{this.builderStore}}
+                @forceShowErrors={{true}}
+                @useNewListingLayout={{true}}
+                @sourceNode={{this.previewForm}}
+              />
+            {{/if}}
+          {{/if}}
+        </div>
+      </div>
+      <div class="playground__show">
+          <div class="au-u-margin-top-small">
+            {{#if this.refresh.isRunning}}
+              <AuLoader />
+            {{else}}
+              <RdfForm
+                @groupClass="au-u-margin-left-small au-u-margin-top"
+                @form={{this.previewForm}}
+                @graphs={{this.graphs}}
+                @sourceNode={{this.sourceNode}}
+                @formStore={{this.previewStore}}
+                @forceShowErrors={{true}}
+                @useNewListingLayout={{true}}
+              />
+            {{/if}}
+          </div>
+        </div>
     </div>
   </div>
 </main>
+
+

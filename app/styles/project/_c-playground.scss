@@ -4,13 +4,16 @@
 }
 
 .playground__codelist,
-.playground__edit,
 .playground__show {
-  flex: 1 1;
   padding: $au-unit*1.5;
+  width: 45%;
 }
 
 .playground__codelist,
+.playground__edit {
+  flex: 1 1 0%;
+}
+
 .playground__edit {
   display: flex;
   flex-direction: column;

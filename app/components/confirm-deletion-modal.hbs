@@ -1,0 +1,34 @@
+<AuModal
+  @modalOpen={{true}}
+  @closeModal={{this.close}}
+  data-test-confirm-deletion-modal="modal"
+>
+  <:title>Formulier verwijderen?</:title>
+  <:body>
+    Bent u zeker dat u dit formulier wilt verwijderen? Deze actie is permanent.
+  </:body>
+  <:footer>
+    <AuButtonGroup>
+      <AuButton
+        @icon="bin"
+        @iconAlignment="left"
+        @alert={{true}}
+        @disabled={{this.delete.isRunning}}
+        @loading={{this.delete.isRunning}}
+        @loadingMessage="Aan het verwijderen"
+        {{on "click" (perform this.delete)}}
+        data-test-confirm-deletion-modal="delete-button"
+      >
+        Verwijderen
+      </AuButton>
+      <AuButton
+        @skin="secondary"
+        @disabled={{this.delete.isRunning}}
+        {{on "click" this.close}}
+        data-test-confirm-deletion-modal="cancel-button"
+      >
+        Annuleer
+      </AuButton>
+    </AuButtonGroup>
+  </:footer>
+</AuModal>

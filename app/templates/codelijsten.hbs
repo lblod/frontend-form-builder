@@ -1,4 +1,4 @@
-{{page-title "Codelijsten"}}
+{{page-title "Concept schemes"}}
 <div class="au-c-toolbar  au-c-toolbar--bottom  au-c-toolbar--large ">
   <div class="au-c-toolbar__group">
     <AuHeading @level="1" @skin="2">
@@ -18,24 +18,35 @@
     <div class="playground">
       <div class="playground__codelist">
 
-        <AuHeading @level="2" @skin="3" class="au-u-light">Kies een codelijst waarvan u de inhoud wil bekijken</AuHeading>
+        <AuHeading @level="2" @skin="3" class="au-u-light">Kies een concept scheme waarvan u de inhoud wil bekijken</AuHeading>
 
         <div class="au-u-margin-top au-u-margin-bottom">
           <ConceptSchemeUriSelector @update={{this.update}}/>
         </div>
 
         <div class="au-u-margin-bottom">
-          <AuLabel>URI: geeft meer informatie en activeert de codelijst</AuLabel>
+          <AuLabel>URI: geeft meer informatie en activeert de concept scheme</AuLabel>
           <AuContent class="au-u-margin-bottom">
             {{#if this.scheme.uri}}
-              <p><a class="au-c-link" href={{this.scheme.uri}} rel="noopener noreferrer" target="_blank">{{this.scheme.uri}}</a></p>
+              <p>
+                <a class="au-c-link" href={{this.scheme.uri}} rel="noopener noreferrer" target="_blank">{{this.scheme.uri}}</a>
+              </p>
+              <div>
+                code:
+                <code>
+                  {"conceptScheme": 
+                    "{{this.scheme.uri}}",
+                    "searchEnabled": true
+                  }
+                </code>
+              </div>
             {{else}}
-              <AuHelpText @skin="tertiary">Kies eerst een codelijst.</AuHelpText>
+              <AuHelpText @skin="tertiary">Kies eerst een concept scheme.</AuHelpText>
             {{/if}}
-            <AuAlert @icon="info-circle" @title="Hoe de codelijst gebruiken:" @skin="info" @size="small">
+            <AuAlert @icon="info-circle" @title="Hoe de concept scheme gebruiken:" @skin="info" @size="small">
               <ul class="au-u-margin-bottom-small">
-                <li>Kopieer de link en plak ze bij <strong>form:options</strong> en vervang de link achter <strong>conceptScheme</strong> om de codelijst te activeren.</li>
-                <li>Sommige links omvatten meer informatie over de codelijst zelf. Klik op de link om die informatie te achterhalen.</li>
+                <li>Kopieer de link en plak ze bij <strong>form:options</strong> en vervang de link achter <strong>conceptScheme</strong> om de concept scheme te activeren.</li>
+                <li>Sommige links omvatten meer informatie over de concept scheme zelf. Klik op de link om die informatie te achterhalen.</li>
               </ul>
               <img src="/img/example-concept-scheme.png" style="border: 1px solid lightgray;" alt="concept scheme" {{! template-lint-disable no-inline-styles}}>
             </AuAlert>
@@ -46,7 +57,7 @@
       <div class="playground__show">
 
         <AuContent class="au-u-margin-bottom">
-          <AuLabel>Bekijk inhoud van codelijst</AuLabel>
+          <AuLabel>Bekijk inhoud van concept schemes</AuLabel>
           {{#if this.scheme.uri}}
             <ul>
               {{#each this.scheme.concepts as |concept|}}
@@ -56,7 +67,7 @@
               {{/each}}
             </ul>
           {{else}}
-            <AuHelpText @skin="tertiary">Kies eerst een codelijst in het linkerveld.</AuHelpText>
+            <AuHelpText @skin="tertiary">Kies eerst een concept scheme in het linkerveld.</AuHelpText>
           {{/if}}
         </AuContent>
       </div>
