@@ -47,7 +47,7 @@ export default class FormbuilderEditController extends Controller {
 
     if (resetBuilder) {
       this.formChanged = true;
-      this.builderStore.deregisterObserver()
+      this.builderStore.deregisterObserver();
       this.builderStore = '';
     }
 
