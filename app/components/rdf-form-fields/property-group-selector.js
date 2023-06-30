@@ -11,8 +11,8 @@ import {
 import { namedNode } from 'rdflib';
 
 function byLabel(a, b) {
-  const textA = a.label.toUpperCase();
-  const textB = b.label.toUpperCase();
+  const textA = a.label?.toUpperCase();
+  const textB = b.label?.toUpperCase();
   return textA < textB ? -1 : textA > textB ? 1 : 0;
 }
 
