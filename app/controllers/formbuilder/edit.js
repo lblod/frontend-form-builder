@@ -7,7 +7,6 @@ import { task, timeout } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { sym as RDFNode } from 'rdflib';
-import { TEXT_AREA } from '../../components/playground';
 import { FORM, RDF } from '../../utils/rdflib';
 
 export const GRAPHS = {
@@ -22,7 +21,7 @@ export default class FormbuilderEditController extends Controller {
   @service('meta-data-extractor') meta;
   @service store;
 
-  @tracked activeTab = 'CODE';
+  @tracked activeTab = 'BUILDER';
   @tracked code;
 
   @tracked previewStore;
@@ -70,7 +69,7 @@ export default class FormbuilderEditController extends Controller {
       GRAPHS.formGraph
     );
   }
-  
+
   @action
   setActiveTab(value) {
     this.activeTab = value;
@@ -81,8 +80,6 @@ export default class FormbuilderEditController extends Controller {
     const sourceTtl = this.builderStore.serializeDataMergedGraph(
       GRAPHS.sourceGraph
     );
-
-    console.log(sourceTtl)
     this.refresh.perform(sourceTtl);
   }
 }

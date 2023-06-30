@@ -35,27 +35,30 @@ function simpleLinter() {
   });
 }
 
-export default modifier(function editor(parent, [value, refresh]) {
-  const extensions = [basicSetup, turtle(), simpleLinter(), lintGutter()];
-  const doc = value || '';
+export default modifier(
+  function editor(parent, [value, refresh]) {
+    const extensions = [basicSetup, turtle(), simpleLinter(), lintGutter()];
+    const doc = value || '';
 
-  const updateListener = EditorView.updateListener.of((viewUpdate) => {
-    if (viewUpdate.docChanged) {
-      const doc = viewUpdate.state.doc;
-      const value = doc.toString();
-      refresh.perform(value);
-    }
-  });
+    const updateListener = EditorView.updateListener.of((viewUpdate) => {
+      if (viewUpdate.docChanged) {
+        const doc = viewUpdate.state.doc;
+        const value = doc.toString();
+        refresh.perform(value);
+      }
+    });
 
-  extensions.push(updateListener);
+    extensions.push(updateListener);
 
-  const editor = new EditorView({
-    parent,
-    doc,
-    extensions,
-  });
-  
-  return () => {
-    editor.destroy();
-  };
-}, { eager: false });
+    const editor = new EditorView({
+      parent,
+      doc,
+      extensions,
+    });
+
+    return () => {
+      editor.destroy();
+    };
+  },
+  { eager: false }
+);

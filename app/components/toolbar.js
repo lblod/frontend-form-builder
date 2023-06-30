@@ -63,5 +63,4 @@ export default class ToolbarComponent extends Component {
       console.error(err);
     }
   }
-
 }

@@ -31,7 +31,9 @@ export default class PropertyGroupSelector extends InputFieldComponent {
   @action
   loadOptions() {
     const sourceGraph = this.args.graphs.sourceGraph;
-    const propertyGroup = new namedNode('http://lblod.data.gift/vocabularies/forms/PropertyGroup');
+    const propertyGroup = new namedNode(
+      'http://lblod.data.gift/vocabularies/forms/PropertyGroup'
+    );
 
     this.options = this.args.formStore
       .match(undefined, RDF('type'), propertyGroup, sourceGraph)

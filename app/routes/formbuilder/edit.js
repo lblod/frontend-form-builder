@@ -24,9 +24,10 @@ export default class FormbuilderEditRoute extends Route {
   registerCustomFields() {
     registerFormFields([
       {
-        displayType: 'http://lblod.data.gift/display-types/propertyGroupSelector',
-        edit: PropertyGroupSelector
-      }
-    ])
+        displayType:
+          'http://lblod.data.gift/display-types/propertyGroupSelector',
+        edit: PropertyGroupSelector,
+      },
+    ]);
   }
 }
