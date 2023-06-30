@@ -5,6 +5,7 @@
   @setActiveTab={{this.setActiveTab}}
   @formChanged={{this.formChanged}}
   @refresh={{this.refresh}}
+  @setFormChanged={{this.setFormChanged}}
 />
 
 <main id="main" class="au-c-main-container">
@@ -12,16 +13,20 @@
     <div class="playground">
       <div class="playground__edit">
         <div style="overflow-y: auto; padding: 30px">
-          {{#if this.builderStore}}
-            <RdfForm
-              @groupClass="au-o-grid__item"
-              @form={{this.builderForm}}
-              @graphs={{this.graphs}}
-              @formStore={{this.builderStore}}
-              @forceShowErrors={{true}}
-              @useNewListingLayout={{true}}
-              @sourceNode={{this.previewForm}}
-            />
+          {{#if (and this.refresh.isRunning this.firstRun)}}
+              <AuLoader />
+          {{else}}
+            {{#if this.builderStore}}
+              <RdfForm
+                @groupClass="au-o-grid__item"
+                @form={{this.builderForm}}
+                @graphs={{this.graphs}}
+                @formStore={{this.builderStore}}
+                @forceShowErrors={{true}}
+                @useNewListingLayout={{true}}
+                @sourceNode={{this.previewForm}}
+              />
+            {{/if}}
           {{/if}}
         </div>
       </div>

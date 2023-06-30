@@ -8,6 +8,7 @@ import { inject as service } from '@ember/service';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { sym as RDFNode } from 'rdflib';
 import { FORM, RDF } from '../../utils/rdflib';
+import { next } from '@ember/runloop';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
@@ -34,8 +35,10 @@ export default class FormbuilderEditController extends Controller {
   graphs = GRAPHS;
   sourceNode = SOURCE_NODE;
 
+  @tracked firstRun = true;
+
   @task({ restartable: true })
-  *refresh(value, resetBuilder) {
+  *refresh({ value, resetBuilder }) {
     yield timeout(500);
 
     if (value) {
@@ -43,11 +46,16 @@ export default class FormbuilderEditController extends Controller {
     }
 
     if (resetBuilder) {
+      this.formChanged = true;
+      this.builderStore.deregisterObserver()
       this.builderStore = '';
     }
 
     this.previewStore = new ForkingStore();
     this.previewStore.parse(this.code, GRAPHS.formGraph.value, 'text/turtle');
+
+    const meta = yield this.meta.extract(this.previewStore, { graphs: GRAPHS });
+    this.previewStore.parse(meta, GRAPHS.metaGraph.value, 'text/turtle');
 
     this.previewForm = this.previewStore.any(
       undefined,
@@ -77,6 +85,13 @@ export default class FormbuilderEditController extends Controller {
     this.builderStore.registerObserver(() => {
       this.serializeSourceToTtl();
     });
+
+    this.firstRun = false;
+  }
+
+  @action
+  setFormChanged(value) {
+    this.formChanged = value;
   }
 
   @action
@@ -86,6 +101,7 @@ export default class FormbuilderEditController extends Controller {
     const sourceTtl = this.builderStore.serializeDataMergedGraph(
       GRAPHS.sourceGraph
     );
-    this.refresh.perform(sourceTtl);
+
+    this.refresh.perform({ value: sourceTtl });
   }
 }

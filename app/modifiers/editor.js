@@ -44,7 +44,7 @@ export default modifier(
       if (viewUpdate.docChanged) {
         const doc = viewUpdate.state.doc;
         const value = doc.toString();
-        refresh.perform(value, true);
+        refresh.perform({ value: value, resetBuilder: true });
       }
     });
 
