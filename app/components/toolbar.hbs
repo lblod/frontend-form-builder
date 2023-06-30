@@ -11,7 +11,7 @@
         <ul class="au-c-list-horizontal au-u-padding-right-tiny">
           <li class="au-c-list-horizontal__item">
             <span class="au-c-app-chrome__status">
-              Bewaard op {{@model.modified}}
+              Bewaard op {{or @model.modified @model.created}}
             </span>
           </li>
         </ul>
@@ -21,10 +21,10 @@
       <Group>
         <AuTabs as |Tab|>
           <Tab>
-            <AuButton {{on "click" (fn @setActiveTab "CODE")}}>Code view</AuButton>
+            <AuButton @skin="naked" @icon="html" {{on "click" (fn @setActiveTab "CODE")}}>Code view</AuButton>
           </Tab>
           <Tab>
-            <AuButton {{on "click" (fn @setActiveTab "BUILDER")}}>Form builder</AuButton>
+            <AuButton @skin="naked" @icon="website" {{on "click" (fn @setActiveTab "BUILDER")}}>Form builder</AuButton>
           </Tab>
         </AuTabs>
       </Group>
