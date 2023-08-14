@@ -43,13 +43,11 @@ export default class ToolbarComponent extends Component {
 
   @action
   async updateForm() {
-    const now = new Date();
-    const FormattedDateTime = `${now.getDate()}/${now.getMonth()}/${now.getFullYear()}, ${now.toLocaleTimeString()}`;
     const form = await this.store.findRecord(
       'generated-form',
       this.args.model.id
     );
-    form.modified = FormattedDateTime;
+    form.modified = new Date();
     form.ttlCode = this.args.code;
     form.label = this.formLabel;
     form.comment = this.formComment;
