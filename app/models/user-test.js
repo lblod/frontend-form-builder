@@ -18,5 +18,5 @@ export default class UserTestModel extends Model {
   })
   modified;
 
-  @belongsTo('generated-form') form;
+  @belongsTo('generated-form', { async: true }) form;
 }
