@@ -20,7 +20,7 @@ export default class FormbuilderEditRoute extends Route {
   async setupController(controller, model) {
     super.setupController(...arguments);
     controller.refresh.perform({
-      value: this.getFormTtlCode(model),
+      formTtlCode: this.getFormTtlCode(model),
     });
   }
 
