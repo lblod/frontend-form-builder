@@ -7,7 +7,6 @@ import { inject as service } from '@ember/service';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { sym as RDFNode } from 'rdflib';
 import { FORM, RDF } from '../../utils/rdflib';
-import ForkingStoreHelper from '../../utils/forkingStoreHelper';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
@@ -37,17 +36,17 @@ export default class FormbuilderEditController extends Controller {
   @tracked isInitialDataLoading = true;
 
   @task({ restartable: true })
-  *refresh({ formTtlCode, resetBuilder }) {
+  *refresh({ value, resetBuilder }) {
     yield timeout(500);
 
-    if (formTtlCode) {
-      this.code = formTtlCode;
+    if (value) {
+      this.code = value;
     }
 
     if (resetBuilder) {
       this.formChanged = true;
       this.builderStore.deregisterObserver();
-      this.builderStore = ForkingStoreHelper.getEmptyStoreValue();
+      this.builderStore = '';
     }
 
     this.previewStore = new ForkingStore();
