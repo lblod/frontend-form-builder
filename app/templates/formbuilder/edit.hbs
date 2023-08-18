@@ -14,6 +14,7 @@
       <div class="playground__edit">
         <AuBodyContainer @scroll={{true}} class="au-o-box">
           {{#if (and this.refresh.isRunning this.firstRun)}}
+
               <AuLoader />
           {{else}}
             {{#if this.builderStore}}

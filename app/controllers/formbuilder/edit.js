@@ -1,4 +1,5 @@
 import Controller from '@ember/controller';
+
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task, timeout } from 'ember-concurrency';
@@ -32,7 +33,7 @@ export default class FormbuilderEditController extends Controller {
   graphs = GRAPHS;
   sourceNode = SOURCE_NODE;
 
-  @tracked firstRun = true;
+  @tracked isInitialDataLoading = true;
 
   @task({ restartable: true })
   *refresh({ value, resetBuilder }) {
@@ -61,11 +62,8 @@ export default class FormbuilderEditController extends Controller {
       GRAPHS.formGraph
     );
 
-    let formRes = yield fetch(`/forms/form.ttl`);
-    let formTtl = yield formRes.text();
-
-    let metaRes = yield fetch(`/forms/meta.ttl`);
-    let metaTtl = yield metaRes.text();
+    const formTtl = yield this.getLocalFileContentAsText('/forms/form.ttl');
+    const metaTtl = yield this.getLocalFileContentAsText('/forms/meta.ttl');
 
     this.builderStore = new ForkingStore();
     this.builderStore.parse(formTtl, GRAPHS.formGraph.value, 'text/turtle');
@@ -83,7 +81,7 @@ export default class FormbuilderEditController extends Controller {
       this.serializeSourceToTtl();
     });
 
-    this.firstRun = false;
+    this.isInitialDataLoading = false;
   }
 
   @action
@@ -100,5 +98,11 @@ export default class FormbuilderEditController extends Controller {
     );
 
     this.refresh.perform({ value: sourceTtl });
+  }
+
+  async getLocalFileContentAsText(path) {
+    const file = await fetch(path);
+
+    return await file.text();
   }
 }
