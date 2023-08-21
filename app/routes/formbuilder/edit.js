@@ -3,7 +3,6 @@ import template from '../../utils/basic-form-template';
 import { inject as service } from '@ember/service';
 import { registerFormFields } from '@lblod/ember-submission-form-fields';
 import PropertyGroupSelector from '../../components/rdf-form-fields/property-group-selector';
-import { tracked } from '@glimmer/tracking';
 
 export default class FormbuilderEditRoute extends Route {
   @service store;
@@ -21,6 +20,8 @@ export default class FormbuilderEditRoute extends Route {
     super.setupController(...arguments);
     controller.refresh.perform({
       value: this.getFormTtlCode(model),
+      resetBuilder: false,
+      isInitialRouteCall: true,
     });
   }
 

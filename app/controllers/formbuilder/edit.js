@@ -8,6 +8,7 @@ import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { sym as RDFNode } from 'rdflib';
 import { FORM, RDF } from '../../utils/rdflib';
 import ForkingStoreHelper from '../../utils/forking-store-helper';
+import RouterHelper from '../../utils/router-helper';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
@@ -20,6 +21,7 @@ const SOURCE_NODE = new RDFNode('http://frontend.poc.form.builder/sourcenode');
 export default class FormbuilderEditController extends Controller {
   @service('meta-data-extractor') meta;
   @service store;
+  @service router;
 
   @tracked code;
 
@@ -34,10 +36,11 @@ export default class FormbuilderEditController extends Controller {
   graphs = GRAPHS;
   sourceNode = SOURCE_NODE;
 
-  @tracked isInitialDataLoading = true;
+  @tracked isInitialDataLoaded = false;
 
   @task({ restartable: true })
-  *refresh({ value, resetBuilder }) {
+  *refresh({ value, resetBuilder, isInitialRouteCall = false }) {
+    this.isInitialDataLoaded = !isInitialRouteCall;
     yield timeout(500);
 
     if (value) {
@@ -78,11 +81,14 @@ export default class FormbuilderEditController extends Controller {
       GRAPHS.formGraph
     );
 
-    this.builderStore.registerObserver(() => {
-      this.serializeSourceToTtl();
-    });
+    if (isInitialRouteCall == true) {
+      this.builderStore.registerObserver(() => {
+        this.serializeSourceToTtl();
+      });
+      this.setFormChanged(false);
+    }
 
-    this.isInitialDataLoading = false;
+    this.isInitialDataLoaded = true;
   }
 
   @action
@@ -92,6 +98,13 @@ export default class FormbuilderEditController extends Controller {
 
   @action
   serializeSourceToTtl() {
+    if (!RouterHelper.isOnRoute(this.router, 'formbuilder.edit')) {
+      this.builderStore.deregisterObserver();
+      this.refresh.cancelAll();
+
+      return;
+    }
+
     this.formChanged = true;
 
     const sourceTtl = this.builderStore.serializeDataMergedGraph(
