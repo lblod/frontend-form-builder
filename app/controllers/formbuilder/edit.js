@@ -81,10 +81,11 @@ export default class FormbuilderEditController extends Controller {
       GRAPHS.formGraph
     );
 
+    this.builderStore.registerObserver(() => {
+      this.serializeSourceToTtl();
+    });
+
     if (isInitialRouteCall == true) {
-      this.builderStore.registerObserver(() => {
-        this.serializeSourceToTtl();
-      });
       this.setFormChanged(false);
     }
 
@@ -106,7 +107,6 @@ export default class FormbuilderEditController extends Controller {
     }
 
     this.formChanged = true;
-
     const sourceTtl = this.builderStore.serializeDataMergedGraph(
       GRAPHS.sourceGraph
     );
