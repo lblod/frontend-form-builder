@@ -13,10 +13,10 @@ export default class FormbuilderEditRoute extends Route {
   }
 
   async model(params) {
-    return await this.getForm(params.id);
+    return await this.getGeneratedFormById(params.id);
   }
 
-  async setupController(controller, model) {
+  setupController(controller, model) {
     super.setupController(...arguments);
     controller.refresh.perform({
       value: this.getFormTtlCode(model),
@@ -25,7 +25,7 @@ export default class FormbuilderEditRoute extends Route {
     });
   }
 
-  async getForm(generatedFormId) {
+  async getGeneratedFormById(generatedFormId) {
     try {
       const form = await this.store.findRecord(
         'generated-form',

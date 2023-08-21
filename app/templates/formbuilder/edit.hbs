@@ -17,7 +17,7 @@
           {{#if this.isInitialDataLoaded}}
             {{#if this.builderStore}}
               <RdfForm
-                @groupClass='au-o-grid__item'
+                @groupClass="au-o-grid__item"
                 @form={{this.builderForm}}
                 @graphs={{this.graphs}}
                 @formStore={{this.builderStore}}
@@ -31,13 +31,13 @@
           {{/if}}
         </AuBodyContainer>
       </div>
-      <div class='playground__show'>
-        <div class='au-u-margin-top-small'>
+      <div class="playground__show">
+        <div class="au-u-margin-top-small">
           {{#if this.refresh.isRunning}}
             <AuLoader />
           {{else}}
             <RdfForm
-              @groupClass='au-u-margin-left-small au-u-margin-top'
+              @groupClass="au-u-margin-left-small au-u-margin-top"
               @form={{this.previewForm}}
               @graphs={{this.graphs}}
               @sourceNode={{this.sourceNode}}

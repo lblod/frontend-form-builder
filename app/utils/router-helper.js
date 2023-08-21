@@ -1,5 +1,5 @@
 export default class RouterHelper {
-  static isOnRoute(_router, _path) {
+  static isCurrentlyOnRoute(_router, _path) {
     if (_router.constructor.name !== 'RouterService') {
       throw `Router is not a RouterService`;
     }

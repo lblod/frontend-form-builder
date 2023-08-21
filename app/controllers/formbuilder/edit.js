@@ -99,7 +99,7 @@ export default class FormbuilderEditController extends Controller {
 
   @action
   serializeSourceToTtl() {
-    if (!RouterHelper.isOnRoute(this.router, 'formbuilder.edit')) {
+    if (!RouterHelper.isCurrentlyOnRoute(this.router, 'formbuilder.edit')) {
       this.builderStore.deregisterObserver();
       this.refresh.cancelAll();
 
