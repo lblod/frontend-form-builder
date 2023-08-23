@@ -4,6 +4,10 @@
 >
   <:title>Formulier code bewerken</:title>
   <:body>
-    <div {{editor @code @refresh}} style="overflow: auto; height: 100%; width:100%"></div>  
+    <div
+      {{editor @code @refresh}}
+      {{!template-lint-disable no-inline-styles}}
+      style="overflow: auto; height: 100%; width:100%"
+    ></div>
   </:body>
 </AuModal>
