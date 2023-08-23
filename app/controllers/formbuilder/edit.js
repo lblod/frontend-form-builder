@@ -7,7 +7,6 @@ import { inject as service } from '@ember/service';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { sym as RDFNode } from 'rdflib';
 import { FORM, RDF } from '../../utils/rdflib';
-import RouterHelper from '../../utils/router-helper';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
@@ -34,6 +33,7 @@ export default class FormbuilderEditController extends Controller {
 
   graphs = GRAPHS;
   sourceNode = SOURCE_NODE;
+  REGISTERED_FORM_TTL_CODE_KEY = 'formTtlCode';
 
   @tracked isInitialDataLoaded = false;
 
@@ -48,7 +48,7 @@ export default class FormbuilderEditController extends Controller {
 
     if (resetBuilder) {
       this.formChanged = true;
-      this.builderStore.deregisterObserver();
+      this.builderStore.deregisterObserver(this.REGISTERED_FORM_TTL_CODE_KEY);
       this.builderStore = '';
     }
 
@@ -82,7 +82,7 @@ export default class FormbuilderEditController extends Controller {
 
     this.builderStore.registerObserver(() => {
       this.serializeSourceToTtl();
-    }, 'formTtlCode');
+    }, this.REGISTERED_FORM_TTL_CODE_KEY);
 
     if (isInitialRouteCall) {
       this.setFormChanged(false);
@@ -98,13 +98,6 @@ export default class FormbuilderEditController extends Controller {
 
   @action
   serializeSourceToTtl() {
-    if (!RouterHelper.isCurrentlyOnRoute(this.router, 'formbuilder.edit')) {
-      this.builderStore.deregisterObserver('formTtlCode');
-      this.refresh.cancelAll();
-
-      return;
-    }
-
     this.formChanged = true;
     const sourceTtl = this.builderStore.serializeDataMergedGraph(
       GRAPHS.sourceGraph
