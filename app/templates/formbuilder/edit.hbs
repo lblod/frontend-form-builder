@@ -9,13 +9,12 @@
   @setFormChanged={{this.setFormChanged}}
 />
 
-<main id='main' class='au-c-main-container'>
-  <div class='au-c-main-container__content'>
-    <div class='playground'>
-      <div class='playground__edit'>
+<main id="main" class="au-c-main-container">
+  <div class="au-c-main-container__content">
+    <div class="playground">
+      <div class="playground__edit">
         <AuBodyContainer @scroll={{true}} class="au-o-box">
-          {{#if this.isInitialDataLoaded}}
-            {{#if this.builderStore}}
+          {{#if (and this.isInitialDataLoaded this.builderStore)}}
               <RdfForm
                 @groupClass="au-o-grid__item"
                 @form={{this.builderForm}}
@@ -25,7 +24,6 @@
                 @useNewListingLayout={{true}}
                 @sourceNode={{this.previewForm}}
               />
-            {{/if}}
           {{else}}
             <AuLoader />
           {{/if}}
