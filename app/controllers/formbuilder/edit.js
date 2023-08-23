@@ -1,6 +1,4 @@
 import Controller from '@ember/controller';
-
-import { v4 as uuidv4 } from 'uuid';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task, timeout } from 'ember-concurrency';
@@ -8,7 +6,6 @@ import { inject as service } from '@ember/service';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { sym as RDFNode } from 'rdflib';
 import { FORM, RDF } from '../../utils/rdflib';
-import { next } from '@ember/runloop';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),

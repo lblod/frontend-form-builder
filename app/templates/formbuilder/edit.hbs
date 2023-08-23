@@ -1,5 +1,5 @@
 {{page-title "Formbuilder"}}
-<Toolbar 
+<Toolbar
   @model={{this.model}}
   @code={{this.code}}
   @setActiveTab={{this.setActiveTab}}
@@ -12,7 +12,7 @@
   <div class="au-c-main-container__content">
     <div class="playground">
       <div class="playground__edit">
-        <div style="overflow-y: auto; padding: 30px">
+        <AuBodyContainer @scroll={{true}} class="au-o-box">
           {{#if (and this.refresh.isRunning this.firstRun)}}
               <AuLoader />
           {{else}}
@@ -28,7 +28,7 @@
               />
             {{/if}}
           {{/if}}
-        </div>
+        </AuBodyContainer>
       </div>
       <div class="playground__show">
           <div class="au-u-margin-top-small">
