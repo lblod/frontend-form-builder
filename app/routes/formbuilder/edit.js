@@ -26,12 +26,7 @@ export default class FormbuilderEditRoute extends Route {
   }
 
   resetController(controller) {
-    if (
-      controller.builderStore &&
-      controller.builderStore.observers[controller.REGISTERED_FORM_TTL_CODE_KEY]
-    ) {
-      controller.builderStore.deregisterObserver();
-    }
+    controller.deregisterFromObservable();
   }
 
   async getGeneratedFormById(generatedFormId) {

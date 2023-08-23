@@ -110,4 +110,10 @@ export default class FormbuilderEditController extends Controller {
 
     return await file.text();
   }
+
+  deregisterFromObservable() {
+    if (this.builderStore instanceof ForkingStore) {
+      this.builderStore.deregisterObserver(this.REGISTERED_FORM_TTL_CODE_KEY);
+    }
+  }
 }
