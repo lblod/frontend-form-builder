@@ -12,15 +12,34 @@ export default class FormbuilderEditRoute extends Route {
     this.registerCustomFields();
   }
 
-  model(params) {
-    return this.store.findRecord('generated-form', params.id);
+  async model(params) {
+    return await this.getGeneratedFormById(params.id);
   }
 
   setupController(controller, model) {
     super.setupController(...arguments);
     controller.refresh.perform({
-      value: model.ttlCode ? model.ttlCode : template,
+      formTtlCode: this.getFormTtlCode(model),
+      resetBuilder: false,
+      isInitialRouteCall: true,
     });
+  }
+
+  resetController(controller) {
+    controller.deregisterFromObservable();
+  }
+
+  async getGeneratedFormById(generatedFormId) {
+    try {
+      const form = await this.store.findRecord(
+        'generated-form',
+        generatedFormId
+      );
+
+      return form;
+    } catch (error) {
+      throw `Could not fetch generated-form with id: ${generatedFormId}`;
+    }
   }
 
   registerCustomFields() {
@@ -31,5 +50,13 @@ export default class FormbuilderEditRoute extends Route {
         edit: PropertyGroupSelector,
       },
     ]);
+  }
+
+  getFormTtlCode(model) {
+    if (!model.ttlCode || model.ttlCode == '') {
+      return template;
+    }
+
+    return model.ttlCode;
   }
 }

@@ -1,4 +1,5 @@
 import Controller from '@ember/controller';
+
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task, timeout } from 'ember-concurrency';
@@ -31,20 +32,22 @@ export default class FormbuilderEditController extends Controller {
 
   graphs = GRAPHS;
   sourceNode = SOURCE_NODE;
+  REGISTERED_FORM_TTL_CODE_KEY = 'formTtlCode';
 
-  @tracked firstRun = true;
+  @tracked isInitialDataLoaded = false;
 
   @task({ restartable: true })
-  *refresh({ value, resetBuilder }) {
-    yield timeout(500);
+  *refresh({ formTtlCode, resetBuilder, isInitialRouteCall = false }) {
+    this.isInitialDataLoaded = !isInitialRouteCall;
+    isInitialRouteCall ? null : yield timeout(500);
 
-    if (value) {
-      this.code = value;
+    if (formTtlCode) {
+      this.code = formTtlCode;
     }
 
     if (resetBuilder) {
       this.formChanged = true;
-      this.builderStore.deregisterObserver();
+      this.builderStore.deregisterObserver(this.REGISTERED_FORM_TTL_CODE_KEY);
       this.builderStore = '';
     }
 
@@ -61,11 +64,8 @@ export default class FormbuilderEditController extends Controller {
       GRAPHS.formGraph
     );
 
-    let formRes = yield fetch(`/forms/form.ttl`);
-    let formTtl = yield formRes.text();
-
-    let metaRes = yield fetch(`/forms/meta.ttl`);
-    let metaTtl = yield metaRes.text();
+    const formTtl = yield this.getLocalFileContentAsText('/forms/form.ttl');
+    const metaTtl = yield this.getLocalFileContentAsText('/forms/meta.ttl');
 
     this.builderStore = new ForkingStore();
     this.builderStore.parse(formTtl, GRAPHS.formGraph.value, 'text/turtle');
@@ -81,9 +81,13 @@ export default class FormbuilderEditController extends Controller {
 
     this.builderStore.registerObserver(() => {
       this.serializeSourceToTtl();
-    });
+    }, this.REGISTERED_FORM_TTL_CODE_KEY);
 
-    this.firstRun = false;
+    if (isInitialRouteCall) {
+      this.setFormChanged(false);
+    }
+
+    this.isInitialDataLoaded = true;
   }
 
   @action
@@ -94,11 +98,22 @@ export default class FormbuilderEditController extends Controller {
   @action
   serializeSourceToTtl() {
     this.formChanged = true;
-
     const sourceTtl = this.builderStore.serializeDataMergedGraph(
       GRAPHS.sourceGraph
     );
 
-    this.refresh.perform({ value: sourceTtl });
+    this.refresh.perform({ formTtlCode: sourceTtl });
+  }
+
+  async getLocalFileContentAsText(path) {
+    const file = await fetch(path);
+
+    return await file.text();
+  }
+
+  deregisterFromObservable() {
+    if (this.builderStore instanceof ForkingStore) {
+      this.builderStore.deregisterObserver(this.REGISTERED_FORM_TTL_CODE_KEY);
+    }
   }
 }

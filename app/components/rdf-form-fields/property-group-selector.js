@@ -35,7 +35,7 @@ export default class PropertyGroupSelector extends InputFieldComponent {
       'http://lblod.data.gift/vocabularies/forms/PropertyGroup'
     );
 
-    this.options = this.args.formStore
+    const allRawOptions = this.args.formStore
       .match(undefined, RDF('type'), propertyGroup, sourceGraph)
       .map((t) => {
         const label = this.args.formStore.any(
@@ -46,7 +46,13 @@ export default class PropertyGroupSelector extends InputFieldComponent {
         );
         return { subject: t.subject, label: label && label.value };
       });
-    this.options.sort(byLabel);
+
+    // There are option labels that are undefined in this list, I did not found it yet why or where these values are added but if they do not have a label they should not be visible in the frontend
+    const optionsWithALabel = allRawOptions.filter((option) => {
+      return option.label;
+    });
+
+    this.options = optionsWithALabel.sort(byLabel);
   }
 
   loadProvidedValue() {

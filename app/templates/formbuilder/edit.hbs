@@ -1,4 +1,5 @@
 {{page-title "Formbuilder"}}
+
 <Toolbar
   @model={{this.model}}
   @code={{this.code}}
@@ -13,10 +14,7 @@
     <div class="playground">
       <div class="playground__edit">
         <AuBodyContainer @scroll={{true}} class="au-o-box">
-          {{#if (and this.refresh.isRunning this.firstRun)}}
-              <AuLoader />
-          {{else}}
-            {{#if this.builderStore}}
+          {{#if (and this.isInitialDataLoaded this.builderStore)}}
               <RdfForm
                 @groupClass="au-o-grid__item"
                 @form={{this.builderForm}}
@@ -26,29 +24,28 @@
                 @useNewListingLayout={{true}}
                 @sourceNode={{this.previewForm}}
               />
-            {{/if}}
+          {{else}}
+            <AuLoader />
           {{/if}}
         </AuBodyContainer>
       </div>
       <div class="playground__show">
-          <div class="au-u-margin-top-small">
-            {{#if this.refresh.isRunning}}
-              <AuLoader />
-            {{else}}
-              <RdfForm
-                @groupClass="au-u-margin-left-small au-u-margin-top"
-                @form={{this.previewForm}}
-                @graphs={{this.graphs}}
-                @sourceNode={{this.sourceNode}}
-                @formStore={{this.previewStore}}
-                @forceShowErrors={{true}}
-                @useNewListingLayout={{true}}
-              />
-            {{/if}}
-          </div>
+        <div class="au-u-margin-top-small">
+          {{#if this.refresh.isRunning}}
+            <AuLoader />
+          {{else}}
+            <RdfForm
+              @groupClass="au-u-margin-left-small au-u-margin-top"
+              @form={{this.previewForm}}
+              @graphs={{this.graphs}}
+              @sourceNode={{this.sourceNode}}
+              @formStore={{this.previewStore}}
+              @forceShowErrors={{true}}
+              @useNewListingLayout={{true}}
+            />
+          {{/if}}
         </div>
+      </div>
     </div>
   </div>
 </main>
-
-
