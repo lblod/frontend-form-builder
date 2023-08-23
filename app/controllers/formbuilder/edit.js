@@ -7,7 +7,6 @@ import { inject as service } from '@ember/service';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { sym as RDFNode } from 'rdflib';
 import { FORM, RDF } from '../../utils/rdflib';
-import ForkingStoreHelper from '../../utils/forking-store-helper';
 import RouterHelper from '../../utils/router-helper';
 
 export const GRAPHS = {
@@ -41,7 +40,7 @@ export default class FormbuilderEditController extends Controller {
   @task({ restartable: true })
   *refresh({ value, resetBuilder, isInitialRouteCall = false }) {
     this.isInitialDataLoaded = !isInitialRouteCall;
-    yield timeout(500);
+    isInitialRouteCall ? null : yield timeout(500);
 
     if (value) {
       this.code = value;
@@ -50,7 +49,7 @@ export default class FormbuilderEditController extends Controller {
     if (resetBuilder) {
       this.formChanged = true;
       this.builderStore.deregisterObserver();
-      this.builderStore = ForkingStoreHelper.getEmptyStoreValue();
+      this.builderStore = '';
     }
 
     this.previewStore = new ForkingStore();
@@ -83,9 +82,9 @@ export default class FormbuilderEditController extends Controller {
 
     this.builderStore.registerObserver(() => {
       this.serializeSourceToTtl();
-    });
+    }, 'formTtlCode');
 
-    if (isInitialRouteCall == true) {
+    if (isInitialRouteCall) {
       this.setFormChanged(false);
     }
 
@@ -100,7 +99,7 @@ export default class FormbuilderEditController extends Controller {
   @action
   serializeSourceToTtl() {
     if (!RouterHelper.isCurrentlyOnRoute(this.router, 'formbuilder.edit')) {
-      this.builderStore.deregisterObserver();
+      this.builderStore.deregisterObserver('formTtlCode');
       this.refresh.cancelAll();
 
       return;

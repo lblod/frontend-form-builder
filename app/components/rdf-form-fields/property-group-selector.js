@@ -48,8 +48,8 @@ export default class PropertyGroupSelector extends InputFieldComponent {
       });
 
     // There are option labels that are undefined in this list, I did not found it yet why or where these values are added but if they do not have a label they should not be visible in the frontend
-    const optionsWithALabel = allRawOptions.filter((_option) => {
-      return _option.label;
+    const optionsWithALabel = allRawOptions.filter((option) => {
+      return option.label;
     });
 
     this.options = optionsWithALabel.sort(byLabel);
