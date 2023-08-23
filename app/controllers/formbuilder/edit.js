@@ -19,7 +19,6 @@ const SOURCE_NODE = new RDFNode('http://frontend.poc.form.builder/sourcenode');
 export default class FormbuilderEditController extends Controller {
   @service('meta-data-extractor') meta;
   @service store;
-  @service router;
 
   @tracked code;
 
@@ -38,12 +37,12 @@ export default class FormbuilderEditController extends Controller {
   @tracked isInitialDataLoaded = false;
 
   @task({ restartable: true })
-  *refresh({ value, resetBuilder, isInitialRouteCall = false }) {
+  *refresh({ formTtlCode, resetBuilder, isInitialRouteCall = false }) {
     this.isInitialDataLoaded = !isInitialRouteCall;
     isInitialRouteCall ? null : yield timeout(500);
 
-    if (value) {
-      this.code = value;
+    if (formTtlCode) {
+      this.code = formTtlCode;
     }
 
     if (resetBuilder) {
@@ -103,7 +102,7 @@ export default class FormbuilderEditController extends Controller {
       GRAPHS.sourceGraph
     );
 
-    this.refresh.perform({ value: sourceTtl });
+    this.refresh.perform({ formTtlCode: sourceTtl });
   }
 
   async getLocalFileContentAsText(path) {
