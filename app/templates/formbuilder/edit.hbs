@@ -13,8 +13,34 @@
   <div class="au-c-main-container__content">
     <div class="playground">
       <div class="playground__edit">
+        <div>
+          Builder
+          <AuToggleSwitch
+            @checked={{this.isAddingValidationToForm}}
+            @onChange={{this.toggleIsAddingValidationToForm}}
+          >Validation</AuToggleSwitch>
+        </div>
         <AuBodyContainer @scroll={{true}} class="au-o-box">
-          {{#if (and this.isInitialDataLoaded this.builderStore)}}
+          {{#if this.isAddingValidationToForm}}
+            <h1>Validation tab</h1>
+            <ul>
+              {{#each this.fieldsInForm as |field|}}
+                <li>{{field.fieldName}}</li>
+                <ul>
+                  {{#each field.validationTypes as |type|}}
+                    <li>{{type.value}}</li>
+                  {{/each}}
+                </ul>
+                <AuButton
+                  {{on "click" (fn this.removeAllValidationsFromField field)}}
+                >Remove all validations</AuButton>
+                <AuButton
+                  {{on "click" (fn this.addIsRequiredValidationToField field)}}
+                >Add is required</AuButton>
+              {{/each}}
+            </ul>
+          {{else}}
+            {{#if (and this.isInitialDataLoaded this.builderStore)}}
               <RdfForm
                 @groupClass="au-o-grid__item"
                 @form={{this.builderForm}}
@@ -24,8 +50,9 @@
                 @useNewListingLayout={{true}}
                 @sourceNode={{this.previewForm}}
               />
-          {{else}}
-            <AuLoader />
+            {{else}}
+              <AuLoader />
+            {{/if}}
           {{/if}}
         </AuBodyContainer>
       </div>
