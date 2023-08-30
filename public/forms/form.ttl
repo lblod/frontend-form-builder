@@ -139,6 +139,7 @@ ext:formNodesFormItem a form:SubForm;
   form:includes ext:formNodeHelpTextF;
   form:includes ext:formNodeOptionsF;
   form:includes ext:formNodePropertyGroupF;
+  form:includes ext:formNodeValidationF;
   form:hasFieldGroup ext:formFieldPg.
 
 ext:formNodesNameF a form:Field ;
@@ -205,7 +206,17 @@ ext:formNodesGenerator a form:Generator;
       a form:Field ;
       sh:name "Field name";
       sh:path [];
-      form:displayType displayTypes:defaultInput
+      form:displayType displayTypes:defaultInput ;
+      form:validations [
+        a form:MaxLength ;
+          form:grouping form:MatchEvery ;
+          form:max "100" ;
+          sh:resultMessage "Max. karakters overschreden." 
+        ],
+        [ a form:RequiredConstraint ;
+          form:grouping form:Bag ;
+          sh:resultMessage "Dit veld is verplicht."@nl
+        ]
     ]
   ].
 
@@ -374,3 +385,17 @@ ext:subformNodesL a form:Listing;
   form:removeLabel "Remove Field";
   sh:group ext:listingPg;
   sh:order 60 .
+
+##########################################################
+#  Validations:
+##########################################################
+ext:formNodeValidationF a form:Field;
+  sh:name "Add validations" ;
+  sh:order 7;
+  form:help """
+    e.g. Required, Max Length...
+   """;
+  sh:path form:validations ;
+  form:displayType displayTypes:conceptSchemeMultiSelector ;
+  form:options """{"conceptScheme":"http://lblod.data.gift/concept-schemes/dde3d2a3-e848-47ea-ba44-0f2e565f04ab","searchEnabled":true}""" ;
+  sh:group ext:formFieldPg .

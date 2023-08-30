@@ -123,3 +123,28 @@ ns1:c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6  ns3:uuid  "c5a91bd7-3eb5-4d69-a51b-9ba
   <http://mu.semte.ch/vocabularies/core/uuid>   "ec03d1ee-8542-48d8-b75a-0597080b5aa6" ;
   skos:inScheme   <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Search"@en .
+
+##############################
+##    VALIDATION OPTIONS    ##
+##############################
+ns1:dde3d2a3-e848-47ea-ba44-0f2e565f04ab  rdf:type  skos:ConceptScheme .
+@prefix ns3:  <http://mu.semte.ch/vocabularies/core/> .
+ns1:dde3d2a3-e848-47ea-ba44-0f2e565f04ab  ns3:uuid  "dde3d2a3-e848-47ea-ba44-0f2e565f04ab" ;
+  skos:prefLabel  "Form validations"@en .
+
+  <http://lblod.data.gift/concepts/629bddbb-bf30-48d6-95af-c2f406bd9e8c>
+    a <http://www.w3.org/2004/02/skos/core#Concept>, <http://www.w3.org/2000/01/rdf-schema#Class>;
+      <http://mu.semte.ch/vocabularies/core/uuid> "629bddbb-bf30-48d6-95af-c2f406bd9e8c" ;
+      <http://www.w3.org/2004/02/skos/core#inScheme> <http://lblod.data.gift/concept-schemes/dde3d2a3-e848-47ea-ba44-0f2e565f04ab>;
+      <http://www.w3.org/2004/02/skos/core#prefLabel> "Required"@en ;
+      <http://mu.semte.ch/vocabularies/ext/validationName> "RequiredConstraint"@en ;
+      skos:inScheme   <http://lblod.data.gift/concept-schemes/dde3d2a3-e848-47ea-ba44-0f2e565f04ab> ;
+      skos:prefLabel  "RequiredConstraint"@en .
+  <http://lblod.data.gift/concepts/60873518-5423-4121-ba6a-9635b18242a0>
+    a <http://www.w3.org/2004/02/skos/core#Concept>, <http://www.w3.org/2000/01/rdf-schema#Class>;
+      <http://mu.semte.ch/vocabularies/core/uuid> "60873518-5423-4121-ba6a-9635b18242a0" ;
+      <http://www.w3.org/2004/02/skos/core#inScheme> <http://lblod.data.gift/concept-schemes/dde3d2a3-e848-47ea-ba44-0f2e565f04ab>;
+      <http://www.w3.org/2004/02/skos/core#prefLabel> "Max length"@en ;
+      <http://mu.semte.ch/vocabularies/ext/validationName> "MaxLength"@en ;
+      skos:inScheme   <http://lblod.data.gift/concept-schemes/dde3d2a3-e848-47ea-ba44-0f2e565f04ab> ;
+      skos:prefLabel  "MaxLength"@en .
