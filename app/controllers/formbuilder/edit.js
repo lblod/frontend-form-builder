@@ -10,9 +10,10 @@ import {
   getChildrenForPropertyGroup,
   validationTypesForField,
 } from '@lblod/ember-submission-form-fields';
-import { Namespace, sym as RDFNode, quad, triple } from 'rdflib';
-import { FORM, RDF, NODES } from '../../utils/rdflib';
+import { Namespace, sym as RDFNode, triple } from 'rdflib';
+import { FORM, RDF, NODES, CONCEPT_SCHEMES } from '../../utils/rdflib';
 import { v4 as uuidv4 } from 'uuid';
+import fetch from 'fetch';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
@@ -112,24 +113,58 @@ export default class FormbuilderEditController extends Controller {
     }
   }
 
-  @action
-  addIsRequiredValidationToForm() {
-    console.log('addIsRequiredValidationTo FORM');
-    const subject = NODES('c065e16e-aeea-452c-93c0-0577f8d7bbff');
-    // const subject = NODES(uuidv4());
-    const predicate = FORM('validations');
-    const value = FORM('RequiredConstraint');
-    console.log({ subject });
-    const validationTriple = quad(
-      subject,
-      predicate,
-      value,
-      this.graphs.sourceGraph
-    );
+  async queryDB(query) {
+    const encodedQuery = escape(query);
+    const endpoint = `/sparql?query=${encodedQuery}`;
+    const response = await fetch(endpoint, {
+      headers: { Accept: 'application/sparql-results+json' },
+    });
 
-    console.log({ validationTriple });
-    this.builderStore.addAll([validationTriple]);
-    console.log(this.builderStore);
+    if (response.ok) {
+      let jsonResponds = await response.json();
+      return jsonResponds.results.bindings;
+    } else {
+      throw new Error(
+        `Request was unsuccessful: [${response.status}] ${response.statusText}`
+      );
+    }
+  }
+
+  @action
+  async addIsRequiredValidationToForm() {
+    console.log('addIsRequiredValidationTo FORM');
+    const validationsListId = 'dde3d2a3-e848-47ea-ba44-0f2e565f04ab';
+    const query = `
+    SELECT DISTINCT ?uuid ?prefLabel ?validationName {
+      ?item <http://www.w3.org/2004/02/skos/core#inScheme> ${CONCEPT_SCHEMES(
+        validationsListId
+      )} ;
+        <http://mu.semte.ch/vocabularies/core/uuid> ?uuid ;
+        <http://mu.semte.ch/vocabularies/ext/validationName> ?validationName ;
+        <http://www.w3.org/2004/02/skos/core#prefLabel> ?prefLabel .
+    }
+  `;
+
+    console.log({ query });
+    let concepts = await this.queryDB(query);
+
+    console.log({ concepts });
+
+    // const subject = NODES('c065e16e-aeea-452c-93c0-0577f8d7bbff');
+    // // const subject = NODES(uuidv4());
+    // const predicate = FORM('validations');
+    // const value = FORM('RequiredConstraint');
+    // console.log({ subject });
+    // const validationTriple = triple(
+    //   subject,
+    //   predicate,
+    //   value,
+    //   this.graphs.sourceGraph
+    // );
+
+    // console.log({ validationTriple });
+    // this.builderStore.addAll([validationTriple]);
+    // console.log(this.builderStore);
   }
 
   @action
