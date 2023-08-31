@@ -10,8 +10,9 @@ import {
   getChildrenForPropertyGroup,
   validationTypesForField,
 } from '@lblod/ember-submission-form-fields';
-import { sym as RDFNode } from 'rdflib';
-import { FORM, RDF } from '../../utils/rdflib';
+import { Namespace, sym as RDFNode, quad, triple } from 'rdflib';
+import { FORM, RDF, NODES } from '../../utils/rdflib';
+import { v4 as uuidv4 } from 'uuid';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
@@ -114,18 +115,45 @@ export default class FormbuilderEditController extends Controller {
   @action
   addIsRequiredValidationToForm() {
     console.log('addIsRequiredValidationTo FORM');
-    console.error('NOT IMPLEMENTED');
+    const subject = NODES('c065e16e-aeea-452c-93c0-0577f8d7bbff');
+    // const subject = NODES(uuidv4());
+    const predicate = FORM('validations');
+    const value = FORM('RequiredConstraint');
+    console.log({ subject });
+    const validationTriple = quad(
+      subject,
+      predicate,
+      value,
+      this.graphs.sourceGraph
+    );
+
+    console.log({ validationTriple });
+    this.builderStore.addAll([validationTriple]);
+    console.log(this.builderStore);
   }
 
   @action
   addIsRequiredValidationToField(field) {
     console.log('addIsRequiredValidationTo FIELD');
     console.log({ field });
-    console.error('NOT IMPLEMENTED');
+    const subject = field.parent.uri;
+    const predicate = FORM('validations');
+    const value = NODES('c065e16e-aeea-452c-93c0-0577f8d7bbff');
+    console.log({ subject });
+    const validationTriple = triple(
+      subject,
+      predicate,
+      value,
+      this.graphs.sourceGraph
+    );
+
+    console.log({ validationTriple });
+    this.builderStore.addAll([validationTriple]);
   }
 
   @task({ restartable: true })
   *refresh({ formTtlCode, resetBuilder, isInitialRouteCall = false }) {
+    console.log({ formTtlCode });
     this.isInitialDataLoaded = !isInitialRouteCall;
     isInitialRouteCall ? null : yield timeout(500);
 
@@ -176,6 +204,7 @@ export default class FormbuilderEditController extends Controller {
       this.isAddingValidationToForm = false;
     }
 
+    console.log('this.builderStore', this.builderStore);
     this.isInitialDataLoaded = true;
   }
 
@@ -190,6 +219,8 @@ export default class FormbuilderEditController extends Controller {
     const sourceTtl = this.builderStore.serializeDataMergedGraph(
       GRAPHS.sourceGraph
     );
+
+    console.log({ sourceTtl });
 
     this.refresh.perform({ formTtlCode: sourceTtl });
   }
