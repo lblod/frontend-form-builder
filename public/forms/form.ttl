@@ -206,17 +206,7 @@ ext:formNodesGenerator a form:Generator;
       a form:Field ;
       sh:name "Field name";
       sh:path [];
-      form:displayType displayTypes:defaultInput ;
-      form:validations [
-        a form:MaxLength ;
-          form:grouping form:MatchEvery ;
-          form:max "100" ;
-          sh:resultMessage "Max. karakters overschreden." 
-        ],
-        [ a form:RequiredConstraint ;
-          form:grouping form:Bag ;
-          sh:resultMessage "Dit veld is verplicht."@nl
-        ]
+      form:displayType displayTypes:defaultInput
     ]
   ].
 

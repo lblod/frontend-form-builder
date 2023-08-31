@@ -10,7 +10,7 @@ import {
   getChildrenForPropertyGroup,
   validationTypesForField,
 } from '@lblod/ember-submission-form-fields';
-import { parse, sym as RDFNode } from 'rdflib';
+import { sym as RDFNode } from 'rdflib';
 import { FORM, RDF } from '../../utils/rdflib';
 
 export const GRAPHS = {
@@ -73,7 +73,7 @@ export default class FormbuilderEditController extends Controller {
     const metaTtl = await this.getMetaTtlContent();
     fieldStore.parse(metaTtl, GRAPHS.metaGraph.value, 'text/turtle');
 
-    const fieldForm = this.previewStore.any(
+    const fieldForm = fieldStore.any(
       undefined,
       RDF('type'),
       FORM('Form'),
@@ -112,49 +112,16 @@ export default class FormbuilderEditController extends Controller {
   }
 
   @action
-  addIsRequiredValidationToField(field) {
-    console.log('addIsRequiredValidationToField');
-    console.log({ field });
+  addIsRequiredValidationToForm() {
+    console.log('addIsRequiredValidationTo FORM');
+    console.error('NOT IMPLEMENTED');
   }
 
   @action
-  removeAllValidationsFromField(field) {
-    console.log('this.code', this.code);
+  addIsRequiredValidationToField(field) {
+    console.log('addIsRequiredValidationTo FIELD');
     console.log({ field });
-    const validationsInTheForm =
-      field.store.graph.predicateIndex[
-        '<http://lblod.data.gift/vocabularies/forms/validations>'
-      ];
-    console.log({ validationsInTheForm });
-    const statementsToRemove = validationsInTheForm.filter((validation) => {
-      return validation.subject.value == field.uri;
-    });
-
-    console.log({ statementsToRemove });
-
-    for (const statement of statementsToRemove) {
-      field.store.removeMatches(
-        statement.subject,
-        statement.predicate,
-        statement.object,
-        statement.graph
-      );
-    }
-
-    console.log('Field store', field.store);
-    // this.serializeSourceToTtl();
-
-    this.builderStore = field.store;
-
-    console.log(
-      '1',
-      this.builderStore.graph.statements.includes(statementsToRemove[0])
-    );
-    console.log(
-      '2',
-      this.builderStore.graph.statements.includes(statementsToRemove[1])
-    );
-    console.log('updated the validations of the field');
+    console.error('NOT IMPLEMENTED');
   }
 
   @task({ restartable: true })
