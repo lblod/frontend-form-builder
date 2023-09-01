@@ -10,8 +10,8 @@ import {
   getChildrenForPropertyGroup,
   validationTypesForField,
 } from '@lblod/ember-submission-form-fields';
-import { Namespace, sym as RDFNode, triple } from 'rdflib';
-import { FORM, RDF, NODES, CONCEPT_SCHEMES } from '../../utils/rdflib';
+import { sym as RDFNode, triple } from 'rdflib';
+import { FORM, RDF, NODES, CONCEPT_SCHEMES, SH } from '../../utils/rdflib';
 import { v4 as uuidv4 } from 'uuid';
 import fetch from 'fetch';
 
@@ -107,6 +107,7 @@ export default class FormbuilderEditController extends Controller {
           validationTypes: validationTypes,
           store: fieldStore,
           fieldForm: fieldForm,
+          propertyGroup: group,
         });
         console.log({ validationTypes });
       }
@@ -130,9 +131,7 @@ export default class FormbuilderEditController extends Controller {
     }
   }
 
-  @action
-  async addIsRequiredValidationToForm() {
-    console.log('addIsRequiredValidationTo FORM');
+  async getAllValidationConceptsByQuery() {
     const validationsListId = 'dde3d2a3-e848-47ea-ba44-0f2e565f04ab';
     const query = `
     SELECT DISTINCT ?uuid ?prefLabel ?validationName {
@@ -149,32 +148,47 @@ export default class FormbuilderEditController extends Controller {
     let concepts = await this.queryDB(query);
 
     console.log({ concepts });
+  }
 
-    // const subject = NODES('c065e16e-aeea-452c-93c0-0577f8d7bbff');
-    // // const subject = NODES(uuidv4());
-    // const predicate = FORM('validations');
-    // const value = FORM('RequiredConstraint');
-    // console.log({ subject });
-    // const validationTriple = triple(
-    //   subject,
-    //   predicate,
-    //   value,
-    //   this.graphs.sourceGraph
-    // );
+  @action
+  async addIsRequiredValidationToForm(field) {
+    console.log('addIsRequiredValidationTo FORM');
 
-    // console.log({ validationTriple });
-    // this.builderStore.addAll([validationTriple]);
-    // console.log(this.builderStore);
+    const subject = NODES('c065e16e-aeea-452c-93c0-0577f8d7bbff');
+    // const subject = NODES(uuidv4());
+    const tripleONE = triple(
+      subject,
+      RDF('type'),
+      FORM('RequiredConstraint'),
+      this.graphs.sourceGraph
+    );
+    const tripleTWO = triple(
+      subject,
+      FORM('grouping'),
+      FORM('MatchEvery'),
+      this.graphs.sourceGraph
+    );
+    const tripleTHREE = triple(
+      subject,
+      FORM('max'),
+      '100',
+      this.graphs.sourceGraph
+    );
+    const tripleFOUR = triple(
+      subject,
+      SH('resultMessage'),
+      'Max. karakters overschreden.',
+      this.graphs.sourceGraph
+    );
+
+    field.store.addAll([tripleONE, tripleTWO, tripleTHREE, tripleFOUR]);
   }
 
   @action
   addIsRequiredValidationToField(field) {
-    console.log('addIsRequiredValidationTo FIELD');
-    console.log({ field });
     const subject = field.parent.uri;
     const predicate = FORM('validations');
     const value = NODES('c065e16e-aeea-452c-93c0-0577f8d7bbff');
-    console.log({ subject });
     const validationTriple = triple(
       subject,
       predicate,
@@ -182,7 +196,6 @@ export default class FormbuilderEditController extends Controller {
       this.graphs.sourceGraph
     );
 
-    console.log({ validationTriple });
     this.builderStore.addAll([validationTriple]);
   }
 

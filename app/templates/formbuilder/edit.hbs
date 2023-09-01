@@ -32,7 +32,7 @@
                   {{/each}}
                 </ul>
                 <AuButton
-                  {{on 'click' (fn this.addIsRequiredValidationToForm)}}
+                  {{on 'click' (fn this.addIsRequiredValidationToForm field)}}
                 >Add is required node to form</AuButton>
                 <AuButton
                   {{on 'click' (fn this.addIsRequiredValidationToField field)}}
