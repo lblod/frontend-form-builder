@@ -39,6 +39,7 @@ export default class FormbuilderEditController extends Controller {
   @tracked isAddingValidationToForm = false;
 
   localeMetaTtlContentAsText = '';
+  localeFormTtlContentAsText = '';
 
   @tracked fieldsInForm = [];
 
@@ -70,34 +71,24 @@ export default class FormbuilderEditController extends Controller {
       return null;
     }
 
-    const fieldStore = new ForkingStore();
-    fieldStore.parse(this.code, GRAPHS.formGraph.value, 'text/turtle');
-    const metaTtl = await this.getMetaTtlContent();
-    fieldStore.parse(metaTtl, GRAPHS.metaGraph.value, 'text/turtle');
-
-    const fieldForm = fieldStore.any(
-      undefined,
-      RDF('type'),
-      FORM('Form'),
-      GRAPHS.formGraph
-    );
+    this.builderStore.deregisterObserver(this.REGISTERED_FORM_TTL_CODE_KEY);
 
     const propertyGroups = getTopLevelPropertyGroups({
-      store: fieldStore,
+      store: this.previewStore,
       graphs: this.graphs,
-      form: fieldForm,
+      form: this.previewForm,
     });
     for (const group of propertyGroups) {
       const children = getChildrenForPropertyGroup(group, {
-        form: fieldForm,
-        store: fieldStore,
+        form: this.previewForm,
+        store: this.previewStore,
         graphs: this.graphs,
         sourceNode: this.sourceNode,
       });
 
       for (const field of children) {
         const validationTypes = validationTypesForField(field.uri, {
-          store: fieldStore,
+          store: this.previewStore,
           formGraph: this.graphs.formGraph,
         });
         this.fieldsInForm.push({
@@ -105,8 +96,8 @@ export default class FormbuilderEditController extends Controller {
           fieldName: field.rdflibLabel,
           uri: field.uri.value,
           validationTypes: validationTypes,
-          store: fieldStore,
-          fieldForm: fieldForm,
+          store: this.previewStore,
+          fieldForm: this.previewForm,
           propertyGroup: group,
         });
         console.log({ validationTypes });
@@ -156,32 +147,39 @@ export default class FormbuilderEditController extends Controller {
 
     const subject = NODES('c065e16e-aeea-452c-93c0-0577f8d7bbff');
     // const subject = NODES(uuidv4());
-    const tripleONE = triple(
+    const requiredConstraint = triple(
       subject,
       RDF('type'),
       FORM('RequiredConstraint'),
-      this.graphs.sourceGraph
+      GRAPHS.sourceGraph
     );
-    const tripleTWO = triple(
+    const bagGrouping = triple(
       subject,
       FORM('grouping'),
-      FORM('MatchEvery'),
-      this.graphs.sourceGraph
+      FORM('Bag'),
+      GRAPHS.sourceGraph
     );
-    const tripleTHREE = triple(
-      subject,
-      FORM('max'),
-      '100',
-      this.graphs.sourceGraph
-    );
-    const tripleFOUR = triple(
+    const resultMessage = triple(
       subject,
       SH('resultMessage'),
-      'Max. karakters overschreden.',
-      this.graphs.sourceGraph
+      'Dit veld is verplicht',
+      GRAPHS.sourceGraph
     );
 
-    field.store.addAll([tripleONE, tripleTWO, tripleTHREE, tripleFOUR]);
+    this.builderStore.addAll([requiredConstraint, bagGrouping, resultMessage]);
+
+    this.builderForm = this.builderStore.any(
+      undefined,
+      RDF('type'),
+      FORM('Form'),
+      GRAPHS.formGraph
+    );
+
+    const sourceTtl = this.builderStore.serializeDataMergedGraph(
+      GRAPHS.sourceGraph
+    );
+
+    console.log({ sourceTtl });
   }
 
   @action
@@ -197,11 +195,13 @@ export default class FormbuilderEditController extends Controller {
     );
 
     this.builderStore.addAll([validationTriple]);
+
+    this.serializeSourceToTtl();
   }
 
   @task({ restartable: true })
   *refresh({ formTtlCode, resetBuilder, isInitialRouteCall = false }) {
-    console.log({ formTtlCode });
+    // console.log({ formTtlCode });
     this.isInitialDataLoaded = !isInitialRouteCall;
     isInitialRouteCall ? null : yield timeout(500);
 
@@ -228,7 +228,7 @@ export default class FormbuilderEditController extends Controller {
       GRAPHS.formGraph
     );
 
-    const formTtl = yield this.getLocalFileContentAsText('/forms/form.ttl');
+    const formTtl = yield this.getFormTtlContent();
     const metaTtl = yield this.getMetaTtlContent();
 
     this.builderStore = new ForkingStore();
@@ -252,7 +252,6 @@ export default class FormbuilderEditController extends Controller {
       this.isAddingValidationToForm = false;
     }
 
-    console.log('this.builderStore', this.builderStore);
     this.isInitialDataLoaded = true;
   }
 
@@ -290,6 +289,19 @@ export default class FormbuilderEditController extends Controller {
     }
 
     return this.localeMetaTtlContentAsText;
+  }
+
+  async getFormTtlContent() {
+    if (
+      !this.localeFormTtlContentAsText ||
+      this.localeFormTtlContentAsText == ''
+    ) {
+      this.localeFormTtlContentAsText = await this.getLocalFileContentAsText(
+        '/forms/form.ttl'
+      );
+    }
+
+    return this.localeFormTtlContentAsText;
   }
 
   deregisterFromObservable() {
