@@ -1,4 +1,4 @@
-{{page-title "Formbuilder"}}
+{{page-title 'Formbuilder'}}
 
 <Toolbar
   @model={{this.model}}
@@ -32,7 +32,7 @@
                   {{/each}}
                 </ul>
                 <AuButton
-                  {{on 'click' (fn this.addIsRequiredValidationToForm field)}}
+                  {{on 'click' (fn this.addIsRequiredValidationToForm)}}
                 >Add is required node to form</AuButton>
                 <AuButton
                   {{on 'click' (fn this.addIsRequiredValidationToField field)}}

@@ -4,15 +4,12 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task, timeout } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
-import {
-  ForkingStore,
-  getTopLevelPropertyGroups,
-  getChildrenForPropertyGroup,
-  validationTypesForField,
-} from '@lblod/ember-submission-form-fields';
-import { sym as RDFNode, triple } from 'rdflib';
-import { FORM, RDF, NODES, CONCEPT_SCHEMES, SH } from '../../utils/rdflib';
-import { v4 as uuidv4 } from 'uuid';
+import { ForkingStore } from '@lblod/ember-submission-form-fields';
+import { sym as RDFNode } from 'rdflib';
+import { FORM, RDF } from '../../utils/rdflib';
+import { getAllFieldInForm } from '../../utils/validation/getAllFieldsInForm';
+import { addIsRequiredValidationToForm } from '../../utils/validation/addValidationToForm';
+import { addIsRequiredValidationToField } from '../../utils/validation/addValidationToField';
 import fetch from 'fetch';
 
 export const GRAPHS = {
@@ -43,6 +40,12 @@ export default class FormbuilderEditController extends Controller {
 
   @tracked fieldsInForm = [];
 
+  graphs = GRAPHS;
+  sourceNode = SOURCE_NODE;
+  REGISTERED_FORM_TTL_CODE_KEY = 'formTtlCode';
+
+  @tracked isInitialDataLoaded = false;
+
   @action
   toggleIsAddingValidationToForm() {
     this.set('isAddingValidationToForm', !this.isAddingValidationToForm);
@@ -54,147 +57,36 @@ export default class FormbuilderEditController extends Controller {
         isInitialRouteCall: true,
       });
     } else {
-      this.getAllFieldsInTheForm();
-    }
-  }
+      this.builderStore.deregisterObserver(this.REGISTERED_FORM_TTL_CODE_KEY); // TODO to remove
 
-  graphs = GRAPHS;
-  sourceNode = SOURCE_NODE;
-  REGISTERED_FORM_TTL_CODE_KEY = 'formTtlCode';
-
-  @tracked isInitialDataLoaded = false;
-
-  @action
-  async getAllFieldsInTheForm() {
-    this.fieldsInForm = [];
-    if (this.code == '') {
-      return null;
-    }
-
-    this.builderStore.deregisterObserver(this.REGISTERED_FORM_TTL_CODE_KEY);
-
-    const propertyGroups = getTopLevelPropertyGroups({
-      store: this.previewStore,
-      graphs: this.graphs,
-      form: this.previewForm,
-    });
-    for (const group of propertyGroups) {
-      const children = getChildrenForPropertyGroup(group, {
-        form: this.previewForm,
-        store: this.previewStore,
-        graphs: this.graphs,
-        sourceNode: this.sourceNode,
-      });
-
-      for (const field of children) {
-        const validationTypes = validationTypesForField(field.uri, {
-          store: this.previewStore,
-          formGraph: this.graphs.formGraph,
-        });
-        this.fieldsInForm.push({
-          parent: field,
-          fieldName: field.rdflibLabel,
-          uri: field.uri.value,
-          validationTypes: validationTypes,
-          store: this.previewStore,
-          fieldForm: this.previewForm,
-          propertyGroup: group,
-        });
-        console.log({ validationTypes });
-      }
-    }
-  }
-
-  async queryDB(query) {
-    const encodedQuery = escape(query);
-    const endpoint = `/sparql?query=${encodedQuery}`;
-    const response = await fetch(endpoint, {
-      headers: { Accept: 'application/sparql-results+json' },
-    });
-
-    if (response.ok) {
-      let jsonResponds = await response.json();
-      return jsonResponds.results.bindings;
-    } else {
-      throw new Error(
-        `Request was unsuccessful: [${response.status}] ${response.statusText}`
+      this.fieldsInForm = getAllFieldInForm(
+        this.code,
+        this.previewStore,
+        this.previewForm,
+        this.graphs
       );
     }
   }
 
-  async getAllValidationConceptsByQuery() {
-    const validationsListId = 'dde3d2a3-e848-47ea-ba44-0f2e565f04ab';
-    const query = `
-    SELECT DISTINCT ?uuid ?prefLabel ?validationName {
-      ?item <http://www.w3.org/2004/02/skos/core#inScheme> ${CONCEPT_SCHEMES(
-        validationsListId
-      )} ;
-        <http://mu.semte.ch/vocabularies/core/uuid> ?uuid ;
-        <http://mu.semte.ch/vocabularies/ext/validationName> ?validationName ;
-        <http://www.w3.org/2004/02/skos/core#prefLabel> ?prefLabel .
-    }
-  `;
-
-    console.log({ query });
-    let concepts = await this.queryDB(query);
-
-    console.log({ concepts });
-  }
-
   @action
-  async addIsRequiredValidationToForm(field) {
+  async addIsRequiredValidationToForm() {
     console.log('addIsRequiredValidationTo FORM');
 
-    const subject = NODES('c065e16e-aeea-452c-93c0-0577f8d7bbff');
-    // const subject = NODES(uuidv4());
-    const requiredConstraint = triple(
-      subject,
-      RDF('type'),
-      FORM('RequiredConstraint'),
-      GRAPHS.sourceGraph
+    const updatedTtlCode = addIsRequiredValidationToForm(
+      'c065e16e-aeea-452c-93c0-0577f8d7bbff',
+      this.builderStore,
+      GRAPHS
     );
-    const bagGrouping = triple(
-      subject,
-      FORM('grouping'),
-      FORM('Bag'),
-      GRAPHS.sourceGraph
-    );
-    const resultMessage = triple(
-      subject,
-      SH('resultMessage'),
-      'Dit veld is verplicht',
-      GRAPHS.sourceGraph
-    );
-
-    this.builderStore.addAll([requiredConstraint, bagGrouping, resultMessage]);
-
-    this.builderForm = this.builderStore.any(
-      undefined,
-      RDF('type'),
-      FORM('Form'),
-      GRAPHS.formGraph
-    );
-
-    const sourceTtl = this.builderStore.serializeDataMergedGraph(
-      GRAPHS.sourceGraph
-    );
-
-    console.log({ sourceTtl });
   }
 
   @action
   addIsRequiredValidationToField(field) {
-    const subject = field.parent.uri;
-    const predicate = FORM('validations');
-    const value = NODES('c065e16e-aeea-452c-93c0-0577f8d7bbff');
-    const validationTriple = triple(
-      subject,
-      predicate,
-      value,
+    addIsRequiredValidationToField(
+      field,
+      'c065e16e-aeea-452c-93c0-0577f8d7bbff',
+      this.builderStore,
       this.graphs.sourceGraph
     );
-
-    this.builderStore.addAll([validationTriple]);
 
     this.serializeSourceToTtl();
   }
