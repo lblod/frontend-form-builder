@@ -11,9 +11,14 @@ export function addIsRequiredValidationToField(
   const subject = field.parent.uri;
   const predicate = FORM('validations');
   const value = NODES(validatioNodeId);
+
   const validationTriple = triple(subject, predicate, value, graph);
 
-  builderStore.addAll([validationTriple]);
+  const filtered = builderStore.graph.statements.filter((statement) => {
+    return statement.subject.value == subject.value;
+  });
+
+  builderStore.addAll([...filtered, validationTriple]);
 
   // Returning the builderStore here would make it dangerous because it is updated by reference. How should this be done?
 }

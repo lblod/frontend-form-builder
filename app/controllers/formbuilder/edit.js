@@ -8,8 +8,7 @@ import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { sym as RDFNode } from 'rdflib';
 import { FORM, RDF } from '../../utils/rdflib';
 import { getAllFieldInForm } from '../../utils/validation/getAllFieldsInForm';
-import { addIsRequiredValidationToForm } from '../../utils/validation/addValidationToForm';
-import { addIsRequiredValidationToField } from '../../utils/validation/addValidationToField';
+import { addIsRequiredValidationToField } from '../../utils/validation/addIsRequiredValidationToField';
 import fetch from 'fetch';
 
 export const GRAPHS = {
@@ -34,14 +33,14 @@ export default class FormbuilderEditController extends Controller {
 
   @tracked formChanged = false;
   @tracked isAddingValidationToForm = false;
+  @tracked fieldsInForm = [];
 
   localeMetaTtlContentAsText = '';
   localeFormTtlContentAsText = '';
 
-  @tracked fieldsInForm = [];
-
   graphs = GRAPHS;
   sourceNode = SOURCE_NODE;
+
   REGISTERED_FORM_TTL_CODE_KEY = 'formTtlCode';
 
   @tracked isInitialDataLoaded = false;
@@ -57,43 +56,43 @@ export default class FormbuilderEditController extends Controller {
         isInitialRouteCall: true,
       });
     } else {
-      this.builderStore.deregisterObserver(this.REGISTERED_FORM_TTL_CODE_KEY); // TODO to remove
-
+      this.deregisterFromObservable();
       this.fieldsInForm = getAllFieldInForm(
         this.code,
         this.previewStore,
         this.previewForm,
-        this.graphs
+        GRAPHS
       );
+      console.log(this.code);
+      console.log('Switched to the validation tab');
     }
   }
 
   @action
-  async addIsRequiredValidationToForm() {
-    console.log('addIsRequiredValidationTo FORM');
-
-    const updatedTtlCode = addIsRequiredValidationToForm(
-      'c065e16e-aeea-452c-93c0-0577f8d7bbff',
-      this.builderStore,
-      GRAPHS
-    );
-  }
-
-  @action
   addIsRequiredValidationToField(field) {
+    console.log('addIsRequiredValidationTo FIELD');
+
     addIsRequiredValidationToField(
       field,
-      'c065e16e-aeea-452c-93c0-0577f8d7bbff',
+      '629bddbb-bf30-48d6-95af-c2f406bd9e8c',
       this.builderStore,
       this.graphs.sourceGraph
     );
 
-    this.serializeSourceToTtl();
+    const updatedTtlCode = this.builderStore.serializeDataMergedGraph(
+      GRAPHS.sourceGraph
+    );
+
+    this.refresh.perform({
+      formTtlCode: updatedTtlCode,
+      isInitialRouteCall: false,
+    });
+    this.setFormChanged(true);
   }
 
   @task({ restartable: true })
   *refresh({ formTtlCode, resetBuilder, isInitialRouteCall = false }) {
-    // console.log({ formTtlCode });
+    console.log('REFRESH');
     this.isInitialDataLoaded = !isInitialRouteCall;
     isInitialRouteCall ? null : yield timeout(500);
 
@@ -103,7 +102,7 @@ export default class FormbuilderEditController extends Controller {
 
     if (resetBuilder) {
       this.formChanged = true;
-      this.builderStore.deregisterObserver(this.REGISTERED_FORM_TTL_CODE_KEY);
+      this.deregisterFromObservable();
       this.builderStore = '';
     }
 
@@ -158,8 +157,6 @@ export default class FormbuilderEditController extends Controller {
     const sourceTtl = this.builderStore.serializeDataMergedGraph(
       GRAPHS.sourceGraph
     );
-
-    console.log({ sourceTtl });
 
     this.refresh.perform({ formTtlCode: sourceTtl });
   }
