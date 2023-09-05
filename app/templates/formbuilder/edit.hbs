@@ -31,9 +31,26 @@
                     <li>{{type.value}}</li>
                   {{/each}}
                 </ul>
+                {{log 'selected validation' this.selectedValidation}}
+                <PowerSelectMultiple
+                  @allowClear={{true}}
+                  @renderInPlace={{true}}
+                  @disabled={{false}}
+                  @searchEnabled={{true}}
+                  @loadingMessage={{'Opties zijn aan het laden..'}}
+                  @noMatchesMessage={{'Geen gevonden resultaten'}}
+                  @searchMessage={{'Type om te zoeken'}}
+                  @options={{this.validationOptions}}
+                  @selected={{this.selectedValidations}}
+                  @placeholder={{'Selecteer een waarde'}}
+                  @onChange={{fn (mut this.selectedValidations)}}
+                  as |multipleselect|
+                >
+                  {{multipleselect}}
+                </PowerSelectMultiple>
                 <AuButton
                   {{on 'click' (fn this.addIsRequiredValidationToField field)}}
-                >Add is required validation to field</AuButton>
+                >Add selected validation to field</AuButton>
               {{/each}}
             </ul>
           {{else}}

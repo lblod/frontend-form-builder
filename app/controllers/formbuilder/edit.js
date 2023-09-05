@@ -9,7 +9,9 @@ import { sym as RDFNode } from 'rdflib';
 import { FORM, RDF } from '../../utils/rdflib';
 import { getAllFieldInForm } from '../../utils/validation/getAllFieldsInForm';
 import { addIsRequiredValidationToField } from '../../utils/validation/addIsRequiredValidationToField';
+import { getAllValidationConceptsByQuery } from '../../utils/validation/getAllValidationConceptsByQuery';
 import fetch from 'fetch';
+import ConceptSchemeHelper from '../../utils/concept-scheme-helper';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
@@ -38,6 +40,11 @@ export default class FormbuilderEditController extends Controller {
   localeMetaTtlContentAsText = '';
   localeFormTtlContentAsText = '';
 
+  @tracked validationOptions;
+  @tracked selectedValidations;
+
+  validationConceptSchemeHelper = ConceptSchemeHelper.createEmpty();
+
   graphs = GRAPHS;
   sourceNode = SOURCE_NODE;
 
@@ -46,7 +53,7 @@ export default class FormbuilderEditController extends Controller {
   @tracked isInitialDataLoaded = false;
 
   @action
-  toggleIsAddingValidationToForm() {
+  async toggleIsAddingValidationToForm() {
     this.set('isAddingValidationToForm', !this.isAddingValidationToForm);
     if (!this.isAddingValidationToForm) {
       this.refresh.perform({
@@ -62,17 +69,41 @@ export default class FormbuilderEditController extends Controller {
         this.previewForm,
         GRAPHS
       );
+
+      if (this.validationConceptSchemeHelper.getAll().length == 0) {
+        const validationConcepts = await getAllValidationConceptsByQuery();
+        this.validationConceptSchemeHelper.addConcepts(validationConcepts);
+        this.validationOptions = [];
+      }
+
+      this.validationOptions =
+        this.validationConceptSchemeHelper.getMappedConceptPropertyValues(
+          'prefLabel'
+        );
     }
   }
 
   @action
   addIsRequiredValidationToField(field) {
-    addIsRequiredValidationToField(
-      field.uri,
-      '629bddbb-bf30-48d6-95af-c2f406bd9e8c',
-      this.builderStore,
-      this.graphs.sourceGraph
-    );
+    console.log(this.selectedValidations);
+
+    const validationsToAdd = [];
+    for (const validationLabel of this.selectedValidations) {
+      const uuidForPropertyValue =
+        this.validationConceptSchemeHelper.getUuidOfConceptByPropertyValue(
+          validationLabel
+        );
+      validationsToAdd.push(uuidForPropertyValue);
+    }
+
+    for (const validationUuid of validationsToAdd) {
+      addIsRequiredValidationToField(
+        field.uri,
+        validationUuid,
+        this.builderStore,
+        this.graphs.sourceGraph
+      );
+    }
 
     const updatedTtlCode = this.builderStore.serializeDataMergedGraph(
       GRAPHS.sourceGraph
@@ -82,6 +113,7 @@ export default class FormbuilderEditController extends Controller {
       formTtlCode: updatedTtlCode,
       isInitialRouteCall: false,
     });
+    // TODO: all fields have to be fetched again so the list is updated
     this.setFormChanged(true);
   }
 
