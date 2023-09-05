@@ -96,14 +96,12 @@ export default class FormbuilderEditController extends Controller {
       validationsToAdd.push(uuidForPropertyValue);
     }
 
-    for (const validationUuid of validationsToAdd) {
-      addIsRequiredValidationToField(
-        field.uri,
-        validationUuid,
-        this.builderStore,
-        this.graphs.sourceGraph
-      );
-    }
+    addIsRequiredValidationToField(
+      field.uri,
+      validationsToAdd,
+      this.builderStore,
+      this.graphs.sourceGraph
+    );
 
     const updatedTtlCode = this.builderStore.serializeDataMergedGraph(
       GRAPHS.sourceGraph
