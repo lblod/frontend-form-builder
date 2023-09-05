@@ -13,4 +13,9 @@ nodes:60873518-5423-4121-ba6a-9635b18242a0
   form:grouping form:MatchEvery;
   form:max "100";
   sh:resultMessage "Max. karakters overschreden.".
-`
+`;
+
+export const VALIDATION_IDS = [
+  '629bddbb-bf30-48d6-95af-c2f406bd9e8c',
+  '60873518-5423-4121-ba6a-9635b18242a0',
+];

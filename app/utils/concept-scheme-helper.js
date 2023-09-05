@@ -21,6 +21,12 @@ export default class ConceptSchemeHelper {
     });
   }
 
+  shortenConceptListToIds(ids) {
+    this.concepts = this.concepts.filter((concept) => {
+      return ids.includes(concept.uuid.value);
+    });
+  }
+
   // Not a fan of this
   getUuidOfConceptByPropertyValue(propertyValue) {
     for (const concept of this.concepts) {
