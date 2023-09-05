@@ -13,11 +13,24 @@ export function addIsRequiredValidationToField(
 
   const validationTriple = triple(fieldUri, predicate, value, graph);
 
-  const filtered = builderStore.graph.statements.filter((statement) => {
-    return statement.subject.value == fieldUri.value;
-  });
+  const statementsRelatedToField = builderStore.graph.statements.filter(
+    (statement) => {
+      return statement.subject.value == fieldUri.value;
+    }
+  );
+  const statementsOtherThantheField = builderStore.graph.statements.filter(
+    (statement) => {
+      return statement.subject.value != fieldUri.value;
+    }
+  );
 
-  builderStore.addAll([...filtered, validationTriple]);
+  builderStore.graph.statements = [];
+
+  builderStore.addAll([
+    ...statementsRelatedToField,
+    ...statementsOtherThantheField,
+    validationTriple,
+  ]);
 
   // Returning the builderStore here would make it dangerous because it is updated by reference. How should this be done?
 }
