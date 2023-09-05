@@ -31,13 +31,4 @@ nodes:24289e48-258f-4919-8c3e-5783a6acb4a4
   sh:name "Text field";
   sh:order 2;
   sh:path nodes:e61f56db-6346-4a61-a75e-33e091789e40 .
-
-##########################################################
-#  Validations
-##########################################################
-nodes:629bddbb-bf30-48d6-95af-c2f406bd9e8c
-  a form:RequiredConstraint;
-  form:grouping form:Bag;
-  sh:resultMessage "Dit veld is verplicht";
-  sh:name "RequiredConstraint".
 `;
