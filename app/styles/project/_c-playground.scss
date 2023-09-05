@@ -5,7 +5,7 @@
 
 .playground__codelist,
 .playground__show {
-  padding: $au-unit*1.5;
+  padding: $au-unit * 1.5;
   width: 45%;
 }
 
@@ -39,4 +39,12 @@
   overflow-y: auto;
   overflow-x: hidden;
   background-color: $au-gray-100;
+}
+
+.playground__tab {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+  gap: 1rem;
+  margin: 1rem 0;
 }

@@ -11,15 +11,15 @@
 
 <main id="main" class="au-c-main-container">
   <div class="au-c-main-container__content">
+     <div class="playground__tab">
+        Builder
+        <AuToggleSwitch
+          @checked={{this.isAddingValidationToForm}}
+          @onChange={{this.toggleIsAddingValidationToForm}}
+        >Validation</AuToggleSwitch>
+      </div>
     <div class="playground">
       <div class="playground__edit">
-        <div>
-          Builder
-          <AuToggleSwitch
-            @checked={{this.isAddingValidationToForm}}
-            @onChange={{this.toggleIsAddingValidationToForm}}
-          >Validation</AuToggleSwitch>
-        </div>
         <AuBodyContainer @scroll={{true}} class="au-o-box">
           {{#if this.isAddingValidationToForm}}
             <h1>Validation tab</h1>
