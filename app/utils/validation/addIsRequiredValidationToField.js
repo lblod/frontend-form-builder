@@ -2,20 +2,19 @@ import { FORM, NODES } from '../rdflib';
 import { triple } from 'rdflib';
 
 export function addIsRequiredValidationToField(
-  field,
+  fieldUri,
   validatioNodeId,
   builderStore,
   graph
 ) {
   // TODO add validations to check whether the validationode exists and the validation is not already added to this field
-  const subject = field.parent.uri;
   const predicate = FORM('validations');
   const value = NODES(validatioNodeId);
 
-  const validationTriple = triple(subject, predicate, value, graph);
+  const validationTriple = triple(fieldUri, predicate, value, graph);
 
   const filtered = builderStore.graph.statements.filter((statement) => {
-    return statement.subject.value == subject.value;
+    return statement.subject.value == fieldUri.value;
   });
 
   builderStore.addAll([...filtered, validationTriple]);

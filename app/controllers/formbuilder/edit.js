@@ -49,7 +49,6 @@ export default class FormbuilderEditController extends Controller {
   toggleIsAddingValidationToForm() {
     this.set('isAddingValidationToForm', !this.isAddingValidationToForm);
     if (!this.isAddingValidationToForm) {
-      console.log('perform refresh');
       this.refresh.perform({
         formTtlCode: this.code,
         resetBuilder: false,
@@ -63,17 +62,13 @@ export default class FormbuilderEditController extends Controller {
         this.previewForm,
         GRAPHS
       );
-      console.log(this.code);
-      console.log('Switched to the validation tab');
     }
   }
 
   @action
   addIsRequiredValidationToField(field) {
-    console.log('addIsRequiredValidationTo FIELD');
-
     addIsRequiredValidationToField(
-      field,
+      field.uri,
       '629bddbb-bf30-48d6-95af-c2f406bd9e8c',
       this.builderStore,
       this.graphs.sourceGraph
@@ -92,7 +87,6 @@ export default class FormbuilderEditController extends Controller {
 
   @task({ restartable: true })
   *refresh({ formTtlCode, resetBuilder, isInitialRouteCall = false }) {
-    console.log('REFRESH');
     this.isInitialDataLoaded = !isInitialRouteCall;
     isInitialRouteCall ? null : yield timeout(500);
 

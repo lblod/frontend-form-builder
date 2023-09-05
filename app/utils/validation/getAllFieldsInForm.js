@@ -37,15 +37,10 @@ export function getAllFieldInForm(
         formGraph: graphs.formGraph,
       });
       fieldsInForm.push({
-        parent: field,
         fieldName: field.rdflibLabel,
-        uri: field.uri.value,
+        uri: field.uri,
         validationTypes: validationTypes,
-        store: previewStore,
-        fieldForm: previewForm,
-        propertyGroup: group,
       });
-      console.log({ validationTypes });
     }
   }
 

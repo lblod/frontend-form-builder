@@ -1,6 +1,8 @@
 import { CONCEPT_SCHEMES } from '../rdflib';
 import fetch from 'fetch';
 
+// NOTE: this is unused for now
+
 async function queryDB(query) {
   const encodedQuery = escape(query);
   const endpoint = `/sparql?query=${encodedQuery}`;
@@ -31,8 +33,7 @@ export async function getAllValidationConceptsByQuery() {
   }
 `;
 
-  console.log({ query });
   let concepts = await queryDB(query);
 
-  console.log({ concepts });
+  return concepts;
 }
