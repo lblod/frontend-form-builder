@@ -13,6 +13,7 @@ export default class InputFieldWithValidationSelector extends Component {
     super(...arguments);
     this.field = this.args.field;
     this.allValidationConcepts = this.args.allValidationConcepts;
+    this.setSelectedvalidationOfField(this.field);
   }
 
   @action
@@ -37,5 +38,18 @@ export default class InputFieldWithValidationSelector extends Component {
     }
 
     this.args.onStoreValidationIdsToAdd(this.field.uri, validationsToAdd);
+  }
+
+  setSelectedvalidationOfField(field) {
+    const selectedValidationTypes = field.validationTypes.map(
+      (validationtype) => {
+        return this.getValidationTypeOfNamedNode(validationtype);
+      }
+    );
+    this.selectedValidationLabels = selectedValidationTypes;
+  }
+
+  getValidationTypeOfNamedNode(namedNode) {
+    return namedNode.value.split('/').pop(); // This is not something that will always work..
   }
 }

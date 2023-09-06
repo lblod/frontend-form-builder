@@ -9,6 +9,7 @@ export default class ValidationConceptMultiSelector extends Component {
   @tracked selectedValidationLabels;
 
   validationConceptSchemeHelper = ConceptSchemeHelper.createEmpty();
+  NAME_PROPERTY = 'prefLabel';
 
   constructor() {
     super(...arguments);
@@ -17,14 +18,15 @@ export default class ValidationConceptMultiSelector extends Component {
       this.args.allValidationConcepts
     );
 
+    this.selectedValidationLabels = this.args.selectedValidationLabels;
     this.setValidationOptions();
   }
 
   async setValidationOptions() {
-    this.validationConceptSchemeHelper.shortenConceptListToIds(VALIDATION_IDS);
+    this.validationConceptSchemeHelper.shortenConceptListToIds(VALIDATION_IDS); // Possible to let this be populated by the InputFieldWithValidationSelector component
     this.validationOptions =
       this.validationConceptSchemeHelper.getMappedConceptPropertyValues(
-        'prefLabel'
+        this.NAME_PROPERTY
       );
   }
 
