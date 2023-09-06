@@ -37,14 +37,10 @@ export default class FormbuilderEditController extends Controller {
   @tracked formChanged = false;
   @tracked isAddingValidationToForm = false;
   @tracked fieldsInForm = [];
+  @tracked allValidationConcepts = [];
 
   localeMetaTtlContentAsText = '';
   localeFormTtlContentAsText = '';
-
-  @tracked validationOptions;
-  @tracked selectedValidations;
-
-  validationConceptSchemeHelper = ConceptSchemeHelper.createEmpty();
 
   graphs = GRAPHS;
   sourceNode = SOURCE_NODE;
@@ -71,38 +67,16 @@ export default class FormbuilderEditController extends Controller {
         GRAPHS
       );
 
-      if (this.validationConceptSchemeHelper.getAll().length == 0) {
-        const validationConcepts = await getAllValidationConceptsByQuery();
-        this.validationConceptSchemeHelper.addConcepts(validationConcepts);
-        this.validationOptions = [];
+      if (this.allValidationConcepts.length == 0) {
+        this.allValidationConcepts = await getAllValidationConceptsByQuery();
       }
-
-      this.validationConceptSchemeHelper.shortenConceptListToIds(
-        VALIDATION_IDS
-      );
-
-      this.validationOptions =
-        this.validationConceptSchemeHelper.getMappedConceptPropertyValues(
-          'prefLabel'
-        );
     }
   }
 
   @action
-  addIsRequiredValidationToField(field) {
-    console.log(this.selectedValidations);
-
-    const validationsToAdd = [];
-    for (const validationLabel of this.selectedValidations) {
-      const uuidForPropertyValue =
-        this.validationConceptSchemeHelper.getUuidOfConceptByPropertyValue(
-          validationLabel
-        );
-      validationsToAdd.push(uuidForPropertyValue);
-    }
-
+  addValidationsToField(fieldUri, validationsToAdd) {
     addIsRequiredValidationToField(
-      field.uri,
+      fieldUri,
       validationsToAdd,
       this.builderStore,
       this.graphs.sourceGraph

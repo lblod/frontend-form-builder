@@ -1,0 +1,17 @@
+<PowerSelectMultiple
+  @allowClear={{true}}
+  @renderInPlace={{true}}
+  @disabled={{false}}
+  @searchEnabled={{true}}
+  @loadingMessage={{"Opties zijn aan het laden.."}}
+  @noMatchesMessage={{"Geen gevonden resultaten"}}
+  @searchMessage={{"Type om te zoeken"}}
+  @options={{this.validationOptions}}
+  @selected={{this.selectedValidationLabels}}
+  @placeholder={{"Selecteer een waarde"}}
+  @onClose={{this.updatedSelectedValidationLabels}}
+  @onChange={{fn (mut this.selectedValidationLabels)}}
+  as |multipleselect|
+>
+  {{multipleselect}}
+</PowerSelectMultiple>

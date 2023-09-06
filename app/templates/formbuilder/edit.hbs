@@ -1,4 +1,4 @@
-{{page-title 'Formbuilder'}}
+{{page-title "Formbuilder"}}
 
 <Toolbar
   @model={{this.model}}
@@ -22,37 +22,15 @@
       <div class="playground__edit">
         <AuBodyContainer @scroll={{true}} class="au-o-box">
           {{#if this.isAddingValidationToForm}}
-            <h1>Validation tab</h1>
-            <ul>
-              {{#each this.fieldsInForm as |field|}}
-                <li>{{field.fieldName}}</li>
-                <ul>
-                  {{#each field.validationTypes as |type|}}
-                    <li>{{type.value}}</li>
-                  {{/each}}
-                </ul>
-                {{log 'selected validation' this.selectedValidation}}
-                <PowerSelectMultiple
-                  @allowClear={{true}}
-                  @renderInPlace={{true}}
-                  @disabled={{false}}
-                  @searchEnabled={{true}}
-                  @loadingMessage={{'Opties zijn aan het laden..'}}
-                  @noMatchesMessage={{'Geen gevonden resultaten'}}
-                  @searchMessage={{'Type om te zoeken'}}
-                  @options={{this.validationOptions}}
-                  @selected={{this.selectedValidations}}
-                  @placeholder={{'Selecteer een waarde'}}
-                  @onChange={{fn (mut this.selectedValidations)}}
-                  as |multipleselect|
-                >
-                  {{multipleselect}}
-                </PowerSelectMultiple>
-                <AuButton
-                  {{on 'click' (fn this.addIsRequiredValidationToField field)}}
-                >Add selected validation to field</AuButton>
-              {{/each}}
-            </ul>
+            {{#each this.fieldsInForm as |field|}}
+              {{#if this.allValidationConcepts}}
+                <InputFieldWithValidationSelector
+                  @field={{field}}
+                  @allValidationConcepts={{this.allValidationConcepts}}
+                  @onStoreValidationIdsToAdd={{this.addValidationsToField}}
+                />
+              {{/if}}
+            {{/each}}
           {{else}}
             {{#if (and this.isInitialDataLoaded this.builderStore)}}
               <RdfForm

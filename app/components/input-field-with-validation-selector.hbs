@@ -1,0 +1,16 @@
+{{#if this.field}}
+  <div>
+    <h1>{{this.field.fieldName}}</h1>
+    <ul>
+      {{#each this.field.validationTypes as |type|}}
+        <li>{{type.value}}</li>
+      {{/each}}
+    </ul>
+    {{#if this.allValidationConcepts}}
+      <ValidationConceptMultiSelector
+        @allValidationConcepts={{this.allValidationConcepts}}
+        @onValidationSelectionUpdated={{this.updateSelectedValidationLabels}}
+      />
+    {{/if}}
+  </div>
+{{/if}}
