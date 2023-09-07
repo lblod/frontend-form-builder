@@ -11,8 +11,6 @@ import { getAllFieldInForm } from '../../utils/validation/getAllFieldsInForm';
 import { addIsRequiredValidationToField } from '../../utils/validation/addIsRequiredValidationToField';
 import { getAllValidationConceptsByQuery } from '../../utils/validation/getAllValidationConceptsByQuery';
 import fetch from 'fetch';
-import ConceptSchemeHelper from '../../utils/concept-scheme-helper';
-import { VALIDATION_IDS } from '../../utils/static-templates/validations-turtle-template';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
@@ -90,7 +88,7 @@ export default class FormbuilderEditController extends Controller {
       formTtlCode: updatedTtlCode,
       isInitialRouteCall: false,
     });
-    // TODO: all fields have to be fetched again so the list is updated
+
     this.setFormChanged(true);
   }
 

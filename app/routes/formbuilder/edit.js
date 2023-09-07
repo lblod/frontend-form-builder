@@ -1,6 +1,5 @@
 import Route from '@ember/routing/route';
 import formTemplate from '../../utils/static-templates/basic-form-template';
-import validationsTemplate from '../../utils/static-templates/validations-turtle-template';
 import { inject as service } from '@ember/service';
 import { registerFormFields } from '@lblod/ember-submission-form-fields';
 import PropertyGroupSelector from '../../components/rdf-form-fields/property-group-selector';
@@ -55,9 +54,7 @@ export default class FormbuilderEditRoute extends Route {
 
   getFormTtlCode(model) {
     if (!model.ttlCode || model.ttlCode == '') {
-      const template = formTemplate + validationsTemplate;
-
-      return template;
+      return formTemplate;
     }
 
     return model.ttlCode;

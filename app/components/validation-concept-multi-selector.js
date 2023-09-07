@@ -2,7 +2,6 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import ConceptSchemeHelper from '../utils/concept-scheme-helper';
-import { VALIDATION_IDS } from '../utils/static-templates/validations-turtle-template';
 
 export default class ValidationConceptMultiSelector extends Component {
   @tracked validationOptions;
@@ -23,7 +22,6 @@ export default class ValidationConceptMultiSelector extends Component {
   }
 
   async setValidationOptions() {
-    this.validationConceptSchemeHelper.shortenConceptListToIds(VALIDATION_IDS); // Possible to let this be populated by the InputFieldWithValidationSelector component
     this.validationOptions =
       this.validationConceptSchemeHelper.getMappedConceptPropertyValues(
         this.NAME_PROPERTY
