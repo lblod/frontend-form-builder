@@ -22,18 +22,19 @@ export default class ConceptSchemeHelper {
   }
 
   // Not a fan of this
-  getUuidOfConceptByPropertyValue(propertyValue) {
+
+  getValidationNameOfConceptByPropertyValue(propertyValue) {
     for (const concept of this.concepts) {
       const propertyKeys = Object.keys(concept);
-      if (propertyKeys.includes('uuid')) {
+      if (propertyKeys.includes('validationName')) {
         for (const key of propertyKeys) {
           if (concept[key].value == propertyValue) {
-            return concept.uuid.value;
+            return concept.validationName.value;
           }
         }
       }
     }
 
-    throw `Could not find a concept with property value: ${propertyValue}`;
+    throw `Could not find a 'validation name' for concept with property value: ${propertyValue}`;
   }
 }

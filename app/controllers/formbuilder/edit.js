@@ -11,7 +11,11 @@ import { getAllFieldInForm } from '../../utils/validation/getAllFieldsInForm';
 import { getAllValidationConceptsByQuery } from '../../utils/validation/getAllValidationConceptsByQuery';
 import fetch from 'fetch';
 import { addValidationToField } from '../../utils/validation/addValidationToField';
-import { createValidationNode } from '../../utils/validation/createValidationNode';
+import {
+  VALIDATION_NODES_CONFIG,
+  ValidationsNodeConfig,
+} from '../../utils/validation/validationNodeConfig';
+import { createTriplesForValidationNodeConfig } from '../../utils/validation/createTriplesForValidationNodeConfig';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
@@ -37,6 +41,7 @@ export default class FormbuilderEditController extends Controller {
   @tracked isAddingValidationToForm = false;
   @tracked fieldsInForm = [];
   @tracked allValidationConcepts = [];
+  validationsNodeConfig = new ValidationsNodeConfig(VALIDATION_NODES_CONFIG);
 
   localeMetaTtlContentAsText = '';
   localeFormTtlContentAsText = '';
@@ -74,17 +79,23 @@ export default class FormbuilderEditController extends Controller {
 
   @action
   addValidationsToField(fieldUri, validationsToAdd) {
-    const validationBlankNodes = createValidationNode('RequiredConstraint', {
-      graph: this.graphs.sourceGraph,
-      resultMessage: 'Dit veld is Verplicht',
-    });
+    for (const validationLabel of validationsToAdd) {
+      const validationConfig =
+        this.validationsNodeConfig.getConfigurationForValidationType(
+          validationLabel
+        );
+      const validationTriples = createTriplesForValidationNodeConfig(
+        validationConfig,
+        this.graphs.sourceGraph
+      );
 
-    addValidationToField(
-      fieldUri,
-      validationBlankNodes,
-      this.builderStore,
-      this.graphs.sourceGraph
-    );
+      addValidationToField(
+        fieldUri,
+        validationTriples,
+        this.builderStore,
+        this.graphs.sourceGraph
+      );
+    }
 
     const updatedTtlCode = this.builderStore.serializeDataMergedGraph(
       GRAPHS.sourceGraph

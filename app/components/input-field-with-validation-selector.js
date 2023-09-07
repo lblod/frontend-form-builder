@@ -18,21 +18,21 @@ export default class InputFieldWithValidationSelector extends Component {
   @action
   updateSelectedValidationLabels(validationlabels) {
     this.selectedValidationLabels = validationlabels;
-    this.getSelectedValidationIds();
+    this.getSelectedValidationNames();
   }
 
   @action
-  getSelectedValidationIds() {
+  getSelectedValidationNames() {
     const validationConceptSchemeHelper = ConceptSchemeHelper.createEmpty();
     validationConceptSchemeHelper.addConcepts(this.allValidationConcepts);
 
     const validationsToAdd = [];
     for (const validationLabel of this.selectedValidationLabels) {
-      const uuidForPropertyValue =
-        validationConceptSchemeHelper.getUuidOfConceptByPropertyValue(
+      const validationNameForPropertyValue =
+        validationConceptSchemeHelper.getValidationNameOfConceptByPropertyValue(
           validationLabel
         );
-      validationsToAdd.push(uuidForPropertyValue);
+      validationsToAdd.push(validationNameForPropertyValue);
     }
 
     this.args.onStoreValidationIdsToAdd(this.field.uri, validationsToAdd);
