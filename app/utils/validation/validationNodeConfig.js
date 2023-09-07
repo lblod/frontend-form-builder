@@ -1,4 +1,4 @@
-import { FORM, RDF, SH } from '../rdflib';
+import { EXT, FORM, RDF, SH } from '../rdflib';
 
 export class ValidationsNodeConfig {
   constructor(config) {
@@ -46,5 +46,14 @@ export const VALIDATION_NODES_CONFIG = [
     PredicateWithValue.create(RDF('type'), FORM('RequiredConstraint')),
     PredicateWithValue.create(FORM('grouping'), FORM('Bag')),
     PredicateWithValue.create(SH('resultMessage'), 'Dit veld is verplicht.'),
+  ]),
+  new ValidationNodeConfig('MaxLength', [
+    PredicateWithValue.create(RDF('type'), FORM('MaxLength')),
+    PredicateWithValue.create(FORM('grouping'), FORM('MatchEvery')),
+    PredicateWithValue.create(FORM('max'), '20'),
+    PredicateWithValue.create(
+      SH('resultMessage'),
+      'Maximum karakters overschreden.'
+    ),
   ]),
 ];
