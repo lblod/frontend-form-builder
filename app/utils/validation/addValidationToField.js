@@ -1,7 +1,7 @@
 import { FORM, NODES } from '../rdflib';
 import { triple } from 'rdflib';
 
-export function addIsRequiredValidationToField(
+export function addValidationToField(
   fieldUri,
   validatioNodeIds,
   builderStore,

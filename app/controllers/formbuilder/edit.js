@@ -8,7 +8,7 @@ import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { sym as RDFNode } from 'rdflib';
 import { FORM, RDF } from '../../utils/rdflib';
 import { getAllFieldInForm } from '../../utils/validation/getAllFieldsInForm';
-import { addIsRequiredValidationToField } from '../../utils/validation/addIsRequiredValidationToField';
+import { addValidationToField } from '../../utils/validation/addValidationToField';
 import { getAllValidationConceptsByQuery } from '../../utils/validation/getAllValidationConceptsByQuery';
 import fetch from 'fetch';
 
@@ -73,7 +73,7 @@ export default class FormbuilderEditController extends Controller {
 
   @action
   addValidationsToField(fieldUri, validationsToAdd) {
-    addIsRequiredValidationToField(
+    addValidationToField(
       fieldUri,
       validationsToAdd,
       this.builderStore,
