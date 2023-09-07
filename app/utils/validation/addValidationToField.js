@@ -3,7 +3,7 @@ import { triple } from 'rdflib';
 
 export function addValidationToField(
   fieldUri,
-  validatioNodeIds,
+  validationBlankNodes,
   builderStore,
   graph
 ) {
@@ -11,16 +11,14 @@ export function addValidationToField(
   const validationTriples = [];
   const predicate = FORM('validations');
 
-  for (const validationNodeId of validatioNodeIds) {
-    const validationTriple = triple(
-      fieldUri,
-      predicate,
-      NODES(validationNodeId),
-      graph
-    );
-
-    validationTriples.push(validationTriple);
-  }
+  const validationTriple = triple(
+    fieldUri,
+    predicate,
+    validationBlankNodes[0].subject,
+    graph
+  );
+  validationTriples.push(...validationBlankNodes);
+  validationTriples.push(validationTriple);
 
   const statementsRelatedToField = builderStore.graph.statements.filter(
     (statement) => {

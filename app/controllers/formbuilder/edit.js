@@ -8,9 +8,10 @@ import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { sym as RDFNode } from 'rdflib';
 import { FORM, RDF } from '../../utils/rdflib';
 import { getAllFieldInForm } from '../../utils/validation/getAllFieldsInForm';
-import { addValidationToField } from '../../utils/validation/addValidationToField';
 import { getAllValidationConceptsByQuery } from '../../utils/validation/getAllValidationConceptsByQuery';
 import fetch from 'fetch';
+import { addValidationToField } from '../../utils/validation/addValidationToField';
+import { createValidationNode } from '../../utils/validation/createValidationNode';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
@@ -73,9 +74,14 @@ export default class FormbuilderEditController extends Controller {
 
   @action
   addValidationsToField(fieldUri, validationsToAdd) {
+    const validationBlankNodes = createValidationNode('RequiredConstraint', {
+      graph: this.graphs.sourceGraph,
+      resultMessage: 'Dit veld is Verplicht',
+    });
+
     addValidationToField(
       fieldUri,
-      validationsToAdd,
+      validationBlankNodes,
       this.builderStore,
       this.graphs.sourceGraph
     );
