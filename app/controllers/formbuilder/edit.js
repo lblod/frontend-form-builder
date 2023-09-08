@@ -79,23 +79,28 @@ export default class FormbuilderEditController extends Controller {
 
   @action
   addValidationsToField(fieldUri, validationsToAdd) {
+    const validationNodeSubjects = [];
+    const validationTriples = [];
     for (const validationLabel of validationsToAdd) {
       const validationConfig =
         this.validationsNodeConfig.getConfigurationForValidationType(
           validationLabel
         );
-      const validationTriples = createTriplesForValidationNodeConfig(
+      const triples = createTriplesForValidationNodeConfig(
         validationConfig,
-        this.graphs.sourceGraph
+        GRAPHS.sourceGraph
       );
-
-      addValidationToField(
-        fieldUri,
-        validationTriples,
-        this.builderStore,
-        this.graphs.sourceGraph
-      );
+      validationTriples.push(...triples);
+      validationNodeSubjects.push(validationTriples[0].subject);
     }
+
+    addValidationToField(
+      fieldUri,
+      validationNodeSubjects,
+      validationTriples,
+      this.builderStore,
+      GRAPHS.sourceGraph
+    );
 
     const updatedTtlCode = this.builderStore.serializeDataMergedGraph(
       GRAPHS.sourceGraph

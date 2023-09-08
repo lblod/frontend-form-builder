@@ -8,7 +8,7 @@ export default class ValidationConceptMultiSelector extends Component {
   @tracked selectedValidationLabels;
 
   validationConceptSchemeHelper = ConceptSchemeHelper.createEmpty();
-  NAME_PROPERTY = 'prefLabel';
+  NAME_PROPERTY = 'validationName';
 
   constructor() {
     super(...arguments);
