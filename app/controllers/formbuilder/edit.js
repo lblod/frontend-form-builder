@@ -10,7 +10,7 @@ import { FORM, RDF } from '../../utils/rdflib';
 import { getAllFieldInForm } from '../../utils/validation/getAllFieldsInForm';
 import { getAllValidationConceptsByQuery } from '../../utils/validation/getAllValidationConceptsByQuery';
 import fetch from 'fetch';
-import { addValidationToField } from '../../utils/validation/addValidationToField';
+import { addValidationsToField } from '../../utils/validation/addValidationToField';
 import {
   VALIDATION_NODES_CONFIG,
   ValidationsNodeConfig,
@@ -91,10 +91,10 @@ export default class FormbuilderEditController extends Controller {
         GRAPHS.sourceGraph
       );
       validationTriples.push(...triples);
-      validationNodeSubjects.push(validationTriples[0].subject);
+      validationNodeSubjects.push(triples[0].subject);
     }
 
-    addValidationToField(
+    addValidationsToField(
       fieldUri,
       validationNodeSubjects,
       validationTriples,
