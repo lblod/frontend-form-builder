@@ -8,6 +8,7 @@ import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { sym as RDFNode } from 'rdflib';
 import { FORM, RDF } from '../../utils/rdflib';
 import { getAllFieldInForm } from '../../utils/validation/get-all-fields-in-form';
+import FormValidationService from '../../utils/validation/form-validation-service';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
@@ -39,6 +40,8 @@ export default class FormbuilderEditController extends Controller {
 
   @tracked isShowBuilder = true;
   @tracked fieldsInForm = [];
+  @tracked validationStore;
+  formValidationService = null;
 
   @action
   async toggleIsAddingValidationToForm() {
@@ -58,6 +61,21 @@ export default class FormbuilderEditController extends Controller {
         this.previewForm,
         GRAPHS,
         SOURCE_NODE
+      );
+
+      const formTtl = await this.getLocalFileContentAsText('/forms/form.ttl');
+      const metaTtl = await this.getLocalFileContentAsText('/forms/meta.ttl');
+
+      this.formValidationService = FormValidationService.init(
+        this.code,
+        formTtl,
+        metaTtl,
+        GRAPHS
+      );
+
+      console.log(
+        'Validation ttl form code',
+        this.formValidationService.getFormTtlCode()
       );
     }
   }
