@@ -11,10 +11,18 @@
 
 <main id="main" class="au-c-main-container">
   <div class="au-c-main-container__content">
+    <div class="playground__tab">
+        Builder
+        <AuToggleSwitch
+          @checked={{this.isAddingValidationToForm}}
+          @onChange={{this.toggleIsAddingValidationToForm}}
+        >Validation</AuToggleSwitch>
+      </div>
     <div class="playground">
-      <div class="playground__edit">
-        <AuBodyContainer @scroll={{true}} class="au-o-box">
-          {{#if (and this.isInitialDataLoaded this.builderStore)}}
+      {{#if this.isShowBuilder}}
+        <div class="playground__edit">
+          <AuBodyContainer @scroll={{true}} class="au-o-box">
+            {{#if (and this.isInitialDataLoaded this.builderStore)}}
               <RdfForm
                 @groupClass="au-o-grid__item"
                 @form={{this.builderForm}}
@@ -24,11 +32,16 @@
                 @useNewListingLayout={{true}}
                 @sourceNode={{this.previewForm}}
               />
-          {{else}}
-            <AuLoader />
-          {{/if}}
+            {{else}}
+              <AuLoader />
+            {{/if}}
+          </AuBodyContainer>
+        </div>
+      {{else}}
+        <AuBodyContainer @scroll={{true}} class="au-o-box">
+          <h1>Validations</h1>
         </AuBodyContainer>
-      </div>
+      {{/if}}
       <div class="playground__show">
         <div class="au-u-margin-top-small">
           {{#if this.refresh.isRunning}}
