@@ -1,3 +1,4 @@
+import { isBlankNode, isStatement } from 'rdflib';
 import { FORM, NODES } from '../rdflib';
 
 export function removeAllValidationsFromField(fieldUri, builderStore, graph) {
@@ -77,12 +78,22 @@ function getAllStatementsForSubject(subject, options) {
 
 function removeStatementsFromStore(store, graph, statements) {
   for (const statement of statements) {
-    store.removeMatches(
-      statement.subject,
-      statement.predicate,
-      statement.object,
-      graph
-    );
+    if (isBlankNode(statement)) {
+      console.info(
+        `Blank nodes can't be removed, make sure you remove all the triples under the named node (${statement.value})`
+      );
+    }
+
+    if (isStatement(statement)) {
+      store.removeMatches(
+        statement.subject,
+        statement.predicate,
+        statement.object,
+        graph
+      );
+    }
+
+    console.error(`Unknown type to remove found object:`, statement);
   }
 }
 
