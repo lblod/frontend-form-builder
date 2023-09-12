@@ -7,6 +7,7 @@ import { inject as service } from '@ember/service';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { sym as RDFNode } from 'rdflib';
 import { FORM, RDF } from '../../utils/rdflib';
+import { getAllFieldInForm } from '../../utils/validation/get-all-fields-in-form';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
@@ -37,6 +38,7 @@ export default class FormbuilderEditController extends Controller {
   @tracked isInitialDataLoaded = false;
 
   @tracked isShowBuilder = true;
+  @tracked fieldsInForm = [];
 
   @action
   async toggleIsAddingValidationToForm() {
@@ -49,6 +51,14 @@ export default class FormbuilderEditController extends Controller {
       });
     } else {
       this.deregisterFromObservable();
+
+      this.fieldsInForm = getAllFieldInForm(
+        this.code,
+        this.previewStore,
+        this.previewForm,
+        GRAPHS,
+        SOURCE_NODE
+      );
     }
   }
 

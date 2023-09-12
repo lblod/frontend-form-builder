@@ -12,12 +12,12 @@
 <main id="main" class="au-c-main-container">
   <div class="au-c-main-container__content">
     <div class="playground__tab">
-        Builder
-        <AuToggleSwitch
-          @checked={{this.isAddingValidationToForm}}
-          @onChange={{this.toggleIsAddingValidationToForm}}
-        >Validation</AuToggleSwitch>
-      </div>
+      Builder
+      <AuToggleSwitch
+        @checked={{this.isAddingValidationToForm}}
+        @onChange={{this.toggleIsAddingValidationToForm}}
+      >Validation</AuToggleSwitch>
+    </div>
     <div class="playground">
       {{#if this.isShowBuilder}}
         <div class="playground__edit">
@@ -39,7 +39,9 @@
         </div>
       {{else}}
         <AuBodyContainer @scroll={{true}} class="au-o-box">
-          <h1>Validations</h1>
+          {{#each this.fieldsInForm as |field|}}
+            <strong>{{field.name}}</strong>
+          {{/each}}
         </AuBodyContainer>
       {{/if}}
       <div class="playground__show">
