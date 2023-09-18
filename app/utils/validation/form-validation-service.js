@@ -84,6 +84,70 @@ export default class FormValidationService {
     return [validationsForField, ...validationStatementsForValidationBlankNode];
   }
 
+  removeValidationFromField(fieldSubject, validation) {
+    const validationBlankNodesOfField = this.forkingStore
+      .match(
+        fieldSubject,
+        FORM('validations'),
+        undefined,
+        this.graphs.sourceGraph
+      )
+      .map((statement) => statement.object);
+
+    const statementsToRemove = [];
+    for (const blankNode of validationBlankNodesOfField) {
+      const matchesForBlankNodeValidation = this.forkingStore.match(
+        blankNode,
+        undefined,
+        FORM(validation.name),
+        this.graphs.sourceGraph
+      );
+
+      const validationSubjectToRemove = matchesForBlankNodeValidation
+        .filter(
+          (statement) => statement.object.value == FORM(validation.name).value
+        )
+        .shift().subject;
+
+      statementsToRemove.push(
+        ...this.forkingStore.match(
+          validationSubjectToRemove,
+          undefined,
+          undefined,
+          this.graphs.sourceGraph
+        )
+      );
+
+      this.forkingStore.removeStatements(statementsToRemove);
+
+      this.getFormTtlCode();
+
+      this.removeValidationsPredicateIfNoValidations(fieldSubject);
+    }
+  }
+
+  removeValidationsPredicateIfNoValidations(fieldSubject) {
+    const validationsOnField = this.forkingStore.match(
+      fieldSubject,
+      FORM('validations'),
+      undefined,
+      this.graphs.sourceGraph
+    );
+
+    for (const validationBlankNode of validationsOnField) {
+      const matches = this.forkingStore.match(
+        validationBlankNode,
+        undefined,
+        undefined,
+        this.graphs.sourceGraph
+      );
+
+      if (matches.length == 0) {
+        this.forkingStore.removeStatements(validationsOnField);
+      }
+    }
+  }
+
   isPossibleValidationForField(fieldType, validation) {
     const matchesForFieldType = this.forkingStore.match(
       undefined,

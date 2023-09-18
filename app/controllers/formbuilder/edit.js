@@ -76,13 +76,24 @@ export default class FormbuilderEditController extends Controller {
         GRAPHS
       );
 
+      const fieldSubject = NODES('24289e48-258f-4919-8c3e-5783a6acb4a4');
+
       const newValidationStatements =
         this.formValidationService.createValidationStatementsForField(
-          NODES('24289e48-258f-4919-8c3e-5783a6acb4a4'),
+          fieldSubject,
           VALIDATIONS.isRequired
         );
 
       this.formValidationService.forkingStore.addAll(newValidationStatements);
+
+      console.log('ADDED', this.formValidationService.getFormTtlCode());
+
+      this.formValidationService.removeValidationFromField(
+        fieldSubject,
+        VALIDATIONS.isRequired
+      );
+
+      console.log('REMOVED', this.formValidationService.getFormTtlCode());
 
       this.refresh.perform({
         formTtlCode: this.formValidationService.getFormTtlCode(),
