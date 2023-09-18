@@ -6,9 +6,11 @@ import { task, timeout } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { sym as RDFNode } from 'rdflib';
-import { FORM, RDF } from '../../utils/rdflib';
+import { FORM, NODES, RDF } from '../../utils/rdflib';
 import { getAllFieldInForm } from '../../utils/validation/get-all-fields-in-form';
-import FormValidationService from '../../utils/validation/form-validation-service';
+import FormValidationService, {
+  VALIDATIONS,
+} from '../../utils/validation/form-validation-service';
 import { getLocalFileContentAsText } from '../../utils/get-local-file-content-as-text';
 
 export const GRAPHS = {
@@ -42,7 +44,6 @@ export default class FormbuilderEditController extends Controller {
 
   @tracked isShowBuilder = true;
   @tracked fieldsInForm = [];
-  @tracked validationStore;
   formValidationService = null;
 
   @action
@@ -75,10 +76,18 @@ export default class FormbuilderEditController extends Controller {
         GRAPHS
       );
 
-      console.log(
-        'Validation ttl form code',
-        this.formValidationService.getFormTtlCode()
-      );
+      const newValidationStatements =
+        this.formValidationService.createValidationStatementsForField(
+          NODES('24289e48-258f-4919-8c3e-5783a6acb4a4'),
+          VALIDATIONS.isRequired
+        );
+
+      this.formValidationService.forkingStore.addAll(newValidationStatements);
+
+      this.refresh.perform({
+        formTtlCode: this.formValidationService.getFormTtlCode(),
+        isInitialRouteCall: true,
+      });
     }
   }
 
