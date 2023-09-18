@@ -9,10 +9,12 @@ import { sym as RDFNode } from 'rdflib';
 import { FORM, RDF } from '../../utils/rdflib';
 import { getAllFieldInForm } from '../../utils/validation/get-all-fields-in-form';
 import FormValidationService from '../../utils/validation/form-validation-service';
+import { getLocalFileContentAsText } from '../../utils/get-local-file-content-as-text';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
   metaGraph: new RDFNode('http://data.lblod.info/metagraph'),
+  validationGraph: new RDFNode('http://data.lblod.info/validationgraph'),
   sourceGraph: new RDFNode(`http://data.lblod.info/sourcegraph`),
 };
 
@@ -63,10 +65,10 @@ export default class FormbuilderEditController extends Controller {
         SOURCE_NODE
       );
 
-      const formTtl = await this.getLocalFileContentAsText('/forms/form.ttl');
-      const metaTtl = await this.getLocalFileContentAsText('/forms/meta.ttl');
+      const formTtl = await getLocalFileContentAsText('/forms/form.ttl');
+      const metaTtl = await getLocalFileContentAsText('/forms/meta.ttl');
 
-      this.formValidationService = FormValidationService.init(
+      this.formValidationService = await FormValidationService.init(
         this.code,
         formTtl,
         metaTtl,
@@ -108,8 +110,8 @@ export default class FormbuilderEditController extends Controller {
       GRAPHS.formGraph
     );
 
-    const formTtl = yield this.getLocalFileContentAsText('/forms/form.ttl');
-    const metaTtl = yield this.getLocalFileContentAsText('/forms/meta.ttl');
+    const formTtl = yield getLocalFileContentAsText('/forms/form.ttl');
+    const metaTtl = yield getLocalFileContentAsText('/forms/meta.ttl');
 
     this.builderStore = new ForkingStore();
     this.builderStore.parse(formTtl, GRAPHS.formGraph.value, 'text/turtle');
@@ -148,12 +150,6 @@ export default class FormbuilderEditController extends Controller {
     );
 
     this.refresh.perform({ formTtlCode: sourceTtl });
-  }
-
-  async getLocalFileContentAsText(path) {
-    const file = await fetch(path);
-
-    return await file.text();
   }
 
   deregisterFromObservable() {

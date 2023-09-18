@@ -1,0 +1,6 @@
+<http://lblod.data.gift/concepts/629bddbb-bf30-48d6-95af-c2f406bd9e8c>
+    a <http://www.w3.org/2004/02/skos/core#Concept>, <http://www.w3.org/2000/01/rdf-schema#Class>;
+    <http://mu.semte.ch/vocabularies/core/uuid> "629bddbb-bf30-48d6-95af-c2f406bd9e8c" ;
+    <http://www.w3.org/2004/02/skos/core#inScheme> <http://lblod.data.gift/concept-schemes/dde3d2a3-e848-47ea-ba44-0f2e565f04ab>;
+    <http://www.w3.org/2004/02/skos/core#prefLabel> "Required"@en ;
+    <http://mu.semte.ch/vocabularies/ext/validationName> "RequiredConstraint"@en .
