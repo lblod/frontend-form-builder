@@ -1,10 +1,13 @@
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { getLocalFileContentAsText } from '../get-local-file-content-as-text';
-import { FORM } from '../rdflib';
+import { CONCEPTS, EXT, FORM } from '../rdflib';
 import { BlankNode, Statement } from 'rdflib';
 
 export const VALIDATIONS = {
-  isRequired: 'RequiredConstraint',
+  isRequired: {
+    name: 'RequiredConstraint',
+    uuid: '629bddbb-bf30-48d6-95af-c2f406bd9e8c',
+  },
 };
 
 export default class FormValidationService {
@@ -31,10 +34,21 @@ export default class FormValidationService {
     return new this(store, graphs);
   }
 
-  createValidationStatementsForField(fieldSubject, validationName) {
+  createValidationStatementsForField(fieldSubject, validation) {
+    const fieldType = 'defaultInput';
+    const isValidationPossibleForField = this.isPossibleValidationForField(
+      fieldType,
+      validation
+    );
+
+    if (!isValidationPossibleForField) {
+      throw `Validation '${validation.name}' is not possible for field type '${fieldType}'`;
+    }
+
     const validationStatementsForValidationBlankNode = [];
-    const validationStatements =
-      this.getValidationStatementsForName(validationName);
+    const validationStatements = this.getValidationStatementsForName(
+      validation.name
+    );
 
     const validationBlankNode = new BlankNode();
     const validationsForField = new Statement(
@@ -57,17 +71,50 @@ export default class FormValidationService {
     return [validationsForField, ...validationStatementsForValidationBlankNode];
   }
 
+  isPossibleValidationForField(fieldType, validation) {
+    const matchesForFieldType = this.forkingStore.match(
+      undefined,
+      EXT('displayType'),
+      fieldType,
+      this.graphs.metaGraph
+    );
+    if (matchesForFieldType.length == 0) {
+      return false;
+    }
+
+    if (matchesForFieldType.length > 1) {
+      throw `Found multiple(${matchesForFieldType.length}) statements for field type '${fieldType}'`;
+    }
+
+    const fieldTypeSubject = matchesForFieldType.shift().subject;
+    const possibleValidationStatements = this.forkingStore.match(
+      fieldTypeSubject,
+      EXT('canHaveValidation'),
+      undefined,
+      this.graphs.metaGraph
+    );
+
+    const possibleValidationObjects = possibleValidationStatements.map(
+      (statement) => statement.object.value
+    );
+
+    return possibleValidationObjects.includes(CONCEPTS(validation.uuid).value);
+  }
+
   getFormTtlCode() {
     return this.forkingStore.serializeDataMergedGraph(this.graphs.sourceGraph);
   }
 
   getValidationStatementsForName(validationName) {
-    if (!Object.values(VALIDATIONS).includes(validationName)) {
+    const validationNames = Object.values(VALIDATIONS).map(
+      (validation) => validation.name
+    );
+    if (!validationNames.includes(validationName)) {
       throw `Validation with name ${validationName} is not a valid validation`;
     }
 
     const validationSubject = this.getValidationSubjectForValidationName(
-      VALIDATIONS.isRequired
+      VALIDATIONS.isRequired.name
     );
     const statementsForValidation = this.forkingStore.match(
       validationSubject,
@@ -92,7 +139,7 @@ export default class FormValidationService {
     }
 
     if (statementsForValidationName.length > 1) {
-      throw `Found multiple statements with validation name ${validationName}`;
+      throw `Found multiple(${statementsForValidationName.length}) statements with validation name ${validationName}`;
     }
 
     return statementsForValidationName.shift().subject;
