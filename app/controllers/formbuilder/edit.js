@@ -36,6 +36,26 @@ export default class FormbuilderEditController extends Controller {
 
   @tracked isInitialDataLoaded = false;
 
+  @tracked isShowBuilder = true;
+  @tracked fieldsInForm = [];
+  formValidationService = null;
+
+  @action
+  async toggleIsAddingValidationToForm() {
+    this.set('isShowBuilder', !this.isShowBuilder);
+    if (this.isShowBuilder) {
+      this.refresh.perform({
+        formTtlCode: this.code,
+        resetBuilder: false,
+        isInitialRouteCall: true,
+      });
+    } else {
+      this.deregisterFromObservable();
+
+      console.log('in validation tab');
+    }
+  }
+
   @task({ restartable: true })
   *refresh({ formTtlCode, resetBuilder, isInitialRouteCall = false }) {
     this.isInitialDataLoaded = !isInitialRouteCall;
@@ -47,7 +67,7 @@ export default class FormbuilderEditController extends Controller {
 
     if (resetBuilder) {
       this.formChanged = true;
-      this.builderStore.deregisterObserver(this.REGISTERED_FORM_TTL_CODE_KEY);
+      this.deregisterFromObservable();
       this.builderStore = '';
     }
 
@@ -85,6 +105,7 @@ export default class FormbuilderEditController extends Controller {
 
     if (isInitialRouteCall) {
       this.setFormChanged(false);
+      this.isAddingValidationToForm = false;
     }
 
     this.isInitialDataLoaded = true;
