@@ -45,6 +45,19 @@ export default class FormValidationService {
       throw `Validation '${validation.name}' is not possible for field type '${fieldType}'`;
     }
 
+    const isValidationAlreadyAddedToField = this.isValidationPresentOnField(
+      fieldSubject,
+      validation
+    );
+
+    if (isValidationAlreadyAddedToField) {
+      throw `validation '${
+        validation.name
+      }' is already added to field with id: ${fieldSubject.value
+        .split('/')
+        .pop()}`;
+    }
+
     const validationStatementsForValidationBlankNode = [];
     const validationStatements = this.getValidationStatementsForName(
       validation.name
@@ -99,6 +112,33 @@ export default class FormValidationService {
     );
 
     return possibleValidationObjects.includes(CONCEPTS(validation.uuid).value);
+  }
+
+  isValidationPresentOnField(fieldSubject, validation) {
+    const currentFieldValidationSubjects = this.forkingStore
+      .match(
+        fieldSubject,
+        FORM('validations'),
+        undefined,
+        this.graphs.sourceGraph
+      )
+      .map((statement) => statement.object);
+
+    for (const blankNode of currentFieldValidationSubjects) {
+      const validations = this.forkingStore
+        .match(blankNode, undefined, undefined, this.graphs.sourceGraph)
+        .map((statement) => statement.object);
+
+      const filteredOnValidationName = validations.filter(
+        (statement) => statement.value == FORM(validation.name).value
+      );
+
+      if (filteredOnValidationName.length !== 0) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   getFormTtlCode() {
