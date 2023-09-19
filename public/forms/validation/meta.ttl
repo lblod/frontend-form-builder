@@ -5,120 +5,122 @@
 <http://lblod.data.gift/concepts/629bddbb-bf30-48d6-95af-c2f406bd9e8c>	rdf:type	rdfs:Class .
 @prefix ns3:	<http://mu.semte.ch/vocabularies/core/> .
 <http://lblod.data.gift/concepts/629bddbb-bf30-48d6-95af-c2f406bd9e8c>	ns3:uuid	"629bddbb-bf30-48d6-95af-c2f406bd9e8c" .
-@prefix ns4:	<http://lblod.data.gift/concept-schemes/> .
-<http://lblod.data.gift/concepts/629bddbb-bf30-48d6-95af-c2f406bd9e8c>	skos:inScheme	ns4:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
+@prefix con:	<http://lblod.data.gift/concept-schemes/> .
+<http://lblod.data.gift/concepts/629bddbb-bf30-48d6-95af-c2f406bd9e8c>	skos:inScheme	con:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
 	skos:prefLabel	"Required"@en .
-@prefix ns5:	<http://mu.semte.ch/vocabularies/ext/> .
+@prefix ext:	<http://mu.semte.ch/vocabularies/ext/> .
+@prefix form: <http://lblod.data.gift/vocabularies/forms/> .
+@prefix sh: <http://www.w3.org/ns/shacl#>.
 
-<http://lblod.data.gift/concepts/629bddbb-bf30-48d6-95af-c2f406bd9e8c>	ns5:validationName	"RequiredConstraint"@en ;
-	ns5:formGrouping	"Bag"@en ;
-	ns5:errorMessage	"Dit veld is verplicht."@nl .
+<http://lblod.data.gift/concepts/629bddbb-bf30-48d6-95af-c2f406bd9e8c>	ext:validationName	"RequiredConstraint"@en ;
+	form:grouping	"Bag"@en ;
+	sh:resultMessage	"Dit veld is verplicht."@nl .
 @prefix ns6:	<http://lblod.data.gift/concepts/> .
 ns6:b06cd462-ea9e-4273-9e7a-6d5b93a43f5f	rdf:type	skos:Concept ,
 		rdfs:Class ;
 	ns3:uuid	"b06cd462-ea9e-4273-9e7a-6d5b93a43f5f" ;
-	skos:inScheme	ns4:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
+	skos:inScheme	con:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
 	skos:prefLabel	"Codelist"@en ;
-	ns5:validationName	"Codelist"@en ;
-	ns5:formGrouping	"MatchEvery"@en ;
-	ns5:errorMessage	"Selecteer een waarde uit de lijst."@nl ;
-	ns5:customParameter	"conceptScheme"@en .
+	ext:validationName	"Codelist"@en ;
+	form:grouping	"MatchEvery"@en ;
+	sh:resultMessage	"Selecteer een waarde uit de lijst."@nl ;
+	ext:customParameter	"conceptScheme"@en .
 <http://lblod.data.gift/concepts/3555ddd7-2565-4700-957d-719e84f5b002>	rdf:type	skos:Concept ,
 		rdfs:Class ;
 	ns3:uuid	"3555ddd7-2565-4700-957d-719e84f5b002" ;
-	skos:inScheme	ns4:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
+	skos:inScheme	con:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
 	skos:prefLabel	"Exact value"@en ;
-	ns5:validationName	"ExactValueConstraint"@en ;
-	ns5:formGrouping	"MatchSome"@en ;
-	ns5:customParameter	"customValue"@en .
+	ext:validationName	"ExactValueConstraint"@en ;
+	form:grouping	"MatchSome"@en ;
+	ext:customParameter	"customValue"@en .
 <http://lblod.data.gift/concepts/0bded4ae-c4dd-42ee-a9b0-f2232f48b2e8>	rdf:type	skos:Concept ,
 		rdfs:Class ;
 	ns3:uuid	"0bded4ae-c4dd-42ee-a9b0-f2232f48b2e8" ;
-	skos:inScheme	ns4:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
+	skos:inScheme	con:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
 	skos:prefLabel	"Uri"@en ;
-	ns5:validationName	"UriConstraint"@en ;
-	ns5:formGrouping	"MatchEvery"@en ;
-	ns5:errorMessage	"Gelieve een geldige URL op te geven. Zorg dat vooraan in de link altijd http://, https://, ftp:// of sftp:// staat."@nl .
+	ext:validationName	"UriConstraint"@en ;
+	form:grouping	"MatchEvery"@en ;
+	sh:resultMessage	"Gelieve een geldige URL op te geven. Zorg dat vooraan in de link altijd http://, https://, ftp:// of sftp:// staat."@nl .
 <http://lblod.data.gift/concepts/4a1eb2d0-22d7-4a66-a8ca-fb54e3cfda37>	rdf:type	skos:Concept ,
 		rdfs:Class ;
 	ns3:uuid	"4a1eb2d0-22d7-4a66-a8ca-fb54e3cfda37" ;
-	skos:inScheme	ns4:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
+	skos:inScheme	con:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
 	skos:prefLabel	"Valid date"@en ;
-	ns5:validationName	"ValidDate"@en ;
-	ns5:formGrouping	"MatchEvery"@en ;
-	ns5:errorMessage	"Geef een geldige datum op."@nl .
+	ext:validationName	"ValidDate"@en ;
+	form:grouping	"MatchEvery"@en ;
+	sh:resultMessage	"Geef een geldige datum op."@nl .
 <http://lblod.data.gift/concepts/3630e744-760a-494f-95aa-130c09649af6>	rdf:type	skos:Concept ,
 		rdfs:Class ;
 	ns3:uuid	"3630e744-760a-494f-95aa-130c09649af6" ;
-	skos:inScheme	ns4:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
+	skos:inScheme	con:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
 	skos:prefLabel	"Valid date time"@en ;
-	ns5:validationName	"ValidDateTime"@en ;
-	ns5:formGrouping	"MatchEvery"@en ;
-	ns5:errorMessage	"Geef een geldige datum en tijd op."@nl .
+	ext:validationName	"ValidDateTime"@en ;
+	form:grouping	"MatchEvery"@en ;
+	sh:resultMessage	"Geef een geldige datum en tijd op."@nl .
 ns6:d19cf942-98be-4369-a883-b607d3330c5f	rdf:type	rdfs:Class ,
 		skos:Concept ;
 	ns3:uuid	"d19cf942-98be-4369-a883-b607d3330c5f" ;
-	skos:inScheme	ns4:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
+	skos:inScheme	con:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
 	skos:prefLabel	"Valid integer"@en ;
-	ns5:validationName	"ValidInteger"@en ;
-	ns5:formGrouping	"MatchEvery"@en ;
-	ns5:errorMessage	"Aantal moet een een geheel getal zijn."@nl .
+	ext:validationName	"ValidInteger"@en ;
+	form:grouping	"MatchEvery"@en ;
+	sh:resultMessage	"Aantal moet een een geheel getal zijn."@nl .
 <http://lblod.data.gift/concepts/50edc60f-3df1-4d49-b5e1-d86b65e8f8ec>	rdf:type	rdfs:Class ,
 		skos:Concept ;
 	ns3:uuid	"50edc60f-3df1-4d49-b5e1-d86b65e8f8ec" ;
-	skos:inScheme	ns4:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
+	skos:inScheme	con:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
 	skos:prefLabel	"Positive number"@en ;
-	ns5:validationName	"PositiveNumber"@en ;
-	ns5:formGrouping	"MatchEvery"@en ;
-	ns5:errorMessage	"Geef een positief aantal op."@nl .
+	ext:validationName	"PositiveNumber"@en ;
+	form:grouping	"MatchEvery"@en ;
+	sh:resultMessage	"Geef een positief aantal op."@nl .
 <http://lblod.data.gift/concepts/2bf94470-a6d8-40c2-8295-707cc0922f1b>	rdf:type	rdfs:Class ,
 		skos:Concept ;
 	ns3:uuid	"2bf94470-a6d8-40c2-8295-707cc0922f1b" ;
-	skos:inScheme	ns4:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
+	skos:inScheme	con:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
 	skos:prefLabel	"Concept scheme"@en ;
-	ns5:validationName	"ConceptSchemeConstraint"@en ;
-	ns5:formGrouping	"Bag"@en ;
-	ns5:errorMessage	"Selecteer een waarde uit de lijst."@nl ;
-	ns5:customParameter	"conceptScheme"@en .
+	ext:validationName	"ConceptSchemeConstraint"@en ;
+	form:grouping	"Bag"@en ;
+	sh:resultMessage	"Selecteer een waarde uit de lijst."@nl ;
+	ext:customParameter	"conceptScheme"@en .
 ns6:c09902d3-9421-49e9-a2e6-d3ac42abbca2	rdf:type	rdfs:Class ,
 		skos:Concept ;
 	ns3:uuid	"c09902d3-9421-49e9-a2e6-d3ac42abbca2" ;
-	skos:inScheme	ns4:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
+	skos:inScheme	con:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
 	skos:prefLabel	"Valid year"@en ;
-	ns5:validationName	"ValidYear"@en ;
-	ns5:formGrouping	"MatchEvery"@en ;
-	ns5:errorMessage	"Geef een geldig jaar op."@nl .
+	ext:validationName	"ValidYear"@en ;
+	form:grouping	"MatchEvery"@en ;
+	sh:resultMessage	"Geef een geldig jaar op."@nl .
 <http://lblod.data.gift/concepts/82d71dd7-8be2-4886-acb0-5d04a31c53e9>	rdf:type	rdfs:Class ,
 		skos:Concept ;
 	ns3:uuid	"82d71dd7-8be2-4886-acb0-5d04a31c53e9" ;
-	skos:inScheme	ns4:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
+	skos:inScheme	con:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
 	skos:prefLabel	"Valid email"@en ;
-	ns5:validationName	"ValidEmail"@en ;
-	ns5:formGrouping	"MatchEvery"@en ;
-	ns5:errorMessage	"Geef een geldig e-mailadres op."@nl .
+	ext:validationName	"ValidEmail"@en ;
+	form:grouping	"MatchEvery"@en ;
+	sh:resultMessage	"Geef een geldig e-mailadres op."@nl .
 <http://lblod.data.gift/concepts/26a91f04-58af-480f-b25f-19c48432a0a3>	rdf:type	rdfs:Class ,
 		skos:Concept ;
 	ns3:uuid	"26a91f04-58af-480f-b25f-19c48432a0a3" ;
-	skos:inScheme	ns4:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
+	skos:inScheme	con:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
 	skos:prefLabel	"Valid IBAN"@en ;
-	ns5:validationName	"ValidIBAN"@en ;
-	ns5:formGrouping	"MatchEvery"@en ;
-	ns5:errorMessage	"Geef een geldig IBAN op."@nl .
+	ext:validationName	"ValidIBAN"@en ;
+	form:grouping	"MatchEvery"@en ;
+	sh:resultMessage	"Geef een geldig IBAN op."@nl .
 <http://lblod.data.gift/concepts/1bc4475c-7df0-46e7-9ede-a91a9bd93bd4>	rdf:type	skos:Concept ,
 		rdfs:Class ;
 	ns3:uuid	"1bc4475c-7df0-46e7-9ede-a91a9bd93bd4" ;
-	skos:inScheme	ns4:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
+	skos:inScheme	con:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
 	skos:prefLabel	"Valid phone number"@en ;
-	ns5:validationName	"ValidPhoneNumber"@en ;
-	ns5:formGrouping	"MatchEvery"@en ;
-	ns5:errorMessage	"Geef een geldig telefoonnummer in."@nl ;
-	ns5:customParameter	"defaultCountry"@en .
+	ext:validationName	"ValidPhoneNumber"@en ;
+	form:grouping	"MatchEvery"@en ;
+	sh:resultMessage	"Geef een geldig telefoonnummer in."@nl ;
+	ext:customParameter	"defaultCountry"@en .
 <http://lblod.data.gift/concepts/60873518-5423-4121-ba6a-9635b18242a0>	rdf:type	rdfs:Class ,
 		skos:Concept ;
 	ns3:uuid	"60873518-5423-4121-ba6a-9635b18242a0" ;
-	skos:inScheme	ns4:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
+	skos:inScheme	con:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
 	skos:prefLabel	"Max length"@en ;
-	ns5:validationName	"MaxLength"@en ;
-	ns5:formGrouping	"MatchEvery"@en ;
-	ns5:errorMessage	"Max. karakters overschreden."@nl ;
-	ns5:customParameter	"max"@en .
+	ext:validationName	"MaxLength"@en ;
+	form:grouping	"MatchEvery"@en ;
+	sh:resultMessage	"Max. karakters overschreden."@nl ;
+	form:max	"100" .
