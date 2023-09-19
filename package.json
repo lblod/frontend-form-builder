@@ -26,11 +26,6 @@
     "test": "concurrently \"npm:lint\" \"npm:test:*\" --names \"lint,test:\"",
     "test:ember": "ember test"
   },
-  "overrides": {
-    "n3": {
-      "readable-stream": "4.3.0"
-    }
-  },
   "devDependencies": {
     "@appuniversum/ember-appuniversum": "^2.14.0",
     "@babel/eslint-parser": "^7.21.3",
