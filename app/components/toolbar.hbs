@@ -78,13 +78,6 @@
   />
 {{/if}}
 
-{{#if this.showUnsavedChangesModal}}
-  <UnsavedChangesModal
-    @onClose={{fn (mut this.showUnsavedChangesModal) false}}
-    @onSave={{this.updateForm}}
-  />
-{{/if}}
-
 {{#if this.showCodeEditModal}}
   <CodeEditModal
     @onClose={{fn (mut this.showCodeEditModal) false}}
