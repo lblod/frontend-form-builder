@@ -42,7 +42,7 @@ export default class FormbuilderEditController extends Controller {
 
   @action
   async toggleIsAddingValidationToForm() {
-    this.set('isShowBuilder', !this.isShowBuilder);
+    this.isShowBuilder = !this.isShowBuilder;
     if (this.isShowBuilder) {
       this.refresh.perform({
         formTtlCode: this.code,
