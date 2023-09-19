@@ -51,8 +51,6 @@ export default class FormbuilderEditController extends Controller {
       });
     } else {
       this.deregisterFromObservable();
-
-      console.log('in validation tab');
     }
   }
 

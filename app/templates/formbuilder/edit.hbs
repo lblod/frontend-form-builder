@@ -39,7 +39,10 @@
         </div>
       {{else}}
         <AuBodyContainer @scroll={{true}} class="au-o-box">
-          <h1>Validation tab</h1>
+          <AddValidationsToForm 
+            @formTtlCode={{this.code}}
+            @sourceNode={{this.sourceNode}}
+          />
         </AuBodyContainer>
       {{/if}}
       <div class="playground__show">
