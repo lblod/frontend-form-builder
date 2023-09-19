@@ -37,36 +37,32 @@
       <Group class="au-c-toolbar__group--actions">
         <AuLink @route="codelijsten">Codelijsten</AuLink>
         <AuDropdown @title="Formulier acties" @alignment="right" role="menu">
-          <AuButton 
-            @skin="tertiary" role="menuitem"
+          <AuButton
+            @skin="link" @icon="copy" role="menuitem"
             {{on "click" (fn (mut this.showEditModal) true)}}
             >
-            <AuIcon @icon="copy" @alignment="left" />
             Bewerk naam en beschrijving
           </AuButton>
-          <AuButton 
-            @skin="tertiary" role="menuitem"
+          <AuButton
+            @skin="link" @icon="export" role="menuitem"
             {{on 'click' this.saveLocally}}
             >
-            <AuIcon @icon="export" @alignment="left" />
             Exporteer code
           </AuButton>
-          <AuButton 
-            @skin="tertiary" role="menuitem"
+          <AuButton
+            @skin="link" @icon="html" role="menuitem"
             {{on 'click' (fn (mut this.showCodeEditModal) true)}}
-            >
-            <AuIcon @icon="html" @alignment="left" />
+          >
             Bewerk code
           </AuButton>
           <AuButton
-            @skin="tertiary" role="menuitem" @alert={{true}}
+            @skin="link" @icon="bin" role="menuitem" @alert={{true}}
             {{on "click" (fn (mut this.showDeleteModal) true) }}
             >
-            <AuIcon @icon="bin" @alignment="left" />
             Naar prullenmand
           </AuButton>
         </AuDropdown>
-        <AuButton 
+        <AuButton
           @disabled={{not @formChanged}}
           {{on 'click' this.updateForm}}
         >Bewaar</AuButton>
@@ -76,21 +72,21 @@
 </nav>
 
 {{#if this.showDeleteModal}}
-  <ConfirmDeletionModal 
+  <ConfirmDeletionModal
     @onDelete={{this.deleteForm}}
     @onClose={{fn (mut this.showDeleteModal) false}}
   />
 {{/if}}
 
 {{#if this.showUnsavedChangesModal}}
-  <UnsavedChangesModal 
+  <UnsavedChangesModal
     @onClose={{fn (mut this.showUnsavedChangesModal) false}}
     @onSave={{this.updateForm}}
   />
 {{/if}}
 
 {{#if this.showCodeEditModal}}
-  <CodeEditModal 
+  <CodeEditModal
     @onClose={{fn (mut this.showCodeEditModal) false}}
     @refresh={{@refresh}}
     @code={{@code}}
@@ -108,7 +104,11 @@
         <AuLabel for="input-filelabel">
           Naam
         </AuLabel>
-        <AuInput id="input-filelabel" @value={{this.formLabel}}/>
+        <AuInput
+          id="input-filelabel"
+          value={{this.formLabel}}
+          {{on "change" this.handleLabelChange}}
+        />
       </div>
       <div class="au-o-grid__item au-1-1">
         <AuLabel for="input-filecomment">Beschrijving</AuLabel>
