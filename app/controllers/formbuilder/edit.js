@@ -7,6 +7,7 @@ import { inject as service } from '@ember/service';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { sym as RDFNode } from 'rdflib';
 import { FORM, RDF } from '../../utils/rdflib';
+import { getLocalFileContentAsText } from '../../utils/get-local-file-content';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
@@ -85,8 +86,8 @@ export default class FormbuilderEditController extends Controller {
       GRAPHS.formGraph
     );
 
-    const formTtl = yield this.getLocalFileContentAsText(this.form_ttl_path);
-    const metaTtl = yield this.getLocalFileContentAsText(this.meta_ttl_path);
+    const formTtl = yield getLocalFileContentAsText(this.form_ttl_path);
+    const metaTtl = yield getLocalFileContentAsText(this.meta_ttl_path);
 
     this.builderStore = new ForkingStore();
     this.builderStore.parse(formTtl, GRAPHS.formGraph.value, 'text/turtle');
@@ -125,12 +126,6 @@ export default class FormbuilderEditController extends Controller {
     );
 
     this.refresh.perform({ formTtlCode: sourceTtl });
-  }
-
-  async getLocalFileContentAsText(path) {
-    const file = await fetch(path);
-
-    return await file.text();
   }
 
   deregisterFromObservable() {
