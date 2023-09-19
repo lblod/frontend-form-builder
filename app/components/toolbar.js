@@ -17,6 +17,11 @@ export default class ToolbarComponent extends Component {
   @tracked formComment = this.args.model.comment;
 
   @action
+  handleLabelChange(event) {
+    this.formLabel = event.target.value;
+  }
+
+  @action
   saveLocally() {
     // Create a link
     let downloadLink = document.createElement('a');
