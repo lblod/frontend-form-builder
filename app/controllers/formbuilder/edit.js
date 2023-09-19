@@ -34,6 +34,9 @@ export default class FormbuilderEditController extends Controller {
   sourceNode = SOURCE_NODE;
   REGISTERED_FORM_TTL_CODE_KEY = 'formTtlCode';
 
+  form_ttl_path = '/forms/builder/form.ttl';
+  meta_ttl_path = '/forms/builder/meta.ttl';
+
   @tracked isInitialDataLoaded = false;
 
   @tracked isShowBuilder = true;
@@ -82,8 +85,8 @@ export default class FormbuilderEditController extends Controller {
       GRAPHS.formGraph
     );
 
-    const formTtl = yield this.getLocalFileContentAsText('/forms/form.ttl');
-    const metaTtl = yield this.getLocalFileContentAsText('/forms/meta.ttl');
+    const formTtl = yield this.getLocalFileContentAsText(this.form_ttl_path);
+    const metaTtl = yield this.getLocalFileContentAsText(this.meta_ttl_path);
 
     this.builderStore = new ForkingStore();
     this.builderStore.parse(formTtl, GRAPHS.formGraph.value, 'text/turtle');
