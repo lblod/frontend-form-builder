@@ -42,7 +42,7 @@
     "@ember/test-helpers": "^2.9.3",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
-    "@lblod/ember-submission-form-fields": "^2.11.0",
+    "@lblod/ember-submission-form-fields": "^2.12.2",
     "broccoli-asset-rev": "^3.0.0",
     "codemirror": "^6.0.1",
     "codemirror-lang-turtle": "^0.0.2",
