@@ -4,11 +4,8 @@ import { GRAPHS } from '../controllers/formbuilder/edit';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { getLocalFileContentAsText } from '../utils/get-local-file-content';
 import { FORM, RDF } from '../utils/rdflib';
-import { inject as service } from '@ember/service';
 
 export default class AddValidationsToFormComponent extends Component {
-  @service('meta-data-extractor') meta;
-
   @tracked builderStore;
   @tracked builderForm;
   @tracked formTtlCode;
@@ -16,7 +13,8 @@ export default class AddValidationsToFormComponent extends Component {
   @tracked sourceNode;
 
   graphs = GRAPHS;
-  validation_ttl_path = '/forms/validation.ttl';
+  form_ttl_path = '/forms/validation/form.ttl';
+  meta_ttl_path = '/forms/validation/meta.ttl';
 
   constructor() {
     super(...arguments);
@@ -38,12 +36,15 @@ export default class AddValidationsToFormComponent extends Component {
   async createBuilderStore() {
     const builderStore = new ForkingStore();
     builderStore.parse(
-      await getLocalFileContentAsText(this.validation_ttl_path),
+      await getLocalFileContentAsText(this.form_ttl_path),
       GRAPHS.formGraph,
       'text/turtle'
     );
-    const meta = await this.meta.extract(builderStore, { graphs: GRAPHS });
-    builderStore.parse(meta, GRAPHS.metaGraph, 'text/turtle');
+    builderStore.parse(
+      await getLocalFileContentAsText(this.meta_ttl_path),
+      GRAPHS.metaGraph,
+      'text/turtle'
+    );
     builderStore.parse(this.formTtlCode, GRAPHS.sourceGraph, 'text/turtle');
 
     return builderStore;
