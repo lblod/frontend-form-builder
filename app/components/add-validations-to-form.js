@@ -30,6 +30,11 @@ export default class AddValidationsToFormComponent extends Component {
       this.builderStore = builderStore;
       this.builderForm = this.createBuilderForm(builderStore);
       this.showRdfForm = true;
+
+      this.builderStore.registerObserver(() => {
+        const updatedTtl = this.builderStore.serializeDataMergedGraph(GRAPHS.sourceGraph);
+        this.args.onUpdateTtlCode({formTtlCode: updatedTtl, isInitialRouteCall: true})
+      }, 'formTtl')
     });
   }
 
