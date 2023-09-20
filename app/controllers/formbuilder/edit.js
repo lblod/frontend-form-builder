@@ -58,11 +58,6 @@ export default class FormbuilderEditController extends Controller {
     }
   }
 
-  @action
-  refreshThis(parameters) {
-    this.refresh.perform(parameters);
-  }
-
   @task({ restartable: true })
   *refresh({ formTtlCode, resetBuilder, isInitialRouteCall = false }) {
     this.isInitialDataLoaded = !isInitialRouteCall;
