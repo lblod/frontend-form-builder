@@ -22,6 +22,11 @@ export default class ToolbarComponent extends Component {
   }
 
   @action
+  handleCommentChange(event) {
+    this.formComment = event.target.value;
+  }
+
+  @action
   saveLocally() {
     // Create a link
     let downloadLink = document.createElement('a');
