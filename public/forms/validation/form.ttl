@@ -113,7 +113,7 @@ ext:conceptSchemeMultiSelectorField a form:Field;
     e.g. Required, Max Length...
    """;
   sh:path form:validations ;
-  form:displayType displayTypes:conceptSchemeValidationMultiSelector ;
+  form:displayType displayTypes:conceptSchemeMultiSelector ;
   form:options """{"conceptScheme":"http://lblod.data.gift/concept-schemes/dde3d2a3-e848-47ea-ba44-0f2e565f04ab","searchEnabled":true}""" ;
   sh:group ext:formFieldPg .
 
