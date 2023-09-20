@@ -11,6 +11,7 @@ You will need the following things properly installed on your computer.
 * [Node.js](https://nodejs.org/) (with npm)
 * [Ember CLI](https://cli.emberjs.com/release/)
 * [Google Chrome](https://google.com/chrome/)
+* [Watchman](https://facebook.github.io/watchman/) (might be needed on some OSs if you run into file watching errors)
 
 ## Installation
 
