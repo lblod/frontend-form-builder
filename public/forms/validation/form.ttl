@@ -6,6 +6,8 @@
 @prefix schema: <http://schema.org/>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#>.
+@prefix fieldGroups: <http://data.lblod.info/field-groups/> .
+@prefix fields: <http://data.lblod.info/fields/> .
 
 ##########################################################
 # form
@@ -29,6 +31,7 @@ ext:formNodesS a form:Scope;
 ext:formNodesL a form:Listing;
   form:each ext:formNodesFormItem;
   form:scope ext:formNodesS;
+  form:createGenerator ext:FieldGroupGenerator;
   form:canAdd true;
   form:addLabel "Add validation";
   form:canRemove true;
@@ -42,6 +45,7 @@ ext:formNodesL a form:Listing;
 ext:formNodesFormItem a form:SubForm;
   form:includes ext:formNodesNameF;
   form:includes ext:formNodesL;
+  form:includes fields:f45db229-1ef1-4516-93f7-deb12cface5f;
   form:hasFieldGroup ext:formFieldPg.
 
 ext:formNodesNameF a form:Field ;
@@ -50,3 +54,29 @@ ext:formNodesNameF a form:Field ;
   sh:path sh:name ;
   form:displayType displayTypes:defaultInput;
   sh:group ext:formFieldPg .
+
+fields:f45db229-1ef1-4516-93f7-deb12cface5f a form:Field ;
+  sh:name "Validation" ;
+  sh:order 1 ;
+  sh:path form:displayType ;
+  form:help """
+    e.g. Required, Max Length,..
+   """;
+  form:displayType displayTypes:conceptSchemeSelector ;
+  form:options """{"conceptScheme":"http://lblod.data.gift/concept-schemes/dde3d2a3-e848-47ea-ba44-0f2e565f04ab","searchEnabled":true}""" ;
+  sh:group ext:formFieldPg .
+
+fieldGroups:37424026-d659-42c3-9353-0059408690f5 a form:FieldGroup ;
+    mu:uuid "37424026-d659-42c3-9353-0059408690f5" ;
+    form:hasField fields:f45db229-1ef1-4516-93f7-deb12cface5f .
+
+# fields:d441cb26-ea24-4ff7-b5fb-868e36e7d468 a form:ConditionalFieldGroup ;
+#     mu:uuid "d441cb26-ea24-4ff7-b5fb-868e36e7d468";
+#     form:conditions
+#       [ a form:Field ;
+#         form:grouping form:Bag ;
+#         sh:path rdf:type ;
+#         form:conceptScheme <http://lblod.data.gift/concept-schemes/dde3d2a3-e848-47ea-ba44-0f2e565f04ab> ; # All validation options 
+#         form:customValue <http://lblod.data.gift/concepts/629bddbb-bf30-48d6-95af-c2f406bd9e8c> # RequiredConstraint validation option
+#       ] ;
+#     form:hasFieldGroup fieldGroups:37424026-d659-42c3-9353-0059408690f5 .
