@@ -10,22 +10,25 @@
 @prefix fields: <http://data.lblod.info/fields/> .
 
 ##########################################################
-# form
+# Form
 ##########################################################
 ext:form a form:Form, form:TopLevelForm ;
-  form:includes ext:mainValidationPg ;
-  form:includes ext:formFieldPg .
+  form:includes ext:formNodesL .
+
 ##########################################################
 #  Parent groups aka Property Groups
 ##########################################################
 ext:mainValidationPg a form:PropertyGroup;
-    sh:name "Field validations" ;
+    sh:name "Validation Form" ;
     sh:order 1 .
 
 ext:formFieldPg a form:PropertyGroup;
     sh:name "Field" ;
     sh:order 2 .
 
+ext:formFieldValidations a form:PropertyGroup;
+    sh:name "Validations for field" ;
+    sh:order 3 .
 ##########################################################
 #  Scopes:
 ##########################################################
@@ -37,28 +40,29 @@ ext:formNodesS a form:Scope;
 ##########################################################
 ext:formNodesFormItem a form:SubForm;
   form:includes ext:formNodesNameF;
-  form:hasFieldGroup ext:mainValidationPg .
+  form:includes ext:formNodesL;
+  form:hasFieldGroup ext:formFieldPg .
 
 ext:formValidationForNodes a form:SubForm;
   form:includes fields:f45db229-1ef1-4516-93f7-deb12cface5f;
-  form:hasFieldGroup ext:formFieldPg .
+  form:hasFieldGroup ext:formFieldValidations .
 
 ext:formNodesNameF a form:Field ;
   sh:name "Field name" ;
   sh:order 1 ;
   sh:path sh:name ;
   form:displayType displayTypes:defaultInput;
-  sh:group ext:mainValidationPg .
+  sh:group ext:formFieldPg .
 
 ext:formNodesL a form:Listing;
   form:each ext:formNodesFormItem;
   form:scope ext:formNodesS;
-  form:createGenerator ext:addValidationGenerator;
+  form:createGenerator ext:formNodesGenerator;
   form:canAdd true;
   form:addLabel "Add validation";
   form:canRemove false;
   form:removeLabel "Remove validation";
-  sh:group ext:mainValidationPg;
+  sh:group ext:formFieldPg;
   sh:order 3 .
 
 ##########################################################
@@ -73,7 +77,7 @@ fields:f45db229-1ef1-4516-93f7-deb12cface5f a form:Field ;
    """;
   form:displayType displayTypes:conceptSchemeSelector ;
   form:options """{"conceptScheme":"http://lblod.data.gift/concept-schemes/dde3d2a3-e848-47ea-ba44-0f2e565f04ab","searchEnabled":true}""" ;
-  sh:group ext:formFieldPg .
+  sh:group ext:formFieldValidations .
 
 ##########################################################
 #  Generators:
@@ -81,6 +85,6 @@ fields:f45db229-1ef1-4516-93f7-deb12cface5f a form:Field ;
 ext:addValidationGenerator a form:Generator;
   form:prototype [
     form:shape [
-      a ext:formValidationForNodes
+      a ext:formNodesFormItem
     ]
   ].
