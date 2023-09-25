@@ -7,6 +7,7 @@ export default class Router extends EmberRouter {
 }
 
 Router.map(function () {
+  this.route('mock-login');
   this.route('forms', function () {
     this.route('playground');
   });
