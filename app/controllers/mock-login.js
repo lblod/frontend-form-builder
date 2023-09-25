@@ -19,6 +19,7 @@ export default class MockLoginController extends Controller {
       page: { size: this.size, number: this.page },
       sort: 'gebruiker.achternaam',
     });
+    console.log('controller | accounts', [...accounts]);
     return accounts;
   });
 
