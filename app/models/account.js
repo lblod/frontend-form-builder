@@ -1,3 +1,7 @@
-import Model from '@ember-data/model';
+import Model, { belongsTo, attr } from '@ember-data/model';
+export default class AccountModel extends Model {
+  @attr voId;
+  @attr provider;
 
-export default class AccountModel extends Model {}
+  @belongsTo('gebruiker', { async: true, inverse: null }) gebruiker;
+}
