@@ -1,7 +1,23 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import { service } from '@ember/service';
 
 export default class FormsPlaygroundRoute extends Route {
+  @service session;
+
+  async beforeModel() {
+    await this.session.setup();
+    await this._loadCurrentSession();
+  }
+
+  async _loadCurrentSession() {
+    try {
+      await this.currentSession.load();
+    } catch (error) {
+      this.session.invalidate();
+    }
+  }
+
   @action
   willTransition(transition) {
     /* eslint ember/no-controller-access-in-routes: "warn" */
