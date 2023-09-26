@@ -23,11 +23,14 @@ ext:formFieldPg a form:PropertyGroup;
     sh:order 1 .
 
 ext:formFieldValidations a form:PropertyGroup;
-    sh:name "Validations for field" ;
+    sh:name "Validation" ;
     sh:order 2 .
 ##########################################################
 #  Scopes:
 ##########################################################
+ext:formNodesS a form:Scope;
+  sh:path form:includes.
+
 ext:formNodesS a form:Scope;
   sh:path form:includes.
 
@@ -36,7 +39,6 @@ ext:formNodesS a form:Scope;
 ##########################################################
 ext:formNodesFormItem a form:SubForm;
   form:includes ext:formNodesNameF;
-  form:includes ext:formValidationL;
   form:hasFieldGroup ext:formFieldPg .
 
 ext:formNodesNameF a form:Field ;
@@ -76,21 +78,21 @@ ext:formValidationL a form:Listing;
 
 ext:formValidationValueItem a form:SubForm;
   form:includes fields:validatonSelectorF;
-  form:hasFieldGroup ext:formFieldPg .
+  form:hasFieldGroup ext:formFieldValidations .
 
 ##########################################################
 #  Section for adding validations to the field:
 ##########################################################
 fields:validatonSelectorF a form:Field ;
-  sh:name "Validation" ;
+  sh:name "Validation type" ;
   sh:order  2 ;
   sh:path form:displayType ;
   form:help """
     e.g. Required, Max Length,..
    """;
   form:displayType displayTypes:conceptSchemeSelector ;
-  form:options """{"conceptScheme":"http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6","searchEnabled":true}""" ;
-  sh:group ext:formFieldPg .
+  form:options """{"conceptScheme":"http://lblod.data.gift/concept-schemes/dde3d2a3-e848-47ea-ba44-0f2e565f04ab","searchEnabled":true}""" ;
+  sh:group ext:formFieldValidations .
 
 ##########################################################
 #  Generators:
@@ -101,3 +103,37 @@ ext:addValidationGenerator a form:Generator;
       a ext:formValidationValueItem
     ]
   ].
+
+##########################################################
+#  Conditional Fields:
+##########################################################
+fields:resultMessageF a form:field;
+  sh:name "Error message";
+  sh:order 4;
+  sh:path sh:resultMessage;
+  sh:Scope ext:formNodesS;
+  form:displayType displayTypes:defaultInput;
+  sh:group ext:formFieldValidationProperties.
+##########################################################
+#  Assignment of fieldgroup to field:
+##########################################################
+fields:validatonSelectorF form:hasConditionalFieldGroup fields:requiredValidationConditionF.
+
+##########################################################
+#  Field Groups:
+##########################################################
+fieldGroups:RequiredValidationFieldGroup a form:FieldGroup ;
+    form:hasField fields:resultMessageF.
+
+##########################################################
+#  Conditions:
+##########################################################
+fields:requiredValidationConditionF a form:ConditionalFieldGroup ;
+    form:conditions
+      [ a form:SingleCodelistValue ;
+        form:grouping form:Bag ;
+        sh:path rdf:type ;
+        form:conceptScheme <http://lblod.data.gift/concept-schemes/dde3d2a3-e848-47ea-ba44-0f2e565f04ab> ;
+        form:customValue <http://lblod.data.gift/concepts/629bddbb-bf30-48d6-95af-c2f406bd9e8c>
+      ] ;
+    form:hasFieldGroup fieldGroups:RequiredValidationFieldGroup.
