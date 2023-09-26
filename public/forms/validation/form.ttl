@@ -18,17 +18,13 @@ ext:form a form:Form, form:TopLevelForm ;
 ##########################################################
 #  Parent groups aka Property Groups
 ##########################################################
-ext:mainValidationPg a form:PropertyGroup;
-    sh:name "Validation Form" ;
-    sh:order 1 .
-
 ext:formFieldPg a form:PropertyGroup;
     sh:name "Field" ;
-    sh:order 2 .
+    sh:order 1 .
 
 ext:formFieldValidations a form:PropertyGroup;
     sh:name "Validations for field" ;
-    sh:order 3 .
+    sh:order 2 .
 ##########################################################
 #  Scopes:
 ##########################################################
@@ -40,12 +36,8 @@ ext:formNodesS a form:Scope;
 ##########################################################
 ext:formNodesFormItem a form:SubForm;
   form:includes ext:formNodesNameF;
-  form:includes ext:formNodesL;
+  form:includes ext:formValidationL;
   form:hasFieldGroup ext:formFieldPg .
-
-ext:formValidationForNodes a form:SubForm;
-  form:includes fields:f45db229-1ef1-4516-93f7-deb12cface5f;
-  form:hasFieldGroup ext:formFieldValidations .
 
 ext:formNodesNameF a form:Field ;
   sh:name "Field name" ;
@@ -55,20 +47,41 @@ ext:formNodesNameF a form:Field ;
   sh:group ext:formFieldPg .
 
 ext:formNodesL a form:Listing;
-  form:each ext:formNodesFormItem;
+  form:each ext:formValidationItem;
   form:scope ext:formNodesS;
-  form:createGenerator ext:formNodesGenerator;
-  form:canAdd true;
-  form:addLabel "Add validation";
-  form:canRemove false;
-  form:removeLabel "Remove validation";
   sh:group ext:formFieldPg;
   sh:order 3 .
 
 ##########################################################
+#  Validation Subform:
+##########################################################
+ext:formValidationItem a form:SubForm;
+  form:includes ext:formNodesNameF;
+  form:includes ext:formValidationL;
+  form:hasFieldGroup ext:formFieldValidations .
+
+##########################################################
+#  Validation Listing:
+##########################################################
+ext:formValidationL a form:Listing;
+  form:each ext:formValidationValueItem;
+  form:scope ext:formNodesS;
+  form:canAdd true;
+  form:addLabel "Validation";
+  form:canRemove true;
+  form:removeLabel "Remove section";
+  form:createGenerator ext:addValidationGenerator;
+  sh:group ext:formFieldPg;
+  sh:order 3 .
+
+ext:formValidationValueItem a form:SubForm;
+  form:includes fields:validatonSelectorF;
+  form:hasFieldGroup ext:formFieldPg .
+
+##########################################################
 #  Section for adding validations to the field:
 ##########################################################
-fields:f45db229-1ef1-4516-93f7-deb12cface5f a form:Field ;
+fields:validatonSelectorF a form:Field ;
   sh:name "Validation" ;
   sh:order  2 ;
   sh:path form:displayType ;
@@ -76,8 +89,8 @@ fields:f45db229-1ef1-4516-93f7-deb12cface5f a form:Field ;
     e.g. Required, Max Length,..
    """;
   form:displayType displayTypes:conceptSchemeSelector ;
-  form:options """{"conceptScheme":"http://lblod.data.gift/concept-schemes/dde3d2a3-e848-47ea-ba44-0f2e565f04ab","searchEnabled":true}""" ;
-  sh:group ext:formFieldValidations .
+  form:options """{"conceptScheme":"http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6","searchEnabled":true}""" ;
+  sh:group ext:formFieldPg .
 
 ##########################################################
 #  Generators:
@@ -85,6 +98,6 @@ fields:f45db229-1ef1-4516-93f7-deb12cface5f a form:Field ;
 ext:addValidationGenerator a form:Generator;
   form:prototype [
     form:shape [
-      a ext:formNodesFormItem
+      a ext:formValidationValueItem
     ]
   ].
