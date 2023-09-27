@@ -61,6 +61,7 @@ ext:formNodesL a form:Listing;
 ##########################################################
 ext:formValidationItem a form:SubForm;
   form:includes ext:formNodesNameF;
+  form:includes ext:validationResultMessageF;
   form:includes ext:formValidationL;
   form:hasFieldGroup ext:formFieldValidations .
 
@@ -110,26 +111,24 @@ ext:addValidationGenerator a form:Generator;
     form:shape [
         a ext:blankNode ;
         form:grouping form:Bag ;
-        sh:resultMessage "Placeholder result message"@nl
     ]
   ].
 
 ##########################################################
 #  Conditional Fields:
 ##########################################################
-fields:resultMessageF a form:field;
-  sh:name "Error message";
-  sh:order 4;
-  sh:path sh:resultMessage;
-  sh:Scope ext:formNodesS;
+ext:validationResultMessageF a form:Field ;
+  sh:name "Error message" ;
+  sh:order 3 ;
+  sh:path (form:validations sh:resultMessage) ;
   form:displayType displayTypes:defaultInput;
-  sh:group ext:formFieldValidations.
+  sh:group ext:formFieldValidations .
 
 ##########################################################
 #  Field Groups:
 ##########################################################
 fieldGroups:RequiredValidationFieldGroup a form:FieldGroup ;
-  form:hasField fields:resultMessageF.
+  form:hasField ext:validationResultMessageF.
 
 ##########################################################
 #  Conditions:
