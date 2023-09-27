@@ -33,6 +33,9 @@ ext:formFieldValidations a form:PropertyGroup;
 ext:formNodesS a form:Scope;
   sh:path form:includes.
 
+ext:formValidationsS a form:Scope;
+  sh:path form:validations.
+
 ##########################################################
 #  Field with add validation button:
 ##########################################################
@@ -66,7 +69,7 @@ ext:formValidationItem a form:SubForm;
 ##########################################################
 ext:formValidationL a form:Listing;
   form:each ext:formValidationValueItem;
-  form:scope ext:formNodesS;
+  form:scope ext:formValidationsS;
   form:canAdd true;
   form:addLabel "Validation";
   form:canRemove true;
@@ -105,7 +108,9 @@ fields:validatonSelectorF a form:Field ;
 ext:addValidationGenerator a form:Generator;
   form:prototype [
     form:shape [
-      a ext:formValidationValueItem
+        a ext:blankNode ;
+        form:grouping form:Bag ;
+        sh:resultMessage "Placeholder result message"@nl
     ]
   ].
 
@@ -133,9 +138,9 @@ fields:requiredValidationConditionF a form:ConditionalFieldGroup ;
   form:conditions
     [ a form:SingleCodelistValue ;
       form:grouping form:Bag ;
-      sh:path rdf:type ;
+      sh:path form:customValue ;
       form:conceptScheme <http://lblod.data.gift/concept-schemes/dde3d2a3-e848-47ea-ba44-0f2e565f04ab> ;
-      form:customValue <http://lblod.data.gift/concepts/629bddbb-bf30-48d6-95af-c2f406bd9e8c>
+      form:customValue <http://lblod.data.gift/vocabularies/forms/RequiredConstraint>
     ] ;
   form:hasFieldGroup fieldGroups:RequiredValidationFieldGroup.
 

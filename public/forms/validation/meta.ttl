@@ -1,21 +1,22 @@
 @prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix skos:	<http://www.w3.org/2004/02/skos/core#> .
-<http://lblod.data.gift/concepts/629bddbb-bf30-48d6-95af-c2f406bd9e8c>	rdf:type	skos:Concept .
+@prefix form: <http://lblod.data.gift/vocabularies/forms/> .
+form:RequiredConstraint	rdf:type	skos:Concept .
 @prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
-<http://lblod.data.gift/concepts/629bddbb-bf30-48d6-95af-c2f406bd9e8c>	rdf:type	rdfs:Class .
+form:RequiredConstraint	rdf:type	rdfs:Class .
 @prefix ns3:	<http://mu.semte.ch/vocabularies/core/> .
-<http://lblod.data.gift/concepts/629bddbb-bf30-48d6-95af-c2f406bd9e8c>	ns3:uuid	"629bddbb-bf30-48d6-95af-c2f406bd9e8c" .
+form:RequiredConstraint	ns3:uuid	"629bddbb-bf30-48d6-95af-c2f406bd9e8c" .
 @prefix con:	<http://lblod.data.gift/concept-schemes/> .
-<http://lblod.data.gift/concepts/629bddbb-bf30-48d6-95af-c2f406bd9e8c>	skos:inScheme	con:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
+form:RequiredConstraint	skos:inScheme	con:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
 	skos:prefLabel	"Required"@en .
 @prefix ext:	<http://mu.semte.ch/vocabularies/ext/> .
-@prefix form: <http://lblod.data.gift/vocabularies/forms/> .
 @prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix ns6:	<http://lblod.data.gift/concepts/> .
 
-<http://lblod.data.gift/concepts/629bddbb-bf30-48d6-95af-c2f406bd9e8c>	ext:validationName	"RequiredConstraint"@en ;
+form:RequiredConstraint
+	ext:validationName	"RequiredConstraint"@en ;
 	form:grouping	"Bag"@en ;
 	sh:resultMessage	"Dit veld is verplicht."@nl .
-@prefix ns6:	<http://lblod.data.gift/concepts/> .
 ns6:b06cd462-ea9e-4273-9e7a-6d5b93a43f5f	rdf:type	skos:Concept ,
 		rdfs:Class ;
 	ns3:uuid	"b06cd462-ea9e-4273-9e7a-6d5b93a43f5f" ;
