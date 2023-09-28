@@ -116,7 +116,9 @@ ns6:c09902d3-9421-49e9-a2e6-d3ac42abbca2	rdf:type	rdfs:Class ,
 	form:grouping	"MatchEvery"@en ;
 	sh:resultMessage	"Geef een geldig telefoonnummer in."@nl ;
 	ext:customParameter	"defaultCountry"@en .
-<http://lblod.data.gift/concepts/60873518-5423-4121-ba6a-9635b18242a0>	rdf:type	rdfs:Class ,
+
+form:MaxLength rdf:type	rdfs:Class ,
+# <http://lblod.data.gift/concepts/60873518-5423-4121-ba6a-9635b18242a0>	rdf:type	rdfs:Class ,
 		skos:Concept ;
 	ns3:uuid	"60873518-5423-4121-ba6a-9635b18242a0" ;
 	skos:inScheme	con:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
