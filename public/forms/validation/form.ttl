@@ -1,5 +1,5 @@
 @prefix form: <http://lblod.data.gift/vocabularies/forms/> .
-@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix mu: <http://mu.semte.ch/vocabularies/core/> .
 @prefix displayTypes: <http://lblod.data.gift/display-types/> .
 @prefix ext: <http://mu.semte.ch/vocabularies/ext/> .
@@ -19,13 +19,9 @@ ext:form a form:Form, form:TopLevelForm ;
 ##########################################################
 #  Property-groups
 ##########################################################
-ext:formFieldPg a form:PropertyGroup ;
+ext:formFieldPg a form:PropertyGroup;
   sh:name "Field" ;
   sh:order 1 .
-
-ext:formFieldValidations a form:PropertyGroup ;
-  sh:name "Validation" ;
-  sh:order 2 .
 
 ##########################################################
 #  Scopes
@@ -57,15 +53,14 @@ ext:formNodesL a form:Listing ;
   sh:order 3 .
 
 ##########################################################
-#  Field validation node
+#  Field with optional validations
 ##########################################################
-ext:formValidationItem a form:SubForm ;
+ext:formValidationItem a form:SubForm;
   form:includes ext:formNodesNameF ;
-  form:includes ext:formValidationL ;
-  form:hasFieldGroup ext:formFieldPg .
+  form:includes ext:formValidationL .
 
 ##########################################################
-#  Validation selection with conditional properties
+# Field validations
 ##########################################################
 ext:formValidationL a form:Listing ;
   form:each ext:formValidationValueItem ;
@@ -79,63 +74,80 @@ ext:formValidationL a form:Listing ;
   sh:order 3 .
 
 ext:formValidationValueItem a form:SubForm ;
-  form:includes fields:validatonSelectorF .
+  form:hasFieldGroup ext:validationsFG ;
+  form:includes ext:validationResultMessageF .
+
+ext:validationsFG a form:FieldGroup ;
+  form:hasField fields:validatonSelectorF .
 
 ##########################################################
-#  Selection of the validation type
+#  Validation type selector
 ##########################################################
 fields:validatonSelectorF a form:Field ;
   sh:name "Validation type" ;
   sh:order 2 ;
   sh:path rdf:type ;
   form:help """
-   """ ;
-  form:validations
+   """;
+  form:validations 
     [ a form:RequiredConstraint ;
-      form:grouping form:Bag ;
-      sh:resultMessage "Dit veld is verplicht."@nl
+        form:grouping form:Bag ;
+        sh:path rdf:type ;
+        sh:resultMessage "Dit veld is verplicht."@nl
     ] ;
   form:displayType displayTypes:conceptSchemeSelector ;
   form:options """{"conceptScheme":"http://lblod.data.gift/concept-schemes/dde3d2a3-e848-47ea-ba44-0f2e565f04ab","searchEnabled":true}""" ;
-  sh:group ext:formFieldValidations ;
-  form:hasConditionalFieldGroup fields:requiredValidationConditionF .
+  sh:group ext:formFieldPg ;
+  form:hasConditionalFieldGroup fields:maxLengthValidationCFG .
 
 ##########################################################
-#  Add validation generator
+#  Validation generator
 ##########################################################
 ext:addValidationGenerator a form:Generator ;
   form:prototype [
     form:shape [
-        a ext:blankNode ;
-        form:grouping form:Bag ;
+      form:grouping form:Bag
     ]
   ] .
 
 ##########################################################
-#  Conditional result message field for validation:
-##########################################################
-ext:validationResultMessageF a form:Field ;
-  sh:name "Error message" ;
-  sh:order 3 ;
-  sh:path sh:resultMessage ;
-  form:displayType displayTypes:defaultInput ;
-  sh:group ext:formFieldValidations .
-
-##########################################################
-#  Fields to show for the required-constraint validation
+#  Field Groups per validation type
 ##########################################################
 fieldGroups:RequiredValidationFieldGroup a form:FieldGroup ;
-  form:hasField ext:validationResultMessageF .
+  form:hasField ext:validationMaxLengthF .
 
 ##########################################################
-#  Conditions for required-constraint
+#  Validation type conditions
 ##########################################################
-fields:requiredValidationConditionF a form:ConditionalFieldGroup ;
+fields:maxLengthValidationCFG a form:ConditionalFieldGroup ;
   form:conditions
     [ a form:SingleCodelistValue ;
-      form:grouping form:Bag ;
-      sh:path rdf:type ;
-      form:conceptScheme concept:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
-      form:customValue form:RequiredConstraint
+        form:grouping form:Bag ;
+        sh:path rdf:type ;
+        form:conceptScheme concept:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
+        form:customValue form:MaxLength
     ] ;
-  form:hasField ext:validationResultMessageF .
+  form:hasFieldGroup fieldGroups:RequiredValidationFieldGroup .
+
+##########################################################
+#  All separate fields
+##########################################################
+    ##########################################################
+    #  Error message field
+    ##########################################################
+    ext:validationResultMessageF a form:Field ;
+      sh:name "Error message" ;
+      sh:order 100 ; # I think we always want to show this below the conditional fields?
+      sh:path sh:resultMessage ;
+      form:displayType displayTypes:defaultInput ;
+      sh:group ext:formFieldPg .
+
+    ##########################################################
+    #  Max-lenght field
+    ##########################################################
+    ext:validationMaxLengthF a form:Field ;
+      sh:name "Max length" ;
+      sh:order 101 ;
+      sh:path form:max ;
+      form:displayType displayTypes:defaultInput ;
+      sh:group ext:formFieldPg .

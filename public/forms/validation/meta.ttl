@@ -1,22 +1,30 @@
 @prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix skos:	<http://www.w3.org/2004/02/skos/core#> .
 @prefix form: <http://lblod.data.gift/vocabularies/forms/> .
-form:RequiredConstraint	rdf:type	skos:Concept .
 @prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
-form:RequiredConstraint	rdf:type	rdfs:Class .
 @prefix ns3:	<http://mu.semte.ch/vocabularies/core/> .
-form:RequiredConstraint	ns3:uuid	"629bddbb-bf30-48d6-95af-c2f406bd9e8c" .
 @prefix con:	<http://lblod.data.gift/concept-schemes/> .
-form:RequiredConstraint	skos:inScheme	con:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
-	skos:prefLabel	"Required"@en .
 @prefix ext:	<http://mu.semte.ch/vocabularies/ext/> .
 @prefix sh: <http://www.w3.org/ns/shacl#>.
 @prefix ns6:	<http://lblod.data.gift/concepts/> .
 
 form:RequiredConstraint
+	rdf:type	rdfs:Class, skos:Concept ;
+	skos:inScheme	con:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
 	ext:validationName	"RequiredConstraint"@en ;
+	skos:prefLabel	"Required"@en ;
 	form:grouping	"Bag"@en ;
 	sh:resultMessage	"Dit veld is verplicht."@nl .
+
+form:MaxLength
+	rdf:type	rdfs:Class, skos:Concept ;
+	skos:inScheme	con:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
+	ext:validationName	"MaxLength"@en ;
+	skos:prefLabel	"Max length"@en ;
+	form:grouping	"MatchEvery"@en ;
+	sh:resultMessage	"Max. karakters overschreden."@nl ;
+	form:max	"100" .
+
 ns6:b06cd462-ea9e-4273-9e7a-6d5b93a43f5f	rdf:type	skos:Concept ,
 		rdfs:Class ;
 	ns3:uuid	"b06cd462-ea9e-4273-9e7a-6d5b93a43f5f" ;
@@ -116,12 +124,3 @@ ns6:c09902d3-9421-49e9-a2e6-d3ac42abbca2	rdf:type	rdfs:Class ,
 	form:grouping	"MatchEvery"@en ;
 	sh:resultMessage	"Geef een geldig telefoonnummer in."@nl ;
 	ext:customParameter	"defaultCountry"@en .
-<http://lblod.data.gift/concepts/60873518-5423-4121-ba6a-9635b18242a0>	rdf:type	rdfs:Class ,
-		skos:Concept ;
-	ns3:uuid	"60873518-5423-4121-ba6a-9635b18242a0" ;
-	skos:inScheme	con:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
-	skos:prefLabel	"Max length"@en ;
-	ext:validationName	"MaxLength"@en ;
-	form:grouping	"MatchEvery"@en ;
-	sh:resultMessage	"Max. karakters overschreden."@nl ;
-	form:max	"100" .
