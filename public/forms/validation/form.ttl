@@ -3,11 +3,12 @@
 @prefix mu: <http://mu.semte.ch/vocabularies/core/> .
 @prefix displayTypes: <http://lblod.data.gift/display-types/> .
 @prefix ext: <http://mu.semte.ch/vocabularies/ext/> .
-@prefix schema: <http://schema.org/>.
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#>.
+@prefix schema: <http://schema.org/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#> .
 @prefix fieldGroups: <http://data.lblod.info/field-groups/> .
 @prefix fields: <http://data.lblod.info/fields/> .
+@prefix concept: <http://lblod.data.gift/concept-schemes/> .
 
 ##########################################################
 # Form
@@ -61,9 +62,8 @@ ext:formNodesL a form:Listing;
 ##########################################################
 ext:formValidationItem a form:SubForm;
   form:includes ext:formNodesNameF;
-  form:includes ext:validationResultMessageF;
   form:includes ext:formValidationL;
-  form:hasFieldGroup ext:formFieldValidations .
+  form:hasFieldGroup ext:formFieldPg .
 
 ##########################################################
 #  Validation Listing:
@@ -81,7 +81,7 @@ ext:formValidationL a form:Listing;
 
 ext:formValidationValueItem a form:SubForm;
   form:includes fields:validatonSelectorF;
-  form:hasFieldGroup ext:formFieldValidations .
+  form:hasFieldGroup fieldGroups:RequiredValidationFieldGroup.
 
 ##########################################################
 #  Section for adding validations to the field:
@@ -96,7 +96,6 @@ fields:validatonSelectorF a form:Field ;
   form:validations [
     a form:RequiredConstraint ;
       form:grouping form:Bag ;
-      sh:path rdf:type ;
       sh:resultMessage "Dit veld is verplicht."@nl
     ] ;
   form:displayType displayTypes:conceptSchemeSelector ;
@@ -120,7 +119,7 @@ ext:addValidationGenerator a form:Generator;
 ext:validationResultMessageF a form:Field ;
   sh:name "Error message" ;
   sh:order 3 ;
-  sh:path (form:validations sh:resultMessage) ;
+  sh:path sh:resultMessage ;
   form:displayType displayTypes:defaultInput;
   sh:group ext:formFieldValidations .
 
@@ -137,9 +136,9 @@ fields:requiredValidationConditionF a form:ConditionalFieldGroup ;
   form:conditions
     [ a form:SingleCodelistValue ;
       form:grouping form:Bag ;
-      sh:path form:customValue ;
-      form:conceptScheme <http://lblod.data.gift/concept-schemes/dde3d2a3-e848-47ea-ba44-0f2e565f04ab> ;
-      form:customValue <http://lblod.data.gift/vocabularies/forms/RequiredConstraint>
+      sh:path rdf:type;
+      form:conceptScheme concept:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
+      form:customValue form:RequiredConstraint
     ] ;
   form:hasFieldGroup fieldGroups:RequiredValidationFieldGroup.
 
