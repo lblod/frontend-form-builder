@@ -146,8 +146,14 @@ fields:maxLengthValidationCFG a form:ConditionalFieldGroup ;
     #  Max-lenght field
     ##########################################################
     ext:validationMaxLengthF a form:Field ;
-      sh:name "Max length" ;
+      sh:name "Max characters" ;
       sh:order 101 ;
       sh:path form:max ;
+      form:validations 
+        [ a form:RequiredConstraint ;
+            form:grouping form:Bag ;
+            sh:path rdf:type ;
+            sh:resultMessage "Dit veld is verplicht."@nl
+        ] ;
       form:displayType displayTypes:defaultInput ;
       sh:group ext:formFieldPg .
