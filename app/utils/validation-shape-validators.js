@@ -1,3 +1,4 @@
+import { Statement } from 'rdflib';
 import { FORM, RDF } from './rdflib';
 
 export function areValidationsInGraphValidated(store, graph) {
@@ -9,7 +10,7 @@ export function areValidationsInGraphValidated(store, graph) {
   );
 }
 
-export function getValidationNodesInGraph(store, graph) {
+function getValidationNodesInGraph(store, graph) {
   const subjectThatHaveValidations = store.match(
     undefined,
     FORM('validations'),
@@ -19,7 +20,7 @@ export function getValidationNodesInGraph(store, graph) {
   return subjectThatHaveValidations.map((statement) => statement.object);
 }
 
-export function isRdfTypeInTriplesOfSubjects(subjects, store, graph) {
+function isRdfTypeInTriplesOfSubjects(subjects, store, graph) {
   for (const subject of subjects) {
     const typeMatches = store.match(subject, RDF('type'), undefined, graph);
     if (!typeMatches.length >= 1) {
@@ -30,7 +31,7 @@ export function isRdfTypeInTriplesOfSubjects(subjects, store, graph) {
   return true;
 }
 
-export function isMaxCharacterValueAddedToMaxLengthValidation(store, graph) {
+function isMaxCharacterValueAddedToMaxLengthValidation(store, graph) {
   const maxLengthValidationSubjects = store.match(
     undefined,
     RDF('type'),

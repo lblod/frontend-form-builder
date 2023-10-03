@@ -106,7 +106,7 @@ fields:validatonSelectorF a form:Field ;
 ext:addValidationGenerator a form:Generator ;
   form:prototype [
     form:shape [
-      form:grouping form:Bag
+      form:grouping "Bag"@en
     ]
   ] .
 
