@@ -113,7 +113,7 @@ ext:addValidationGenerator a form:Generator ;
 ##########################################################
 #  Field Groups per validation type
 ##########################################################
-fieldGroups:RequiredValidationFieldGroup a form:FieldGroup ;
+fieldGroups:maxLengthValidationFG a form:FieldGroup ;
   form:hasField ext:validationMaxLengthF .
 
 ##########################################################
@@ -127,7 +127,7 @@ fields:maxLengthValidationCFG a form:ConditionalFieldGroup ;
         form:conceptScheme concept:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
         form:customValue form:MaxLength
     ] ;
-  form:hasFieldGroup fieldGroups:RequiredValidationFieldGroup .
+  form:hasFieldGroup fieldGroups:maxLengthValidationFG .
 
 ##########################################################
 #  All separate fields
