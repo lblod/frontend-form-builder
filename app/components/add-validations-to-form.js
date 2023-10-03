@@ -4,6 +4,7 @@ import { GRAPHS } from '../controllers/formbuilder/edit';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { getLocalFileContentAsText } from '../utils/get-local-file-content';
 import { FORM, RDF } from '../utils/rdflib';
+import { sym as RDFNode } from 'rdflib';
 import { areValidationsInGraphValidated } from '../utils/validation-shape-validators';
 
 export default class AddValidationsToFormComponent extends Component {
@@ -11,11 +12,14 @@ export default class AddValidationsToFormComponent extends Component {
   @tracked builderForm;
   @tracked formTtlCode;
   @tracked showRdfForm = false;
-  @tracked sourceNode;
 
-  graphs = GRAPHS;
+  graphs = {
+    ...GRAPHS,
+    fieldGraph: new RDFNode(`http://data.lblod.info/fieldGraph`),
+  };
   form_ttl_path = '/forms/validation/form.ttl';
   meta_ttl_path = '/forms/validation/meta.ttl';
+  field_meta_ttl_path = '/forms/builder/meta.ttl';
   REGISTERED_VALIDATION_FORM_TTL_CODE_KEY = 'validationFormTtlCode';
 
   constructor() {
@@ -26,7 +30,6 @@ export default class AddValidationsToFormComponent extends Component {
     }
 
     this.formTtlCode = this.args.formTtlCode;
-    this.sourceNode = this.args.sourceNode;
 
     this.createBuilderStore().then((builderStore) => {
       this.builderStore = builderStore;
@@ -56,6 +59,11 @@ export default class AddValidationsToFormComponent extends Component {
     builderStore.parse(
       await getLocalFileContentAsText(this.meta_ttl_path),
       GRAPHS.metaGraph,
+      'text/turtle'
+    );
+    builderStore.parse(
+      await getLocalFileContentAsText(this.field_meta_ttl_path),
+      this.graphs.fieldGraph,
       'text/turtle'
     );
     builderStore.parse(this.formTtlCode, GRAPHS.sourceGraph, 'text/turtle');
