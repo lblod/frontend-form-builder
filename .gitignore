@@ -2,7 +2,6 @@
 
 # IDE
 .idea
-.vscode
 
 # compiled output
 /dist/
