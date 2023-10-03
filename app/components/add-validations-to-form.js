@@ -4,6 +4,7 @@ import { GRAPHS } from '../controllers/formbuilder/edit';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { getLocalFileContentAsText } from '../utils/get-local-file-content';
 import { FORM, RDF } from '../utils/rdflib';
+import { areValidationsInGraphValidated } from '../utils/validation-shape-validators';
 
 export default class AddValidationsToFormComponent extends Component {
   @tracked builderStore;
@@ -40,62 +41,9 @@ export default class AddValidationsToFormComponent extends Component {
   async serializeToTtlCode(builderStore) {
     const sourceTtl = builderStore.serializeDataMergedGraph(GRAPHS.sourceGraph);
 
-    const subjectThatHaveValidations = builderStore.match(
-      undefined,
-      FORM('validations'),
-      undefined,
-      GRAPHS.sourceGraph
-    );
-    const validationNodes = subjectThatHaveValidations.map(
-      (statement) => statement.object
-    );
-
-    if (
-      this.isRdfTypeInTriplesOfSubjects(
-        validationNodes,
-        builderStore,
-        GRAPHS.sourceGraph
-      ) &&
-      this.isMaxCharacterValueAddedToMaxLengthValidation(
-        builderStore,
-        GRAPHS.sourceGraph
-      )
-    ) {
+    if (areValidationsInGraphValidated(builderStore, GRAPHS.sourceGraph)) {
       this.args.onUpdateValidations(sourceTtl);
     }
-  }
-
-  isRdfTypeInTriplesOfSubjects(subjects, store, graph) {
-    for (const subject of subjects) {
-      const typeMatches = store.match(subject, RDF('type'), undefined, graph);
-      if (!typeMatches.length >= 1) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  isMaxCharacterValueAddedToMaxLengthValidation(store, graph) {
-    const maxLengthValidationSubjects = store.match(
-      undefined,
-      RDF('type'),
-      FORM('MaxLength'),
-      graph
-    );
-    for (const triple of maxLengthValidationSubjects) {
-      const maxCharactersValues = store.match(
-        triple.subject,
-        FORM('max'),
-        undefined,
-        graph
-      );
-      if (!maxCharactersValues.length >= 1) {
-        return false;
-      }
-    }
-
-    return true;
   }
 
   async createBuilderStore() {
