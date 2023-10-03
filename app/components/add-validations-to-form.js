@@ -15,6 +15,7 @@ export default class AddValidationsToFormComponent extends Component {
   graphs = GRAPHS;
   form_ttl_path = '/forms/validation/form.ttl';
   meta_ttl_path = '/forms/validation/meta.ttl';
+  REGISTERED_VALIDATION_FORM_TTL_CODE_KEY = 'validationFormTtlCode';
 
   constructor() {
     super(...arguments);
@@ -31,14 +32,44 @@ export default class AddValidationsToFormComponent extends Component {
       this.builderForm = this.createBuilderForm(builderStore);
       this.showRdfForm = true;
       this.builderStore.registerObserver(() => {
-        (function (builderStore) {
-          const sourceTtl = builderStore.serializeDataMergedGraph(
-            GRAPHS.sourceGraph
-          );
-          console.log('ttl code', sourceTtl);
-        })(this.builderStore);
-      }, 'validation_form.ttl');
+        this.serializeToTtlCode(builderStore);
+      }, this.REGISTERED_VALIDATION_FORM_TTL_CODE_KEY);
     });
+  }
+
+  async serializeToTtlCode(builderStore) {
+    const sourceTtl = builderStore.serializeDataMergedGraph(GRAPHS.sourceGraph);
+
+    const subjectThatHaveValidations = builderStore.match(
+      undefined,
+      FORM('validations'),
+      undefined,
+      GRAPHS.sourceGraph
+    );
+    const validationNodes = subjectThatHaveValidations.map(
+      (statement) => statement.object
+    );
+
+    if (
+      this.isRdfTypeInTriplesOfSubjects(
+        validationNodes,
+        builderStore,
+        GRAPHS.sourceGraph
+      )
+    ) {
+      this.args.onUpdateValidations(sourceTtl);
+    }
+  }
+
+  isRdfTypeInTriplesOfSubjects(subjects, store, graph) {
+    for (const subject of subjects) {
+      const typeMatches = store.match(subject, RDF('type'), undefined, graph);
+      if (!typeMatches.length >= 1) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   async createBuilderStore() {

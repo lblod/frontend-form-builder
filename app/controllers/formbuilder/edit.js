@@ -58,6 +58,15 @@ export default class FormbuilderEditController extends Controller {
     }
   }
 
+  @action
+  async refreshWithTheValidationFormTtlCode(validationTtlCode) {
+    this.refresh.perform({
+      formTtlCode: validationTtlCode,
+      resetBuilder: false,
+      isInitialRouteCall: false,
+    });
+  }
+
   @task({ restartable: true })
   *refresh({ formTtlCode, resetBuilder, isInitialRouteCall = false }) {
     this.isInitialDataLoaded = !isInitialRouteCall;
@@ -108,6 +117,7 @@ export default class FormbuilderEditController extends Controller {
     if (isInitialRouteCall) {
       this.setFormChanged(false);
       this.isAddingValidationToForm = false;
+      this.isShowBuilder = true;
     }
 
     this.isInitialDataLoaded = true;
