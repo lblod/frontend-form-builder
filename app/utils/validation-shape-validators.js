@@ -1,4 +1,3 @@
-import { Statement } from 'rdflib';
 import { FORM, RDF } from './rdflib';
 
 export function areValidationsInGraphValidated(store, graph) {
