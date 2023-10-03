@@ -62,6 +62,7 @@ export default class AddValidationsToFormComponent extends Component {
       this.args.onUpdateValidations(sourceTtl);
     }
   }
+  
 
   async createBuilderStore(formTtlCode) {
     const builderStore = new ForkingStore();
