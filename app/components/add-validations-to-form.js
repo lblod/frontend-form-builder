@@ -17,9 +17,6 @@ export default class AddValidationsToFormComponent extends Component {
     ...GRAPHS,
     fieldGraph: new RDFNode(`http://data.lblod.info/fieldGraph`),
   };
-  formTtlPath = '/forms/validation/form.ttl';
-  metaTtlPath = '/forms/validation/meta.ttl';
-  fieldMetaTtlPath = '/forms/builder/meta.ttl';
   REGISTERED_VALIDATION_FORM_TTL_CODE_KEY = 'validationFormTtlCode';
 
   constructor() {
@@ -52,17 +49,17 @@ export default class AddValidationsToFormComponent extends Component {
   async createBuilderStore() {
     const builderStore = new ForkingStore();
     builderStore.parse(
-      await getLocalFileContentAsText(this.formTtlPath),
+      await getLocalFileContentAsText('/forms/validation/form.ttl'),
       GRAPHS.formGraph,
       'text/turtle'
     );
     builderStore.parse(
-      await getLocalFileContentAsText(this.metaTtlPath),
+      await getLocalFileContentAsText('/forms/validation/meta.ttl'),
       GRAPHS.metaGraph,
       'text/turtle'
     );
     builderStore.parse(
-      await getLocalFileContentAsText(this.fieldMetaTtlPath),
+      await getLocalFileContentAsText('/forms/builder/meta.ttl'),
       this.graphs.fieldGraph,
       'text/turtle'
     );
