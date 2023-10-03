@@ -95,7 +95,7 @@ fields:validatonSelectorF a form:Field ;
         sh:path rdf:type ;
         sh:resultMessage "Dit veld is verplicht."@nl
     ] ;
-  form:displayType displayTypes:conceptSchemeSelector ;
+  form:displayType displayTypes:validationConceptSchemeSelector ;
   form:options """{"conceptScheme":"http://lblod.data.gift/concept-schemes/dde3d2a3-e848-47ea-ba44-0f2e565f04ab","searchEnabled":true}""" ;
   sh:group ext:formFieldPg ;
   form:hasConditionalFieldGroup fields:maxLengthValidationCFG .
