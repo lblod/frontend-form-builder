@@ -30,10 +30,15 @@ export default class AddValidationsToFormComponent extends Component {
 
     this.createBuilderStore().then((builderStore) => {
       this.builderStore = builderStore;
-      this.builderForm = this.createBuilderForm(builderStore);
+      this.builderForm = this.builderStore.any(
+        undefined,
+        RDF('type'),
+        FORM('Form'),
+        GRAPHS.formGraph
+      );
       this.showRdfForm = true;
       this.builderStore.registerObserver(() => {
-        this.serializeToTtlCode(builderStore);
+        this.serializeToTtlCode(this.builderStore);
       }, this.REGISTERED_VALIDATION_FORM_TTL_CODE_KEY);
     });
   }
@@ -66,14 +71,5 @@ export default class AddValidationsToFormComponent extends Component {
     builderStore.parse(this.formTtlCode, GRAPHS.sourceGraph, 'text/turtle');
 
     return builderStore;
-  }
-
-  createBuilderForm(builderStore) {
-    return builderStore.any(
-      undefined,
-      RDF('type'),
-      FORM('Form'),
-      GRAPHS.formGraph
-    );
   }
 }
