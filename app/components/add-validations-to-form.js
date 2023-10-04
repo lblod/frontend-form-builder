@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { GRAPHS } from '../controllers/formbuilder/edit';
@@ -8,6 +9,8 @@ import { FORM, RDF } from '../utils/rdflib';
 import { sym as RDFNode } from 'rdflib';
 import { areValidationsInGraphValidated } from '../utils/validation-shape-validators';
 
+const REGISTERED_FORM_TTL_CODE_KEY = 'validationFormTtlCode';
+
 export default class AddValidationsToFormComponent extends Component {
   @tracked builderStore;
   @tracked builderForm;
@@ -16,7 +19,6 @@ export default class AddValidationsToFormComponent extends Component {
     ...GRAPHS,
     fieldGraph: new RDFNode(`http://data.lblod.info/fieldGraph`),
   };
-  REGISTERED_VALIDATION_FORM_TTL_CODE_KEY = 'validationFormTtlCode';
 
   constructor() {
     super(...arguments);
@@ -44,7 +46,7 @@ export default class AddValidationsToFormComponent extends Component {
 
     this.builderStore.registerObserver(() => {
       this.serializeToTtlCode(this.builderStore);
-    }, this.REGISTERED_VALIDATION_FORM_TTL_CODE_KEY);
+    }, REGISTERED_FORM_TTL_CODE_KEY);
   }
 
   serializeToTtlCode(builderStore) {
