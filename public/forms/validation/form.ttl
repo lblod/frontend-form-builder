@@ -96,7 +96,7 @@ fields:validatonSelectorF a form:Field ;
         sh:resultMessage "Dit veld is verplicht."@nl
     ] ;
   form:displayType displayTypes:conceptSchemeSelector ;
-  form:options """{"conceptScheme":"http://lblod.data.gift/concept-schemes/dde3d2a3-e848-47ea-ba44-0f2e565f04ab","searchEnabled":true}""" ;
+  form:options """{"conceptScheme":"http://lblod.data.gift/concept-schemes/possibleValidations","searchEnabled":true}""" ;
   sh:group ext:formFieldPg ;
   form:hasConditionalFieldGroup fields:maxLengthValidationCFG .
 
@@ -124,7 +124,7 @@ fields:maxLengthValidationCFG a form:ConditionalFieldGroup ;
     [ a form:SingleCodelistValue ;
         form:grouping form:Bag ;
         sh:path rdf:type ;
-        form:conceptScheme concept:dde3d2a3-e848-47ea-ba44-0f2e565f04ab ;
+        form:conceptScheme concept:possibleValidations ;
         form:customValue form:MaxLength
     ] ;
   form:hasFieldGroup fieldGroups:maxLengthValidationFG .
