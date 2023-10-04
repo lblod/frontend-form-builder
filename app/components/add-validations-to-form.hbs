@@ -1,0 +1,13 @@
+{{#if this.canShowRdfForm}}
+  <RdfForm
+    @groupClass="au-o-grid__item"
+    @form={{this.builderForm}}
+    @graphs={{this.graphs}}
+    @formStore={{this.builderStore}}
+    @forceShowErrors={{false}}
+    @useNewListingLayout={{true}}
+    @sourceNode={{this.graphs.sourceNode}}
+  />
+{{else}}
+  <AuLoader />
+{{/if}}

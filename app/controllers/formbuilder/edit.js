@@ -7,6 +7,7 @@ import { inject as service } from '@ember/service';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { sym as RDFNode } from 'rdflib';
 import { FORM, RDF } from '../../utils/rdflib';
+import { getLocalFileContentAsText } from '../../utils/get-local-file-content';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
@@ -15,6 +16,7 @@ export const GRAPHS = {
 };
 
 const SOURCE_NODE = new RDFNode('http://frontend.poc.form.builder/sourcenode');
+const REGISTERED_FORM_TTL_CODE_KEY = 'builderFormTtlCode';
 
 export default class FormbuilderEditController extends Controller {
   @service('meta-data-extractor') meta;
@@ -29,12 +31,35 @@ export default class FormbuilderEditController extends Controller {
   @tracked builderForm;
 
   @tracked formChanged = false;
+  @tracked isInitialDataLoaded = false;
+
+  @tracked isShowBuilder = true;
 
   graphs = GRAPHS;
   sourceNode = SOURCE_NODE;
-  REGISTERED_FORM_TTL_CODE_KEY = 'formTtlCode';
 
-  @tracked isInitialDataLoaded = false;
+  @action
+  async toggleIsAddingValidationToForm() {
+    this.isShowBuilder = !this.isShowBuilder;
+    if (this.isShowBuilder) {
+      this.refresh.perform({
+        formTtlCode: this.code,
+        resetBuilder: false,
+        isInitialRouteCall: true,
+      });
+    } else {
+      this.deregisterFromObservable();
+    }
+  }
+
+  @action
+  async refreshWithTheValidationFormTtlCode(validationTtlCode) {
+    this.refresh.perform({
+      formTtlCode: validationTtlCode,
+      resetBuilder: false,
+      isInitialRouteCall: false,
+    });
+  }
 
   @task({ restartable: true })
   *refresh({ formTtlCode, resetBuilder, isInitialRouteCall = false }) {
@@ -47,7 +72,7 @@ export default class FormbuilderEditController extends Controller {
 
     if (resetBuilder) {
       this.formChanged = true;
-      this.builderStore.deregisterObserver(this.REGISTERED_FORM_TTL_CODE_KEY);
+      this.deregisterFromObservable();
       this.builderStore = '';
     }
 
@@ -64,8 +89,8 @@ export default class FormbuilderEditController extends Controller {
       GRAPHS.formGraph
     );
 
-    const formTtl = yield this.getLocalFileContentAsText('/forms/form.ttl');
-    const metaTtl = yield this.getLocalFileContentAsText('/forms/meta.ttl');
+    const formTtl = yield getLocalFileContentAsText('/forms/builder/form.ttl');
+    const metaTtl = yield getLocalFileContentAsText('/forms/builder/meta.ttl');
 
     this.builderStore = new ForkingStore();
     this.builderStore.parse(formTtl, GRAPHS.formGraph.value, 'text/turtle');
@@ -81,10 +106,12 @@ export default class FormbuilderEditController extends Controller {
 
     this.builderStore.registerObserver(() => {
       this.serializeSourceToTtl();
-    }, this.REGISTERED_FORM_TTL_CODE_KEY);
+    }, REGISTERED_FORM_TTL_CODE_KEY);
 
     if (isInitialRouteCall) {
       this.setFormChanged(false);
+      this.isAddingValidationToForm = false;
+      this.isShowBuilder = true;
     }
 
     this.isInitialDataLoaded = true;
@@ -105,15 +132,9 @@ export default class FormbuilderEditController extends Controller {
     this.refresh.perform({ formTtlCode: sourceTtl });
   }
 
-  async getLocalFileContentAsText(path) {
-    const file = await fetch(path);
-
-    return await file.text();
-  }
-
   deregisterFromObservable() {
     if (this.builderStore instanceof ForkingStore) {
-      this.builderStore.deregisterObserver(this.REGISTERED_FORM_TTL_CODE_KEY);
+      this.builderStore.deregisterObserver(REGISTERED_FORM_TTL_CODE_KEY);
     }
   }
 }
