@@ -49,6 +49,12 @@ export default class AddValidationsToFormComponent extends Component {
     }, REGISTERED_FORM_TTL_CODE_KEY);
   }
 
+  willDestroy() {
+    super.willDestroy(...arguments);
+
+    this.builderStore.deregisterObserver(REGISTERED_FORM_TTL_CODE_KEY);
+  }
+
   serializeToTtlCode(builderStore) {
     const sourceTtl = builderStore.serializeDataMergedGraph(
       this.graphs.sourceGraph
