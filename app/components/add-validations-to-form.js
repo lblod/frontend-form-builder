@@ -9,8 +9,6 @@ import { FORM, RDF } from '../utils/rdflib';
 import { sym as RDFNode } from 'rdflib';
 import { areValidationsInGraphValidated } from '../utils/validation-shape-validators';
 
-const REGISTERED_FORM_TTL_CODE_KEY = 'validationFormTtlCode';
-
 export default class AddValidationsToFormComponent extends Component {
   @tracked builderStore;
   @tracked builderForm;
@@ -46,13 +44,13 @@ export default class AddValidationsToFormComponent extends Component {
 
     this.builderStore.registerObserver(() => {
       this.serializeToTtlCode(this.builderStore);
-    }, REGISTERED_FORM_TTL_CODE_KEY);
+    });
   }
 
   willDestroy() {
     super.willDestroy(...arguments);
 
-    this.builderStore.deregisterObserver(REGISTERED_FORM_TTL_CODE_KEY);
+    this.builderStore.clearObservers();
   }
 
   serializeToTtlCode(builderStore) {

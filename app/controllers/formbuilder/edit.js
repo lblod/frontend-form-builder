@@ -16,7 +16,6 @@ export const GRAPHS = {
 };
 
 const SOURCE_NODE = new RDFNode('http://frontend.poc.form.builder/sourcenode');
-const REGISTERED_FORM_TTL_CODE_KEY = 'builderFormTtlCode';
 
 export default class FormbuilderEditController extends Controller {
   @service('meta-data-extractor') meta;
@@ -106,7 +105,7 @@ export default class FormbuilderEditController extends Controller {
 
     this.builderStore.registerObserver(() => {
       this.serializeSourceToTtl();
-    }, REGISTERED_FORM_TTL_CODE_KEY);
+    });
 
     if (isInitialRouteCall) {
       this.setFormChanged(false);
@@ -134,7 +133,7 @@ export default class FormbuilderEditController extends Controller {
 
   deregisterFromObservable() {
     if (this.builderStore instanceof ForkingStore) {
-      this.builderStore.deregisterObserver(REGISTERED_FORM_TTL_CODE_KEY);
+      this.builderStore.clearObservers();
     }
   }
 }
