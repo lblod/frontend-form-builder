@@ -38,7 +38,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
         displayType,
         this.EXT('canHaveValidation'),
         undefined,
-        graphs.metaGraph
+        graphs.fieldGraph
       )
       .map((triple) => triple.object);
   }
@@ -61,7 +61,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     const conceptOptions = this.getPossibleValidationsForDisplayType(
       fieldDisplayType,
       this.args.formStore,
-      this.args.graphs.sourceGraph
+      this.args.graphs
     );
 
     const allOptions = this.args.formStore
