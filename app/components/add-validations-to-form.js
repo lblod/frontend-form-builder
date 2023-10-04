@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import { task } from 'ember-concurrency';
 import { GRAPHS } from '../controllers/formbuilder/edit';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { getLocalFileContentAsText } from '../utils/get-local-file-content';
@@ -24,29 +25,34 @@ export default class AddValidationsToFormComponent extends Component {
       throw `Cannot add validations to an empty form`;
     }
 
-    this.createBuilderStore(this.args.formTtlCode).then((builderStore) => {
-      this.builderStore = builderStore;
-      this.builderForm = this.builderStore.any(
-        undefined,
-        RDF('type'),
-        FORM('Form'),
-        GRAPHS.formGraph
-      );
-
-      this.builderStore.registerObserver(() => {
-        this.serializeToTtlCode(this.builderStore);
-      }, this.REGISTERED_VALIDATION_FORM_TTL_CODE_KEY);
-    });
+    this.initialise.perform({ formTtlCode: this.args.formTtlCode });
   }
 
   get canShowRdfForm() {
     return this.builderStore instanceof ForkingStore && this.builderForm;
   }
 
-  async serializeToTtlCode(builderStore) {
-    const sourceTtl = builderStore.serializeDataMergedGraph(GRAPHS.sourceGraph);
+  @task({ restartable: false })
+  *initialise({ formTtlCode }) {
+    this.builderStore = yield this.createBuilderStore(formTtlCode);
+    this.builderForm = this.builderStore.any(
+      undefined,
+      RDF('type'),
+      FORM('Form'),
+      this.graphs.formGraph
+    );
 
-    if (areValidationsInGraphValidated(builderStore, GRAPHS.sourceGraph)) {
+    this.builderStore.registerObserver(() => {
+      this.serializeToTtlCode(this.builderStore);
+    }, this.REGISTERED_VALIDATION_FORM_TTL_CODE_KEY);
+  }
+
+  serializeToTtlCode(builderStore) {
+    const sourceTtl = builderStore.serializeDataMergedGraph(
+      this.graphs.sourceGraph
+    );
+
+    if (areValidationsInGraphValidated(builderStore, this.graphs.sourceGraph)) {
       this.args.onUpdateValidations(sourceTtl);
     }
   }
@@ -55,12 +61,12 @@ export default class AddValidationsToFormComponent extends Component {
     const builderStore = new ForkingStore();
     builderStore.parse(
       await getLocalFileContentAsText('/forms/validation/form.ttl'),
-      GRAPHS.formGraph,
+      this.graphs.formGraph,
       'text/turtle'
     );
     builderStore.parse(
       await getLocalFileContentAsText('/forms/validation/meta.ttl'),
-      GRAPHS.metaGraph,
+      this.graphs.metaGraph,
       'text/turtle'
     );
     builderStore.parse(
@@ -68,7 +74,7 @@ export default class AddValidationsToFormComponent extends Component {
       this.graphs.fieldGraph,
       'text/turtle'
     );
-    builderStore.parse(formTtlCode, GRAPHS.sourceGraph, 'text/turtle');
+    builderStore.parse(formTtlCode, this.graphs.sourceGraph, 'text/turtle');
 
     return builderStore;
   }
