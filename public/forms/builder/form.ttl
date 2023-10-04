@@ -62,6 +62,7 @@ ext:propertyGroupL a form:Listing;
   form:addLabel "New section";
   form:canRemove true;
   form:removeLabel "Remove section";
+  form:canChangeOrder true;
   sh:group ext:mainPg;
   sh:order 1 .
 
@@ -101,7 +102,7 @@ ext:propertyGroupDescriptionF a form:Field ;
   sh:path form:help ;
   form:displayType displayTypes:textArea  ;
   sh:group ext:propertyGroupPg .
-  
+
 ext:propertyGroupOrderF a form:Field ;
   sh:name "Order" ;
   sh:order 2 ;
@@ -126,6 +127,7 @@ ext:formNodesL a form:Listing;
   form:addLabel "Add field";
   form:canRemove true;
   form:removeLabel "Remove field";
+  form:canChangeOrder true;
   sh:group ext:mainPg;
   sh:order 2 .
 
@@ -232,6 +234,7 @@ ext:formListingL a form:Listing;
   form:canAdd true;
   form:addLabel "Add new Listing";
   form:canRemove true;
+  form:canChangeOrder true;
   sh:group ext:mainPg;
   sh:order 3 .
 
@@ -245,6 +248,7 @@ ext:formListingTableL a form:Listing;
   form:canAdd true;
   form:addLabel "Add new table listing";
   form:canRemove true;
+  form:canChangeOrder true;
   sh:group ext:mainPg;
   sh:order 4 .
 
@@ -372,5 +376,6 @@ ext:subformNodesL a form:Listing;
   form:addLabel "Add new field";
   form:canRemove true;
   form:removeLabel "Remove Field";
+  form:canChangeOrder true;
   sh:group ext:listingPg;
   sh:order 60 .
