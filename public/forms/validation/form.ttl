@@ -152,7 +152,7 @@ fields:maxLengthValidationCFG a form:ConditionalFieldGroup ;
       form:validations 
         [ a form:RequiredConstraint ;
             form:grouping form:Bag ;
-            sh:path rdf:type ;
+            sh:path form:max ;
             sh:resultMessage "Dit veld is verplicht."@nl
         ] ;
       form:displayType displayTypes:defaultInput ;
