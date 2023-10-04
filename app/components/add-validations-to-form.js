@@ -10,8 +10,6 @@ import { areValidationsInGraphValidated } from '../utils/validation-shape-valida
 export default class AddValidationsToFormComponent extends Component {
   @tracked builderStore;
   @tracked builderForm;
-  @tracked formTtlCode;
-  @tracked showRdfForm = false;
 
   graphs = {
     ...GRAPHS,
@@ -26,9 +24,7 @@ export default class AddValidationsToFormComponent extends Component {
       throw `Cannot add validations to an empty form`;
     }
 
-    this.formTtlCode = this.args.formTtlCode;
-
-    this.createBuilderStore().then((builderStore) => {
+    this.createBuilderStore(this.args.formTtlCode).then((builderStore) => {
       this.builderStore = builderStore;
       this.builderForm = this.builderStore.any(
         undefined,
@@ -36,11 +32,15 @@ export default class AddValidationsToFormComponent extends Component {
         FORM('Form'),
         GRAPHS.formGraph
       );
-      this.showRdfForm = true;
+
       this.builderStore.registerObserver(() => {
         this.serializeToTtlCode(this.builderStore);
       }, this.REGISTERED_VALIDATION_FORM_TTL_CODE_KEY);
     });
+  }
+
+  get canShowRdfForm() {
+    return this.builderStore instanceof ForkingStore && this.builderForm;
   }
 
   async serializeToTtlCode(builderStore) {
@@ -51,7 +51,7 @@ export default class AddValidationsToFormComponent extends Component {
     }
   }
 
-  async createBuilderStore() {
+  async createBuilderStore(formTtlCode) {
     const builderStore = new ForkingStore();
     builderStore.parse(
       await getLocalFileContentAsText('/forms/validation/form.ttl'),
@@ -68,7 +68,7 @@ export default class AddValidationsToFormComponent extends Component {
       this.graphs.fieldGraph,
       'text/turtle'
     );
-    builderStore.parse(this.formTtlCode, GRAPHS.sourceGraph, 'text/turtle');
+    builderStore.parse(formTtlCode, GRAPHS.sourceGraph, 'text/turtle');
 
     return builderStore;
   }
