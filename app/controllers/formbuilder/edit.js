@@ -40,12 +40,15 @@ export default class FormbuilderEditController extends Controller {
   @action
   async toggleIsAddingValidationToForm() {
     this.isShowBuilder = !this.isShowBuilder;
+    const isFormChangedSavedState = this.formChanged;
     if (this.isShowBuilder) {
-      this.refresh.perform({
+      await this.refresh.perform({
         formTtlCode: this.code,
         resetBuilder: false,
         isInitialRouteCall: true,
       });
+
+      this.setFormChanged(isFormChangedSavedState);
     } else {
       this.deregisterFromObservable();
     }
@@ -58,6 +61,7 @@ export default class FormbuilderEditController extends Controller {
       resetBuilder: false,
       isInitialRouteCall: false,
     });
+    this.setFormChanged(true);
   }
 
   @task({ restartable: true })
