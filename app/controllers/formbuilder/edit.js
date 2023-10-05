@@ -58,6 +58,7 @@ export default class FormbuilderEditController extends Controller {
       resetBuilder: false,
       isInitialRouteCall: false,
     });
+    this.formChanged = true;
   }
 
   @task({ restartable: true })
