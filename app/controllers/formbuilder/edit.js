@@ -48,9 +48,7 @@ export default class FormbuilderEditController extends Controller {
         isInitialRouteCall: true,
       });
 
-      if (isFormChangedSavedState) {
-        this.setFormChanged(true);
-      }
+      this.setFormChanged(isFormChangedSavedState);
     } else {
       this.deregisterFromObservable();
     }
