@@ -1,5 +1,7 @@
 {{#if this.canShowRdfForm}}
   {{#each this.storesWithForm as |field|}}
+    <strong>{{field.name}}</strong>
+    <br />
     <RdfForm
       @groupClass="au-o-grid__item"
       @form={{field.form}}
@@ -9,7 +11,7 @@
       @useNewListingLayout={{true}}
       @sourceNode={{this.graphs.sourceNode}}
     />
-    <br/>
+    <br />
   {{/each}}
 {{else}}
   <AuLoader />

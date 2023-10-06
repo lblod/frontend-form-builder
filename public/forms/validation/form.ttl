@@ -56,7 +56,6 @@ ext:formNodesL a form:Listing ;
 #  Field with optional validations
 ##########################################################
 ext:formValidationItem a form:SubForm;
-  form:includes ext:formNodesNameF ;
   form:includes ext:formValidationL .
 
 ##########################################################

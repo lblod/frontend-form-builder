@@ -5,7 +5,7 @@ import { task } from 'ember-concurrency';
 import { GRAPHS } from '../controllers/formbuilder/edit';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { getLocalFileContentAsText } from '../utils/get-local-file-content';
-import { FORM, RDF, EXT, EMBER, DISPLAY } from '../utils/rdflib';
+import { FORM, RDF, EMBER, SH } from '../utils/rdflib';
 import { sym as RDFNode } from 'rdflib';
 import { areValidationsInGraphValidated } from '../utils/validation-shape-validators';
 
@@ -105,6 +105,7 @@ export default class AddValidationsToFormComponent extends Component {
       await this.parseStoreGraphs(fieldStore, ttl);
 
       storesWithForm.push({
+        name: field.name,
         displayType: field.displayType,
         store: fieldStore,
         form: fieldStore.any(
@@ -168,11 +169,21 @@ export default class AddValidationsToFormComponent extends Component {
       if (!displayTypeTriple) {
         throw `Could not find display type for field`;
       }
+
+      let fieldName = 'Text field';
+      const fieldNameTriple = fieldTriples.find(
+        (triple) => triple.predicate.value == SH('name').value
+      );
+      if (fieldNameTriple) {
+        fieldName = fieldNameTriple.object.value;
+      }
+
       const tripleIsField = fieldTriples.find(
         (triple) => triple.object.value == FORM('Field').value
       );
       if (tripleIsField) {
         triplesPerField.push({
+          name: fieldName,
           displayType: displayTypeTriple.object,
           triples: fieldTriples,
         });
