@@ -10,8 +10,6 @@ import { sym as RDFNode } from 'rdflib';
 import { areValidationsInGraphValidated } from '../utils/validation-shape-validators';
 
 export default class AddValidationsToFormComponent extends Component {
-  @tracked builderStore;
-  @tracked builderForm;
   @tracked storesWithForm;
 
   graphs = {
@@ -30,29 +28,20 @@ export default class AddValidationsToFormComponent extends Component {
     this.initialise.perform({ formTtlCode: this.args.formTtlCode });
   }
 
-  get canShowRdfForm() {
-    return this.builderStore instanceof ForkingStore && this.builderForm;
-  }
-
   @task({ restartable: false })
   *initialise({ formTtlCode }) {
-    this.builderStore = yield this.createBuilderStore(formTtlCode);
-    this.builderForm = this.builderStore.any(
-      undefined,
-      RDF('type'),
-      FORM('Form'),
-      this.graphs.formGraph
-    );
+    const builderStore = new ForkingStore();
+    yield this.parseStoreGraphs(builderStore, formTtlCode);
 
-    // this.builderStore.registerObserver(() => {
-    //   this.serializeToTtlCode(this.builderStore);
-    // });
+    this.storesWithForm = yield this.createSeparateStorePerField(builderStore);
   }
 
   willDestroy() {
     super.willDestroy(...arguments);
 
-    this.builderStore.clearObservers();
+    for (const storeWithForm of this.storesWithForm) {
+      storeWithForm.store.clearObservers();
+    }
   }
 
   serializeToTtlCode(builderStore) {
@@ -60,37 +49,10 @@ export default class AddValidationsToFormComponent extends Component {
       this.graphs.sourceGraph
     );
 
-    console.log(sourceTtl);
-
-    // if (areValidationsInGraphValidated(builderStore, this.graphs.sourceGraph)) {
-    //   this.args.onUpdateValidations(sourceTtl);
-    // }
-  }
-
-  async createBuilderStore(formTtlCode) {
-    const builderStore = new ForkingStore();
-    builderStore.parse(
-      await getLocalFileContentAsText('/forms/validation/form.ttl'),
-      this.graphs.formGraph,
-      'text/turtle'
-    );
-    builderStore.parse(
-      await getLocalFileContentAsText('/forms/validation/meta.ttl'),
-      this.graphs.metaGraph,
-      'text/turtle'
-    );
-    builderStore.parse(
-      await getLocalFileContentAsText('/forms/builder/meta.ttl'),
-      this.graphs.fieldGraph,
-      'text/turtle'
-    );
-    builderStore.parse(formTtlCode, this.graphs.sourceGraph, 'text/turtle');
-
-    this.storesWithForm = await this.createSeparateStorePerField(builderStore);
-
-    console.log('storesWithForm', this.storesWithForm);
-
-    return builderStore;
+    if (areValidationsInGraphValidated(builderStore, this.graphs.sourceGraph)) {
+      console.log(sourceTtl);
+      // this.args.onUpdateValidations(sourceTtl); // This is the merge with the builder form
+    }
   }
 
   async createSeparateStorePerField(store) {
@@ -173,7 +135,8 @@ export default class AddValidationsToFormComponent extends Component {
         (triple) => triple.predicate.value == FORM('displayType').value
       );
       if (!displayTypeTriple) {
-        throw `Could not find display type for field`;
+        console.info(`Could not find display type for field`, fieldSubject);
+        continue;
       }
 
       let fieldName = 'Text field';
