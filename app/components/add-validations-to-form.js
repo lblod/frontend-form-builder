@@ -60,9 +60,11 @@ export default class AddValidationsToFormComponent extends Component {
       this.graphs.sourceGraph
     );
 
-    if (areValidationsInGraphValidated(builderStore, this.graphs.sourceGraph)) {
-      this.args.onUpdateValidations(sourceTtl);
-    }
+    console.log(sourceTtl);
+
+    // if (areValidationsInGraphValidated(builderStore, this.graphs.sourceGraph)) {
+    //   this.args.onUpdateValidations(sourceTtl);
+    // }
   }
 
   async createBuilderStore(formTtlCode) {
@@ -103,6 +105,10 @@ export default class AddValidationsToFormComponent extends Component {
       fieldStore.parse(something, this.graphs.sourceGraph, 'text/turtle');
 
       await this.parseStoreGraphs(fieldStore, ttl);
+
+      fieldStore.registerObserver(() => {
+        this.serializeToTtlCode(fieldStore);
+      });
 
       storesWithForm.push({
         name: field.name,
