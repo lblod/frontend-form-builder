@@ -20,7 +20,7 @@ ext:form a form:Form, form:TopLevelForm ;
 #  Property-groups
 ##########################################################
 ext:formFieldPg a form:PropertyGroup;
-  sh:name "Field" ;
+  sh:name "" ;
   sh:order 1 .
 
 ##########################################################
