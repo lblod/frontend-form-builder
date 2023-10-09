@@ -6,7 +6,7 @@ import { GRAPHS } from '../controllers/formbuilder/edit';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { getLocalFileContentAsText } from '../utils/get-local-file-content';
 import { FORM, RDF, EMBER, SH, EXT } from '../utils/rdflib';
-import { sym as RDFNode } from 'rdflib';
+import { sym as RDFNode, Statement } from 'rdflib';
 import { areValidationsInGraphValidated } from '../utils/validation-shape-validators';
 
 export default class AddValidationsToFormComponent extends Component {
@@ -30,7 +30,51 @@ export default class AddValidationsToFormComponent extends Component {
     this.storesWithForm = [];
     this.savedBuilderTtlCode = this.args.builderTtlCode;
 
-    this.initialise.perform({ ttlCode: this.args.builderTtlCode });
+    this.initialise.perform({
+      ttlCode: this.args.builderTtlCode,
+    });
+  }
+
+  getFieldSubject(store) {
+    return store.any(
+      undefined,
+      RDF('type'),
+      FORM('Field'),
+      this.graphs.sourceGraph
+    );
+  }
+
+  currentFieldValidationsToFormNodesL(store) {
+    const fieldValidations = store.match(
+      this.getFieldSubject(store),
+      FORM('validations'),
+      undefined,
+      this.graphs.sourceGraph
+    );
+
+    const formNodesLValidations = store.match(
+      EXT('formNodesL'),
+      FORM('validations'),
+      undefined,
+      this.graphs.sourceGraph
+    );
+
+    if (formNodesLValidations.length !== fieldValidations.length) {
+      store.addAll(
+        fieldValidations.map((triple) => {
+          return new Statement(
+            EXT('formNodesL'),
+            triple.predicate,
+            triple.object,
+            this.graphs.sourceGraph
+          );
+        })
+      );
+    }
+
+    const sourceTtl = store.serializeDataMergedGraph(this.graphs.sourceGraph);
+
+    return sourceTtl;
   }
 
   @task({ restartable: false })
@@ -38,7 +82,12 @@ export default class AddValidationsToFormComponent extends Component {
     const builderStore = new ForkingStore();
     yield this.parseStoreGraphs(builderStore, ttlCode);
 
-    this.storesWithForm = yield this.createSeparateStorePerField(builderStore);
+    ttlCode = this.currentFieldValidationsToFormNodesL(builderStore);
+
+    this.storesWithForm = yield this.createSeparateStorePerField(
+      builderStore,
+      ttlCode
+    );
   }
 
   willDestroy() {
@@ -56,40 +105,22 @@ export default class AddValidationsToFormComponent extends Component {
       return;
     }
 
-    const field = builderStore.any(
-      undefined,
-      RDF('type'),
-      FORM('Field'),
-      this.graphs.sourceGraph
-    );
-
     builderStore.parse(
       this.savedBuilderTtlCode,
       this.graphs.sourceGraph,
       'text/turtle'
     );
 
-    builderStore.graph.statements.map((statement) => {
-      if (
-        statement.subject.value == EXT('formNodesL').value &&
-        statement.predicate.value == FORM('validations').value
-      ) {
-        statement.subject = field;
-      }
-    });
-
     const sourceTtl = builderStore.serializeDataMergedGraph(
       this.graphs.sourceGraph
     );
-
-    console.log('source', sourceTtl);
 
     if (areValidationsInGraphValidated(builderStore, this.graphs.sourceGraph)) {
       this.args.onUpdateValidations(sourceTtl);
     }
   }
 
-  async createSeparateStorePerField(store) {
+  async createSeparateStorePerField(store, builderTtlCodeWithSomeExtra) {
     const triplesPerFieldInForm = this.getTriplesPerFieldInForm(store);
     const storesWithForm = [];
 
@@ -97,10 +128,7 @@ export default class AddValidationsToFormComponent extends Component {
       const fieldStore = new ForkingStore();
       fieldStore.addAll(field.triples);
 
-      const ttl = fieldStore.serializeDataMergedGraph(this.graphs.sourceGraph);
-      fieldStore.parse(something, this.graphs.sourceGraph, 'text/turtle');
-
-      await this.parseStoreGraphs(fieldStore, ttl);
+      await this.parseStoreGraphs(fieldStore, builderTtlCodeWithSomeExtra);
 
       fieldStore.parse(
         this.savedBuilderTtlCode,
@@ -203,28 +231,3 @@ export default class AddValidationsToFormComponent extends Component {
     return triplesPerField;
   }
 }
-
-const something = `@prefix form: <http://lblod.data.gift/vocabularies/forms/> .
-@prefix sh: <http://www.w3.org/ns/shacl#> .
-@prefix mu: <http://mu.semte.ch/vocabularies/core/> .
-@prefix displayTypes: <http://lblod.data.gift/display-types/> .
-@prefix ext: <http://mu.semte.ch/vocabularies/ext/> .
-@prefix schema: <http://schema.org/> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#> .
-@prefix fieldGroups: <http://data.lblod.info/field-groups/> .
-@prefix fields: <http://data.lblod.info/fields/> .
-@prefix concept: <http://lblod.data.gift/concept-schemes/> .
-
-##########################################################
-# Form
-##########################################################
-ext:form a form:Form, form:TopLevelForm ;
-  form:includes ext:formNodesL .
-
-##########################################################
-#  Property-groups
-##########################################################
-ext:formFieldPg a form:PropertyGroup;
-  sh:name "" ;
-  sh:order 1 .`;
