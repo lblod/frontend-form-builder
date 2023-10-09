@@ -11,27 +11,32 @@ import { areValidationsInGraphValidated } from '../utils/validation-shape-valida
 
 export default class AddValidationsToFormComponent extends Component {
   @tracked storesWithForm;
+  savedBuilderTtlCode;
 
   graphs = {
     ...GRAPHS,
     fieldGraph: new RDFNode(`http://data.lblod.info/fieldGraph`),
+    sourceBuilderGraph: new RDFNode(
+      `http://data.lblod.info/sourceBuilderGraph`
+    ),
   };
 
   constructor() {
     super(...arguments);
 
-    if (!this.args.formTtlCode || this.args.formTtlCode == '') {
+    if (!this.args.builderTtlCode || this.args.builderTtlCode == '') {
       throw `Cannot add validations to an empty form`;
     }
     this.storesWithForm = [];
+    this.savedBuilderTtlCode = this.args.builderTtlCode;
 
-    this.initialise.perform({ formTtlCode: this.args.formTtlCode });
+    this.initialise.perform({ ttlCode: this.args.builderTtlCode });
   }
 
   @task({ restartable: false })
-  *initialise({ formTtlCode }) {
+  *initialise({ ttlCode }) {
     const builderStore = new ForkingStore();
-    yield this.parseStoreGraphs(builderStore, formTtlCode);
+    yield this.parseStoreGraphs(builderStore, ttlCode);
 
     this.storesWithForm = yield this.createSeparateStorePerField(builderStore);
   }
@@ -67,6 +72,12 @@ export default class AddValidationsToFormComponent extends Component {
       fieldStore.parse(something, this.graphs.sourceGraph, 'text/turtle');
 
       await this.parseStoreGraphs(fieldStore, ttl);
+
+      fieldStore.parse(
+        this.savedBuilderTtlCode,
+        this.graphs.sourceBuilderGraph,
+        'text/turtle'
+      );
 
       fieldStore.registerObserver(() => {
         this.serializeToTtlCode(fieldStore);
@@ -152,6 +163,7 @@ export default class AddValidationsToFormComponent extends Component {
       );
       if (tripleIsField) {
         triplesPerField.push({
+          subject: fieldSubject,
           name: fieldName,
           displayType: displayTypeTriple.object,
           triples: fieldTriples,

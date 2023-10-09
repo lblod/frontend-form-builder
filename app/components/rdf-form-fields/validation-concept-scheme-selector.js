@@ -24,7 +24,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
 
   EXT = new Namespace('http://mu.semte.ch/vocabularies/ext/');
   FORM = new Namespace('http://lblod.data.gift/vocabularies/forms/');
-  RDF = new Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
+  RDF = new Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#');
 
   constructor() {
     super(...arguments);
@@ -44,11 +44,18 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
   }
 
   loadOptions() {
+    const fieldSubject = this.args.formStore.any(
+      undefined,
+      this.RDF('type'),
+      this.FORM('Field'),
+      this.args.graphs.sourceGraph
+    );
+
     const fieldDisplayType = this.args.formStore.any(
-      this.EXT('formNodesNameF'),
+      fieldSubject,
       this.FORM('displayType'),
       undefined,
-      this.args.graphs.formGraph
+      this.args.graphs.sourceBuilderGraph
     );
 
     const metaGraph = this.args.graphs.metaGraph;
