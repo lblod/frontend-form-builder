@@ -5,7 +5,7 @@ import { task } from 'ember-concurrency';
 import { GRAPHS } from '../controllers/formbuilder/edit';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { getLocalFileContentAsText } from '../utils/get-local-file-content';
-import { FORM, RDF, EMBER, SH } from '../utils/rdflib';
+import { FORM, RDF, EMBER, SH, EXT } from '../utils/rdflib';
 import { sym as RDFNode } from 'rdflib';
 import { areValidationsInGraphValidated } from '../utils/validation-shape-validators';
 
@@ -50,13 +50,42 @@ export default class AddValidationsToFormComponent extends Component {
   }
 
   serializeToTtlCode(builderStore) {
+    if (
+      !areValidationsInGraphValidated(builderStore, this.graphs.sourceGraph)
+    ) {
+      return;
+    }
+
+    const field = builderStore.any(
+      undefined,
+      RDF('type'),
+      FORM('Field'),
+      this.graphs.sourceGraph
+    );
+
+    builderStore.parse(
+      this.savedBuilderTtlCode,
+      this.graphs.sourceGraph,
+      'text/turtle'
+    );
+
+    builderStore.graph.statements.map((statement) => {
+      if (
+        statement.subject.value == EXT('formNodesL').value &&
+        statement.predicate.value == FORM('validations').value
+      ) {
+        statement.subject = field;
+      }
+    });
+
     const sourceTtl = builderStore.serializeDataMergedGraph(
       this.graphs.sourceGraph
     );
 
+    console.log('source', sourceTtl);
+
     if (areValidationsInGraphValidated(builderStore, this.graphs.sourceGraph)) {
-      console.log(sourceTtl);
-      // this.args.onUpdateValidations(sourceTtl); // This is the merge with the builder form
+      this.args.onUpdateValidations(sourceTtl);
     }
   }
 
