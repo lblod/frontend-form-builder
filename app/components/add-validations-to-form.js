@@ -2,24 +2,22 @@ import Component from '@glimmer/component';
 
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import { GRAPHS } from '../controllers/formbuilder/edit';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { getLocalFileContentAsText } from '../utils/get-local-file-content';
 import { FORM, RDF, EMBER, SH, EXT } from '../utils/rdflib';
-import { sym as RDFNode } from 'rdflib';
 import { areValidationsInGraphValidated } from '../utils/validation-shape-validators';
+import {
+  getFirstFieldSubject,
+  getValidationNodesForSubject,
+  parseStoreGraphs,
+  templateForValidationOnField,
+  validationGraphs,
+} from '../utils/validation-helpers';
 
 export default class AddValidationsToFormComponent extends Component {
   @tracked storesWithForm;
   savedBuilderTtlCode;
 
-  graphs = {
-    ...GRAPHS,
-    fieldGraph: new RDFNode(`http://data.lblod.info/fieldGraph`),
-    sourceBuilderGraph: new RDFNode(
-      `http://data.lblod.info/sourceBuilderGraph`
-    ),
-  };
+  graphs = validationGraphs;
 
   constructor() {
     super(...arguments);
@@ -36,7 +34,12 @@ export default class AddValidationsToFormComponent extends Component {
   @task({ restartable: false })
   *initialise({ ttlCode }) {
     const builderStore = new ForkingStore();
-    yield this.parseStoreGraphs(builderStore, ttlCode);
+    yield parseStoreGraphs(builderStore, ttlCode);
+    builderStore.parse(
+      this.savedBuilderTtlCode,
+      this.graphs.sourceBuilderGraph,
+      'text/turtle'
+    );
 
     this.storesWithForm = yield this.createSeparateStorePerField(builderStore);
   }
@@ -56,8 +59,8 @@ export default class AddValidationsToFormComponent extends Component {
       return;
     }
 
-    const field = this.getFirstFieldSubject(builderStore);
-    //#region Stop the observing to block of an infinte loop if `serializeToTtlCode`
+    const field = getFirstFieldSubject(builderStore);
+    //#region Stop the observing to block off an infinte loop if `serializeToTtlCode`
     builderStore.clearObservers();
     const formNodesLValidations = this.getFormNodesLValidations(builderStore);
 
@@ -73,42 +76,23 @@ export default class AddValidationsToFormComponent extends Component {
 
     builderStore.parse(
       this.savedBuilderTtlCode,
-      this.graphs.sourceBuilderGraph,
+      this.graphs.sourceGraph,
       'text/turtle'
     );
 
-    const sourceTtl = builderStore.serializeDataMergedGraph(
-      this.graphs.sourceGraph
-    );
-
-    console.log('source', sourceTtl);
-
     if (areValidationsInGraphValidated(builderStore, this.graphs.sourceGraph)) {
+      const sourceTtl = builderStore.serializeDataMergedGraph(
+        this.graphs.sourceGraph
+      );
+      console.log('source', sourceTtl);
+
       this.args.onUpdateValidations(sourceTtl);
     }
-  }
-
-  getFirstFieldSubject(store) {
-    return store.any(
-      undefined,
-      RDF('type'),
-      FORM('Field'),
-      this.graphs.sourceGraph
-    );
   }
 
   getFormNodesLValidations(store) {
     return store.match(
       EXT('formNodesL'),
-      FORM('validations'),
-      undefined,
-      this.graphs.sourceGraph
-    );
-  }
-
-  getFieldValidationNodes(subject, store) {
-    return store.match(
-      subject,
       FORM('validations'),
       undefined,
       this.graphs.sourceGraph
@@ -122,10 +106,14 @@ export default class AddValidationsToFormComponent extends Component {
     for (const field of triplesPerFieldInForm) {
       const fieldStore = new ForkingStore();
       fieldStore.addAll(field.triples);
-      fieldStore.parse(something, this.graphs.sourceGraph, 'text/turtle');
+      fieldStore.parse(
+        templateForValidationOnField,
+        this.graphs.sourceGraph,
+        'text/turtle'
+      );
 
       const ttl = fieldStore.serializeDataMergedGraph(this.graphs.sourceGraph);
-      await this.parseStoreGraphs(fieldStore, ttl);
+      await parseStoreGraphs(fieldStore, ttl);
 
       fieldStore.parse(
         this.savedBuilderTtlCode,
@@ -139,7 +127,6 @@ export default class AddValidationsToFormComponent extends Component {
 
       storesWithForm.push({
         name: field.name,
-        displayType: field.displayType,
         store: fieldStore,
         form: fieldStore.any(
           undefined,
@@ -151,25 +138,6 @@ export default class AddValidationsToFormComponent extends Component {
     }
 
     return storesWithForm;
-  }
-
-  async parseStoreGraphs(store, ttlCode) {
-    store.parse(
-      await getLocalFileContentAsText('/forms/validation/form.ttl'),
-      this.graphs.formGraph,
-      'text/turtle'
-    );
-    store.parse(
-      await getLocalFileContentAsText('/forms/validation/meta.ttl'),
-      this.graphs.metaGraph,
-      'text/turtle'
-    );
-    store.parse(
-      await getLocalFileContentAsText('/forms/builder/meta.ttl'),
-      this.graphs.fieldGraph,
-      'text/turtle'
-    );
-    store.parse(ttlCode, this.graphs.sourceGraph, 'text/turtle');
   }
 
   getTriplesPerFieldInForm(store) {
@@ -196,7 +164,7 @@ export default class AddValidationsToFormComponent extends Component {
         this.graphs.sourceGraph
       );
 
-      const fieldValidations = this.getFieldValidationNodes(
+      const fieldValidations = getValidationNodesForSubject(
         fieldSubject,
         store
       );
@@ -208,14 +176,6 @@ export default class AddValidationsToFormComponent extends Component {
           this.graphs.sourceGraph
         );
         fieldTriples.push(...validationTriples);
-      }
-
-      const displayTypeTriple = fieldTriples.find(
-        (triple) => triple.predicate.value == FORM('displayType').value
-      );
-      if (!displayTypeTriple) {
-        console.info(`Could not find display type for field`, fieldSubject);
-        continue;
       }
 
       let fieldName = 'Text field';
@@ -233,7 +193,6 @@ export default class AddValidationsToFormComponent extends Component {
         triplesPerField.push({
           subject: fieldSubject,
           name: fieldName,
-          displayType: displayTypeTriple.object,
           triples: fieldTriples,
         });
       }
@@ -242,28 +201,3 @@ export default class AddValidationsToFormComponent extends Component {
     return triplesPerField;
   }
 }
-
-const something = `@prefix form: <http://lblod.data.gift/vocabularies/forms/> .
-@prefix sh: <http://www.w3.org/ns/shacl#> .
-@prefix mu: <http://mu.semte.ch/vocabularies/core/> .
-@prefix displayTypes: <http://lblod.data.gift/display-types/> .
-@prefix ext: <http://mu.semte.ch/vocabularies/ext/> .
-@prefix schema: <http://schema.org/> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#> .
-@prefix fieldGroups: <http://data.lblod.info/field-groups/> .
-@prefix fields: <http://data.lblod.info/fields/> .
-@prefix concept: <http://lblod.data.gift/concept-schemes/> .
-
-##########################################################
-# Form
-##########################################################
-ext:form a form:Form, form:TopLevelForm ;
-  form:includes ext:formNodesL .
-
-##########################################################
-#  Property-groups
-##########################################################
-ext:formFieldPg a form:PropertyGroup;
-  sh:name "" ;
-  sh:order 1 .`;
