@@ -55,25 +55,27 @@ export default class AddValidationsToFormComponent extends Component {
     ) {
       return;
     }
-    builderStore.parse(
-      this.savedBuilderTtlCode,
-      this.graphs.sourceGraph,
-      'text/turtle'
-    );
 
     const field = this.getFirstFieldSubject(builderStore);
-    console.log('field in serialize', field.value);
+    //#region Stop the observing to block of an infinte loop if `serializeToTtlCode`
+    builderStore.clearObservers();
     const formNodesLValidations = this.getFormNodesLValidations(builderStore);
-    const fieldValidationNodes = this.getFieldValidationNodes(
-      field,
-      builderStore
-    );
-    if (formNodesLValidations.length !== fieldValidationNodes.length) {
-      for (const validation of formNodesLValidations) {
-        validation.subject = field;
-        builderStore.addAll([validation]);
-      }
+
+    for (const validation of formNodesLValidations) {
+      validation.subject = field;
+      builderStore.addAll([validation]);
     }
+
+    builderStore.registerObserver(() => {
+      this.serializeToTtlCode(builderStore);
+    });
+    //#endregion
+
+    builderStore.parse(
+      this.savedBuilderTtlCode,
+      this.graphs.sourceBuilderGraph,
+      'text/turtle'
+    );
 
     const sourceTtl = builderStore.serializeDataMergedGraph(
       this.graphs.sourceGraph
@@ -119,13 +121,10 @@ export default class AddValidationsToFormComponent extends Component {
 
     for (const field of triplesPerFieldInForm) {
       const fieldStore = new ForkingStore();
-      console.log({ field });
       fieldStore.addAll(field.triples);
-
-      const ttl = fieldStore.serializeDataMergedGraph(this.graphs.sourceGraph);
-      console.log({ ttl });
       fieldStore.parse(something, this.graphs.sourceGraph, 'text/turtle');
 
+      const ttl = fieldStore.serializeDataMergedGraph(this.graphs.sourceGraph);
       await this.parseStoreGraphs(fieldStore, ttl);
 
       fieldStore.parse(
