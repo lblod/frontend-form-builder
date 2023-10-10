@@ -142,6 +142,34 @@ export default class AddValidationsToFormComponent extends Component {
       this.graphs.sourceGraph
     );
   }
+  addValidationTriplesToFormNodesL(store) {
+    const fieldSubject = getFirstFieldSubject(store);
+    const validationSubjects = getValidationNodesForSubject(
+      fieldSubject,
+      store
+    ).map((triple) => triple.object);
+    for (const subject of validationSubjects) {
+      const validationTriples = store.match(
+        subject,
+        undefined,
+        undefined,
+        this.graphs.sourceBuilderGraph
+      );
+      const formNodesLWithValidation = triple(
+        EXT('formNodesL'),
+        FORM('validations'),
+        validationTriples.shift().subject,
+        this.graphs.sourceGraph
+      );
+      store.addAll([
+        formNodesLWithValidation,
+        ...validationTriples.map((triple) => {
+          triple.graph = this.graphs.sourceGraph;
+          return triple;
+        }),
+      ]);
+    }
+  }
 
   async createSeparateStorePerField(store) {
     const triplesPerFieldInForm = this.getTriplesPerFieldInForm(store);
@@ -164,6 +192,13 @@ export default class AddValidationsToFormComponent extends Component {
         this.graphs.sourceBuilderGraph,
         'text/turtle'
       );
+
+      this.addValidationTriplesToFormNodesL(fieldStore);
+
+      const sourceTtl = fieldStore.serializeDataMergedGraph(
+        this.graphs.sourceGraph
+      );
+      console.log(sourceTtl);
 
       fieldStore.registerObserver(() => {
         this.serializeToTtlCode(fieldStore);
