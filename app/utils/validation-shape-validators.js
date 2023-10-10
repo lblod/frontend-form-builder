@@ -3,10 +3,10 @@ import { FORM, RDF } from './rdflib';
 export function areValidationsInGraphValidated(store, graph) {
   const validationNodes = getValidationNodesInGraph(store, graph);
 
-  return (
-    isRdfTypeInTriplesOfSubjects(validationNodes, store, graph) &&
-    isMaxCharacterValueAddedToMaxLengthValidation(store, graph)
-  );
+  return ![
+    isRdfTypeInTriplesOfSubjects(validationNodes, store, graph),
+    isMaxCharacterValueAddedToMaxLengthValidation(store, graph),
+  ].includes(false);
 }
 
 function getValidationNodesInGraph(store, graph) {

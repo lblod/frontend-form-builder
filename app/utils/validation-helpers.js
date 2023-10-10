@@ -46,7 +46,7 @@ export function getValidationNodesForSubject(subject, store) {
   );
 }
 
-export const templateForValidationOnField = `@prefix form: <http://lblod.data.gift/vocabularies/forms/> .
+export const templatePrefixes = `@prefix form: <http://lblod.data.gift/vocabularies/forms/> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix mu: <http://mu.semte.ch/vocabularies/core/> .
 @prefix displayTypes: <http://lblod.data.gift/display-types/> .
@@ -56,7 +56,9 @@ export const templateForValidationOnField = `@prefix form: <http://lblod.data.gi
 @prefix nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#> .
 @prefix fieldGroups: <http://data.lblod.info/field-groups/> .
 @prefix fields: <http://data.lblod.info/fields/> .
-@prefix concept: <http://lblod.data.gift/concept-schemes/> .
+@prefix concept: <http://lblod.data.gift/concept-schemes/> .`;
+
+export const templateForValidationOnField = `${templatePrefixes}
 
 ##########################################################
 # Form

@@ -10,8 +10,10 @@ import {
   getValidationNodesForSubject,
   parseStoreGraphs,
   templateForValidationOnField,
+  templatePrefixes,
   validationGraphs,
 } from '../utils/validation-helpers';
+import { triple } from 'rdflib';
 
 export default class AddValidationsToFormComponent extends Component {
   @tracked storesWithForm;
@@ -28,28 +30,85 @@ export default class AddValidationsToFormComponent extends Component {
     this.storesWithForm = [];
     this.savedBuilderTtlCode = this.args.builderTtlCode;
 
-    this.initialise.perform({ ttlCode: this.args.builderTtlCode });
+    this.initialise.perform({ ttlCode: this.savedBuilderTtlCode });
   }
 
   @task({ restartable: false })
   *initialise({ ttlCode }) {
     const builderStore = new ForkingStore();
     yield parseStoreGraphs(builderStore, ttlCode);
-    builderStore.parse(
-      this.savedBuilderTtlCode,
-      this.graphs.sourceBuilderGraph,
-      'text/turtle'
-    );
 
     this.storesWithForm = yield this.createSeparateStorePerField(builderStore);
   }
 
-  willDestroy() {
+  async willDestroy() {
     super.willDestroy(...arguments);
 
     for (const storeWithForm of this.storesWithForm) {
       storeWithForm.store.clearObservers();
+
+      if (
+        areValidationsInGraphValidated(
+          storeWithForm.store,
+          this.graphs.sourceGraph
+        )
+      ) {
+        const final = new ForkingStore();
+        parseStoreGraphs(final, templatePrefixes);
+
+        const triples = this.getFieldAndValidationTriples(storeWithForm.store);
+        final.addAll(triples);
+
+        const builderStore = new ForkingStore();
+        await parseStoreGraphs(builderStore, this.savedBuilderTtlCode);
+
+        const allMatches = builderStore.match(
+          undefined,
+          undefined,
+          undefined,
+          this.graphs.sourceGraph
+        );
+
+        const notFieldTriples = allMatches.filter(
+          (triple) => triple.subject.value !== storeWithForm.subject.value
+        );
+        final.addAll(notFieldTriples);
+
+        const sourceTtl = final.serializeDataMergedGraph(
+          this.graphs.sourceGraph
+        );
+        this.savedBuilderTtlCode = sourceTtl;
+      }
     }
+    this.args.onUpdateValidations(this.savedBuilderTtlCode);
+  }
+
+  getFieldAndValidationTriples(store) {
+    const triples = [];
+
+    const fieldSubject = getFirstFieldSubject(store);
+    const fieldTriples = store.match(
+      fieldSubject,
+      undefined,
+      undefined,
+      this.graphs.sourceGraph
+    );
+    triples.push(...fieldTriples);
+    const fieldValidationSubjects = getValidationNodesForSubject(
+      fieldSubject,
+      store
+    ).map((triple) => triple.object);
+    for (const validationSubject of fieldValidationSubjects) {
+      const validationTriples = store.match(
+        validationSubject,
+        undefined,
+        undefined,
+        this.graphs.sourceGraph
+      );
+      triples.push(...validationTriples);
+    }
+
+    return triples;
   }
 
   serializeToTtlCode(builderStore) {
@@ -60,7 +119,7 @@ export default class AddValidationsToFormComponent extends Component {
     }
 
     const field = getFirstFieldSubject(builderStore);
-    //#region Stop the observing to block off an infinte loop if `serializeToTtlCode`
+    //#region Stop the observing to block off an infinite loop if `serializeToTtlCode`
     builderStore.clearObservers();
     const formNodesLValidations = this.getFormNodesLValidations(builderStore);
 
@@ -73,21 +132,6 @@ export default class AddValidationsToFormComponent extends Component {
       this.serializeToTtlCode(builderStore);
     });
     //#endregion
-
-    builderStore.parse(
-      this.savedBuilderTtlCode,
-      this.graphs.sourceGraph,
-      'text/turtle'
-    );
-
-    if (areValidationsInGraphValidated(builderStore, this.graphs.sourceGraph)) {
-      const sourceTtl = builderStore.serializeDataMergedGraph(
-        this.graphs.sourceGraph
-      );
-      console.log('source', sourceTtl);
-
-      this.args.onUpdateValidations(sourceTtl);
-    }
   }
 
   getFormNodesLValidations(store) {
@@ -127,6 +171,7 @@ export default class AddValidationsToFormComponent extends Component {
 
       storesWithForm.push({
         name: field.name,
+        subject: field.subject,
         store: fieldStore,
         form: fieldStore.any(
           undefined,
