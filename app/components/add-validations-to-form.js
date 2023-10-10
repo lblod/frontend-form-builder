@@ -55,28 +55,25 @@ export default class AddValidationsToFormComponent extends Component {
     ) {
       return;
     }
-
-    const field = builderStore.any(
-      undefined,
-      RDF('type'),
-      FORM('Field'),
-      this.graphs.sourceGraph
-    );
-
     builderStore.parse(
       this.savedBuilderTtlCode,
       this.graphs.sourceGraph,
       'text/turtle'
     );
 
-    builderStore.graph.statements.map((statement) => {
-      if (
-        statement.subject.value == EXT('formNodesL').value &&
-        statement.predicate.value == FORM('validations').value
-      ) {
-        statement.subject = field;
+    const field = this.getFirstFieldSubject(builderStore);
+    console.log('field in serialize', field.value);
+    const formNodesLValidations = this.getFormNodesLValidations(builderStore);
+    const fieldValidationNodes = this.getFieldValidationNodes(
+      field,
+      builderStore
+    );
+    if (formNodesLValidations.length !== fieldValidationNodes.length) {
+      for (const validation of formNodesLValidations) {
+        validation.subject = field;
+        builderStore.addAll([validation]);
       }
-    });
+    }
 
     const sourceTtl = builderStore.serializeDataMergedGraph(
       this.graphs.sourceGraph
@@ -89,15 +86,44 @@ export default class AddValidationsToFormComponent extends Component {
     }
   }
 
+  getFirstFieldSubject(store) {
+    return store.any(
+      undefined,
+      RDF('type'),
+      FORM('Field'),
+      this.graphs.sourceGraph
+    );
+  }
+
+  getFormNodesLValidations(store) {
+    return store.match(
+      EXT('formNodesL'),
+      FORM('validations'),
+      undefined,
+      this.graphs.sourceGraph
+    );
+  }
+
+  getFieldValidationNodes(subject, store) {
+    return store.match(
+      subject,
+      FORM('validations'),
+      undefined,
+      this.graphs.sourceGraph
+    );
+  }
+
   async createSeparateStorePerField(store) {
     const triplesPerFieldInForm = this.getTriplesPerFieldInForm(store);
     const storesWithForm = [];
 
     for (const field of triplesPerFieldInForm) {
       const fieldStore = new ForkingStore();
+      console.log({ field });
       fieldStore.addAll(field.triples);
 
       const ttl = fieldStore.serializeDataMergedGraph(this.graphs.sourceGraph);
+      console.log({ ttl });
       fieldStore.parse(something, this.graphs.sourceGraph, 'text/turtle');
 
       await this.parseStoreGraphs(fieldStore, ttl);
@@ -170,6 +196,20 @@ export default class AddValidationsToFormComponent extends Component {
         undefined,
         this.graphs.sourceGraph
       );
+
+      const fieldValidations = this.getFieldValidationNodes(
+        fieldSubject,
+        store
+      );
+      for (const node of fieldValidations) {
+        const validationTriples = store.match(
+          node.object,
+          undefined,
+          undefined,
+          this.graphs.sourceGraph
+        );
+        fieldTriples.push(...validationTriples);
+      }
 
       const displayTypeTriple = fieldTriples.find(
         (triple) => triple.predicate.value == FORM('displayType').value
