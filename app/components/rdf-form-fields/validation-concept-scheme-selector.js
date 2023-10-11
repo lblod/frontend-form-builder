@@ -140,12 +140,15 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
 
     if (this.isSelectedValidationAlreadyOnField(this.selected)) {
       this.toaster.error(
-        `Validatie "${this.selected.label} is duplicaat"`,
+        `Validatie "${this.selected.label}" is duplicaat.`,
         'Error',
         {
           timeOut: 5000,
         }
       );
+      this.selected = null;
+
+      return;
     }
 
     // Cleanup old value(s) in the store
