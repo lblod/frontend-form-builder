@@ -1,5 +1,6 @@
 import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
 import {
@@ -8,6 +9,10 @@ import {
   updateSimpleFormValue,
 } from '@lblod/submission-form-helpers';
 import { Namespace, namedNode } from 'rdflib';
+import {
+  getFirstFieldSubject,
+  getValidationNodesForSubject,
+} from '../../utils/validation-helpers';
 
 function byLabel(a, b) {
   const textA = a.label.toUpperCase();
@@ -21,6 +26,8 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
   @tracked selected = null;
   @tracked options = [];
   @tracked searchEnabled = true;
+
+  @service toaster;
 
   EXT = new Namespace('http://mu.semte.ch/vocabularies/ext/');
   FORM = new Namespace('http://lblod.data.gift/vocabularies/forms/');
@@ -104,9 +111,42 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     }
   }
 
+  isSelectedValidationAlreadyOnField(selectedOption) {
+    const fieldSubject = getFirstFieldSubject(this.args.formStore);
+    const validationNodes = getValidationNodesForSubject(
+      fieldSubject,
+      this.args.formStore
+    );
+
+    for (const triple of validationNodes) {
+      const type = this.args.formStore.any(
+        triple.object,
+        this.RDF('type'),
+        undefined,
+        this.args.graphs.sourceGraph
+      );
+
+      if (type.value == selectedOption.subject.value) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   @action
   updateSelection(option) {
     this.selected = option;
+
+    if (this.isSelectedValidationAlreadyOnField(this.selected)) {
+      this.toaster.error(
+        `Validatie "${this.selected.label} is duplicaat"`,
+        'Error',
+        {
+          timeOut: 5000,
+        }
+      );
+    }
 
     // Cleanup old value(s) in the store
     const matches = triplesForPath(this.storeOptions, true).values;
