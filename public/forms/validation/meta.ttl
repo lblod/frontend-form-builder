@@ -25,6 +25,9 @@ form:MaxLength
 	sh:resultMessage	"Max. karakters overschreden."@nl ;
 	form:max	"100" .
 
+#
+# All validations below are not added to a field and need to have a name update like the two above
+#
 ns6:b06cd462-ea9e-4273-9e7a-6d5b93a43f5f	rdf:type	skos:Concept ,
 		rdfs:Class ;
 	ns3:uuid	"b06cd462-ea9e-4273-9e7a-6d5b93a43f5f" ;
