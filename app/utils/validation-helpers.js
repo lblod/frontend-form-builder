@@ -46,6 +46,44 @@ export function getValidationNodesForSubject(subject, store) {
   );
 }
 
+export function removeUnassignedNodes(store, exception) {
+  const subjectsInForm = store
+    .match(undefined, undefined, undefined, validationGraphs.sourceGraph)
+    .map((triple) => triple.subject);
+
+  const uniqueSubjects = new Array(...new Set(subjectsInForm));
+
+  const subjectsWithoutExceptions = uniqueSubjects.filter(
+    (statement) => statement.value !== exception.value
+  );
+
+  for (const subject of subjectsWithoutExceptions) {
+    const matchesInObject = store.match(
+      undefined,
+      undefined,
+      subject,
+      validationGraphs.sourceGraph
+    );
+    if (matchesInObject.length == 0 || !matchesInObject) {
+      try {
+        const subjectTriples = store.match(
+          subject,
+          undefined,
+          undefined,
+          validationGraphs.sourceGraph
+        );
+        store.removeStatements(subjectTriples);
+      } catch (error) {
+        console.error(
+          `Could not remove subject with predicates for`,
+          subject,
+          error
+        );
+      }
+    }
+  }
+}
+
 export const templatePrefixes = `@prefix form: <http://lblod.data.gift/vocabularies/forms/> .
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix mu: <http://mu.semte.ch/vocabularies/core/> .
