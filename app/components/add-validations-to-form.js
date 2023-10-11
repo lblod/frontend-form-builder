@@ -95,8 +95,12 @@ export default class AddValidationsToFormComponent extends Component {
           triples: triples,
         });
       } else {
-        console.log(
+        console.info(
           `Form of field with id: ${storeWithForm.subject} is invalid`
+        );
+        console.info(
+          `current field ttl`,
+          storeWithForm.store.serializeDataMergedGraph(this.graphs.sourceGraph)
         );
       }
     }
@@ -143,6 +147,13 @@ export default class AddValidationsToFormComponent extends Component {
     //#region Stop the observing to block off an infinite loop if `serializeToTtlCode`
     builderStore.clearObservers();
     const formNodesLValidations = this.getFormNodesLValidations(builderStore);
+    const fieldValidations = getValidationNodesForSubject(field, builderStore);
+
+    this.removeValidationTriplesFromFieldThatAreRemovedFromFromNodesL(
+      formNodesLValidations,
+      fieldValidations,
+      builderStore
+    );
 
     for (const validation of formNodesLValidations) {
       validation.subject = field;
@@ -153,6 +164,22 @@ export default class AddValidationsToFormComponent extends Component {
       this.serializeToTtlCode(builderStore);
     });
     //#endregion
+  }
+
+  removeValidationTriplesFromFieldThatAreRemovedFromFromNodesL(
+    formNodesLValidations,
+    fieldValidations,
+    store
+  ) {
+    const formNodesLObjects = formNodesLValidations.map(
+      (statement) => statement.object.value
+    );
+
+    for (const fieldValidation of fieldValidations) {
+      if (!formNodesLObjects.includes(fieldValidation.object.value)) {
+        store.removeStatements([fieldValidation]);
+      }
+    }
   }
 
   getFormNodesLValidations(store) {
