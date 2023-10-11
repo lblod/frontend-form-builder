@@ -44,43 +44,64 @@ export default class AddValidationsToFormComponent extends Component {
   async willDestroy() {
     super.willDestroy(...arguments);
 
-    for (const storeWithForm of this.storesWithForm) {
-      storeWithForm.store.clearObservers();
+    this.deregisterFromObservableForStoresWithForm(this.storesWithForm);
 
-      if (
-        areValidationsInGraphValidated(
-          storeWithForm.store,
-          this.graphs.sourceGraph
-        )
-      ) {
-        const final = new ForkingStore();
-        parseStoreGraphs(final, templatePrefixes);
+    for (const fieldData of this.getFieldsData(this.storesWithForm)) {
+      const final = new ForkingStore();
+      parseStoreGraphs(final, templatePrefixes);
+      final.addAll(fieldData.triples);
 
-        const triples = this.getFieldAndValidationTriples(storeWithForm.store);
-        final.addAll(triples);
+      const builderStore = new ForkingStore();
+      await parseStoreGraphs(builderStore, this.savedBuilderTtlCode);
 
-        const builderStore = new ForkingStore();
-        await parseStoreGraphs(builderStore, this.savedBuilderTtlCode);
+      const allMatches = builderStore.match(
+        undefined,
+        undefined,
+        undefined,
+        this.graphs.sourceGraph
+      );
 
-        const allMatches = builderStore.match(
-          undefined,
-          undefined,
-          undefined,
-          this.graphs.sourceGraph
-        );
+      const notFieldTriples = allMatches.filter(
+        (triple) => triple.subject.value !== fieldData.subject.value
+      );
+      final.addAll(notFieldTriples);
 
-        const notFieldTriples = allMatches.filter(
-          (triple) => triple.subject.value !== storeWithForm.subject.value
-        );
-        final.addAll(notFieldTriples);
-
-        const sourceTtl = final.serializeDataMergedGraph(
-          this.graphs.sourceGraph
-        );
-        this.savedBuilderTtlCode = sourceTtl;
-      }
+      const sourceTtl = final.serializeDataMergedGraph(this.graphs.sourceGraph);
+      this.savedBuilderTtlCode = sourceTtl;
     }
     this.args.onUpdateValidations(this.savedBuilderTtlCode);
+  }
+
+  deregisterFromObservableForStoresWithForm(storesWithForm) {
+    for (const storeWithForm of storesWithForm) {
+      storeWithForm.store.clearObservers();
+    }
+  }
+
+  getFieldsData(storesWithForm) {
+    const fieldsData = [];
+
+    for (const storeWithForm of storesWithForm) {
+      const isValidTtl = areValidationsInGraphValidated(
+        storeWithForm.store,
+        this.graphs.sourceGraph
+      );
+      if (isValidTtl) {
+        const triples = this.getFieldAndValidationTriples(storeWithForm.store);
+
+        fieldsData.push({
+          store: storeWithForm.store,
+          subject: storeWithForm.subject,
+          triples: triples,
+        });
+      } else {
+        console.log(
+          `Form of field with id: ${storeWithForm.subject} is invalid`
+        );
+      }
+    }
+
+    return fieldsData;
   }
 
   getFieldAndValidationTriples(store) {
@@ -142,6 +163,7 @@ export default class AddValidationsToFormComponent extends Component {
       this.graphs.sourceGraph
     );
   }
+
   addValidationTriplesToFormNodesL(store) {
     const fieldSubject = getFirstFieldSubject(store);
     const validationSubjects = getValidationNodesForSubject(
@@ -194,11 +216,6 @@ export default class AddValidationsToFormComponent extends Component {
       );
 
       this.addValidationTriplesToFormNodesL(fieldStore);
-
-      const sourceTtl = fieldStore.serializeDataMergedGraph(
-        this.graphs.sourceGraph
-      );
-      console.log(sourceTtl);
 
       fieldStore.registerObserver(() => {
         this.serializeToTtlCode(fieldStore);
