@@ -14,7 +14,7 @@ import {
   templatePrefixes,
   validationGraphs,
 } from '../utils/validation-helpers';
-import { triple } from 'rdflib';
+import { Statement, isLiteral, isNamedNode, isStatement, triple } from 'rdflib';
 
 export default class AddValidationsToFormComponent extends Component {
   @tracked storesWithForm;
@@ -40,6 +40,37 @@ export default class AddValidationsToFormComponent extends Component {
     yield parseStoreGraphs(builderStore, ttlCode);
 
     this.storesWithForm = yield this.createSeparateStorePerField(builderStore);
+  }
+
+  removeValidationsFromBuilderFields(fieldSubject, store) {
+    console.log(`++removeValidationsFromBuilderFields++`);
+    console.log({ fieldSubject });
+    const fieldValidationSubjects = store
+      .match(
+        fieldSubject,
+        FORM('validations'),
+        undefined,
+        validationGraphs.sourceGraph
+      )
+      .map((triple) => triple.object);
+    console.log({ fieldValidationSubjects });
+    for (const validationSubject of fieldValidationSubjects) {
+      const validationTriples = store.match(
+        validationSubject,
+        undefined,
+        undefined,
+        this.graphs.sourceBuilderGraph
+      );
+      console.log('to remove from builder', validationTriples);
+      store.removeStatements(validationTriples);
+      const validationTriplesSHouldBeUndefiuned = store.match(
+        validationSubject,
+        undefined,
+        undefined,
+        this.graphs.sourceBuilderGraph
+      );
+      console.log({ validationTriplesSHouldBeUndefiuned });
+    }
   }
 
   async willDestroy() {
@@ -159,6 +190,30 @@ export default class AddValidationsToFormComponent extends Component {
       builderStore
     );
 
+    // start
+    for (const validationNode of formNodesLValidations) {
+      const triplesOfValidationFormNodesL = builderStore.match(
+        validationNode.object,
+        undefined,
+        undefined,
+        this.graphs.sourceGraph
+      );
+      const triplesOfValidationBuilder = builderStore.match(
+        validationNode.object,
+        undefined,
+        undefined,
+        this.graphs.sourceBuilderGraph
+      );
+
+      this.updateDifferencesInTriples(
+        triplesOfValidationFormNodesL,
+        triplesOfValidationBuilder,
+        builderStore
+      );
+    }
+
+    // stop
+
     for (const validation of formNodesLValidations) {
       validation.subject = field;
       builderStore.addAll([validation]);
@@ -168,6 +223,33 @@ export default class AddValidationsToFormComponent extends Component {
       this.serializeToTtlCode(builderStore);
     });
     //#endregion
+  }
+
+  updateDifferencesInTriples(newTriples, oldTriples, store) {
+    for (const newTriple of newTriples) {
+      const matchingOldTriple = oldTriples.find(
+        (triple) =>
+          triple.subject.value == newTriple.subject.value &&
+          triple.predicate.value == newTriple.predicate.value
+      );
+
+      if (!matchingOldTriple) continue;
+
+      if (newTriple.object.value !== matchingOldTriple.object.value) {
+        console.log('DIFFERENCE', newTriple.object, matchingOldTriple.object);
+        console.log({ matchingOldTriple });
+        const toRemove = new Statement(
+          matchingOldTriple.subject,
+          matchingOldTriple.predicate,
+          matchingOldTriple.object,
+          this.graphs.sourceGraph
+        );
+        store.removeStatements([toRemove]);
+
+        const ttl = store.serializeDataMergedGraph(this.graphs.sourceGraph);
+        console.log('ttl after rmemoving old triple', ttl);
+      }
+    }
   }
 
   removeValidationTriplesFromFieldThatAreRemovedFromFromNodesL(
