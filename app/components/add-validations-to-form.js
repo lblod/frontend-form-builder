@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
@@ -18,6 +19,9 @@ import { Statement, triple } from 'rdflib';
 
 export default class AddValidationsToFormComponent extends Component {
   @tracked storesWithForm;
+
+  @service toaster;
+
   savedBuilderTtlCode;
 
   graphs = validationGraphs;
@@ -26,7 +30,11 @@ export default class AddValidationsToFormComponent extends Component {
     super(...arguments);
 
     if (!this.args.builderTtlCode || this.args.builderTtlCode == '') {
-      throw `Cannot add validations to an empty form`;
+      const errorMessage = `Cannot add validations to an empty form.`;
+      this.toaster.error(errorMessage, 'Error', {
+        timeOut: 5000,
+      });
+      throw errorMessage;
     }
     this.storesWithForm = [];
     this.savedBuilderTtlCode = this.args.builderTtlCode;
@@ -43,8 +51,6 @@ export default class AddValidationsToFormComponent extends Component {
   }
 
   removeValidationsFromBuilderFields(fieldSubject, store) {
-    console.log(`++removeValidationsFromBuilderFields++`);
-    console.log({ fieldSubject });
     const fieldValidationSubjects = store
       .match(
         fieldSubject,
@@ -53,7 +59,6 @@ export default class AddValidationsToFormComponent extends Component {
         validationGraphs.sourceGraph
       )
       .map((triple) => triple.object);
-    console.log({ fieldValidationSubjects });
     for (const validationSubject of fieldValidationSubjects) {
       const validationTriples = store.match(
         validationSubject,
@@ -61,15 +66,7 @@ export default class AddValidationsToFormComponent extends Component {
         undefined,
         this.graphs.sourceBuilderGraph
       );
-      console.log('to remove from builder', validationTriples);
       store.removeStatements(validationTriples);
-      const validationTriplesSHouldBeUndefiuned = store.match(
-        validationSubject,
-        undefined,
-        undefined,
-        this.graphs.sourceBuilderGraph
-      );
-      console.log({ validationTriplesSHouldBeUndefiuned });
     }
   }
 
@@ -138,11 +135,15 @@ export default class AddValidationsToFormComponent extends Component {
           triples: triples,
         });
       } else {
-        console.info(
-          `Form of field with id: ${storeWithForm.subject} is invalid`
+        this.toaster.error(
+          `Form of field with subject: ${storeWithForm.subject} is invalid.`,
+          'Error',
+          {
+            timeOut: 5000,
+          }
         );
-        console.info(
-          `current field ttl`,
+        console.error(
+          `Current invalid field ttl for subject: ${storeWithForm.subject}`,
           storeWithForm.store.serializeDataMergedGraph(this.graphs.sourceGraph)
         );
       }
@@ -361,7 +362,11 @@ export default class AddValidationsToFormComponent extends Component {
       .map((triple) => triple.object);
 
     if (possibleFieldSubjects.length == 0) {
-      throw `No fields found in form.`;
+      const errorMessage = `No fields found in form.`;
+      this.toaster.error(errorMessage, 'Error', {
+        timeOut: 5000,
+      });
+      throw errorMessage;
     }
 
     const triplesPerField = [];
