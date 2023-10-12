@@ -14,7 +14,7 @@ import {
   templatePrefixes,
   validationGraphs,
 } from '../utils/validation-helpers';
-import { Statement, isLiteral, isNamedNode, isStatement, triple } from 'rdflib';
+import { Statement, triple } from 'rdflib';
 
 export default class AddValidationsToFormComponent extends Component {
   @tracked storesWithForm;
@@ -85,6 +85,14 @@ export default class AddValidationsToFormComponent extends Component {
 
       const builderStore = new ForkingStore();
       await parseStoreGraphs(builderStore, this.savedBuilderTtlCode);
+
+      const validationnodesOfField = getValidationNodesForSubject(
+        fieldData.subject,
+        builderStore
+      );
+
+      builderStore.removeStatements(validationnodesOfField);
+      removeUnassignedNodes(builderStore, EMBER('source-node'));
 
       const allMatches = builderStore.match(
         undefined,
@@ -190,7 +198,6 @@ export default class AddValidationsToFormComponent extends Component {
       builderStore
     );
 
-    // start
     for (const validationNode of formNodesLValidations) {
       const triplesOfValidationFormNodesL = builderStore.match(
         validationNode.object,
@@ -211,8 +218,6 @@ export default class AddValidationsToFormComponent extends Component {
         builderStore
       );
     }
-
-    // stop
 
     for (const validation of formNodesLValidations) {
       validation.subject = field;
@@ -236,8 +241,6 @@ export default class AddValidationsToFormComponent extends Component {
       if (!matchingOldTriple) continue;
 
       if (newTriple.object.value !== matchingOldTriple.object.value) {
-        console.log('DIFFERENCE', newTriple.object, matchingOldTriple.object);
-        console.log({ matchingOldTriple });
         const toRemove = new Statement(
           matchingOldTriple.subject,
           matchingOldTriple.predicate,
@@ -245,9 +248,6 @@ export default class AddValidationsToFormComponent extends Component {
           this.graphs.sourceGraph
         );
         store.removeStatements([toRemove]);
-
-        const ttl = store.serializeDataMergedGraph(this.graphs.sourceGraph);
-        console.log('ttl after rmemoving old triple', ttl);
       }
     }
   }
