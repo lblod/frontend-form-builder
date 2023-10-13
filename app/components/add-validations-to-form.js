@@ -23,6 +23,7 @@ import { getFieldsInStore } from '../utils/get-triples-per-field-in-store';
 import { createStoreForFieldData } from '../utils/create-store-for-field';
 import { templatePrefixes } from '../utils/validation-form-templates/template-prefixes';
 import { removeUnassignedNodesFromGraph } from '../utils/remove-unassigned-nodes-from-graph';
+import { getFieldAndValidationTriples } from '../utils/get-field-and-validation-triples';
 
 export default class AddValidationsToFormComponent extends Component {
   @tracked storesWithForm;
@@ -120,7 +121,11 @@ export default class AddValidationsToFormComponent extends Component {
         this.graphs.sourceGraph
       );
       if (isValidTtl) {
-        const triples = this.getFieldAndValidationTriples(storeWithForm.store);
+        const triples = getFieldAndValidationTriples(
+          storeWithForm.subject,
+          storeWithForm.store,
+          this.graphs.sourceGraph
+        );
 
         fieldsData.push({
           store: storeWithForm.store,
@@ -140,34 +145,6 @@ export default class AddValidationsToFormComponent extends Component {
     }
 
     return fieldsData;
-  }
-
-  getFieldAndValidationTriples(store) {
-    const triples = [];
-
-    const fieldSubject = getFirstFieldSubject(store);
-    const fieldTriples = getTriplesWithNodeAsSubject(
-      fieldSubject,
-      store,
-      this.graphs.sourceGraph
-    );
-
-    triples.push(...fieldTriples);
-    const fieldValidationSubjects = getValidationSubjectsOnNode(
-      fieldSubject,
-      store,
-      this.graphs.sourceGraph
-    );
-    for (const validationSubject of fieldValidationSubjects) {
-      const validationTriples = getTriplesWithNodeAsSubject(
-        validationSubject,
-        store,
-        this.graphs.sourceGraph
-      );
-      triples.push(...validationTriples);
-    }
-
-    return triples;
   }
 
   serializeToTtlCode(builderStore) {
