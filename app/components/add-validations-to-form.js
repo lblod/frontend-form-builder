@@ -55,24 +55,6 @@ export default class AddValidationsToFormComponent extends Component {
     this.storesWithForm = yield this.createSeparateStorePerField(builderStore);
   }
 
-  removeValidationsFromBuilderFields(fieldSubject, store) {
-    const fieldValidationSubjects = getValidationSubjectsOnNode(
-      fieldSubject,
-      store,
-      this.graphs.sourceGraph
-    );
-
-    for (const validationSubject of fieldValidationSubjects) {
-      const validationTriples = getTriplesWithNodeAsSubject(
-        validationSubject,
-        store,
-        this.graphs.sourceBuilderGraph
-      );
-
-      store.removeStatements(validationTriples);
-    }
-  }
-
   async willDestroy() {
     super.willDestroy(...arguments);
 
