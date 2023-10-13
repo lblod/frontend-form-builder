@@ -56,7 +56,7 @@ export default class FormbuilderEditController extends Controller {
 
   @action
   async refreshWithTheValidationFormTtlCode(validationTtlCode) {
-    this.refresh.perform({
+    await this.refresh.perform({
       formTtlCode: validationTtlCode,
       resetBuilder: false,
       isInitialRouteCall: false,

@@ -14,6 +14,7 @@
     <div class="playground-tab">
       Builder
       <AuToggleSwitch
+        @disabled={{this.refresh.isRunning}}
         @checked={{this.isAddingValidationToForm}}
         @onChange={{this.toggleIsAddingValidationToForm}}
       >Validation</AuToggleSwitch>
@@ -21,7 +22,10 @@
     <div class="playground">
       {{#if this.isShowBuilder}}
         <div class="playground__edit">
-          <AuBodyContainer @scroll={{true}} class="au-o-box au-u-margin-bottom-large">
+          <AuBodyContainer
+            @scroll={{true}}
+            class="au-o-box au-u-margin-bottom-large"
+          >
             {{#if (and this.isInitialDataLoaded this.builderStore)}}
               <RdfForm
                 @groupClass="au-o-grid__item"
@@ -39,8 +43,8 @@
         </div>
       {{else}}
         <AuBodyContainer @scroll={{true}} class="au-o-box">
-          <AddValidationsToForm 
-            @formTtlCode={{this.code}}
+          <AddValidationsToForm
+            @builderTtlCode={{this.code}}
             @sourceNode={{this.sourceNode}}
             @onUpdateValidations={{this.refreshWithTheValidationFormTtlCode}}
           />

@@ -1,87 +1,252 @@
 import Component from '@glimmer/component';
 
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import { GRAPHS } from '../controllers/formbuilder/edit';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { getLocalFileContentAsText } from '../utils/get-local-file-content';
-import { FORM, RDF } from '../utils/rdflib';
-import { sym as RDFNode } from 'rdflib';
+import { FORM, EXT } from '../utils/rdflib';
 import { areValidationsInGraphValidated } from '../utils/validation-shape-validators';
+import {
+  getFirstFieldSubject,
+  parseStoreGraphs,
+  validationGraphs,
+} from '../utils/validation-helpers';
+import { Statement } from 'rdflib';
+import {
+  getNodeValidationTriples,
+  getTriplesWithNodeAsSubject,
+  getValidationSubjectsOnNode,
+} from '../utils/forking-store-helpers';
+import { showErrorToasterMessage } from '../utils/toaster-message-helper';
+import { getFieldsInStore } from '../utils/get-triples-per-field-in-store';
+import { createStoreForFieldData } from '../utils/create-store-for-field';
+import { getFieldAndValidationTriples } from '../utils/get-field-and-validation-triples';
+import { addValidationTriplesToFormNodesL } from '../utils/add-field-valdiations-to-formNodesL';
+import { mergeFieldValidationFormWithBuilderForm as mergeFieldDataWithBuilderForm } from '../utils/merge-field-data-with-builder-form';
 
 export default class AddValidationsToFormComponent extends Component {
-  @tracked builderStore;
-  @tracked builderForm;
+  @tracked storesWithForm;
 
-  graphs = {
-    ...GRAPHS,
-    fieldGraph: new RDFNode(`http://data.lblod.info/fieldGraph`),
-  };
+  @service toaster;
+
+  savedBuilderTtlCode;
+
+  graphs = validationGraphs;
 
   constructor() {
     super(...arguments);
 
-    if (!this.args.formTtlCode || this.args.formTtlCode == '') {
-      throw `Cannot add validations to an empty form`;
+    if (!this.args.builderTtlCode || this.args.builderTtlCode == '') {
+      const errorMessage = `Cannot add validations to an empty form.`;
+      showErrorToasterMessage(this.toaster, errorMessage);
+
+      throw errorMessage;
     }
+    this.storesWithForm = [];
+    this.savedBuilderTtlCode = this.args.builderTtlCode;
 
-    this.initialise.perform({ formTtlCode: this.args.formTtlCode });
-  }
-
-  get canShowRdfForm() {
-    return this.builderStore instanceof ForkingStore && this.builderForm;
+    this.initialise.perform({ ttlCode: this.savedBuilderTtlCode });
   }
 
   @task({ restartable: false })
-  *initialise({ formTtlCode }) {
-    this.builderStore = yield this.createBuilderStore(formTtlCode);
-    this.builderForm = this.builderStore.any(
-      undefined,
-      RDF('type'),
-      FORM('Form'),
-      this.graphs.formGraph
-    );
+  *initialise({ ttlCode }) {
+    const builderStore = new ForkingStore();
+    yield parseStoreGraphs(builderStore, ttlCode);
 
-    this.builderStore.registerObserver(() => {
-      this.serializeToTtlCode(this.builderStore);
-    });
+    this.storesWithForm = yield this.createSeparateStorePerField(builderStore);
+
+    this.registerToObservableForStoresWithForm(this.storesWithForm);
   }
 
-  willDestroy() {
+  async willDestroy() {
     super.willDestroy(...arguments);
 
-    this.builderStore.clearObservers();
+    this.deregisterFromObservableForStoresWithForm(this.storesWithForm);
+
+    for (const fieldData of this.getFieldsData(this.storesWithForm)) {
+      const storeWithMergedField = await mergeFieldDataWithBuilderForm(
+        fieldData,
+        this.savedBuilderTtlCode,
+        this.graphs
+      );
+
+      const sourceTtl = storeWithMergedField.serializeDataMergedGraph(
+        this.graphs.sourceGraph
+      );
+      this.savedBuilderTtlCode = sourceTtl;
+    }
+
+    this.args.onUpdateValidations(this.savedBuilderTtlCode);
   }
 
-  serializeToTtlCode(builderStore) {
-    const sourceTtl = builderStore.serializeDataMergedGraph(
+  getFieldsData(storesWithForm) {
+    const fieldsData = [];
+
+    for (const storeWithForm of storesWithForm) {
+      const isValidTtl = areValidationsInGraphValidated(
+        storeWithForm.store,
+        this.graphs.sourceGraph
+      );
+      if (isValidTtl) {
+        const triples = getFieldAndValidationTriples(
+          storeWithForm.subject,
+          storeWithForm.store,
+          this.graphs.sourceGraph
+        );
+
+        fieldsData.push({
+          store: storeWithForm.store,
+          subject: storeWithForm.subject,
+          triples: triples,
+        });
+      } else {
+        showErrorToasterMessage(
+          this.toaster,
+          `Form of field with subject: ${storeWithForm.subject} is invalid.`
+        );
+        console.error(
+          `Current invalid field ttl for subject: ${storeWithForm.subject}`,
+          storeWithForm.store.serializeDataMergedGraph(this.graphs.sourceGraph)
+        );
+      }
+    }
+
+    return fieldsData;
+  }
+
+  updatedFormFieldValidations(builderStore) {
+    if (
+      !areValidationsInGraphValidated(builderStore, this.graphs.sourceGraph)
+    ) {
+      return;
+    }
+
+    const field = getFirstFieldSubject(builderStore);
+    // Stop the observing to block off an infinite loop (updating the sourceGraph here)
+    builderStore.clearObservers();
+    const formNodesLValidationSubjects = getValidationSubjectsOnNode(
+      EXT('formNodesL'),
+      builderStore,
+      this.graphs.sourceGraph
+    );
+    const fieldValidationNodes = getNodeValidationTriples(
+      field,
+      builderStore,
       this.graphs.sourceGraph
     );
 
-    if (areValidationsInGraphValidated(builderStore, this.graphs.sourceGraph)) {
-      this.args.onUpdateValidations(sourceTtl);
+    this.removeValidationTriplesFromFieldThatAreRemovedFromFormNodesL(
+      formNodesLValidationSubjects,
+      fieldValidationNodes,
+      builderStore
+    );
+
+    for (const nodeSubject of formNodesLValidationSubjects) {
+      const triplesOfValidationFormNodesL = getTriplesWithNodeAsSubject(
+        nodeSubject,
+        builderStore,
+        this.graphs.sourceGraph
+      );
+
+      const triplesOfValidationBuilder = getTriplesWithNodeAsSubject(
+        nodeSubject,
+        builderStore,
+        this.graphs.sourceBuilderGraph
+      );
+      this.updateDifferencesInTriples(
+        triplesOfValidationFormNodesL,
+        triplesOfValidationBuilder,
+        builderStore
+      );
+    }
+
+    for (const validationSubject of formNodesLValidationSubjects) {
+      const statement = new Statement(
+        field,
+        FORM('validations'),
+        validationSubject,
+        this.graphs.sourceGraph
+      );
+      builderStore.addAll([statement]);
+    }
+
+    builderStore.registerObserver(() => {
+      this.updatedFormFieldValidations(builderStore);
+    });
+  }
+
+  updateDifferencesInTriples(newTriples, oldTriples, store) {
+    for (const newTriple of newTriples) {
+      const matchingOldTriple = oldTriples.find(
+        (triple) =>
+          triple.subject.value == newTriple.subject.value &&
+          triple.predicate.value == newTriple.predicate.value
+      );
+
+      if (!matchingOldTriple) continue;
+
+      if (newTriple.object.value !== matchingOldTriple.object.value) {
+        const toRemove = new Statement(
+          matchingOldTriple.subject,
+          matchingOldTriple.predicate,
+          matchingOldTriple.object,
+          this.graphs.sourceGraph
+        );
+        store.removeStatements([toRemove]);
+      }
     }
   }
 
-  async createBuilderStore(formTtlCode) {
-    const builderStore = new ForkingStore();
-    builderStore.parse(
-      await getLocalFileContentAsText('/forms/validation/form.ttl'),
-      this.graphs.formGraph,
-      'text/turtle'
+  removeValidationTriplesFromFieldThatAreRemovedFromFormNodesL(
+    formNodesLValidationSubjects,
+    fieldValidationNodes,
+    store
+  ) {
+    const validationSubjectValues = formNodesLValidationSubjects.map(
+      (subject) => subject.value
     );
-    builderStore.parse(
-      await getLocalFileContentAsText('/forms/validation/meta.ttl'),
-      this.graphs.metaGraph,
-      'text/turtle'
-    );
-    builderStore.parse(
-      await getLocalFileContentAsText('/forms/builder/meta.ttl'),
-      this.graphs.fieldGraph,
-      'text/turtle'
-    );
-    builderStore.parse(formTtlCode, this.graphs.sourceGraph, 'text/turtle');
 
-    return builderStore;
+    for (const node of fieldValidationNodes) {
+      if (!validationSubjectValues.includes(node.object.value)) {
+        store.removeStatements([node]);
+      }
+    }
+  }
+
+  async createSeparateStorePerField(store) {
+    const fieldsData = getFieldsInStore(store, this.graphs.sourceGraph);
+    const storesWithForm = [];
+
+    for (const fieldData of fieldsData) {
+      const fieldStoreWithForm = await createStoreForFieldData(
+        fieldData,
+        this.savedBuilderTtlCode,
+        this.graphs
+      );
+
+      addValidationTriplesToFormNodesL(
+        fieldStoreWithForm.subject,
+        fieldStoreWithForm.store,
+        this.graphs
+      );
+
+      storesWithForm.push(fieldStoreWithForm);
+    }
+
+    return storesWithForm;
+  }
+
+  deregisterFromObservableForStoresWithForm(storesWithForm) {
+    for (const storeWithForm of storesWithForm) {
+      storeWithForm.store.clearObservers();
+    }
+  }
+
+  registerToObservableForStoresWithForm(storesWithForm) {
+    for (const storeWithForm of storesWithForm) {
+      storeWithForm.store.registerObserver(() => {
+        this.updatedFormFieldValidations(storeWithForm.store);
+      });
+    }
   }
 }

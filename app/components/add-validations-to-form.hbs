@@ -1,13 +1,14 @@
-{{#if this.canShowRdfForm}}
+{{#each this.storesWithForm as |field|}}
+  <strong>{{field.name}}</strong>
+  <br />
   <RdfForm
     @groupClass="au-o-grid__item"
-    @form={{this.builderForm}}
+    @form={{field.form}}
     @graphs={{this.graphs}}
-    @formStore={{this.builderStore}}
+    @formStore={{field.store}}
     @forceShowErrors={{false}}
     @useNewListingLayout={{true}}
     @sourceNode={{this.graphs.sourceNode}}
   />
-{{else}}
-  <AuLoader />
-{{/if}}
+  <br />
+{{/each}}

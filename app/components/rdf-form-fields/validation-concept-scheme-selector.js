@@ -1,5 +1,6 @@
 import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
 import {
@@ -7,7 +8,17 @@ import {
   triplesForPath,
   updateSimpleFormValue,
 } from '@lblod/submission-form-helpers';
-import { Namespace, namedNode } from 'rdflib';
+import { namedNode } from 'rdflib';
+import {
+  getFirstFieldSubject,
+  getPossibleValidationsForDisplayType,
+} from '../../utils/validation-helpers';
+import {
+  getDisplayTypeOfNode,
+  getRdfTypeOfNode,
+  getValidationSubjectsOnNode,
+} from '../../utils/forking-store-helpers';
+import { showErrorToasterMessage } from '../../utils/toaster-message-helper';
 
 function byLabel(a, b) {
   const textA = a.label.toUpperCase();
@@ -22,9 +33,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
   @tracked options = [];
   @tracked searchEnabled = true;
 
-  EXT = new Namespace('http://mu.semte.ch/vocabularies/ext/');
-  FORM = new Namespace('http://lblod.data.gift/vocabularies/forms/');
-  RDF = new Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
+  @service toaster;
 
   constructor() {
     super(...arguments);
@@ -32,23 +41,13 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     this.loadProvidedValue();
   }
 
-  getPossibleValidationsForDisplayType(displayType, store, graphs) {
-    return store
-      .match(
-        displayType,
-        this.EXT('canHaveValidation'),
-        undefined,
-        graphs.fieldGraph
-      )
-      .map((triple) => triple.object);
-  }
-
   loadOptions() {
-    const fieldDisplayType = this.args.formStore.any(
-      this.EXT('formNodesNameF'),
-      this.FORM('displayType'),
-      undefined,
-      this.args.graphs.formGraph
+    const fieldSubject = getFirstFieldSubject(this.args.formStore);
+
+    const fieldDisplayType = getDisplayTypeOfNode(
+      fieldSubject,
+      this.args.formStore,
+      this.args.graphs.sourceBuilderGraph
     );
 
     const metaGraph = this.args.graphs.metaGraph;
@@ -58,10 +57,10 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     if (fieldOptions.searchEnabled !== undefined) {
       this.searchEnabled = fieldOptions.searchEnabled;
     }
-    const conceptOptions = this.getPossibleValidationsForDisplayType(
+    const conceptOptions = getPossibleValidationsForDisplayType(
       fieldDisplayType,
       this.args.formStore,
-      this.args.graphs
+      this.args.graphs.fieldGraph
     );
 
     const allOptions = this.args.formStore
@@ -97,9 +96,42 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     }
   }
 
+  isSelectedValidationAlreadyOnField(selectedOption) {
+    const fieldSubject = getFirstFieldSubject(this.args.formStore);
+    const validationNodes = getValidationSubjectsOnNode(
+      fieldSubject,
+      this.args.formStore,
+      this.args.graphs.sourceGraph
+    );
+
+    for (const validationNode of validationNodes) {
+      const type = getRdfTypeOfNode(
+        validationNode,
+        this.args.formStore,
+        this.args.graphs.sourceGraph
+      );
+
+      if (type.value == selectedOption.subject.value) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   @action
   updateSelection(option) {
     this.selected = option;
+
+    if (this.isSelectedValidationAlreadyOnField(this.selected)) {
+      showErrorToasterMessage(
+        this.toaster,
+        `Validatie "${this.selected.label}" is duplicaat.`
+      );
+      this.selected = null;
+
+      return;
+    }
 
     // Cleanup old value(s) in the store
     const matches = triplesForPath(this.storeOptions, true).values;

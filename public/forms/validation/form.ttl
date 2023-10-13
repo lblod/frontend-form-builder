@@ -20,7 +20,7 @@ ext:form a form:Form, form:TopLevelForm ;
 #  Property-groups
 ##########################################################
 ext:formFieldPg a form:PropertyGroup;
-  sh:name "Field" ;
+  sh:name "" ;
   sh:order 1 .
 
 ##########################################################
@@ -56,7 +56,6 @@ ext:formNodesL a form:Listing ;
 #  Field with optional validations
 ##########################################################
 ext:formValidationItem a form:SubForm;
-  form:includes ext:formNodesNameF ;
   form:includes ext:formValidationL .
 
 ##########################################################
