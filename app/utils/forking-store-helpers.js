@@ -1,7 +1,7 @@
 import { FORM } from './rdflib';
 
-export function getTriplesOfSubject(subject, store, graph) {
-  return store.match(subject, undefined, undefined, graph);
+export function getTriplesWithNodeAsSubject(node, store, graph) {
+  return store.match(node, undefined, undefined, graph);
 }
 
 export function getTriplesWithNodeAsObject(node, store, graph) {

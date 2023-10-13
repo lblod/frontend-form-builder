@@ -18,7 +18,7 @@ import { Statement, triple } from 'rdflib';
 import {
   getAllTriples,
   getNodeValidationTriples,
-  getTriplesOfSubject,
+  getTriplesWithNodeAsSubject,
   getValidationSubjectsOnNode,
 } from '../utils/forking-store-helpers';
 import { showErrorToasterMessage } from '../utils/toaster-message-helper';
@@ -63,7 +63,7 @@ export default class AddValidationsToFormComponent extends Component {
     );
 
     for (const validationSubject of fieldValidationSubjects) {
-      const validationTriples = getTriplesOfSubject(
+      const validationTriples = getTriplesWithNodeAsSubject(
         validationSubject,
         store,
         this.graphs.sourceBuilderGraph
@@ -155,7 +155,7 @@ export default class AddValidationsToFormComponent extends Component {
     const triples = [];
 
     const fieldSubject = getFirstFieldSubject(store);
-    const fieldTriples = getTriplesOfSubject(
+    const fieldTriples = getTriplesWithNodeAsSubject(
       fieldSubject,
       store,
       this.graphs.sourceGraph
@@ -168,7 +168,7 @@ export default class AddValidationsToFormComponent extends Component {
       this.graphs.sourceGraph
     );
     for (const validationSubject of fieldValidationSubjects) {
-      const validationTriples = getTriplesOfSubject(
+      const validationTriples = getTriplesWithNodeAsSubject(
         validationSubject,
         store,
         this.graphs.sourceGraph
@@ -207,13 +207,13 @@ export default class AddValidationsToFormComponent extends Component {
     );
 
     for (const nodeSubject of formNodesLValidationSubjects) {
-      const triplesOfValidationFormNodesL = getTriplesOfSubject(
+      const triplesOfValidationFormNodesL = getTriplesWithNodeAsSubject(
         nodeSubject,
         builderStore,
         this.graphs.sourceGraph
       );
 
-      const triplesOfValidationBuilder = getTriplesOfSubject(
+      const triplesOfValidationBuilder = getTriplesWithNodeAsSubject(
         nodeSubject,
         builderStore,
         this.graphs.sourceBuilderGraph
@@ -287,7 +287,7 @@ export default class AddValidationsToFormComponent extends Component {
       this.graphs.sourceGraph
     );
     for (const subject of validationSubjects) {
-      const validationTriples = getTriplesOfSubject(
+      const validationTriples = getTriplesWithNodeAsSubject(
         subject,
         store,
         this.graphs.sourceBuilderGraph
@@ -372,7 +372,7 @@ export default class AddValidationsToFormComponent extends Component {
     const triplesPerField = [];
 
     for (const fieldSubject of possibleFieldSubjects) {
-      const fieldTriples = getTriplesOfSubject(
+      const fieldTriples = getTriplesWithNodeAsSubject(
         fieldSubject,
         store,
         this.graphs.sourceGraph
@@ -384,7 +384,7 @@ export default class AddValidationsToFormComponent extends Component {
         this.graphs.sourceGraph
       );
       for (const subject of fieldValidationSubjects) {
-        const validationTriples = getTriplesOfSubject(
+        const validationTriples = getTriplesWithNodeAsSubject(
           subject,
           store,
           this.graphs.sourceGraph

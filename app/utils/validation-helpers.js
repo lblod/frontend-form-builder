@@ -4,7 +4,7 @@ import { sym as RDFNode } from 'rdflib';
 import { FORM, RDF } from '../utils/rdflib';
 import {
   getAllTriples,
-  getTriplesOfSubject,
+  getTriplesWithNodeAsSubject,
   getTriplesWithNodeAsObject,
 } from './forking-store-helpers';
 
@@ -61,7 +61,7 @@ export function removeUnassignedNodesFromGraph(store, exception) {
 
     if (matchesInObject.length == 0 || !matchesInObject) {
       try {
-        const subjectTriples = getTriplesOfSubject(
+        const subjectTriples = getTriplesWithNodeAsSubject(
           subject,
           store,
           validationGraphs.sourceGraph
