@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { FORM, EMBER, EXT } from '../utils/rdflib';
+import { FORM, EXT } from '../utils/rdflib';
 import { areValidationsInGraphValidated } from '../utils/validation-shape-validators';
 import {
   getFirstFieldSubject,
@@ -13,7 +13,6 @@ import {
 } from '../utils/validation-helpers';
 import { Statement } from 'rdflib';
 import {
-  getAllTriples,
   getNodeValidationTriples,
   getTriplesWithNodeAsSubject,
   getValidationSubjectsOnNode,
@@ -21,10 +20,9 @@ import {
 import { showErrorToasterMessage } from '../utils/toaster-message-helper';
 import { getFieldsInStore } from '../utils/get-triples-per-field-in-store';
 import { createStoreForFieldData } from '../utils/create-store-for-field';
-import { templatePrefixes } from '../utils/validation-form-templates/template-prefixes';
-import { removeUnassignedNodesFromGraph } from '../utils/remove-unassigned-nodes-from-graph';
 import { getFieldAndValidationTriples } from '../utils/get-field-and-validation-triples';
 import { addValidationTriplesToFormNodesL } from '../utils/add-field-valdiations-to-formNodesL';
+import { mergeFieldValidationFormWithBuilderForm as mergeFieldDataWithBuilderForm } from '../utils/merge-field-data-with-builder-form';
 
 export default class AddValidationsToFormComponent extends Component {
   @tracked storesWithForm;
@@ -64,43 +62,15 @@ export default class AddValidationsToFormComponent extends Component {
     this.deregisterFromObservableForStoresWithForm(this.storesWithForm);
 
     for (const fieldData of this.getFieldsData(this.storesWithForm)) {
-      const final = new ForkingStore();
-      parseStoreGraphs(final, templatePrefixes);
-      final.addAll(fieldData.triples);
+      const storeWithMergedField = await mergeFieldDataWithBuilderForm(
+        fieldData,
+        this.savedBuilderTtlCode,
+        this.graphs
+      );
 
-      const builderStore = new ForkingStore();
-      await parseStoreGraphs(builderStore, this.savedBuilderTtlCode);
-
-      const validationnodesOfField = getNodeValidationTriples(
-        fieldData.subject,
-        builderStore,
+      const sourceTtl = storeWithMergedField.serializeDataMergedGraph(
         this.graphs.sourceGraph
       );
-
-      builderStore.removeStatements(validationnodesOfField);
-      removeUnassignedNodesFromGraph(
-        EMBER('source-node'),
-        builderStore,
-        this.graphs.sourceGraph
-      );
-
-      const allTriplesInGraph = getAllTriples(
-        builderStore,
-        this.graphs.sourceGraph
-      );
-
-      const notFieldTriples = allTriplesInGraph.filter(
-        (triple) => triple.subject.value !== fieldData.subject.value
-      );
-      final.addAll(notFieldTriples);
-
-      removeUnassignedNodesFromGraph(
-        EMBER('source-node'),
-        final,
-        this.graphs.sourceGraph
-      );
-
-      const sourceTtl = final.serializeDataMergedGraph(this.graphs.sourceGraph);
       this.savedBuilderTtlCode = sourceTtl;
     }
 
