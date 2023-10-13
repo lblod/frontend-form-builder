@@ -22,6 +22,7 @@ import {
   getValidationSubjectsOnNode,
 } from '../utils/forking-store-helpers';
 import { showErrorToasterMessage } from '../utils/toaster-message-helper';
+import { getTriplesPerFieldInStore } from '../utils/get-triples-per-field-in-store';
 
 export default class AddValidationsToFormComponent extends Component {
   @tracked storesWithForm;
@@ -291,7 +292,10 @@ export default class AddValidationsToFormComponent extends Component {
   }
 
   async createSeparateStorePerField(store) {
-    const triplesPerFieldInForm = this.getTriplesPerFieldInForm(store);
+    const triplesPerFieldInForm = getTriplesPerFieldInStore(
+      store,
+      this.graphs.sourceGraph
+    );
     const storesWithForm = [];
 
     for (const field of triplesPerFieldInForm) {
@@ -332,69 +336,5 @@ export default class AddValidationsToFormComponent extends Component {
     }
 
     return storesWithForm;
-  }
-
-  getTriplesPerFieldInForm(store) {
-    const possibleFieldSubjects = store
-      .match(
-        EMBER('source-node'),
-        FORM('includes'),
-        undefined,
-        this.graphs.sourceGraph
-      )
-      .map((triple) => triple.object);
-
-    if (possibleFieldSubjects.length == 0) {
-      const errorMessage = `No fields found in form.`;
-      showErrorToasterMessage(this.toaster, errorMessage);
-
-      throw errorMessage;
-    }
-
-    const triplesPerField = [];
-
-    for (const fieldSubject of possibleFieldSubjects) {
-      const fieldTriples = getTriplesWithNodeAsSubject(
-        fieldSubject,
-        store,
-        this.graphs.sourceGraph
-      );
-
-      const fieldValidationSubjects = getValidationSubjectsOnNode(
-        fieldSubject,
-        store,
-        this.graphs.sourceGraph
-      );
-      for (const subject of fieldValidationSubjects) {
-        const validationTriples = getTriplesWithNodeAsSubject(
-          subject,
-          store,
-          this.graphs.sourceGraph
-        );
-
-        fieldTriples.push(...validationTriples);
-      }
-
-      let fieldName = 'Text field';
-      const fieldNameTriple = fieldTriples.find(
-        (triple) => triple.predicate.value == SH('name').value
-      );
-      if (fieldNameTriple) {
-        fieldName = fieldNameTriple.object.value;
-      }
-
-      const tripleIsField = fieldTriples.find(
-        (triple) => triple.object.value == FORM('Field').value
-      );
-      if (tripleIsField) {
-        triplesPerField.push({
-          subject: fieldSubject,
-          name: fieldName,
-          triples: fieldTriples,
-        });
-      }
-    }
-
-    return triplesPerField;
   }
 }
