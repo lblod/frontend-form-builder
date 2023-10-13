@@ -9,7 +9,6 @@ import { areValidationsInGraphValidated } from '../utils/validation-shape-valida
 import {
   getFirstFieldSubject,
   parseStoreGraphs,
-  removeUnassignedNodesFromGraph,
   validationGraphs,
 } from '../utils/validation-helpers';
 import { Statement, triple } from 'rdflib';
@@ -23,6 +22,7 @@ import { showErrorToasterMessage } from '../utils/toaster-message-helper';
 import { getFieldsInStore } from '../utils/get-triples-per-field-in-store';
 import { createStoreForFieldData } from '../utils/create-store-for-field';
 import { templatePrefixes } from '../utils/validation-form-templates/template-prefixes';
+import { removeUnassignedNodesFromGraph } from '../utils/remove-unassigned-nodes-from-graph';
 
 export default class AddValidationsToFormComponent extends Component {
   @tracked storesWithForm;
@@ -76,7 +76,11 @@ export default class AddValidationsToFormComponent extends Component {
       );
 
       builderStore.removeStatements(validationnodesOfField);
-      removeUnassignedNodesFromGraph(builderStore, EMBER('source-node'));
+      removeUnassignedNodesFromGraph(
+        EMBER('source-node'),
+        builderStore,
+        this.graphs.sourceGraph
+      );
 
       const allTriplesInGraph = getAllTriples(
         builderStore,
@@ -88,7 +92,11 @@ export default class AddValidationsToFormComponent extends Component {
       );
       final.addAll(notFieldTriples);
 
-      removeUnassignedNodesFromGraph(final, EMBER('source-node'));
+      removeUnassignedNodesFromGraph(
+        EMBER('source-node'),
+        final,
+        this.graphs.sourceGraph
+      );
 
       const sourceTtl = final.serializeDataMergedGraph(this.graphs.sourceGraph);
       this.savedBuilderTtlCode = sourceTtl;
@@ -183,7 +191,7 @@ export default class AddValidationsToFormComponent extends Component {
       this.graphs.sourceGraph
     );
 
-    this.removeValidationTriplesFromFieldThatAreRemovedFromFromNodesL(
+    this.removeValidationTriplesFromFieldThatAreRemovedFromFormNodesL(
       formNodesLValidationSubjects,
       fieldValidationNodes,
       builderStore
@@ -246,7 +254,7 @@ export default class AddValidationsToFormComponent extends Component {
     }
   }
 
-  removeValidationTriplesFromFieldThatAreRemovedFromFromNodesL(
+  removeValidationTriplesFromFieldThatAreRemovedFromFormNodesL(
     formNodesLValidationSubjects,
     fieldValidationNodes,
     store

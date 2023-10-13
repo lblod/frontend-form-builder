@@ -2,11 +2,6 @@ import { getLocalFileContentAsText } from '../utils/get-local-file-content';
 import { GRAPHS } from '../controllers/formbuilder/edit';
 import { sym as RDFNode } from 'rdflib';
 import { EXT, FORM, RDF } from '../utils/rdflib';
-import {
-  getAllTriples,
-  getTriplesWithNodeAsSubject,
-  getTriplesWithNodeAsObject,
-} from './forking-store-helpers';
 
 export const validationGraphs = {
   ...GRAPHS,
@@ -50,41 +45,4 @@ export function getPossibleValidationsForDisplayType(
   return store
     .match(displayType, EXT('canHaveValidation'), undefined, graph)
     .map((triple) => triple.object);
-}
-
-export function removeUnassignedNodesFromGraph(store, exception) {
-  const subjectsInForm = getAllTriples(store, validationGraphs.sourceGraph).map(
-    (triple) => triple.subject
-  );
-  const uniqueSubjects = new Array(...new Set(subjectsInForm));
-
-  const subjectsWithoutExceptions = uniqueSubjects.filter(
-    (statement) => statement.value !== exception.value
-  );
-
-  for (const subject of subjectsWithoutExceptions) {
-    const matchesInObject = getTriplesWithNodeAsObject(
-      subject,
-      store,
-      validationGraphs.sourceGraph
-    );
-
-    if (matchesInObject.length == 0 || !matchesInObject) {
-      try {
-        const subjectTriples = getTriplesWithNodeAsSubject(
-          subject,
-          store,
-          validationGraphs.sourceGraph
-        );
-
-        store.removeStatements(subjectTriples);
-      } catch (error) {
-        console.error(
-          `Could not remove subject with predicates for`,
-          subject,
-          error
-        );
-      }
-    }
-  }
 }
