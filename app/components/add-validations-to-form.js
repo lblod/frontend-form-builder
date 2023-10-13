@@ -54,6 +54,8 @@ export default class AddValidationsToFormComponent extends Component {
     yield parseStoreGraphs(builderStore, ttlCode);
 
     this.storesWithForm = yield this.createSeparateStorePerField(builderStore);
+
+    this.registerToObservableForStoresWithForm(this.storesWithForm);
   }
 
   async willDestroy() {
@@ -75,12 +77,6 @@ export default class AddValidationsToFormComponent extends Component {
     }
 
     this.args.onUpdateValidations(this.savedBuilderTtlCode);
-  }
-
-  deregisterFromObservableForStoresWithForm(storesWithForm) {
-    for (const storeWithForm of storesWithForm) {
-      storeWithForm.store.clearObservers();
-    }
   }
 
   getFieldsData(storesWithForm) {
@@ -235,13 +231,23 @@ export default class AddValidationsToFormComponent extends Component {
         this.graphs
       );
 
-      fieldStoreWithForm.store.registerObserver(() => {
-        this.serializeToTtlCode(fieldStoreWithForm.store);
-      });
-
       storesWithForm.push(fieldStoreWithForm);
     }
 
     return storesWithForm;
+  }
+
+  deregisterFromObservableForStoresWithForm(storesWithForm) {
+    for (const storeWithForm of storesWithForm) {
+      storeWithForm.store.clearObservers();
+    }
+  }
+
+  registerToObservableForStoresWithForm(storesWithForm) {
+    for (const storeWithForm of storesWithForm) {
+      storeWithForm.store.registerObserver(() => {
+        this.serializeToTtlCode(storeWithForm.store);
+      });
+    }
   }
 }
