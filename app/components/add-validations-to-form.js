@@ -8,7 +8,6 @@ import { FORM, RDF, EMBER, SH, EXT } from '../utils/rdflib';
 import { areValidationsInGraphValidated } from '../utils/validation-shape-validators';
 import {
   getFirstFieldSubject,
-  getValidationNodesForSubject,
   parseStoreGraphs,
   removeUnassignedNodes,
   templateForValidationOnField,
@@ -18,7 +17,9 @@ import {
 import { Statement, triple } from 'rdflib';
 import {
   getAllTriples,
+  getNodeValidationTriples,
   getTriplesOfSubject,
+  getValidationSubjectsOnNode,
 } from '../utils/forking-store-helpers';
 
 export default class AddValidationsToFormComponent extends Component {
@@ -55,14 +56,12 @@ export default class AddValidationsToFormComponent extends Component {
   }
 
   removeValidationsFromBuilderFields(fieldSubject, store) {
-    const fieldValidationSubjects = store
-      .match(
-        fieldSubject,
-        FORM('validations'),
-        undefined,
-        validationGraphs.sourceGraph
-      )
-      .map((triple) => triple.object);
+    const fieldValidationSubjects = getValidationSubjectsOnNode(
+      fieldSubject,
+      store,
+      this.graphs.sourceGraph
+    );
+
     for (const validationSubject of fieldValidationSubjects) {
       const validationTriples = getTriplesOfSubject(
         validationSubject,
@@ -87,17 +86,21 @@ export default class AddValidationsToFormComponent extends Component {
       const builderStore = new ForkingStore();
       await parseStoreGraphs(builderStore, this.savedBuilderTtlCode);
 
-      const validationnodesOfField = getValidationNodesForSubject(
+      const validationnodesOfField = getNodeValidationTriples(
         fieldData.subject,
-        builderStore
+        builderStore,
+        this.graphs.sourceGraph
       );
 
       builderStore.removeStatements(validationnodesOfField);
       removeUnassignedNodes(builderStore, EMBER('source-node'));
 
-      const allMatches = getAllTriples(builderStore, this.graphs.sourceGraph);
+      const allTriplesInGraph = getAllTriples(
+        builderStore,
+        this.graphs.sourceGraph
+      );
 
-      const notFieldTriples = allMatches.filter(
+      const notFieldTriples = allTriplesInGraph.filter(
         (triple) => triple.subject.value !== fieldData.subject.value
       );
       final.addAll(notFieldTriples);
@@ -162,10 +165,11 @@ export default class AddValidationsToFormComponent extends Component {
     );
 
     triples.push(...fieldTriples);
-    const fieldValidationSubjects = getValidationNodesForSubject(
+    const fieldValidationSubjects = getValidationSubjectsOnNode(
       fieldSubject,
-      store
-    ).map((triple) => triple.object);
+      store,
+      this.graphs.sourceGraph
+    );
     for (const validationSubject of fieldValidationSubjects) {
       const validationTriples = getTriplesOfSubject(
         validationSubject,
@@ -188,24 +192,32 @@ export default class AddValidationsToFormComponent extends Component {
     const field = getFirstFieldSubject(builderStore);
     //#region Stop the observing to block off an infinite loop if `serializeToTtlCode`
     builderStore.clearObservers();
-    const formNodesLValidations = this.getFormNodesLValidations(builderStore);
-    const fieldValidations = getValidationNodesForSubject(field, builderStore);
+    const formNodesLValidationSubjects = getValidationSubjectsOnNode(
+      EXT('formNodesL'),
+      builderStore,
+      this.graphs.sourceGraph
+    );
+    const fieldValidationNodes = getNodeValidationTriples(
+      field,
+      builderStore,
+      this.graphs.sourceGraph
+    );
 
     this.removeValidationTriplesFromFieldThatAreRemovedFromFromNodesL(
-      formNodesLValidations,
-      fieldValidations,
+      formNodesLValidationSubjects,
+      fieldValidationNodes,
       builderStore
     );
 
-    for (const validationNode of formNodesLValidations) {
+    for (const nodeSubject of formNodesLValidationSubjects) {
       const triplesOfValidationFormNodesL = getTriplesOfSubject(
-        validationNode.object,
+        nodeSubject,
         builderStore,
         this.graphs.sourceGraph
       );
 
       const triplesOfValidationBuilder = getTriplesOfSubject(
-        validationNode.object,
+        nodeSubject,
         builderStore,
         this.graphs.sourceBuilderGraph
       );
@@ -216,9 +228,14 @@ export default class AddValidationsToFormComponent extends Component {
       );
     }
 
-    for (const validation of formNodesLValidations) {
-      validation.subject = field;
-      builderStore.addAll([validation]);
+    for (const validationSubject of formNodesLValidationSubjects) {
+      const statement = new Statement(
+        field,
+        FORM('validations'),
+        validationSubject,
+        this.graphs.sourceGraph
+      );
+      builderStore.addAll([statement]);
     }
 
     builderStore.registerObserver(() => {
@@ -250,36 +267,28 @@ export default class AddValidationsToFormComponent extends Component {
   }
 
   removeValidationTriplesFromFieldThatAreRemovedFromFromNodesL(
-    formNodesLValidations,
-    fieldValidations,
+    formNodesLValidationSubjects,
+    fieldValidationNodes,
     store
   ) {
-    const formNodesLObjects = formNodesLValidations.map(
-      (statement) => statement.object.value
+    const validationSubjectValues = formNodesLValidationSubjects.map(
+      (subject) => subject.value
     );
 
-    for (const fieldValidation of fieldValidations) {
-      if (!formNodesLObjects.includes(fieldValidation.object.value)) {
-        store.removeStatements([fieldValidation]);
+    for (const node of fieldValidationNodes) {
+      if (!validationSubjectValues.includes(node.object.value)) {
+        store.removeStatements([node]);
       }
     }
   }
 
-  getFormNodesLValidations(store) {
-    return store.match(
-      EXT('formNodesL'),
-      FORM('validations'),
-      undefined,
-      this.graphs.sourceGraph
-    );
-  }
-
   addValidationTriplesToFormNodesL(store) {
     const fieldSubject = getFirstFieldSubject(store);
-    const validationSubjects = getValidationNodesForSubject(
+    const validationSubjects = getValidationSubjectsOnNode(
       fieldSubject,
-      store
-    ).map((triple) => triple.object);
+      store,
+      this.graphs.sourceGraph
+    );
     for (const subject of validationSubjects) {
       const validationTriples = getTriplesOfSubject(
         subject,
@@ -373,17 +382,18 @@ export default class AddValidationsToFormComponent extends Component {
         this.graphs.sourceGraph
       );
 
-      const fieldValidations = getValidationNodesForSubject(
+      const fieldValidationSubjects = getValidationSubjectsOnNode(
         fieldSubject,
-        store
+        store,
+        this.graphs.sourceGraph
       );
-      for (const node of fieldValidations) {
-        const validationTriples = store.match(
-          node.object,
-          undefined,
-          undefined,
+      for (const subject of fieldValidationSubjects) {
+        const validationTriples = getTriplesOfSubject(
+          subject,
+          store,
           this.graphs.sourceGraph
         );
+
         fieldTriples.push(...validationTriples);
       }
 

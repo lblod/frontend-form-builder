@@ -8,8 +8,12 @@ export function getAllTriples(store, graph) {
   return store.match(undefined, undefined, undefined, graph);
 }
 
+export function getNodeValidationTriples(node, store, graph) {
+  return store.match(node, FORM('validations'), undefined, graph);
+}
+
 export function getValidationSubjectsOnNode(node, store, graph) {
-  return store
-    .match(node, FORM('validations'), undefined, graph)
-    .map((triple) => triple.object);
+  return getNodeValidationTriples(node, store, graph).map(
+    (triple) => triple.object
+  );
 }

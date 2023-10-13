@@ -37,15 +37,6 @@ export function getFirstFieldSubject(store) {
   );
 }
 
-export function getValidationNodesForSubject(subject, store) {
-  return store.match(
-    subject,
-    FORM('validations'),
-    undefined,
-    validationGraphs.sourceGraph
-  );
-}
-
 export function removeUnassignedNodes(store, exception) {
   const subjectsInForm = store
     .match(undefined, undefined, undefined, validationGraphs.sourceGraph)
