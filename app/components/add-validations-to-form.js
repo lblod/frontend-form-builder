@@ -11,7 +11,7 @@ import {
   parseStoreGraphs,
   validationGraphs,
 } from '../utils/validation-helpers';
-import { Statement, triple } from 'rdflib';
+import { Statement } from 'rdflib';
 import {
   getAllTriples,
   getNodeValidationTriples,
@@ -24,6 +24,7 @@ import { createStoreForFieldData } from '../utils/create-store-for-field';
 import { templatePrefixes } from '../utils/validation-form-templates/template-prefixes';
 import { removeUnassignedNodesFromGraph } from '../utils/remove-unassigned-nodes-from-graph';
 import { getFieldAndValidationTriples } from '../utils/get-field-and-validation-triples';
+import { addValidationTriplesToFormNodesL } from '../utils/add-field-valdiations-to-formNodesL';
 
 export default class AddValidationsToFormComponent extends Component {
   @tracked storesWithForm;
@@ -247,35 +248,6 @@ export default class AddValidationsToFormComponent extends Component {
     }
   }
 
-  addValidationTriplesToFormNodesL(store) {
-    const fieldSubject = getFirstFieldSubject(store);
-    const validationSubjects = getValidationSubjectsOnNode(
-      fieldSubject,
-      store,
-      this.graphs.sourceGraph
-    );
-    for (const subject of validationSubjects) {
-      const validationTriples = getTriplesWithNodeAsSubject(
-        subject,
-        store,
-        this.graphs.sourceBuilderGraph
-      );
-      const formNodesLWithValidation = triple(
-        EXT('formNodesL'),
-        FORM('validations'),
-        validationTriples.shift().subject,
-        this.graphs.sourceGraph
-      );
-      store.addAll([
-        formNodesLWithValidation,
-        ...validationTriples.map((triple) => {
-          triple.graph = this.graphs.sourceGraph;
-          return triple;
-        }),
-      ]);
-    }
-  }
-
   async createSeparateStorePerField(store) {
     const fieldsData = getFieldsInStore(store, this.graphs.sourceGraph);
     const storesWithForm = [];
@@ -287,7 +259,11 @@ export default class AddValidationsToFormComponent extends Component {
         this.graphs
       );
 
-      this.addValidationTriplesToFormNodesL(fieldStoreWithForm.store);
+      addValidationTriplesToFormNodesL(
+        fieldStoreWithForm.subject,
+        fieldStoreWithForm.store,
+        this.graphs
+      );
 
       fieldStoreWithForm.store.registerObserver(() => {
         this.serializeToTtlCode(fieldStoreWithForm.store);
