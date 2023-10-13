@@ -21,6 +21,7 @@ import {
   getTriplesOfSubject,
   getValidationSubjectsOnNode,
 } from '../utils/forking-store-helpers';
+import { showErrorToasterMessage } from '../utils/toaster-message-helper';
 
 export default class AddValidationsToFormComponent extends Component {
   @tracked storesWithForm;
@@ -36,9 +37,8 @@ export default class AddValidationsToFormComponent extends Component {
 
     if (!this.args.builderTtlCode || this.args.builderTtlCode == '') {
       const errorMessage = `Cannot add validations to an empty form.`;
-      this.toaster.error(errorMessage, 'Error', {
-        timeOut: 5000,
-      });
+      showErrorToasterMessage(this.toaster, errorMessage);
+
       throw errorMessage;
     }
     this.storesWithForm = [];
@@ -137,12 +137,9 @@ export default class AddValidationsToFormComponent extends Component {
           triples: triples,
         });
       } else {
-        this.toaster.error(
-          `Form of field with subject: ${storeWithForm.subject} is invalid.`,
-          'Error',
-          {
-            timeOut: 5000,
-          }
+        showErrorToasterMessage(
+          this.toaster,
+          `Form of field with subject: ${storeWithForm.subject} is invalid.`
         );
         console.error(
           `Current invalid field ttl for subject: ${storeWithForm.subject}`,
@@ -367,9 +364,8 @@ export default class AddValidationsToFormComponent extends Component {
 
     if (possibleFieldSubjects.length == 0) {
       const errorMessage = `No fields found in form.`;
-      this.toaster.error(errorMessage, 'Error', {
-        timeOut: 5000,
-      });
+      showErrorToasterMessage(this.toaster, errorMessage);
+
       throw errorMessage;
     }
 

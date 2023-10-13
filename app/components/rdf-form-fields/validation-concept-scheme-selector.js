@@ -11,6 +11,7 @@ import {
 import { Namespace, namedNode } from 'rdflib';
 import { getFirstFieldSubject } from '../../utils/validation-helpers';
 import { getValidationSubjectsOnNode } from '../../utils/forking-store-helpers';
+import { showErrorToasterMessage } from '../../utils/toaster-message-helper';
 
 function byLabel(a, b) {
   const textA = a.label.toUpperCase();
@@ -138,12 +139,9 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     this.selected = option;
 
     if (this.isSelectedValidationAlreadyOnField(this.selected)) {
-      this.toaster.error(
-        `Validatie "${this.selected.label}" is duplicaat.`,
-        'Error',
-        {
-          timeOut: 5000,
-        }
+      showErrorToasterMessage(
+        this.toaster,
+        `Validatie "${this.selected.label}" is duplicaat.`
       );
       this.selected = null;
 
