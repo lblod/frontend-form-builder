@@ -114,7 +114,7 @@ export default class AddValidationsToFormComponent extends Component {
     return fieldsData;
   }
 
-  serializeToTtlCode(builderStore) {
+  updatedFormFieldValidations(builderStore) {
     if (
       !areValidationsInGraphValidated(builderStore, this.graphs.sourceGraph)
     ) {
@@ -122,7 +122,7 @@ export default class AddValidationsToFormComponent extends Component {
     }
 
     const field = getFirstFieldSubject(builderStore);
-    //#region Stop the observing to block off an infinite loop if `serializeToTtlCode`
+    // Stop the observing to block off an infinite loop (updating the sourceGraph here)
     builderStore.clearObservers();
     const formNodesLValidationSubjects = getValidationSubjectsOnNode(
       EXT('formNodesL'),
@@ -171,9 +171,8 @@ export default class AddValidationsToFormComponent extends Component {
     }
 
     builderStore.registerObserver(() => {
-      this.serializeToTtlCode(builderStore);
+      this.updatedFormFieldValidations(builderStore);
     });
-    //#endregion
   }
 
   updateDifferencesInTriples(newTriples, oldTriples, store) {
@@ -246,7 +245,7 @@ export default class AddValidationsToFormComponent extends Component {
   registerToObservableForStoresWithForm(storesWithForm) {
     for (const storeWithForm of storesWithForm) {
       storeWithForm.store.registerObserver(() => {
-        this.serializeToTtlCode(storeWithForm.store);
+        this.updatedFormFieldValidations(storeWithForm.store);
       });
     }
   }
