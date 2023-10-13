@@ -4,14 +4,12 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { FORM, RDF, EMBER, SH, EXT } from '../utils/rdflib';
+import { FORM, EMBER, EXT } from '../utils/rdflib';
 import { areValidationsInGraphValidated } from '../utils/validation-shape-validators';
 import {
   getFirstFieldSubject,
   parseStoreGraphs,
   removeUnassignedNodesFromGraph,
-  templateForValidationOnField,
-  templatePrefixes,
   validationGraphs,
 } from '../utils/validation-helpers';
 import { Statement, triple } from 'rdflib';
@@ -22,7 +20,9 @@ import {
   getValidationSubjectsOnNode,
 } from '../utils/forking-store-helpers';
 import { showErrorToasterMessage } from '../utils/toaster-message-helper';
-import { getTriplesPerFieldInStore } from '../utils/get-triples-per-field-in-store';
+import { getFieldsInStore } from '../utils/get-triples-per-field-in-store';
+import { createStoreForFieldData } from '../utils/create-store-for-field';
+import { templatePrefixes } from '../utils/validation-form-templates/template-prefixes';
 
 export default class AddValidationsToFormComponent extends Component {
   @tracked storesWithForm;
@@ -292,47 +292,23 @@ export default class AddValidationsToFormComponent extends Component {
   }
 
   async createSeparateStorePerField(store) {
-    const triplesPerFieldInForm = getTriplesPerFieldInStore(
-      store,
-      this.graphs.sourceGraph
-    );
+    const fieldsData = getFieldsInStore(store, this.graphs.sourceGraph);
     const storesWithForm = [];
 
-    for (const field of triplesPerFieldInForm) {
-      const fieldStore = new ForkingStore();
-      fieldStore.addAll(field.triples);
-      fieldStore.parse(
-        templateForValidationOnField,
-        this.graphs.sourceGraph,
-        'text/turtle'
-      );
-
-      const ttl = fieldStore.serializeDataMergedGraph(this.graphs.sourceGraph);
-      await parseStoreGraphs(fieldStore, ttl);
-
-      fieldStore.parse(
+    for (const fieldData of fieldsData) {
+      const fieldStoreWithForm = await createStoreForFieldData(
+        fieldData,
         this.savedBuilderTtlCode,
-        this.graphs.sourceBuilderGraph,
-        'text/turtle'
+        this.graphs
       );
 
-      this.addValidationTriplesToFormNodesL(fieldStore);
+      this.addValidationTriplesToFormNodesL(fieldStoreWithForm.store);
 
-      fieldStore.registerObserver(() => {
-        this.serializeToTtlCode(fieldStore);
+      fieldStoreWithForm.store.registerObserver(() => {
+        this.serializeToTtlCode(fieldStoreWithForm.store);
       });
 
-      storesWithForm.push({
-        name: field.name,
-        subject: field.subject,
-        store: fieldStore,
-        form: fieldStore.any(
-          undefined,
-          RDF('type'),
-          FORM('Form'),
-          this.graphs.formGraph
-        ),
-      });
+      storesWithForm.push(fieldStoreWithForm);
     }
 
     return storesWithForm;

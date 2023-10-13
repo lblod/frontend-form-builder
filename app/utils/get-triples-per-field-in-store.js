@@ -5,7 +5,7 @@ import {
 import { EMBER, FORM, SH } from './rdflib';
 import { showErrorToasterMessage } from './toaster-message-helper';
 
-export function getTriplesPerFieldInStore(store, graph) {
+export function getFieldsInStore(store, graph) {
   const possibleFieldSubjects = store
     .match(EMBER('source-node'), FORM('includes'), undefined, graph)
     .map((triple) => triple.object);
