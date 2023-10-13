@@ -9,7 +9,7 @@ import { areValidationsInGraphValidated } from '../utils/validation-shape-valida
 import {
   getFirstFieldSubject,
   parseStoreGraphs,
-  removeUnassignedNodes,
+  removeUnassignedNodesFromGraph,
   templateForValidationOnField,
   templatePrefixes,
   validationGraphs,
@@ -93,7 +93,7 @@ export default class AddValidationsToFormComponent extends Component {
       );
 
       builderStore.removeStatements(validationnodesOfField);
-      removeUnassignedNodes(builderStore, EMBER('source-node'));
+      removeUnassignedNodesFromGraph(builderStore, EMBER('source-node'));
 
       const allTriplesInGraph = getAllTriples(
         builderStore,
@@ -105,7 +105,7 @@ export default class AddValidationsToFormComponent extends Component {
       );
       final.addAll(notFieldTriples);
 
-      removeUnassignedNodes(final, EMBER('source-node'));
+      removeUnassignedNodesFromGraph(final, EMBER('source-node'));
 
       const sourceTtl = final.serializeDataMergedGraph(this.graphs.sourceGraph);
       this.savedBuilderTtlCode = sourceTtl;

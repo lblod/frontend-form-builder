@@ -2,6 +2,11 @@ import { getLocalFileContentAsText } from '../utils/get-local-file-content';
 import { GRAPHS } from '../controllers/formbuilder/edit';
 import { sym as RDFNode } from 'rdflib';
 import { FORM, RDF } from '../utils/rdflib';
+import {
+  getAllTriples,
+  getTriplesOfSubject,
+  getTriplesWithNodeAsObject,
+} from './forking-store-helpers';
 
 export const validationGraphs = {
   ...GRAPHS,
@@ -37,11 +42,10 @@ export function getFirstFieldSubject(store) {
   );
 }
 
-export function removeUnassignedNodes(store, exception) {
-  const subjectsInForm = store
-    .match(undefined, undefined, undefined, validationGraphs.sourceGraph)
-    .map((triple) => triple.subject);
-
+export function removeUnassignedNodesFromGraph(store, exception) {
+  const subjectsInForm = getAllTriples(store, validationGraphs.sourceGraph).map(
+    (triple) => triple.subject
+  );
   const uniqueSubjects = new Array(...new Set(subjectsInForm));
 
   const subjectsWithoutExceptions = uniqueSubjects.filter(
@@ -49,20 +53,20 @@ export function removeUnassignedNodes(store, exception) {
   );
 
   for (const subject of subjectsWithoutExceptions) {
-    const matchesInObject = store.match(
-      undefined,
-      undefined,
+    const matchesInObject = getTriplesWithNodeAsObject(
       subject,
+      store,
       validationGraphs.sourceGraph
     );
+
     if (matchesInObject.length == 0 || !matchesInObject) {
       try {
-        const subjectTriples = store.match(
+        const subjectTriples = getTriplesOfSubject(
           subject,
-          undefined,
-          undefined,
+          store,
           validationGraphs.sourceGraph
         );
+
         store.removeStatements(subjectTriples);
       } catch (error) {
         console.error(
