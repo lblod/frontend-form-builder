@@ -16,6 +16,10 @@ import {
   validationGraphs,
 } from '../utils/validation-helpers';
 import { Statement, triple } from 'rdflib';
+import {
+  getAllTriples,
+  getTriplesOfSubject,
+} from '../utils/forking-store-helpers';
 
 export default class AddValidationsToFormComponent extends Component {
   @tracked storesWithForm;
@@ -60,12 +64,12 @@ export default class AddValidationsToFormComponent extends Component {
       )
       .map((triple) => triple.object);
     for (const validationSubject of fieldValidationSubjects) {
-      const validationTriples = store.match(
+      const validationTriples = getTriplesOfSubject(
         validationSubject,
-        undefined,
-        undefined,
+        store,
         this.graphs.sourceBuilderGraph
       );
+
       store.removeStatements(validationTriples);
     }
   }
@@ -91,12 +95,7 @@ export default class AddValidationsToFormComponent extends Component {
       builderStore.removeStatements(validationnodesOfField);
       removeUnassignedNodes(builderStore, EMBER('source-node'));
 
-      const allMatches = builderStore.match(
-        undefined,
-        undefined,
-        undefined,
-        this.graphs.sourceGraph
-      );
+      const allMatches = getAllTriples(builderStore, this.graphs.sourceGraph);
 
       const notFieldTriples = allMatches.filter(
         (triple) => triple.subject.value !== fieldData.subject.value
@@ -156,22 +155,21 @@ export default class AddValidationsToFormComponent extends Component {
     const triples = [];
 
     const fieldSubject = getFirstFieldSubject(store);
-    const fieldTriples = store.match(
+    const fieldTriples = getTriplesOfSubject(
       fieldSubject,
-      undefined,
-      undefined,
+      store,
       this.graphs.sourceGraph
     );
+
     triples.push(...fieldTriples);
     const fieldValidationSubjects = getValidationNodesForSubject(
       fieldSubject,
       store
     ).map((triple) => triple.object);
     for (const validationSubject of fieldValidationSubjects) {
-      const validationTriples = store.match(
+      const validationTriples = getTriplesOfSubject(
         validationSubject,
-        undefined,
-        undefined,
+        store,
         this.graphs.sourceGraph
       );
       triples.push(...validationTriples);
@@ -200,19 +198,17 @@ export default class AddValidationsToFormComponent extends Component {
     );
 
     for (const validationNode of formNodesLValidations) {
-      const triplesOfValidationFormNodesL = builderStore.match(
+      const triplesOfValidationFormNodesL = getTriplesOfSubject(
         validationNode.object,
-        undefined,
-        undefined,
+        builderStore,
         this.graphs.sourceGraph
       );
-      const triplesOfValidationBuilder = builderStore.match(
+
+      const triplesOfValidationBuilder = getTriplesOfSubject(
         validationNode.object,
-        undefined,
-        undefined,
+        builderStore,
         this.graphs.sourceBuilderGraph
       );
-
       this.updateDifferencesInTriples(
         triplesOfValidationFormNodesL,
         triplesOfValidationBuilder,
@@ -285,10 +281,9 @@ export default class AddValidationsToFormComponent extends Component {
       store
     ).map((triple) => triple.object);
     for (const subject of validationSubjects) {
-      const validationTriples = store.match(
+      const validationTriples = getTriplesOfSubject(
         subject,
-        undefined,
-        undefined,
+        store,
         this.graphs.sourceBuilderGraph
       );
       const formNodesLWithValidation = triple(
@@ -372,10 +367,9 @@ export default class AddValidationsToFormComponent extends Component {
     const triplesPerField = [];
 
     for (const fieldSubject of possibleFieldSubjects) {
-      const fieldTriples = store.match(
+      const fieldTriples = getTriplesOfSubject(
         fieldSubject,
-        undefined,
-        undefined,
+        store,
         this.graphs.sourceGraph
       );
 
