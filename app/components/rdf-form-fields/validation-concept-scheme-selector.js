@@ -8,9 +8,16 @@ import {
   triplesForPath,
   updateSimpleFormValue,
 } from '@lblod/submission-form-helpers';
-import { Namespace, namedNode } from 'rdflib';
-import { getFirstFieldSubject } from '../../utils/validation-helpers';
-import { getValidationSubjectsOnNode } from '../../utils/forking-store-helpers';
+import { namedNode } from 'rdflib';
+import {
+  getFirstFieldSubject,
+  getPossibleValidationsForDisplayType,
+} from '../../utils/validation-helpers';
+import {
+  getDisplayTypeOfNode,
+  getRdfTypeOfNode,
+  getValidationSubjectsOnNode,
+} from '../../utils/forking-store-helpers';
 import { showErrorToasterMessage } from '../../utils/toaster-message-helper';
 
 function byLabel(a, b) {
@@ -28,39 +35,18 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
 
   @service toaster;
 
-  EXT = new Namespace('http://mu.semte.ch/vocabularies/ext/');
-  FORM = new Namespace('http://lblod.data.gift/vocabularies/forms/');
-  RDF = new Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#');
-
   constructor() {
     super(...arguments);
     this.loadOptions();
     this.loadProvidedValue();
   }
 
-  getPossibleValidationsForDisplayType(displayType, store, graphs) {
-    return store
-      .match(
-        displayType,
-        this.EXT('canHaveValidation'),
-        undefined,
-        graphs.fieldGraph
-      )
-      .map((triple) => triple.object);
-  }
-
   loadOptions() {
-    const fieldSubject = this.args.formStore.any(
-      undefined,
-      this.RDF('type'),
-      this.FORM('Field'),
-      this.args.graphs.sourceGraph
-    );
+    const fieldSubject = getFirstFieldSubject(this.args.formStore);
 
-    const fieldDisplayType = this.args.formStore.any(
+    const fieldDisplayType = getDisplayTypeOfNode(
       fieldSubject,
-      this.FORM('displayType'),
-      undefined,
+      this.args.formStore,
       this.args.graphs.sourceBuilderGraph
     );
 
@@ -71,10 +57,10 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     if (fieldOptions.searchEnabled !== undefined) {
       this.searchEnabled = fieldOptions.searchEnabled;
     }
-    const conceptOptions = this.getPossibleValidationsForDisplayType(
+    const conceptOptions = getPossibleValidationsForDisplayType(
       fieldDisplayType,
       this.args.formStore,
-      this.args.graphs
+      this.args.graphs.fieldGraph
     );
 
     const allOptions = this.args.formStore
@@ -119,10 +105,9 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     );
 
     for (const validationNode of validationNodes) {
-      const type = this.args.formStore.any(
+      const type = getRdfTypeOfNode(
         validationNode,
-        this.RDF('type'),
-        undefined,
+        this.args.formStore,
         this.args.graphs.sourceGraph
       );
 

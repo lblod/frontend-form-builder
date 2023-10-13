@@ -1,7 +1,7 @@
 import { getLocalFileContentAsText } from '../utils/get-local-file-content';
 import { GRAPHS } from '../controllers/formbuilder/edit';
 import { sym as RDFNode } from 'rdflib';
-import { FORM, RDF } from '../utils/rdflib';
+import { EXT, FORM, RDF } from '../utils/rdflib';
 import {
   getAllTriples,
   getTriplesWithNodeAsSubject,
@@ -40,6 +40,16 @@ export function getFirstFieldSubject(store) {
     FORM('Field'),
     validationGraphs.sourceGraph
   );
+}
+
+export function getPossibleValidationsForDisplayType(
+  displayType,
+  store,
+  graph
+) {
+  return store
+    .match(displayType, EXT('canHaveValidation'), undefined, graph)
+    .map((triple) => triple.object);
 }
 
 export function removeUnassignedNodesFromGraph(store, exception) {
