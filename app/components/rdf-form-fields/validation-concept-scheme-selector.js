@@ -9,10 +9,8 @@ import {
   updateSimpleFormValue,
 } from '@lblod/submission-form-helpers';
 import { Namespace, namedNode } from 'rdflib';
-import {
-  getFirstFieldSubject,
-  getValidationNodesForSubject,
-} from '../../utils/validation-helpers';
+import { getFirstFieldSubject } from '../../utils/validation-helpers';
+import { getValidationSubjectsOnNode } from '../../utils/forking-store-helpers';
 
 function byLabel(a, b) {
   const textA = a.label.toUpperCase();
@@ -113,14 +111,15 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
 
   isSelectedValidationAlreadyOnField(selectedOption) {
     const fieldSubject = getFirstFieldSubject(this.args.formStore);
-    const validationNodes = getValidationNodesForSubject(
+    const validationNodes = getValidationSubjectsOnNode(
       fieldSubject,
-      this.args.formStore
+      this.args.formStore,
+      this.args.graphs.sourceGraph
     );
 
-    for (const triple of validationNodes) {
+    for (const validationNode of validationNodes) {
       const type = this.args.formStore.any(
-        triple.object,
+        validationNode,
         this.RDF('type'),
         undefined,
         this.args.graphs.sourceGraph
