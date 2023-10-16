@@ -3,6 +3,15 @@ import { getRdfTypeOfNode } from './forking-store-helpers';
 import { getGroupingTypeForValidation } from './get-grouping-type-for-validation';
 import { FORM } from './rdflib';
 
+/**
+ * Validation nodes have a predicate named `form:grouping`.
+ * These validations nodes are generated and so we cannot add the type dynamically depending
+ *  on the validation type (RDF-type). In the form.ttl file under validation you can see that
+ *  `form:Bag` is the default grouping  value.
+ * To fix this we are checking what the current and the expected grouping type is for the
+ *  selected validation. If the current value is not as expected it is updated.
+ *
+ */
 export function updateGroupingTypesOnValidations(store, graphs) {
   const triplesWithGroupingType = store.match(
     undefined,
