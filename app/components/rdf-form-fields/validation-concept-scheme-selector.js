@@ -146,41 +146,29 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
 
     // Insert new value in the store
     if (option) {
-      updateSimpleFormValue(this.storeOptions, option.subject);
-    }
+      const groupingType = getGroupingTypeForValidation(
+        this.selected.subject,
+        this.storeOptions.store,
+        this.storeOptions.metaGraph
+      );
 
-    this.addgroupingTypeForValidationNode(
-      this.selected.subject,
-      this.storeOptions.store,
-      {
-        sourceGraph: this.storeOptions.sourceGraph,
-        metaGraph: this.storeOptions.metaGraph,
-      }
-    );
+      this.storeOptions.store.addAll([
+        new Statement(
+          this.storeOptions.sourceNode,
+          FORM('grouping'),
+          groupingType,
+          this.storeOptions.sourceGraph
+        ),
+        new Statement(
+          this.storeOptions.sourceNode,
+          RDF('type'),
+          option.subject,
+          this.storeOptions.sourceGraph
+        ),
+      ]);
+    }
 
     this.hasBeenFocused = true;
     super.updateValidations();
-  }
-
-  addgroupingTypeForValidationNode(validationType, store, graphs) {
-    const validationNode = store.any(
-      undefined,
-      RDF('type'),
-      validationType,
-      graphs.sourceGraph
-    );
-    const groupingType = getGroupingTypeForValidation(
-      validationType,
-      store,
-      graphs.metaGraph
-    );
-    store.addAll([
-      new Statement(
-        validationNode,
-        FORM('grouping'),
-        groupingType,
-        graphs.sourceGraph
-      ),
-    ]);
   }
 }
