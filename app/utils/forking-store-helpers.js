@@ -1,4 +1,9 @@
 import { FORM, RDF } from './rdflib';
+import { ForkingStore } from '@lblod/ember-submission-form-fields';
+
+export function isForkingStore(store) {
+  return store instanceof ForkingStore;
+}
 
 export function getTriplesWithNodeAsSubject(node, store, graph) {
   return store.match(node, undefined, undefined, graph);
