@@ -24,7 +24,6 @@ import { createStoreForFieldData } from '../utils/create-store-for-field';
 import { getFieldAndValidationTriples } from '../utils/get-field-and-validation-triples';
 import { addValidationTriplesToFormNodesL } from '../utils/add-field-valdiations-to-formNodesL';
 import { mergeFieldValidationFormWithBuilderForm as mergeFieldDataWithBuilderForm } from '../utils/merge-field-data-with-builder-form';
-import { updateGroupingTypesOnValidations } from '../utils/update-grouping-type-on-validations';
 
 export default class AddValidationsToFormComponent extends Component {
   @tracked storesWithForm;
@@ -71,11 +70,6 @@ export default class AddValidationsToFormComponent extends Component {
         this.savedBuilderTtlCode,
         this.graphs
       );
-
-      updateGroupingTypesOnValidations(storeWithMergedField, {
-        sourceGraph: this.graphs.sourceGraph,
-        metaGraph: this.graphs.metaGraph,
-      });
 
       const sourceTtl = storeWithMergedField.serializeDataMergedGraph(
         this.graphs.sourceGraph

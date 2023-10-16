@@ -8,7 +8,7 @@ import {
   triplesForPath,
   updateSimpleFormValue,
 } from '@lblod/submission-form-helpers';
-import { namedNode } from 'rdflib';
+import { Statement, namedNode } from 'rdflib';
 import {
   getFirstFieldSubject,
   getPossibleValidationsForDisplayType,
@@ -19,6 +19,8 @@ import {
   getValidationSubjectsOnNode,
 } from '../../utils/forking-store-helpers';
 import { showErrorToasterMessage } from '../../utils/toaster-message-helper';
+import { FORM, RDF } from '../../utils/rdflib';
+import { getGroupingTypeForValidation } from '../../utils/get-grouping-type-for-validation';
 
 function byLabel(a, b) {
   const textA = a.label.toUpperCase();
@@ -147,7 +149,38 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
       updateSimpleFormValue(this.storeOptions, option.subject);
     }
 
+    this.addgroupingTypeForValidationNode(
+      this.selected.subject,
+      this.storeOptions.store,
+      {
+        sourceGraph: this.storeOptions.sourceGraph,
+        metaGraph: this.storeOptions.metaGraph,
+      }
+    );
+
     this.hasBeenFocused = true;
     super.updateValidations();
+  }
+
+  addgroupingTypeForValidationNode(validationType, store, graphs) {
+    const validationNode = store.any(
+      undefined,
+      RDF('type'),
+      validationType,
+      graphs.sourceGraph
+    );
+    const groupingType = getGroupingTypeForValidation(
+      validationType,
+      store,
+      graphs.metaGraph
+    );
+    store.addAll([
+      new Statement(
+        validationNode,
+        FORM('grouping'),
+        groupingType,
+        graphs.sourceGraph
+      ),
+    ]);
   }
 }
