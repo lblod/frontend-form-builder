@@ -1,6 +1,6 @@
 import { Statement } from 'rdflib';
 import { getRdfTypeOfNode } from './forking-store-helpers';
-import { getGroupingTypeLiteralForValidation } from './get-grouping-type-for-validation';
+import { getGroupingTypeForValidation } from './get-grouping-type-for-validation';
 import { FORM } from './rdflib';
 
 export function updateGroupingTypesOnValidations(store, graphs) {
@@ -25,7 +25,7 @@ export function updateGroupingTypesOnValidations(store, graphs) {
       undefined,
       graphs.sourceGraph
     );
-    const expectedGroupingType = getGroupingTypeLiteralForValidation(
+    const expectedGroupingType = getGroupingTypeForValidation(
       validationType,
       store,
       graphs.metaGraph
