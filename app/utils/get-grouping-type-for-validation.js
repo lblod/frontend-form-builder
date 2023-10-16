@@ -1,4 +1,4 @@
-import { Literal } from 'rdflib';
+import { isLiteral } from 'rdflib';
 import { FORM } from './rdflib';
 
 export function getGroupingTypeLiteralForValidation(
@@ -14,7 +14,15 @@ export function getGroupingTypeLiteralForValidation(
   );
 
   if (!groupingType) {
-    return new Literal('Bag', 'en');
+    return FORM('Bag');
+  }
+
+  return getNamedNodeGroupingType(groupingType);
+}
+
+function getNamedNodeGroupingType(groupingType) {
+  if (isLiteral(groupingType)) {
+    return FORM(groupingType.value);
   }
 
   return groupingType;
