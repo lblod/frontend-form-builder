@@ -2,14 +2,15 @@
 @prefix skos:	<http://www.w3.org/2004/02/skos/core#> .
 @prefix form: <http://lblod.data.gift/vocabularies/forms/> .
 @prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
-@prefix ns3:	<http://mu.semte.ch/vocabularies/core/> .
 @prefix con:	<http://lblod.data.gift/concept-schemes/> .
 @prefix ext:	<http://mu.semte.ch/vocabularies/ext/> .
 @prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix ns6:	<http://lblod.data.gift/concepts/> .
 
+#######################
+#  Basic validations  #
+#######################
 form:RequiredConstraint
-	rdf:type	rdfs:Class, skos:Concept ;
+	rdf:type rdfs:Class, skos:Concept ;
 	skos:inScheme	con:possibleValidations ;
 	ext:validationName	"RequiredConstraint"@en ;
 	skos:prefLabel	"Required"@en ;
@@ -17,7 +18,7 @@ form:RequiredConstraint
 	sh:resultMessage	"Dit veld is verplicht."@nl .
 
 form:MaxLength
-	rdf:type	rdfs:Class, skos:Concept ;
+	rdf:type rdfs:Class, skos:Concept ;
 	skos:inScheme	con:possibleValidations ;
 	ext:validationName	"MaxLength"@en ;
 	skos:prefLabel	"Max length"@en ;
@@ -25,105 +26,110 @@ form:MaxLength
 	sh:resultMessage	"Max. karakters overschreden."@nl ;
 	form:max	"100" .
 
-#
-# All validations below are not added to a field and need to have a name update like the two above
-#
-ns6:b06cd462-ea9e-4273-9e7a-6d5b93a43f5f	rdf:type	skos:Concept ,
-		rdfs:Class ;
-	ns3:uuid	"b06cd462-ea9e-4273-9e7a-6d5b93a43f5f" ;
+form:PositiveNumber
+	rdf:type rdfs:Class, skos:Concept ;
 	skos:inScheme	con:possibleValidations ;
-	skos:prefLabel	"Codelist"@en ;
-	ext:validationName	"Codelist"@en ;
-	form:grouping	"MatchEvery"@en ;
-	sh:resultMessage	"Selecteer een waarde uit de lijst."@nl ;
-	ext:customParameter	"conceptScheme"@en .
-<http://lblod.data.gift/concepts/3555ddd7-2565-4700-957d-719e84f5b002>	rdf:type	skos:Concept ,
-		rdfs:Class ;
-	ns3:uuid	"3555ddd7-2565-4700-957d-719e84f5b002" ;
-	skos:inScheme	con:possibleValidations ;
-	skos:prefLabel	"Exact value"@en ;
-	ext:validationName	"ExactValueConstraint"@en ;
-	form:grouping	"MatchSome"@en ;
-	ext:customParameter	"customValue"@en .
-<http://lblod.data.gift/concepts/0bded4ae-c4dd-42ee-a9b0-f2232f48b2e8>	rdf:type	skos:Concept ,
-		rdfs:Class ;
-	ns3:uuid	"0bded4ae-c4dd-42ee-a9b0-f2232f48b2e8" ;
-	skos:inScheme	con:possibleValidations ;
-	skos:prefLabel	"Uri"@en ;
-	ext:validationName	"UriConstraint"@en ;
-	form:grouping	"MatchEvery"@en ;
-	sh:resultMessage	"Gelieve een geldige URL op te geven. Zorg dat vooraan in de link altijd http://, https://, ftp:// of sftp:// staat."@nl .
-<http://lblod.data.gift/concepts/4a1eb2d0-22d7-4a66-a8ca-fb54e3cfda37>	rdf:type	skos:Concept ,
-		rdfs:Class ;
-	ns3:uuid	"4a1eb2d0-22d7-4a66-a8ca-fb54e3cfda37" ;
-	skos:inScheme	con:possibleValidations ;
-	skos:prefLabel	"Valid date"@en ;
-	ext:validationName	"ValidDate"@en ;
-	form:grouping	"MatchEvery"@en ;
-	sh:resultMessage	"Geef een geldige datum op."@nl .
-<http://lblod.data.gift/concepts/3630e744-760a-494f-95aa-130c09649af6>	rdf:type	skos:Concept ,
-		rdfs:Class ;
-	ns3:uuid	"3630e744-760a-494f-95aa-130c09649af6" ;
-	skos:inScheme	con:possibleValidations ;
-	skos:prefLabel	"Valid date time"@en ;
-	ext:validationName	"ValidDateTime"@en ;
-	form:grouping	"MatchEvery"@en ;
-	sh:resultMessage	"Geef een geldige datum en tijd op."@nl .
-ns6:d19cf942-98be-4369-a883-b607d3330c5f	rdf:type	rdfs:Class ,
-		skos:Concept ;
-	ns3:uuid	"d19cf942-98be-4369-a883-b607d3330c5f" ;
-	skos:inScheme	con:possibleValidations ;
-	skos:prefLabel	"Valid integer"@en ;
-	ext:validationName	"ValidInteger"@en ;
-	form:grouping	"MatchEvery"@en ;
-	sh:resultMessage	"Aantal moet een een geheel getal zijn."@nl .
-<http://lblod.data.gift/concepts/50edc60f-3df1-4d49-b5e1-d86b65e8f8ec>	rdf:type	rdfs:Class ,
-		skos:Concept ;
-	ns3:uuid	"50edc60f-3df1-4d49-b5e1-d86b65e8f8ec" ;
-	skos:inScheme	con:possibleValidations ;
-	skos:prefLabel	"Positive number"@en ;
 	ext:validationName	"PositiveNumber"@en ;
-	form:grouping	"MatchEvery"@en ;
+	skos:prefLabel	"Positive number"@en ;
+	form:grouping	form:MatchEvery ;
 	sh:resultMessage	"Geef een positief aantal op."@nl .
-<http://lblod.data.gift/concepts/2bf94470-a6d8-40c2-8295-707cc0922f1b>	rdf:type	rdfs:Class ,
-		skos:Concept ;
-	ns3:uuid	"2bf94470-a6d8-40c2-8295-707cc0922f1b" ;
+
+form:ExactValueConstraint	
+	rdf:type rdfs:Class, skos:Concept ;
 	skos:inScheme	con:possibleValidations ;
-	skos:prefLabel	"Concept scheme"@en ;
-	ext:validationName	"ConceptSchemeConstraint"@en ;
-	form:grouping	"Bag"@en ;
-	sh:resultMessage	"Selecteer een waarde uit de lijst."@nl ;
-	ext:customParameter	"conceptScheme"@en .
-ns6:c09902d3-9421-49e9-a2e6-d3ac42abbca2	rdf:type	rdfs:Class ,
-		skos:Concept ;
-	ns3:uuid	"c09902d3-9421-49e9-a2e6-d3ac42abbca2" ;
+	ext:validationName	"ExactValueConstraint"@en ;
+	skos:prefLabel	"Exact value"@en ;
+	form:grouping	form:MatchSome ;
+	ext:customParameter	"customValue"@en .
+
+form:ValidInteger
+	rdf:type rdfs:Class, skos:Concept ;
 	skos:inScheme	con:possibleValidations ;
-	skos:prefLabel	"Valid year"@en ;
+	ext:validationName	"ValidInteger"@en ;
+	skos:prefLabel	"Valid integer"@en ;
+	form:grouping	form:MatchEvery ;
+	sh:resultMessage	"Aantal moet een een geheel getal zijn."@nl .
+
+#################
+#  Date & time  #
+################
+form:ValidDateTime
+	rdf:type rdfs:Class, skos:Concept ;
+	skos:inScheme	con:possibleValidations ;
+	ext:validationName	"ValidDateTime"@en ;
+	skos:prefLabel	"Valid date time"@en ;
+	form:grouping	form:MatchEvery ;
+	sh:resultMessage	"Geef een geldige datum en tijd op."@nl .
+
+form:ValidDate
+	rdf:type rdfs:Class, skos:Concept ;
+	skos:inScheme	con:possibleValidations ;
+	ext:validationName	"ValidDate"@en ;
+	skos:prefLabel	"Valid date"@en ;
+	form:grouping	form:MatchEvery ;
+	sh:resultMessage	"Geef een geldige datum op."@nl .
+
+form:ValidYear
+	rdf:type rdfs:Class, skos:Concept ;
+	skos:inScheme	con:possibleValidations ;
 	ext:validationName	"ValidYear"@en ;
-	form:grouping	"MatchEvery"@en ;
+	skos:prefLabel	"Valid year"@en ;
+	form:grouping	form:MatchEvery ;
 	sh:resultMessage	"Geef een geldig jaar op."@nl .
-<http://lblod.data.gift/concepts/82d71dd7-8be2-4886-acb0-5d04a31c53e9>	rdf:type	rdfs:Class ,
-		skos:Concept ;
-	ns3:uuid	"82d71dd7-8be2-4886-acb0-5d04a31c53e9" ;
+
+##############
+#  Specials  #
+#############
+form:ValidEmail
+	rdf:type rdfs:Class, skos:Concept ;
 	skos:inScheme	con:possibleValidations ;
-	skos:prefLabel	"Valid email"@en ;
 	ext:validationName	"ValidEmail"@en ;
-	form:grouping	"MatchEvery"@en ;
+	skos:prefLabel	"Valid email"@en ;
+	form:grouping	form:MatchEvery ;
 	sh:resultMessage	"Geef een geldig e-mailadres op."@nl .
-<http://lblod.data.gift/concepts/26a91f04-58af-480f-b25f-19c48432a0a3>	rdf:type	rdfs:Class ,
-		skos:Concept ;
-	ns3:uuid	"26a91f04-58af-480f-b25f-19c48432a0a3" ;
+
+form:ValidPhoneNumber	
+	rdf:type rdfs:Class, skos:Concept ;
 	skos:inScheme	con:possibleValidations ;
-	skos:prefLabel	"Valid IBAN"@en ;
-	ext:validationName	"ValidIBAN"@en ;
-	form:grouping	"MatchEvery"@en ;
-	sh:resultMessage	"Geef een geldig IBAN op."@nl .
-<http://lblod.data.gift/concepts/1bc4475c-7df0-46e7-9ede-a91a9bd93bd4>	rdf:type	skos:Concept ,
-		rdfs:Class ;
-	ns3:uuid	"1bc4475c-7df0-46e7-9ede-a91a9bd93bd4" ;
-	skos:inScheme	con:possibleValidations ;
-	skos:prefLabel	"Valid phone number"@en ;
 	ext:validationName	"ValidPhoneNumber"@en ;
-	form:grouping	"MatchEvery"@en ;
+	skos:prefLabel	"Valid phone number"@en ;
+	form:grouping	form:MatchEvery ;
 	sh:resultMessage	"Geef een geldig telefoonnummer in."@nl ;
 	ext:customParameter	"defaultCountry"@en .
+
+form:ValidIBAN
+	rdf:type rdfs:Class, skos:Concept ;
+	skos:inScheme	con:possibleValidations ;
+	ext:validationName	"ValidIBAN"@en ;
+	skos:prefLabel	"Valid IBAN"@en ;
+	form:grouping	form:MatchEvery ;
+	sh:resultMessage	"Geef een geldig IBAN op."@nl .
+
+###########
+#  URI's  #
+##########
+form:ConceptSchemeConstraint
+	rdf:type rdfs:Class, skos:Concept ;
+	skos:inScheme	con:possibleValidations ;
+	ext:validationName	"ConceptSchemeConstraint"@en ;
+	skos:prefLabel	"Concept scheme"@en ;
+	form:grouping	form:Bag ;
+	sh:resultMessage	"Selecteer een waarde uit de lijst."@nl ;
+	ext:customParameter	"conceptScheme"@en .
+
+form:UriConstraint 
+	rdf:type rdfs:Class, skos:Concept ;
+	skos:inScheme	con:possibleValidations ;
+	ext:validationName	"UriConstraint"@en ;
+	skos:prefLabel	"Uri"@en ;
+	form:grouping	form:MatchEvery ;
+	sh:resultMessage	"Gelieve een geldige URL op te geven. Zorg dat vooraan in de link altijd http://, https://, ftp:// of sftp:// staat."@nl .
+
+form:Codelist 
+	rdf:type rdfs:Class, skos:Concept ;
+	skos:inScheme	con:possibleValidations ;
+	ext:validationName	"Codelist"@en ;
+	skos:prefLabel	"Codelist"@en ;
+	form:grouping	form:MatchEvery ;
+	sh:resultMessage	"Selecteer een waarde uit de lijst."@nl ;
+	ext:customParameter	"conceptScheme"@en .
