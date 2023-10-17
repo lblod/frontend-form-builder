@@ -128,8 +128,8 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
   }
 
   @action
-  updateSelection(option) {
-    this.selected = option;
+  updateSelection(validationTypeOption) {
+    this.selected = validationTypeOption;
 
     if (this.isSelectedValidationAlreadyOnField(this.selected)) {
       showErrorToasterMessage(
@@ -147,27 +147,21 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
       this.storeOptions.sourceGraph
     );
 
-    if (option) {
+    if (validationTypeOption) {
       const groupingType = getGroupingTypeForValidation(
         this.selected.subject,
         this.storeOptions.store,
         this.storeOptions.metaGraph
       );
 
-      this.storeOptions.store.addAll([
-        new Statement(
-          this.storeOptions.sourceNode,
-          FORM('grouping'),
-          groupingType,
-          this.storeOptions.sourceGraph
-        ),
-        new Statement(
-          this.storeOptions.sourceNode,
-          RDF('type'),
-          option.subject,
-          this.storeOptions.sourceGraph
-        ),
-      ]);
+      const statements = this.createStatementForRdfTypeAndGrouping(
+        this.storeOptions.sourceNode,
+        validationTypeOption.subject,
+        groupingType,
+        this.storeOptions.sourceGraph
+      );
+
+      this.storeOptions.store.addAll(statements);
     }
 
     this.hasBeenFocused = true;
