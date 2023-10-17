@@ -1,11 +1,11 @@
 {{page-title "Formbuilder"}}
 
 <Toolbar
-  @model={{this.model}}
-  @code={{this.code}}
+  @model={{this.model.generatedForm}}
+  @code={{this.formCode}}
   @setActiveTab={{this.setActiveTab}}
   @formChanged={{this.formChanged}}
-  @refresh={{this.refresh}}
+  @onCodeChange={{this.handleCodeChange}}
   @setFormChanged={{this.setFormChanged}}
 />
 
@@ -14,8 +14,8 @@
     <div class="playground-tab">
       Builder
       <AuToggleSwitch
-        @disabled={{this.refresh.isRunning}}
-        @checked={{this.isAddingValidationToForm}}
+        @disabled={{or this.setupBuilderForm.isRunning this.setupPreviewForm.isRunning}}
+        @checked={{not this.isShowBuilder}}
         @onChange={{this.toggleIsAddingValidationToForm}}
       >Validation</AuToggleSwitch>
     </div>
@@ -26,7 +26,7 @@
             @scroll={{true}}
             class="au-o-box au-u-margin-bottom-large"
           >
-            {{#if (and this.isInitialDataLoaded this.builderStore)}}
+            {{#if this.setupBuilderForm.isIdle}}
               <RdfForm
                 @groupClass="au-o-grid__item"
                 @form={{this.builderForm}}
@@ -44,7 +44,7 @@
       {{else}}
         <AuBodyContainer @scroll={{true}} class="au-o-box">
           <AddValidationsToForm
-            @builderTtlCode={{this.code}}
+            @builderTtlCode={{this.formCode}}
             @sourceNode={{this.sourceNode}}
             @onUpdateValidations={{this.refreshWithTheValidationFormTtlCode}}
           />
@@ -52,7 +52,7 @@
       {{/if}}
       <div class="playground__show">
         <div class="au-u-margin-top-small">
-          {{#if this.refresh.isRunning}}
+          {{#if this.setupPreviewForm.isRunning}}
             <AuLoader />
           {{else}}
             <RdfForm

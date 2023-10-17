@@ -2,12 +2,12 @@ import Controller from '@ember/controller';
 
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { task, timeout } from 'ember-concurrency';
+import { restartableTask, timeout } from 'ember-concurrency';
 import { inject as service } from '@ember/service';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { sym as RDFNode } from 'rdflib';
 import { FORM, RDF } from '../../utils/rdflib';
-import { getLocalFileContentAsText } from '../../utils/get-local-file-content';
+import basicFormTemplate from '../../utils/basic-form-template';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
@@ -18,10 +18,9 @@ export const GRAPHS = {
 const SOURCE_NODE = new RDFNode('http://frontend.poc.form.builder/sourcenode');
 
 export default class FormbuilderEditController extends Controller {
-  @service('meta-data-extractor') meta;
   @service store;
 
-  @tracked code;
+  @tracked formCode;
 
   @tracked previewStore;
   @tracked previewForm;
@@ -30,8 +29,6 @@ export default class FormbuilderEditController extends Controller {
   @tracked builderForm;
 
   @tracked formChanged = false;
-  @tracked isInitialDataLoaded = false;
-
   @tracked isShowBuilder = true;
 
   graphs = GRAPHS;
@@ -40,65 +37,44 @@ export default class FormbuilderEditController extends Controller {
   @action
   async toggleIsAddingValidationToForm() {
     this.isShowBuilder = !this.isShowBuilder;
-    const isFormChangedSavedState = this.formChanged;
-    if (this.isShowBuilder) {
-      await this.refresh.perform({
-        formTtlCode: this.code,
-        resetBuilder: false,
-        isInitialRouteCall: true,
-      });
 
-      this.setFormChanged(isFormChangedSavedState);
+    if (this.isShowBuilder) {
+      this.setupBuilderForm.perform();
     } else {
       this.deregisterFromObservable();
     }
   }
 
   @action
-  async refreshWithTheValidationFormTtlCode(validationTtlCode) {
-    await this.refresh.perform({
-      formTtlCode: validationTtlCode,
-      resetBuilder: false,
-      isInitialRouteCall: false,
-    });
-    this.setFormChanged(true);
+  refreshWithTheValidationFormTtlCode(validationTtlCode) {
+    this.formChanged = true;
+    this.formCode = validationTtlCode;
+    this.setupPreviewForm.perform();
   }
 
-  @task({ restartable: true })
-  *refresh({ formTtlCode, resetBuilder, isInitialRouteCall = false }) {
-    this.isInitialDataLoaded = !isInitialRouteCall;
-    isInitialRouteCall ? null : yield timeout(500);
+  setupForms() {
+    this.setupBuilderForm.perform();
+    this.setupPreviewForm.perform();
+  }
 
-    if (formTtlCode) {
-      this.code = formTtlCode;
-    }
+  setupBuilderForm = restartableTask(async () => {
+    // force a component recreation by unrendering it very briefly
+    // Ideally the RdfForm component would do the right thing when the formStore
+    // and form arguments change, but we're not there yet.
+    await timeout(1);
 
-    if (resetBuilder) {
-      this.formChanged = true;
-      this.deregisterFromObservable();
-      this.builderStore = '';
-    }
+    this.deregisterFromObservable();
 
-    this.previewStore = new ForkingStore();
-    this.previewStore.parse(this.code, GRAPHS.formGraph.value, 'text/turtle');
-
-    const meta = yield this.meta.extract(this.previewStore, { graphs: GRAPHS });
-    this.previewStore.parse(meta, GRAPHS.metaGraph.value, 'text/turtle');
-
-    this.previewForm = this.previewStore.any(
-      undefined,
-      RDF('type'),
-      FORM('Form'),
-      GRAPHS.formGraph
-    );
-
-    const formTtl = yield getLocalFileContentAsText('/forms/builder/form.ttl');
-    const metaTtl = yield getLocalFileContentAsText('/forms/builder/meta.ttl');
+    const { formTtl, metaTtl } = this.model;
 
     this.builderStore = new ForkingStore();
     this.builderStore.parse(formTtl, GRAPHS.formGraph.value, 'text/turtle');
     this.builderStore.parse(metaTtl, GRAPHS.metaGraph.value, 'text/turtle');
-    this.builderStore.parse(this.code, GRAPHS.sourceGraph.value, 'text/turtle');
+    this.builderStore.parse(
+      this.formCode,
+      GRAPHS.sourceGraph.value,
+      'text/turtle'
+    );
 
     this.builderForm = this.builderStore.any(
       undefined,
@@ -108,17 +84,30 @@ export default class FormbuilderEditController extends Controller {
     );
 
     this.builderStore.registerObserver(() => {
-      this.serializeSourceToTtl();
+      this.handleBuilderFormChange.perform();
     });
+  });
 
-    if (isInitialRouteCall) {
-      this.setFormChanged(false);
-      this.isAddingValidationToForm = false;
-      this.isShowBuilder = true;
-    }
+  setupPreviewForm = restartableTask(async () => {
+    // force a component recreation by unrendering it very briefly
+    // Ideally the RdfForm component would do the right thing when the formStore
+    // and form arguments change, but we're not there yet.
+    await timeout(1);
 
-    this.isInitialDataLoaded = true;
-  }
+    this.previewStore = new ForkingStore();
+    this.previewStore.parse(
+      this.formCode,
+      GRAPHS.formGraph.value,
+      'text/turtle'
+    );
+
+    this.previewForm = this.previewStore.any(
+      undefined,
+      RDF('type'),
+      FORM('Form'),
+      GRAPHS.formGraph
+    );
+  });
 
   @action
   setFormChanged(value) {
@@ -126,18 +115,46 @@ export default class FormbuilderEditController extends Controller {
   }
 
   @action
-  serializeSourceToTtl() {
+  async handleCodeChange(newCode) {
     this.formChanged = true;
+    this.formCode = newCode;
+    this.setupForms();
+  }
+
+  handleBuilderFormChange = restartableTask(async () => {
+    await timeout(1); // small timeout to group multiple store observer callbacks together
+    this.formChanged = true;
+
     const sourceTtl = this.builderStore.serializeDataMergedGraph(
       GRAPHS.sourceGraph
     );
 
-    this.refresh.perform({ formTtlCode: sourceTtl });
-  }
+    this.formCode = sourceTtl;
+    this.setupPreviewForm.perform();
+  });
 
   deregisterFromObservable() {
     if (this.builderStore instanceof ForkingStore) {
       this.builderStore.clearObservers();
     }
+  }
+
+  setup(model) {
+    this.formCode = this.getFormTtlCode(model.generatedForm);
+    this.setupForms();
+  }
+
+  reset() {
+    this.deregisterFromObservable();
+    this.formChanged = false;
+    this.isShowBuilder = true;
+  }
+
+  getFormTtlCode(generatedForm) {
+    if (!generatedForm.ttlCode || generatedForm.ttlCode == '') {
+      return basicFormTemplate;
+    }
+
+    return generatedForm.ttlCode;
   }
 }

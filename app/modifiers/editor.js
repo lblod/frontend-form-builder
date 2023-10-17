@@ -36,15 +36,15 @@ function simpleLinter() {
 }
 
 export default modifier(
-  function editor(parent, [value, refresh]) {
+  function editor(parent, [code, onCodeChangeHandler]) {
     const extensions = [basicSetup, turtle(), simpleLinter(), lintGutter()];
-    const doc = value || '';
+    const doc = code || '';
 
     const updateListener = EditorView.updateListener.of((viewUpdate) => {
       if (viewUpdate.docChanged) {
         const doc = viewUpdate.state.doc;
-        const value = doc.toString();
-        refresh.perform({ formTtlCode: value, resetBuilder: true });
+        const newCode = doc.toString();
+        onCodeChangeHandler(newCode);
       }
     });
 

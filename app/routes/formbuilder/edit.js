@@ -1,9 +1,9 @@
 import Route from '@ember/routing/route';
-import template from '../../utils/basic-form-template';
 import { inject as service } from '@ember/service';
 import { registerFormFields } from '@lblod/ember-submission-form-fields';
 import PropertyGroupSelector from '../../components/rdf-form-fields/property-group-selector';
 import ValidationConceptSchemeSelectorComponent from '../../components/rdf-form-fields/validation-concept-scheme-selector';
+import { getLocalFileContentAsText } from '../../utils/get-local-file-content';
 
 export default class FormbuilderEditRoute extends Route {
   @service store;
@@ -14,20 +14,27 @@ export default class FormbuilderEditRoute extends Route {
   }
 
   async model(params) {
-    return await this.getGeneratedFormById(params.id);
+    const [generatedForm, formTtl, metaTtl] = await Promise.all([
+      this.getGeneratedFormById(params.id),
+      getLocalFileContentAsText('/forms/builder/form.ttl'),
+      getLocalFileContentAsText('/forms/builder/meta.ttl'),
+    ]);
+
+    return {
+      generatedForm,
+      formTtl,
+      metaTtl,
+    };
   }
 
   setupController(controller, model) {
     super.setupController(...arguments);
-    controller.refresh.perform({
-      formTtlCode: this.getFormTtlCode(model),
-      resetBuilder: false,
-      isInitialRouteCall: true,
-    });
+
+    controller.setup(model);
   }
 
   resetController(controller) {
-    controller.deregisterFromObservable();
+    controller.reset();
   }
 
   async getGeneratedFormById(generatedFormId) {
@@ -56,13 +63,5 @@ export default class FormbuilderEditRoute extends Route {
         edit: ValidationConceptSchemeSelectorComponent,
       },
     ]);
-  }
-
-  getFormTtlCode(model) {
-    if (!model.ttlCode || model.ttlCode == '') {
-      return template;
-    }
-
-    return model.ttlCode;
   }
 }
