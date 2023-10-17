@@ -16,6 +16,7 @@ import {
   getNodeValidationTriples,
   getTriplesWithNodeAsSubject,
   getValidationSubjectsOnNode,
+  isForkingStore,
 } from '../utils/forking-store-helpers';
 import { showErrorToasterMessage } from '../utils/toaster-message-helper';
 import { getFieldsInStore } from '../utils/get-triples-per-field-in-store';
@@ -238,7 +239,9 @@ export default class AddValidationsToFormComponent extends Component {
 
   deregisterFromObservableForStoresWithForm(storesWithForm) {
     for (const storeWithForm of storesWithForm) {
-      storeWithForm.store.clearObservers();
+      if (isForkingStore(storeWithForm.store)) {
+        storeWithForm.store.clearObservers();
+      }
     }
   }
 

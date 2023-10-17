@@ -85,7 +85,6 @@ ext:validationsFG a form:FieldGroup ;
 fields:validatonSelectorF a form:Field ;
   sh:name "Validation type" ;
   sh:order 2 ;
-  sh:path rdf:type ;
   form:help """
    """;
   form:validations 
@@ -104,9 +103,7 @@ fields:validatonSelectorF a form:Field ;
 ##########################################################
 ext:addValidationGenerator a form:Generator ;
   form:prototype [
-    form:shape [
-      form:grouping "Bag"@en
-    ]
+    form:shape []
   ] .
 
 ##########################################################

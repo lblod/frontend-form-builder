@@ -1,4 +1,9 @@
 import { FORM, RDF } from './rdflib';
+import { ForkingStore } from '@lblod/ember-submission-form-fields';
+
+export function isForkingStore(store) {
+  return store instanceof ForkingStore;
+}
 
 export function getTriplesWithNodeAsSubject(node, store, graph) {
   return store.match(node, undefined, undefined, graph);
@@ -28,4 +33,8 @@ export function getDisplayTypeOfNode(node, store, graph) {
 
 export function getRdfTypeOfNode(node, store, graph) {
   return store.any(node, RDF('type'), undefined, graph);
+}
+
+export function getGroupingTypeOfNode(node, store, graph) {
+  return store.any(node, FORM('grouping'), undefined, graph);
 }

@@ -14,7 +14,7 @@ form:RequiredConstraint
 	skos:inScheme	con:possibleValidations ;
 	ext:validationName	"RequiredConstraint"@en ;
 	skos:prefLabel	"Required"@en ;
-	form:grouping	"Bag"@en ;
+	form:grouping	form:Bag ;
 	sh:resultMessage	"Dit veld is verplicht."@nl .
 
 form:MaxLength
@@ -22,7 +22,7 @@ form:MaxLength
 	skos:inScheme	con:possibleValidations ;
 	ext:validationName	"MaxLength"@en ;
 	skos:prefLabel	"Max length"@en ;
-	form:grouping	"MatchEvery"@en ;
+	form:grouping	form:MatchEvery ;
 	sh:resultMessage	"Max. karakters overschreden."@nl ;
 	form:max	"100" .
 

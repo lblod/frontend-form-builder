@@ -3,22 +3,21 @@ import { guidFor } from '@ember/object/internals';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
-import {
-  SKOS,
-  triplesForPath,
-  updateSimpleFormValue,
-} from '@lblod/submission-form-helpers';
-import { namedNode } from 'rdflib';
+import { SKOS } from '@lblod/submission-form-helpers';
+import { Statement, namedNode } from 'rdflib';
 import {
   getFirstFieldSubject,
   getPossibleValidationsForDisplayType,
 } from '../../utils/validation-helpers';
 import {
   getDisplayTypeOfNode,
+  getGroupingTypeOfNode,
   getRdfTypeOfNode,
   getValidationSubjectsOnNode,
 } from '../../utils/forking-store-helpers';
 import { showErrorToasterMessage } from '../../utils/toaster-message-helper';
+import { FORM, RDF } from '../../utils/rdflib';
+import { getGroupingTypeForValidation } from '../../utils/get-grouping-type-for-validation';
 
 function byLabel(a, b) {
   const textA = a.label.toUpperCase();
@@ -29,23 +28,31 @@ function byLabel(a, b) {
 export default class ValidationConceptSchemeSelectorComponent extends InputFieldComponent {
   inputId = 'select-' + guidFor(this);
 
-  @tracked selected = null;
-  @tracked options = [];
+  @tracked selectedValidationType = null;
+  @tracked validationTypeOptions = [];
   @tracked searchEnabled = true;
 
   @service toaster;
 
+  fieldSubject;
+
   constructor() {
     super(...arguments);
-    this.loadOptions();
-    this.loadProvidedValue();
+    this.loadValidationTypes();
+    this.loadProvidedValidationType();
   }
 
-  loadOptions() {
-    const fieldSubject = getFirstFieldSubject(this.args.formStore);
+  getFieldSubject() {
+    if (!this.fieldSubject) {
+      this.fieldSubject = getFirstFieldSubject(this.args.formStore);
+    }
 
+    return this.fieldSubject;
+  }
+
+  loadValidationTypes() {
     const fieldDisplayType = getDisplayTypeOfNode(
-      fieldSubject,
+      this.getFieldSubject(),
       this.args.formStore,
       this.args.graphs.sourceBuilderGraph
     );
@@ -75,43 +82,44 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
         return { subject: t.subject, label: label && label.value };
       });
 
-    this.options = allOptions.filter((option) => {
+    this.validationTypeOptions = allOptions.filter((option) => {
       return conceptOptions
         .map((concept) => concept.value)
         .includes(option.subject.value);
     });
-    this.options.sort(byLabel);
+    this.validationTypeOptions.sort(byLabel);
   }
 
-  loadProvidedValue() {
+  loadProvidedValidationType() {
     if (this.isValid) {
-      // Assumes valid input
-      // This means even though we can have multiple values for one path (e.g. rdf:type)
-      // this selector will only accept one value, and we take the first value from the matches.
-      // The validation makes sure the matching value is the sole one.
-      const matches = triplesForPath(this.storeOptions, true).values;
-      this.selected = this.options.find((opt) =>
-        matches.find((m) => m.equals(opt.subject))
+      const assignedRdfTypeOnSourceNode = getRdfTypeOfNode(
+        this.storeOptions.sourceNode,
+        this.storeOptions.store,
+        this.storeOptions.sourceGraph
       );
+      if (assignedRdfTypeOnSourceNode) {
+        this.selectedValidationType = this.validationTypeOptions.find(
+          (option) => option.subject.value == assignedRdfTypeOnSourceNode.value
+        );
+      }
     }
   }
 
   isSelectedValidationAlreadyOnField(selectedOption) {
-    const fieldSubject = getFirstFieldSubject(this.args.formStore);
     const validationNodes = getValidationSubjectsOnNode(
-      fieldSubject,
+      this.getFieldSubject(),
       this.args.formStore,
       this.args.graphs.sourceGraph
     );
 
     for (const validationNode of validationNodes) {
-      const type = getRdfTypeOfNode(
+      const validationType = getRdfTypeOfNode(
         validationNode,
         this.args.formStore,
         this.args.graphs.sourceGraph
       );
 
-      if (type.value == selectedOption.subject.value) {
+      if (validationType.value == selectedOption.subject.value) {
         return true;
       }
     }
@@ -120,34 +128,71 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
   }
 
   @action
-  updateSelection(option) {
-    this.selected = option;
+  updateValidationTypeAndGrouping(validationTypeOption) {
+    this.selectedValidationType = validationTypeOption;
 
-    if (this.isSelectedValidationAlreadyOnField(this.selected)) {
+    if (this.isSelectedValidationAlreadyOnField(this.selectedValidationType)) {
       showErrorToasterMessage(
         this.toaster,
-        `Validatie "${this.selected.label}" is duplicaat.`
+        `Validatie "${this.selectedValidationType.label}" is duplicaat.`
       );
-      this.selected = null;
+      this.selectedValidationType = null;
 
       return;
     }
 
-    // Cleanup old value(s) in the store
-    const matches = triplesForPath(this.storeOptions, true).values;
-    const matchingOptions = matches.filter((m) =>
-      this.options.find((opt) => m.equals(opt.subject))
-    );
-    matchingOptions.forEach((m) =>
-      updateSimpleFormValue(this.storeOptions, undefined, m)
+    this.removeValidationTypeAndGroupingFromGraph(
+      this.storeOptions.sourceNode,
+      this.storeOptions.store,
+      this.storeOptions.sourceGraph
     );
 
-    // Insert new value in the store
-    if (option) {
-      updateSimpleFormValue(this.storeOptions, option.subject);
+    if (validationTypeOption) {
+      const groupingType = getGroupingTypeForValidation(
+        this.selectedValidationType.subject,
+        this.storeOptions.store,
+        this.storeOptions.metaGraph
+      );
+
+      const statements = this.createStatementForRdfTypeAndGrouping(
+        this.storeOptions.sourceNode,
+        validationTypeOption.subject,
+        groupingType,
+        this.storeOptions.sourceGraph
+      );
+
+      this.storeOptions.store.addAll(statements);
     }
 
     this.hasBeenFocused = true;
     super.updateValidations();
+  }
+
+  removeValidationTypeAndGroupingFromGraph(sourceNode, store, graph) {
+    const rdfType = getRdfTypeOfNode(sourceNode, store, graph);
+    const groupingType = getGroupingTypeOfNode(sourceNode, store, graph);
+
+    const statements = this.createStatementForRdfTypeAndGrouping(
+      sourceNode,
+      rdfType,
+      groupingType,
+      graph
+    );
+
+    if (rdfType && groupingType) {
+      store.removeStatements(statements);
+    }
+  }
+
+  createStatementForRdfTypeAndGrouping(
+    sourceNode,
+    rdfType,
+    groupingType,
+    graph
+  ) {
+    return [
+      new Statement(sourceNode, RDF('type'), rdfType, graph),
+      new Statement(sourceNode, FORM('grouping'), groupingType, graph),
+    ];
   }
 }
