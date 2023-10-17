@@ -37,17 +37,25 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
 
   @service toaster;
 
+  fieldSubject;
+
   constructor() {
     super(...arguments);
     this.loadOptions();
     this.loadProvidedValue();
   }
 
-  loadOptions() {
-    const fieldSubject = getFirstFieldSubject(this.args.formStore);
+  getFieldSubject() {
+    if (!this.fieldSubject) {
+      this.fieldSubject = getFirstFieldSubject(this.args.formStore);
+    }
 
+    return this.fieldSubject;
+  }
+
+  loadOptions() {
     const fieldDisplayType = getDisplayTypeOfNode(
-      fieldSubject,
+      this.getFieldSubject(),
       this.args.formStore,
       this.args.graphs.sourceBuilderGraph
     );
@@ -99,9 +107,8 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
   }
 
   isSelectedValidationAlreadyOnField(selectedOption) {
-    const fieldSubject = getFirstFieldSubject(this.args.formStore);
     const validationNodes = getValidationSubjectsOnNode(
-      fieldSubject,
+      this.getFieldSubject(),
       this.args.formStore,
       this.args.graphs.sourceGraph
     );
