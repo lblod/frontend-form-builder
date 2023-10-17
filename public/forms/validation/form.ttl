@@ -85,7 +85,7 @@ ext:validationsFG a form:FieldGroup ;
 fields:validatonSelectorF a form:Field ;
   sh:name "Validation type" ;
   sh:order 2 ;
-  sh:path rdf:type, form:grouping ;
+  sh:path rdf:type;
   form:help """
    """;
   form:validations 
