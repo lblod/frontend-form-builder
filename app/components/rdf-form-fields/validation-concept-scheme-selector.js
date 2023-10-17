@@ -28,8 +28,8 @@ function byLabel(a, b) {
 export default class ValidationConceptSchemeSelectorComponent extends InputFieldComponent {
   inputId = 'select-' + guidFor(this);
 
-  @tracked selected = null;
-  @tracked options = [];
+  @tracked selectedValidationType = null;
+  @tracked validationTypeOptions = [];
   @tracked searchEnabled = true;
 
   @service toaster;
@@ -38,8 +38,8 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
 
   constructor() {
     super(...arguments);
-    this.loadOptions();
-    this.loadProvidedValue();
+    this.loadValidationTypes();
+    this.loadProvidedValidationType();
   }
 
   getFieldSubject() {
@@ -50,7 +50,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     return this.fieldSubject;
   }
 
-  loadOptions() {
+  loadValidationTypes() {
     const fieldDisplayType = getDisplayTypeOfNode(
       this.getFieldSubject(),
       this.args.formStore,
@@ -82,15 +82,15 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
         return { subject: t.subject, label: label && label.value };
       });
 
-    this.options = allOptions.filter((option) => {
+    this.validationTypeOptions = allOptions.filter((option) => {
       return conceptOptions
         .map((concept) => concept.value)
         .includes(option.subject.value);
     });
-    this.options.sort(byLabel);
+    this.validationTypeOptions.sort(byLabel);
   }
 
-  loadProvidedValue() {
+  loadProvidedValidationType() {
     if (this.isValid) {
       const assignedRdfTypeOnSourceNode = getRdfTypeOfNode(
         this.storeOptions.sourceNode,
@@ -98,7 +98,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
         this.storeOptions.sourceGraph
       );
       if (assignedRdfTypeOnSourceNode) {
-        this.selected = this.options.find(
+        this.selectedValidationType = this.validationTypeOptions.find(
           (option) => option.subject.value == assignedRdfTypeOnSourceNode.value
         );
       }
@@ -113,13 +113,13 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     );
 
     for (const validationNode of validationNodes) {
-      const type = getRdfTypeOfNode(
+      const validationType = getRdfTypeOfNode(
         validationNode,
         this.args.formStore,
         this.args.graphs.sourceGraph
       );
 
-      if (type.value == selectedOption.subject.value) {
+      if (validationType.value == selectedOption.subject.value) {
         return true;
       }
     }
@@ -128,15 +128,15 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
   }
 
   @action
-  updateSelection(validationTypeOption) {
-    this.selected = validationTypeOption;
+  updateValidationTypeAndGrouping(validationTypeOption) {
+    this.selectedValidationType = validationTypeOption;
 
-    if (this.isSelectedValidationAlreadyOnField(this.selected)) {
+    if (this.isSelectedValidationAlreadyOnField(this.selectedValidationType)) {
       showErrorToasterMessage(
         this.toaster,
-        `Validatie "${this.selected.label}" is duplicaat.`
+        `Validatie "${this.selectedValidationType.label}" is duplicaat.`
       );
-      this.selected = null;
+      this.selectedValidationType = null;
 
       return;
     }
@@ -149,7 +149,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
 
     if (validationTypeOption) {
       const groupingType = getGroupingTypeForValidation(
-        this.selected.subject,
+        this.selectedValidationType.subject,
         this.storeOptions.store,
         this.storeOptions.metaGraph
       );

@@ -12,10 +12,10 @@
     @triggerId={{this.inputId}}
     @searchField="label"
     @searchEnabled={{this.searchEnabled}}
-    @selected={{this.selected}}
-    @options={{this.options}}
+    @selected={{this.selectedValidationType}}
+    @options={{this.validationTypeOptions}}
     @onClose={{fn (mut this.hasBeenFocused) true}}
-    @onChange={{this.updateSelection}}
+    @onChange={{this.updateValidationTypeAndGrouping}}
     @allowClear={{true}}
     @loadingMessage="Aan het laden..."
     @noMatchesMessage="Geen resultaten gevonden"
