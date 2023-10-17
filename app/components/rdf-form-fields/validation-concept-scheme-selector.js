@@ -3,11 +3,7 @@ import { guidFor } from '@ember/object/internals';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
-import {
-  SKOS,
-  triplesForPath,
-  updateSimpleFormValue,
-} from '@lblod/submission-form-helpers';
+import { SKOS } from '@lblod/submission-form-helpers';
 import { Statement, namedNode } from 'rdflib';
 import {
   getFirstFieldSubject,
@@ -15,6 +11,7 @@ import {
 } from '../../utils/validation-helpers';
 import {
   getDisplayTypeOfNode,
+  getGroupingTypeOfNode,
   getRdfTypeOfNode,
   getValidationSubjectsOnNode,
 } from '../../utils/forking-store-helpers';
@@ -144,16 +141,12 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
       return;
     }
 
-    // Cleanup old value(s) in the store
-    const matches = triplesForPath(this.storeOptions, true).values;
-    const matchingOptions = matches.filter((m) =>
-      this.options.find((opt) => m.equals(opt.subject))
-    );
-    matchingOptions.forEach((m) =>
-      updateSimpleFormValue(this.storeOptions, undefined, m)
+    this.removeValidationTypeAndGroupingFromGraph(
+      this.storeOptions.sourceNode,
+      this.storeOptions.store,
+      this.storeOptions.sourceGraph
     );
 
-    // Insert new value in the store
     if (option) {
       const groupingType = getGroupingTypeForValidation(
         this.selected.subject,
@@ -179,5 +172,33 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
 
     this.hasBeenFocused = true;
     super.updateValidations();
+  }
+
+  removeValidationTypeAndGroupingFromGraph(sourceNode, store, graph) {
+    const rdfType = getRdfTypeOfNode(sourceNode, store, graph);
+    const groupingType = getGroupingTypeOfNode(sourceNode, store, graph);
+
+    const statements = this.createStatementForRdfTypeAndGrouping(
+      sourceNode,
+      rdfType,
+      groupingType,
+      graph
+    );
+
+    if (rdfType && groupingType) {
+      store.removeStatements(statements);
+    }
+  }
+
+  createStatementForRdfTypeAndGrouping(
+    sourceNode,
+    rdfType,
+    groupingType,
+    graph
+  ) {
+    return [
+      new Statement(sourceNode, RDF('type'), rdfType, graph),
+      new Statement(sourceNode, FORM('grouping'), groupingType, graph),
+    ];
   }
 }

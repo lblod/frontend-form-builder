@@ -34,3 +34,7 @@ export function getDisplayTypeOfNode(node, store, graph) {
 export function getRdfTypeOfNode(node, store, graph) {
   return store.any(node, RDF('type'), undefined, graph);
 }
+
+export function getGroupingTypeOfNode(node, store, graph) {
+  return store.any(node, FORM('grouping'), undefined, graph);
+}
