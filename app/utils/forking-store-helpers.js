@@ -1,4 +1,4 @@
-import { FORM, RDF } from './rdflib';
+import { FORM, RDF, SH } from './rdflib';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 
 export function isForkingStore(store) {
@@ -37,4 +37,8 @@ export function getRdfTypeOfNode(node, store, graph) {
 
 export function getGroupingTypeOfNode(node, store, graph) {
   return store.any(node, FORM('grouping'), undefined, graph);
+}
+
+export function getFirstPathOfNode(node, store, graph) {
+  return store.any(node, SH('path'), undefined, graph);
 }

@@ -11,6 +11,7 @@ import {
 } from '../../utils/validation-helpers';
 import {
   getDisplayTypeOfNode,
+  getFirstPathOfNode,
   getGroupingTypeOfNode,
   getRdfTypeOfNode,
   getValidationSubjectsOnNode,
@@ -153,30 +154,26 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
         this.storeOptions.store,
         this.storeOptions.metaGraph
       );
-      const fieldPath = this.storeOptions.store.any(
-        this.getFieldSubject(),
-        SH('path'),
-        undefined,
-        this.storeOptions.sourceGraph
-      );
-      console.log({ fieldPath });
 
-      const statements = this.createStatementForRdfTypeAndGrouping(
-        this.storeOptions.sourceNode,
-        validationTypeOption.subject,
-        groupingType,
-        this.storeOptions.sourceGraph
-      );
-      statements.push(
-        new Statement(
+      const validationPathStatement =
+        this.createStatementThatConnectsPathsBetweenFieldAndValidation(
           this.storeOptions.sourceNode,
-          SH('path'),
-          fieldPath,
+          this.storeOptions.store,
           this.storeOptions.sourceGraph
-        )
-      );
+        );
 
-      this.storeOptions.store.addAll(statements);
+      const rdfTypeAndGroupingStatements =
+        this.createStatementForRdfTypeAndGrouping(
+          this.storeOptions.sourceNode,
+          validationTypeOption.subject,
+          groupingType,
+          this.storeOptions.sourceGraph
+        );
+
+      this.storeOptions.store.addAll([
+        validationPathStatement,
+        ...rdfTypeAndGroupingStatements,
+      ]);
     }
 
     this.hasBeenFocused = true;
@@ -209,5 +206,15 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
       new Statement(sourceNode, RDF('type'), rdfType, graph),
       new Statement(sourceNode, FORM('grouping'), groupingType, graph),
     ];
+  }
+
+  createStatementThatConnectsPathsBetweenFieldAndValidation(
+    validationSubject,
+    store,
+    graph
+  ) {
+    const fieldPath = getFirstPathOfNode(this.getFieldSubject(), store, graph);
+
+    return new Statement(validationSubject, SH('path'), fieldPath, graph);
   }
 }
