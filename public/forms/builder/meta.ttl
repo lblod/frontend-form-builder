@@ -5,18 +5,19 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix ext: <http://mu.semte.ch/vocabularies/ext/> .
 @prefix core: <http://mu.semte.ch/vocabularies/core/> .
+@prefix form: <http://lblod.data.gift/vocabularies/forms/> .
 
 <http://lblod.data.gift/display-types/defaultInput>
   rdf:type  rdfs:Class , skos:Concept ;
   ext:displayType "defaultInput" ;
   ext:usesConceptScheme "false"^^xsd:boolean ;
   ext:canHaveValidation 
-      <http://lblod.data.gift/vocabularies/forms/RequiredConstraint>,
-      <http://lblod.data.gift/vocabularies/forms/MaxLength>,
-      <http://lblod.data.gift/vocabularies/forms/ValidEmail>,
-      <http://lblod.data.gift/vocabularies/forms/ValidInteger>,
-      <http://lblod.data.gift/vocabularies/forms/UriConstraint>,
-      <http://lblod.data.gift/vocabularies/forms/ValidIBAN> ;
+      form:RequiredConstraint,
+      form:MaxLength,
+      form:ValidEmail,
+      form:ValidInteger,
+      form:UriConstraint,
+      form:ValidIBAN ;
   core:uuid "68ccebe5-84fb-4976-a9b1-28b1d3ef3687" ;
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Input"@en .
@@ -25,9 +26,9 @@
   ext:displayType "numericalInput" ;
   ext:usesConceptScheme "false"^^xsd:boolean ;
   ext:canHaveValidation
-      <http://lblod.data.gift/vocabularies/forms/RequiredConstraint>,
-      <http://lblod.data.gift/vocabularies/forms/PositiveNumber>,
-      <http://lblod.data.gift/vocabularies/forms/ValidYear> ;
+      form:RequiredConstraint,
+      form:PositiveNumber,
+      form:ValidYear ;
   core:uuid "c1be61dc-4ad1-4d21-a847-17c61d64c733" ;
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Numerical input"@en .
@@ -36,7 +37,7 @@
   ext:displayType "date" ;
   ext:usesConceptScheme "false"^^xsd:boolean ;
   ext:canHaveValidation
-      <http://lblod.data.gift/vocabularies/forms/RequiredConstraint> ;
+      form:RequiredConstraint ;
   core:uuid "4f1569e8-6ebc-4c61-9c3a-9affe7c38f28" ;
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Date"@en .
@@ -45,7 +46,7 @@
   ext:displayType "dateTime" ;
   ext:usesConceptScheme "false"^^xsd:boolean ;
   ext:canHaveValidation
-      <http://lblod.data.gift/vocabularies/forms/RequiredConstraint> ;
+      form:RequiredConstraint ;
   core:uuid "3b2016b4-566e-47ab-83ff-46fe643b08ac" ;
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Date and time"@en .
@@ -54,7 +55,7 @@
   ext:displayType "dateRange" ;
   ext:usesConceptScheme "false"^^xsd:boolean ;
   ext:canHaveValidation
-      <http://lblod.data.gift/vocabularies/forms/RequiredConstraint> ;
+      form:RequiredConstraint ;
   core:uuid "bcb0457e-425b-4a39-8213-1ce84b781688" ;
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Date range"@en .
@@ -63,8 +64,8 @@
   ext:displayType "textArea" ;
   ext:usesConceptScheme "false"^^xsd:boolean ;
   ext:canHaveValidation
-      <http://lblod.data.gift/vocabularies/forms/RequiredConstraint>,
-      <http://lblod.data.gift/vocabularies/forms/MaxLength> ;
+      form:RequiredConstraint,
+      form:MaxLength ;
   core:uuid "2e114946-3f3e-43ee-af16-d7c7255977e3" ;
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Text area"@en .
@@ -73,7 +74,7 @@
   ext:displayType "conceptSchemeSelector" ;
   ext:usesConceptScheme "true"^^xsd:boolean ;
   ext:canHaveValidation
-      <http://lblod.data.gift/vocabularies/forms/RequiredConstraint> ;
+      form:RequiredConstraint ;
   core:uuid "8ad9281f-fd76-4d99-b84c-9b7ae434fb2d" ;
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Dropdown"@en .
@@ -82,7 +83,7 @@
   ext:displayType "files" ;
   ext:usesConceptScheme "false"^^xsd:boolean ;
   ext:canHaveValidation
-      <http://lblod.data.gift/vocabularies/forms/RequiredConstraint> ;
+      form:RequiredConstraint ;
   core:uuid "be1e99bd-8c4c-4b9c-bc88-732c692ee069" ;
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Files"@en .
@@ -91,8 +92,8 @@
   ext:displayType "remoteUrls" ;
   ext:usesConceptScheme "false"^^xsd:boolean ;
   ext:canHaveValidation
-      <http://lblod.data.gift/vocabularies/forms/RequiredConstraint>,
-      <http://lblod.data.gift/vocabularies/forms/UriConstraint> ;
+      form:RequiredConstraint,
+      form:UriConstraint ;
   core:uuid "e322303f-bace-4279-9267-ce8c7780dc97" ;
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Urls"@en .
@@ -101,7 +102,7 @@
   ext:displayType "switch" ;
   ext:usesConceptScheme "false"^^xsd:boolean ;
   ext:canHaveValidation
-      <http://lblod.data.gift/vocabularies/forms/RequiredConstraint> ;
+      form:RequiredConstraint ;
   core:uuid "eabf6541-6fc3-4ac1-95b7-c9fab5f5a366" ;
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Switch"@en .
@@ -110,7 +111,7 @@
   ext:displayType "checkbox" ;
   ext:usesConceptScheme "false"^^xsd:boolean ;
   ext:canHaveValidation
-      <http://lblod.data.gift/vocabularies/forms/RequiredConstraint> ;
+      form:RequiredConstraint ;
   core:uuid "32b6f216-6420-4fe5-94e9-37f0c5186550" ;
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Checkbox"@en .
@@ -119,7 +120,7 @@
   ext:displayType "conceptSchemeRadioButtons" ;
   ext:usesConceptScheme "true"^^xsd:boolean ;
   ext:canHaveValidation
-      <http://lblod.data.gift/vocabularies/forms/RequiredConstraint> ;
+      form:RequiredConstraint ;
   core:uuid "9ec72078-c1ef-4126-b635-d426847af8e9" ;
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Radio buttons"@en .
@@ -128,7 +129,7 @@
   ext:displayType "conceptSchemeMultiSelector" ;
   ext:usesConceptScheme "true"^^xsd:boolean ;
   ext:canHaveValidation
-      <http://lblod.data.gift/vocabularies/forms/RequiredConstraint> ;
+      form:RequiredConstraint ;
   core:uuid "ce803ee6-fb61-43f6-a2f7-22968ca9a7e6" ;
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Multi selector"@en .
@@ -137,7 +138,7 @@
   ext:displayType "search" ;
   ext:usesConceptScheme "false"^^xsd:boolean ;
   ext:canHaveValidation
-      <http://lblod.data.gift/vocabularies/forms/RequiredConstraint> ;
+      form:RequiredConstraint ;
   core:uuid "ec03d1ee-8542-48d8-b75a-0597080b5aa6" ;
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Search"@en .
