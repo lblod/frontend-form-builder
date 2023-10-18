@@ -16,7 +16,7 @@ import {
   getValidationSubjectsOnNode,
 } from '../../utils/forking-store-helpers';
 import { showErrorToasterMessage } from '../../utils/toaster-message-helper';
-import { FORM, RDF } from '../../utils/rdflib';
+import { FORM, RDF, SH } from '../../utils/rdflib';
 import { getGroupingTypeForValidation } from '../../utils/get-grouping-type-for-validation';
 
 function byLabel(a, b) {
@@ -153,12 +153,27 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
         this.storeOptions.store,
         this.storeOptions.metaGraph
       );
+      const fieldPath = this.storeOptions.store.any(
+        this.getFieldSubject(),
+        SH('path'),
+        undefined,
+        this.storeOptions.sourceGraph
+      );
+      console.log({ fieldPath });
 
       const statements = this.createStatementForRdfTypeAndGrouping(
         this.storeOptions.sourceNode,
         validationTypeOption.subject,
         groupingType,
         this.storeOptions.sourceGraph
+      );
+      statements.push(
+        new Statement(
+          this.storeOptions.sourceNode,
+          SH('path'),
+          fieldPath,
+          this.storeOptions.sourceGraph
+        )
       );
 
       this.storeOptions.store.addAll(statements);
