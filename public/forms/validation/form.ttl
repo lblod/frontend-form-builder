@@ -204,16 +204,8 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
     ##########################################################
     ext:phoneNumberCountryCodeF a form:Field ;
       sh:name "CountryCode" ;
-      form:help """
-      Default country code is: BE
-      """ ;
       sh:order 103 ;
       sh:path form:defaultCountry ;
-      # form:validations 
-      #   [ a form:ValidPhoneNumber ;
-      #       form:grouping form:Bag ;
-      #       sh:path form:defaultCountry ;
-      #       sh:resultMessage "Dit veld is verplicht."@nl
-      #   ] ;
-      form:displayType displayTypes:defaultInput ;
+      form:displayType displayTypes:countryCodeConceptSchemeSelector ;
+      form:options """{"conceptScheme":"http://lblod.data.gift/concept-schemes/countryCodes","searchEnabled":true}""" ;
       sh:group ext:formFieldPg .

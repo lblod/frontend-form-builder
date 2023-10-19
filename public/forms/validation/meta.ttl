@@ -133,3 +133,20 @@ form:Codelist
 	form:grouping	form:MatchEvery ;
 	sh:resultMessage	"Selecteer een waarde uit de lijst."@nl ;
 	ext:customParameter	"conceptScheme"@en .
+
+####################
+#  Country codes  #
+##################
+
+con:countryCodes a skos:ConceptScheme ;
+	skos:prefLabel  "Country code options" .
+
+ext:countryCodeBE
+  rdf:type  rdfs:Class , skos:Concept ;
+	skos:inScheme	con:countryCodes ;
+  skos:prefLabel  "BE"@en .
+
+ext:countryCodeNL
+  rdf:type  rdfs:Class , skos:Concept ;
+	skos:inScheme	con:countryCodes ;
+  skos:prefLabel  "NL"@en .
