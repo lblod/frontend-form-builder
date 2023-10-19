@@ -13,6 +13,7 @@ import {
   getDisplayTypeOfNode,
   getFirstPathOfNode,
   getGroupingTypeOfNode,
+  getPrefLabelOfNode,
   getRdfTypeOfNode,
   getValidationSubjectsOnNode,
 } from '../../utils/forking-store-helpers';
@@ -74,12 +75,12 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     const allOptions = this.args.formStore
       .match(undefined, SKOS('inScheme'), conceptScheme, metaGraph)
       .map((t) => {
-        const label = this.args.formStore.any(
+        const label = getPrefLabelOfNode(
           t.subject,
-          SKOS('prefLabel'),
-          undefined,
+          this.args.formStore,
           metaGraph
         );
+
         return { subject: t.subject, label: label && label.value };
       });
 
