@@ -13,9 +13,11 @@ export function areValidationsInGraphValidated(store, graph) {
     graph
   );
   if (!defaultCountryCodesAdded.isAdded) {
-    for (const subject of defaultCountryCodesAdded.subjectsToAddDefaultTo) {
-      insertDefaultCountryCode(subject, store, graph);
-    }
+    const defaultCountryCodeStatements =
+      defaultCountryCodesAdded.subjectsToAddDefaultTo.map((subject) => {
+        return createDefaultCountryCodeStatement(subject, graph);
+      });
+    store.addAll(defaultCountryCodeStatements);
   }
 
   return ![
@@ -35,13 +37,11 @@ function getAllValidationNodesInGraph(store, graph) {
   return subjectThatHaveValidations.map((statement) => statement.object);
 }
 
-function insertDefaultCountryCode(subject, store, graph) {
-  store.addAll([
-    new Statement(
-      subject,
-      FORM('defaultCountry'),
-      defaultCountryCode.label,
-      graph
-    ),
-  ]);
+function createDefaultCountryCodeStatement(subject, graph) {
+  return new Statement(
+    subject,
+    FORM('defaultCountry'),
+    defaultCountryCode.label,
+    graph
+  );
 }
