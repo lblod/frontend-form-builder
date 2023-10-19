@@ -8,7 +8,7 @@ import { Statement, namedNode } from 'rdflib';
 import {
   getFirstFieldSubject,
   getPossibleValidationsForDisplayType,
-} from '../../utils/validation-helpers';
+} from '../../utils/validation/helpers';
 import {
   getDisplayTypeOfNode,
   getFirstPathOfNode,
@@ -18,7 +18,7 @@ import {
 } from '../../utils/forking-store-helpers';
 import { showErrorToasterMessage } from '../../utils/toaster-message-helper';
 import { FORM, RDF, SH } from '../../utils/rdflib';
-import { getGroupingTypeForValidation } from '../../utils/get-grouping-type-for-validation';
+import { getGroupingTypeForValidation } from '../../utils/validation/get-grouping-type-for-validation';
 
 function byLabel(a, b) {
   const textA = a.label.toUpperCase();

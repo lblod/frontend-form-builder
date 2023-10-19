@@ -1,4 +1,4 @@
-import { FORM, RDF } from '../rdflib';
+import { FORM, RDF } from '../../rdflib';
 
 export function isDefaultCountryCodeAddedToValidPhoneNumber(store, graph) {
   const validPhoneNumber = store.match(

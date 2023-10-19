@@ -5,12 +5,12 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { FORM, EXT } from '../utils/rdflib';
-import { areValidationsInGraphValidated } from '../utils/validation-shape-validators';
+import { areValidationsInGraphValidated } from '../utils/validation/are-validations-in-graph-validated';
 import {
   getFirstFieldSubject,
   parseStoreGraphs,
   validationGraphs,
-} from '../utils/validation-helpers';
+} from '../utils/validation/helpers';
 import { Statement } from 'rdflib';
 import {
   getNodeValidationTriples,
@@ -22,8 +22,8 @@ import { showErrorToasterMessage } from '../utils/toaster-message-helper';
 import { getFieldsInStore } from '../utils/get-triples-per-field-in-store';
 import { createStoreForFieldData } from '../utils/create-store-for-field';
 import { getFieldAndValidationTriples } from '../utils/get-field-and-validation-triples';
-import { addValidationTriplesToFormNodesL } from '../utils/add-field-valdiations-to-formNodesL';
 import { mergeFieldValidationFormWithBuilderForm as mergeFieldDataWithBuilderForm } from '../utils/merge-field-data-with-builder-form';
+import { addValidationTriplesToFormNodesL } from '../utils/validation/add-field-valdiations-to-formNodesL';
 
 export default class AddValidationsToFormComponent extends Component {
   @tracked storesWithForm;

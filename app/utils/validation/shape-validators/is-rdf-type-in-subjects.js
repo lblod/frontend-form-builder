@@ -1,4 +1,4 @@
-import { RDF } from '../rdflib';
+import { RDF } from '../../rdflib';
 
 export function isRdfTypeInSubjects(subjects, store, graph) {
   for (const subject of subjects) {

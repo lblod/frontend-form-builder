@@ -1,10 +1,10 @@
 import { Statement } from 'rdflib';
-import { FORM } from './rdflib';
-import { defaultCountryCode } from '../components/rdf-form-fields/country-code-concept-scheme-selector';
-import { isMaxCharacterValueAddedToMaxLengthValidation } from './validation-shape-validators/is-max-character-value-added';
-import { isDefaultCountryCodeAddedToValidPhoneNumber } from './validation-shape-validators/is-country-code-added';
-import { isExactValueAddedToExactValueConstraint } from './validation-shape-validators/is-exact-value-added';
-import { isRdfTypeInSubjects } from './validation-shape-validators/is-rdf-type-in-subjects';
+import { FORM } from '../rdflib';
+import { defaultCountryCode } from '../../components/rdf-form-fields/country-code-concept-scheme-selector';
+import { isMaxCharacterValueAddedToMaxLengthValidation } from './shape-validators/is-max-character-value-added';
+import { isDefaultCountryCodeAddedToValidPhoneNumber } from './shape-validators/is-country-code-added';
+import { isExactValueAddedToExactValueConstraint } from './shape-validators/is-exact-value-added';
+import { isRdfTypeInSubjects } from './shape-validators/is-rdf-type-in-subjects';
 
 export function areValidationsInGraphValidated(store, graph) {
   const validationNodes = getAllValidationNodesInGraph(store, graph);

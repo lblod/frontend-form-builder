@@ -2,8 +2,8 @@ import { triple } from 'rdflib';
 import {
   getTriplesWithNodeAsSubject,
   getValidationSubjectsOnNode,
-} from './forking-store-helpers';
-import { EXT, FORM } from './rdflib';
+} from '../forking-store-helpers';
+import { EXT, FORM } from '../rdflib';
 
 export function addValidationTriplesToFormNodesL(fieldSubject, store, graphs) {
   const validationSubjects = getValidationSubjectsOnNode(

@@ -1,4 +1,4 @@
-import { FORM } from './rdflib';
+import { FORM } from '../rdflib';
 
 export function getGroupingTypeForValidation(validationType, store, graph) {
   const groupingType = store.any(

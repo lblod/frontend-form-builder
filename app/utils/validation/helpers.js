@@ -1,7 +1,7 @@
-import { getLocalFileContentAsText } from '../utils/get-local-file-content';
-import { GRAPHS } from '../controllers/formbuilder/edit';
+import { getLocalFileContentAsText } from '../get-local-file-content';
+import { GRAPHS } from '../../controllers/formbuilder/edit';
 import { sym as RDFNode } from 'rdflib';
-import { EXT, FORM, RDF } from '../utils/rdflib';
+import { EXT, FORM, RDF } from '../rdflib';
 
 export const validationGraphs = {
   ...GRAPHS,

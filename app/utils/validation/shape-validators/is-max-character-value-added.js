@@ -1,4 +1,4 @@
-import { FORM, RDF } from '../rdflib';
+import { FORM, RDF } from '../../rdflib';
 
 export function isMaxCharacterValueAddedToMaxLengthValidation(store, graph) {
   const maxLengthValidationSubjects = store.match(
