@@ -156,7 +156,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
       );
 
       const validationPathStatement =
-        this.createStatementThatConnectsPathsBetweenFieldAndValidation(
+        this.getStatementToAddFieldPathToValidationPath(
           this.storeOptions.sourceNode,
           this.storeOptions.store,
           this.storeOptions.sourceGraph
@@ -208,11 +208,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     ];
   }
 
-  createStatementThatConnectsPathsBetweenFieldAndValidation(
-    validationSubject,
-    store,
-    graph
-  ) {
+  getStatementToAddFieldPathToValidationPath(validationSubject, store, graph) {
     const fieldPath = getFirstPathOfNode(this.getFieldSubject(), store, graph);
 
     return new Statement(validationSubject, SH('path'), fieldPath, graph);
