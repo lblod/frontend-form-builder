@@ -1,4 +1,4 @@
-import { Literal, Statement } from 'rdflib';
+import { Statement } from 'rdflib';
 import { FORM, RDF } from './rdflib';
 import { defaultCountryCode } from '../components/rdf-form-fields/country-code-concept-scheme-selector';
 
