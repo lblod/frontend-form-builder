@@ -2,10 +2,14 @@ import { FORM, RDF } from './rdflib';
 
 export function areValidationsInGraphValidated(store, graph) {
   const validationNodes = getValidationNodesInGraph(store, graph);
-
+  console.log(
+    `isExactValueAddedToExactValueConstraint(store, graph)`,
+    isExactValueAddedToExactValueConstraint(store, graph)
+  );
   return ![
     isRdfTypeInTriplesOfSubjects(validationNodes, store, graph),
     isMaxCharacterValueAddedToMaxLengthValidation(store, graph),
+    isExactValueAddedToExactValueConstraint(store, graph),
   ].includes(false);
 }
 
@@ -45,6 +49,27 @@ function isMaxCharacterValueAddedToMaxLengthValidation(store, graph) {
       graph
     );
     if (!maxCharactersValues.length >= 1) {
+      return false;
+    }
+  }
+
+  return true;
+}
+function isExactValueAddedToExactValueConstraint(store, graph) {
+  const exactValueConstraint = store.match(
+    undefined,
+    RDF('type'),
+    FORM('ExactValueConstraint'),
+    graph
+  );
+  for (const triple of exactValueConstraint) {
+    const exactValueValues = store.match(
+      triple.subject,
+      FORM('customValue'),
+      undefined,
+      graph
+    );
+    if (!exactValueValues.length >= 1) {
       return false;
     }
   }

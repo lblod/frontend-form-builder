@@ -96,7 +96,9 @@ fields:validatonSelectorF a form:Field ;
   form:displayType displayTypes:validationConceptSchemeSelector ;
   form:options """{"conceptScheme":"http://lblod.data.gift/concept-schemes/possibleValidations","searchEnabled":true}""" ;
   sh:group ext:formFieldPg ;
-  form:hasConditionalFieldGroup fields:maxLengthValidationCFG .
+  form:hasConditionalFieldGroup
+      fields:maxLengthValidationCFG,
+      fields:exactValueConstraintCFG .
 
 ##########################################################
 #  Validation generator
@@ -112,6 +114,9 @@ ext:addValidationGenerator a form:Generator ;
 fieldGroups:maxLengthValidationFG a form:FieldGroup ;
   form:hasField ext:validationMaxLengthF .
 
+fieldGroups:exactValueConstraintFG a form:FieldGroup ;
+  form:hasField ext:exacValueConstraintF .
+
 ##########################################################
 #  Validation type conditions
 ##########################################################
@@ -124,6 +129,16 @@ fields:maxLengthValidationCFG a form:ConditionalFieldGroup ;
         form:customValue form:MaxLength
     ] ;
   form:hasFieldGroup fieldGroups:maxLengthValidationFG .
+
+fields:exactValueConstraintCFG a form:ConditionalFieldGroup ;
+  form:conditions
+    [ a form:SingleCodelistValue ;
+        form:grouping form:Bag ;
+        sh:path rdf:type ;
+        form:conceptScheme concept:possibleValidations ;
+        form:customValue form:ExactValueConstraint
+    ] ;
+  form:hasFieldGroup fieldGroups:exactValueConstraintFG .
 
 ##########################################################
 #  All separate fields
@@ -149,6 +164,22 @@ fields:maxLengthValidationCFG a form:ConditionalFieldGroup ;
         [ a form:RequiredConstraint ;
             form:grouping form:Bag ;
             sh:path form:max ;
+            sh:resultMessage "Dit veld is verplicht."@nl
+        ] ;
+      form:displayType displayTypes:defaultInput ;
+      sh:group ext:formFieldPg .
+    
+    ##########################################################
+    #  Exact value field
+    ##########################################################
+    ext:exacValueConstraintF a form:Field ;
+      sh:name "Exact value" ;
+      sh:order 102 ;
+      sh:path form:customValue ;
+      form:validations 
+        [ a form:RequiredConstraint ;
+            form:grouping form:Bag ;
+            sh:path form:customValue ;
             sh:resultMessage "Dit veld is verplicht."@nl
         ] ;
       form:displayType displayTypes:defaultInput ;

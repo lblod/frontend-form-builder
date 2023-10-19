@@ -40,7 +40,7 @@ form:ExactValueConstraint
 	ext:validationName	"ExactValueConstraint"@en ;
 	skos:prefLabel	"Exact value"@en ;
 	form:grouping	form:MatchSome ;
-	ext:customParameter	"customValue"@en .
+	form:customValue	"customValue"@en .
 
 form:ValidInteger
 	rdf:type rdfs:Class, skos:Concept ;
