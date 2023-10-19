@@ -2,14 +2,12 @@ import { FORM, RDF } from './rdflib';
 
 export function areValidationsInGraphValidated(store, graph) {
   const validationNodes = getValidationNodesInGraph(store, graph);
-  console.log(
-    `isExactValueAddedToExactValueConstraint(store, graph)`,
-    isExactValueAddedToExactValueConstraint(store, graph)
-  );
+
   return ![
     isRdfTypeInTriplesOfSubjects(validationNodes, store, graph),
     isMaxCharacterValueAddedToMaxLengthValidation(store, graph),
     isExactValueAddedToExactValueConstraint(store, graph),
+    isCountryCodeAddedToValidPhoneNumber(store, graph),
   ].includes(false);
 }
 
@@ -55,6 +53,7 @@ function isMaxCharacterValueAddedToMaxLengthValidation(store, graph) {
 
   return true;
 }
+
 function isExactValueAddedToExactValueConstraint(store, graph) {
   const exactValueConstraint = store.match(
     undefined,
@@ -70,6 +69,29 @@ function isExactValueAddedToExactValueConstraint(store, graph) {
       graph
     );
     if (!exactValueValues.length >= 1) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function isCountryCodeAddedToValidPhoneNumber(store, graph) {
+  const validPhoneNumber = store.match(
+    undefined,
+    RDF('type'),
+    FORM('ValidPhoneNumber'),
+    graph
+  );
+  for (const triple of validPhoneNumber) {
+    const countryCodeValues = store.match(
+      triple.subject,
+      FORM('defaultCountry'),
+      undefined,
+      graph
+    );
+
+    if (!countryCodeValues.length >= 1) {
       return false;
     }
   }

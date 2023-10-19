@@ -98,7 +98,8 @@ fields:validatonSelectorF a form:Field ;
   sh:group ext:formFieldPg ;
   form:hasConditionalFieldGroup
       fields:maxLengthValidationCFG,
-      fields:exactValueConstraintCFG .
+      fields:exactValueConstraintCFG,
+      fields:phoneNumberCountryCodeCFG .
 
 ##########################################################
 #  Validation generator
@@ -116,6 +117,9 @@ fieldGroups:maxLengthValidationFG a form:FieldGroup ;
 
 fieldGroups:exactValueConstraintFG a form:FieldGroup ;
   form:hasField ext:exacValueConstraintF .
+
+fieldGroups:phoneNumberCountryCodeFG a form:FieldGroup ;
+  form:hasField ext:phoneNumberCountryCodeF .
 
 ##########################################################
 #  Validation type conditions
@@ -139,6 +143,16 @@ fields:exactValueConstraintCFG a form:ConditionalFieldGroup ;
         form:customValue form:ExactValueConstraint
     ] ;
   form:hasFieldGroup fieldGroups:exactValueConstraintFG .
+
+fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
+  form:conditions
+    [ a form:SingleCodelistValue ;
+        form:grouping form:Bag ;
+        sh:path rdf:type ;
+        form:conceptScheme concept:possibleValidations ;
+        form:customValue form:ValidPhoneNumber
+    ] ;
+  form:hasFieldGroup fieldGroups:phoneNumberCountryCodeFG .
 
 ##########################################################
 #  All separate fields
@@ -182,5 +196,24 @@ fields:exactValueConstraintCFG a form:ConditionalFieldGroup ;
             sh:path form:customValue ;
             sh:resultMessage "Dit veld is verplicht."@nl
         ] ;
+      form:displayType displayTypes:defaultInput ;
+      sh:group ext:formFieldPg .
+   
+    ##########################################################
+    #  Phone number: country code field
+    ##########################################################
+    ext:phoneNumberCountryCodeF a form:Field ;
+      sh:name "CountryCode" ;
+      form:help """
+      Default country code is: BE
+      """ ;
+      sh:order 103 ;
+      sh:path form:defaultCountry ;
+      # form:validations 
+      #   [ a form:ValidPhoneNumber ;
+      #       form:grouping form:Bag ;
+      #       sh:path form:defaultCountry ;
+      #       sh:resultMessage "Dit veld is verplicht."@nl
+      #   ] ;
       form:displayType displayTypes:defaultInput ;
       sh:group ext:formFieldPg .

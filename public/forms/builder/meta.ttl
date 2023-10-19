@@ -19,7 +19,8 @@ display:defaultInput
       form:ValidInteger,
       form:UriConstraint,
       form:ExactValueConstraint,
-      form:ValidIBAN ;
+      form:ValidIBAN,
+      form:ValidPhoneNumber ;
   core:uuid "68ccebe5-84fb-4976-a9b1-28b1d3ef3687" ;
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Input"@en .

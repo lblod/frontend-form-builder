@@ -95,7 +95,7 @@ form:ValidPhoneNumber
 	skos:prefLabel	"Valid phone number"@en ;
 	form:grouping	form:MatchEvery ;
 	sh:resultMessage	"Geef een geldig telefoonnummer in."@nl ;
-	ext:customParameter	"defaultCountry"@en .
+	form:defaultCountry	"BE" .
 
 form:ValidIBAN
 	rdf:type rdfs:Class, skos:Concept ;
