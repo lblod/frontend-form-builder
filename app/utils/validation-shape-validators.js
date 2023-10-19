@@ -1,4 +1,6 @@
+import { Literal, Statement } from 'rdflib';
 import { FORM, RDF } from './rdflib';
+import { defaultCountryCode } from '../components/rdf-form-fields/country-code-concept-scheme-selector';
 
 export function areValidationsInGraphValidated(store, graph) {
   const validationNodes = getValidationNodesInGraph(store, graph);
@@ -92,9 +94,20 @@ function isCountryCodeAddedToValidPhoneNumber(store, graph) {
     );
 
     if (!countryCodeValues.length >= 1) {
-      return false;
+      insertDefaultCountryCode(triple.subject, store, graph);
     }
   }
 
   return true;
+}
+
+function insertDefaultCountryCode(subject, store, graph) {
+  store.addAll([
+    new Statement(
+      subject,
+      FORM('defaultCountry'),
+      defaultCountryCode.label,
+      graph
+    ),
+  ]);
 }
