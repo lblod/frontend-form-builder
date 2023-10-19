@@ -40,7 +40,9 @@ form:ExactValueConstraint
 	ext:validationName	"ExactValueConstraint"@en ;
 	skos:prefLabel	"Exact value"@en ;
 	form:grouping	form:MatchSome ;
-	form:customValue	"customValue"@en .
+	form:customValue	"customValue"@en ;
+	sh:resultMessage	"Type de waarde exact over."@nl .
+
 
 form:ValidInteger
 	rdf:type rdfs:Class, skos:Concept ;

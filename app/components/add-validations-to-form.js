@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { FORM, EXT } from '../utils/rdflib';
+import { FORM, EXT, SH } from '../utils/rdflib';
 import { areValidationsInGraphValidated } from '../utils/validation/are-validations-in-graph-validated';
 import {
   getFirstFieldSubject,
@@ -14,6 +14,7 @@ import {
 import { Statement } from 'rdflib';
 import {
   getNodeValidationTriples,
+  getRdfTypeOfNode,
   getTriplesWithNodeAsSubject,
   getValidationSubjectsOnNode,
   isForkingStore,
@@ -24,6 +25,7 @@ import { createStoreForFieldData } from '../utils/create-store-for-field';
 import { getFieldAndValidationTriples } from '../utils/get-field-and-validation-triples';
 import { mergeFieldValidationFormWithBuilderForm as mergeFieldDataWithBuilderForm } from '../utils/merge-field-data-with-builder-form';
 import { addValidationTriplesToFormNodesL } from '../utils/validation/add-field-valdiations-to-formNodesL';
+import { getFormNodesLValidationSubjects } from '../utils/validation/get-form-nodes-L-validation-subjects';
 
 export default class AddValidationsToFormComponent extends Component {
   @tracked storesWithForm;
@@ -170,6 +172,51 @@ export default class AddValidationsToFormComponent extends Component {
       );
       builderStore.addAll([statement]);
     }
+
+    // new stuff
+
+    const formNodeLValidationSubject = getFormNodesLValidationSubjects(
+      builderStore,
+      this.graphs.sourceGraph
+    );
+
+    for (const validationSubject of formNodeLValidationSubject.map(
+      (triple) => triple.object
+    )) {
+      const resultMessageOfValidation = builderStore.any(
+        validationSubject,
+        SH('resultMessage'),
+        undefined,
+        this.graphs.sourceGraph
+      );
+
+      if (!resultMessageOfValidation) {
+        const validationTypeSubject = getRdfTypeOfNode(
+          validationSubject,
+          builderStore,
+          this.graphs.sourceGraph
+        );
+        const defaultResultMessageForValidation = builderStore.any(
+          validationTypeSubject,
+          SH('resultMessage'),
+          undefined,
+          this.graphs.metaGraph
+        );
+        console.log({ defaultResultMessageForValidation });
+        if (defaultResultMessageForValidation) {
+          builderStore.addAll([
+            new Statement(
+              validationSubject,
+              SH('resultMessage'),
+              defaultResultMessageForValidation,
+              this.graphs.sourceGraph
+            ),
+          ]);
+          console.log(`added default value`);
+        }
+      }
+    }
+    // end new stuff
 
     builderStore.registerObserver(() => {
       this.updatedFormFieldValidations(builderStore);
