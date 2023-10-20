@@ -5,7 +5,7 @@
   <:title>Formulier code bewerken</:title>
   <:body>
     <div
-      {{editor @code @refresh}}
+      {{editor @code (perform this.handleCodeChange)}}
       {{!template-lint-disable no-inline-styles}}
       style="overflow: auto; height: 100%; width:100%"
     ></div>

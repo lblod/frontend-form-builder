@@ -81,7 +81,7 @@
 {{#if this.showCodeEditModal}}
   <CodeEditModal
     @onClose={{fn (mut this.showCodeEditModal) false}}
-    @refresh={{@refresh}}
+    @onCodeChange={{@onCodeChange}}
     @code={{@code}}
   />
 {{/if}}

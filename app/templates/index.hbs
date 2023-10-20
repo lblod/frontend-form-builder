@@ -31,16 +31,16 @@
               class="au-u-visible-small-up" />
             <th colspan="2">Acties</th>
           </c.header>
-          <c.body as |row|>
-            <td class="au-u-visible-medium-up">{{row.label}}</td>
-            <td class="au-u-visible-medium-up">{{row.comment}}</td>
-            <td class="au-u-visible-medium-up">{{format-date row.created}}</td>
-            <td class="au-u-visible-medium-up">{{format-date-time row.modified}}</td>
+          <c.body as |generatedForm|>
+            <td class="au-u-visible-medium-up">{{generatedForm.label}}</td>
+            <td class="au-u-visible-medium-up">{{generatedForm.comment}}</td>
+            <td class="au-u-visible-medium-up">{{format-date generatedForm.created}}</td>
+            <td class="au-u-visible-medium-up">{{format-date-time generatedForm.modified}}</td>
             <td class="au-u-visible-medium-up">
-              <AuLink @route="formbuilder.edit" @model={{row}} @icon="pencil" @iconAlignment="left" @ariaHidden={{true}}>Bewerk</AuLink>
+              <AuLink @route="formbuilder.edit" @model={{generatedForm.id}} @icon="pencil" @iconAlignment="left" @ariaHidden={{true}}>Bewerk</AuLink>
             </td>
             <td class="au-u-visible-medium-up">
-              <LinkTo @route="user-tests.new" @query={{hash form=row.id}} class="au-c-link">
+              <LinkTo @route="user-tests.new" @query={{hash form=generatedForm.id}} class="au-c-link">
                 <AuIcon @icon="user-popup" @alignment="left" @size="large" @ariaHidden={{true}} />
                 Test
               </LinkTo>
