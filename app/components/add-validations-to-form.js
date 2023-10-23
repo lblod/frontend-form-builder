@@ -59,9 +59,7 @@ export default class AddValidationsToFormComponent extends Component {
     this.registerToObservableForStoresWithForm(this.storesWithForm);
   }
 
-  async willDestroy() {
-    super.willDestroy(...arguments);
-
+  async mergeThFieldFormsWithTheBuilderForm() {
     this.deregisterFromObservableForStoresWithForm(this.storesWithForm);
 
     for (const fieldData of this.getFieldsData(this.storesWithForm)) {
@@ -115,7 +113,8 @@ export default class AddValidationsToFormComponent extends Component {
     return fieldsData;
   }
 
-  updatedFormFieldValidations(builderStore) {
+  @task({ restartable: true })
+  *updatedFormFieldValidations(builderStore) {
     if (
       !areValidationsInGraphValidated(builderStore, this.graphs.sourceGraph)
     ) {
@@ -171,8 +170,10 @@ export default class AddValidationsToFormComponent extends Component {
       builderStore.addAll([statement]);
     }
 
+    yield this.mergeThFieldFormsWithTheBuilderForm();
+
     builderStore.registerObserver(() => {
-      this.updatedFormFieldValidations(builderStore);
+      this.updatedFormFieldValidations.perform(builderStore);
     });
   }
 
@@ -247,8 +248,8 @@ export default class AddValidationsToFormComponent extends Component {
 
   registerToObservableForStoresWithForm(storesWithForm) {
     for (const storeWithForm of storesWithForm) {
-      storeWithForm.store.registerObserver(() => {
-        this.updatedFormFieldValidations(storeWithForm.store);
+      storeWithForm.store.registerObserver(async () => {
+        await this.updatedFormFieldValidations.perform(storeWithForm.store);
       });
     }
   }
