@@ -8,16 +8,18 @@ import { Statement, namedNode } from 'rdflib';
 import {
   getFirstFieldSubject,
   getPossibleValidationsForDisplayType,
-} from '../../utils/validation-helpers';
+} from '../../utils/validation/helpers';
 import {
   getDisplayTypeOfNode,
+  getFirstPathOfNode,
   getGroupingTypeOfNode,
+  getPrefLabelOfNode,
   getRdfTypeOfNode,
   getValidationSubjectsOnNode,
 } from '../../utils/forking-store-helpers';
 import { showErrorToasterMessage } from '../../utils/toaster-message-helper';
-import { FORM, RDF } from '../../utils/rdflib';
-import { getGroupingTypeForValidation } from '../../utils/get-grouping-type-for-validation';
+import { FORM, RDF, SH } from '../../utils/rdflib';
+import { getGroupingTypeForValidation } from '../../utils/validation/get-grouping-type-for-validation';
 
 function byLabel(a, b) {
   const textA = a.label.toUpperCase();
@@ -73,12 +75,12 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     const allOptions = this.args.formStore
       .match(undefined, SKOS('inScheme'), conceptScheme, metaGraph)
       .map((t) => {
-        const label = this.args.formStore.any(
+        const label = getPrefLabelOfNode(
           t.subject,
-          SKOS('prefLabel'),
-          undefined,
+          this.args.formStore,
           metaGraph
         );
+
         return { subject: t.subject, label: label && label.value };
       });
 
@@ -154,14 +156,25 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
         this.storeOptions.metaGraph
       );
 
-      const statements = this.createStatementForRdfTypeAndGrouping(
-        this.storeOptions.sourceNode,
-        validationTypeOption.subject,
-        groupingType,
-        this.storeOptions.sourceGraph
-      );
+      const validationPathStatement =
+        this.getStatementToAddFieldPathToValidationPath(
+          this.storeOptions.sourceNode,
+          this.storeOptions.store,
+          this.storeOptions.sourceGraph
+        );
 
-      this.storeOptions.store.addAll(statements);
+      const rdfTypeAndGroupingStatements =
+        this.createStatementForRdfTypeAndGrouping(
+          this.storeOptions.sourceNode,
+          validationTypeOption.subject,
+          groupingType,
+          this.storeOptions.sourceGraph
+        );
+
+      this.storeOptions.store.addAll([
+        validationPathStatement,
+        ...rdfTypeAndGroupingStatements,
+      ]);
     }
 
     this.hasBeenFocused = true;
@@ -194,5 +207,11 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
       new Statement(sourceNode, RDF('type'), rdfType, graph),
       new Statement(sourceNode, FORM('grouping'), groupingType, graph),
     ];
+  }
+
+  getStatementToAddFieldPathToValidationPath(validationSubject, store, graph) {
+    const fieldPath = getFirstPathOfNode(this.getFieldSubject(), store, graph);
+
+    return new Statement(validationSubject, SH('path'), fieldPath, graph);
   }
 }

@@ -5,8 +5,8 @@ import {
 import { EMBER } from './rdflib';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { removeUnassignedNodesFromGraph } from './remove-unassigned-nodes-from-graph';
-import { templatePrefixes } from './validation-form-templates/template-prefixes';
-import { parseStoreGraphs } from './validation-helpers';
+import { templatePrefixes } from './validation/form-templates/template-prefixes';
+import { parseStoreGraphs } from './validation/helpers';
 
 export async function mergeFieldValidationFormWithBuilderForm(
   fieldData,
