@@ -171,10 +171,7 @@ export default class AddValidationsToFormComponent extends Component {
     }
 
     yield this.mergeThFieldFormsWithTheBuilderForm();
-
-    builderStore.registerObserver(() => {
-      this.updatedFormFieldValidations.perform(builderStore);
-    });
+    this.registerToObservableForStoresWithForm()
   }
 
   updateDifferencesInTriples(newTriples, oldTriples, store) {
@@ -246,8 +243,8 @@ export default class AddValidationsToFormComponent extends Component {
     }
   }
 
-  registerToObservableForStoresWithForm(storesWithForm) {
-    for (const storeWithForm of storesWithForm) {
+  registerToObservableForStoresWithForm() {
+    for (const storeWithForm of this.storesWithForm) {
       storeWithForm.store.registerObserver(async () => {
         await this.updatedFormFieldValidations.perform(storeWithForm.store);
       });
