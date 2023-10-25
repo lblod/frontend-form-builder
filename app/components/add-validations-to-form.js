@@ -29,6 +29,7 @@ export default class AddValidationsToFormComponent extends Component {
   @tracked storesWithForm;
 
   @service toaster;
+  @service('forking-store-manager') forkingStoreManager;
 
   savedBuilderTtlCode;
 
@@ -51,10 +52,12 @@ export default class AddValidationsToFormComponent extends Component {
 
   @task({ restartable: false })
   *initialise({ ttlCode }) {
-    const builderStore = new ForkingStore();
-    yield parseStoreGraphs(builderStore, ttlCode);
+    this.forkingStoreManager.setBuilderStore(new ForkingStore());
+    yield parseStoreGraphs(this.forkingStoreManager.getBuilderStore(), ttlCode);
 
-    this.storesWithForm = yield this.createSeparateStorePerField(builderStore);
+    this.storesWithForm = yield this.createSeparateStorePerField(
+      this.forkingStoreManager.getBuilderStore()
+    );
 
     this.registerToObservableForStoresWithForm(this.storesWithForm);
   }
@@ -62,7 +65,7 @@ export default class AddValidationsToFormComponent extends Component {
   async mergeThFieldFormsWithTheBuilderForm() {
     this.deregisterFromObservableForStoresWithForm(this.storesWithForm);
 
-    for (const fieldData of this.getFieldsData(this.storesWithForm)) {
+    for (const fieldData of this.getFieldsData()) {
       const storeWithMergedField = await mergeFieldDataWithBuilderForm(
         fieldData,
         this.savedBuilderTtlCode,
@@ -78,10 +81,10 @@ export default class AddValidationsToFormComponent extends Component {
     this.args.onUpdateValidations(this.savedBuilderTtlCode);
   }
 
-  getFieldsData(storesWithForm) {
+  getFieldsData() {
     const fieldsData = [];
 
-    for (const storeWithForm of storesWithForm) {
+    for (const storeWithForm of this.storesWithForm) {
       const isValidTtl = areValidationsInGraphValidated(
         storeWithForm.store,
         this.graphs.sourceGraph
@@ -231,6 +234,14 @@ export default class AddValidationsToFormComponent extends Component {
 
       storesWithForm.push(fieldStoreWithForm);
     }
+
+    this.forkingStoreManager.addFieldStores(
+      storesWithForm.map((storeWithForm) => {
+        return { subject: storeWithForm.subject, store: storeWithForm.store };
+      })
+    );
+
+    console.log(this.forkingStoreManager.getStoreOverView());
 
     return storesWithForm;
   }
