@@ -103,6 +103,35 @@ export default class AddValidationsToFormComponent extends Component {
     }
   }
 
+  getFieldDataForStoreWithForm(storeWithForm) {
+    const isValidTtl = areValidationsInGraphValidated(
+      storeWithForm.store,
+      this.graphs.sourceGraph
+    );
+    if (isValidTtl) {
+      const triples = getFieldAndValidationTriples(
+        storeWithForm.subject,
+        storeWithForm.store,
+        this.graphs.sourceGraph
+      );
+
+      return {
+        store: storeWithForm.store,
+        subject: storeWithForm.subject,
+        triples: triples,
+      };
+    } else {
+      showErrorToasterMessage(
+        this.toaster,
+        `Form of field with subject: ${storeWithForm.subject} is invalid.`
+      );
+      console.error(
+        `Current invalid field ttl for subject: ${storeWithForm.subject}`,
+        storeWithForm.store.serializeDataMergedGraph(this.graphs.sourceGraph)
+      );
+    }
+  }
+
   getFieldsData(storesWithForm) {
     const fieldsData = [];
 
