@@ -74,38 +74,6 @@ export default class AddValidationsToFormComponent extends Component {
     this.args.onUpdateValidations(this.savedBuilderTtlCode);
   }
 
-<<<<<<< HEAD
-  getFieldDataForStoreWithForm(storeWithForm) {
-    const isValidTtl = areValidationsInGraphValidated(
-      storeWithForm.store,
-      this.graphs.sourceGraph
-    );
-    if (isValidTtl) {
-      const triples = getFieldAndValidationTriples(
-        storeWithForm.subject,
-        storeWithForm.store,
-        this.graphs.sourceGraph
-      );
-
-      return {
-        store: storeWithForm.store,
-        subject: storeWithForm.subject,
-        triples: triples,
-      };
-    } else {
-      showErrorToasterMessage(
-        this.toaster,
-        `Form of field with subject: ${storeWithForm.subject} is invalid.`
-      );
-      console.error(
-        `Current invalid field ttl for subject: ${storeWithForm.subject}`,
-        storeWithForm.store.serializeDataMergedGraph(this.graphs.sourceGraph)
-      );
-    }
-  }
-
-=======
->>>>>>> 5823ffb (refactor: not all field forms are merged everytime only when something is changed in the specific field form)
   getFieldDataForStoreWithForm(storeWithForm) {
     const isValidTtl = areValidationsInGraphValidated(
       storeWithForm.store,
