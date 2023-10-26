@@ -179,6 +179,11 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
             form:grouping form:Bag ;
             sh:path form:max ;
             sh:resultMessage "Dit veld is verplicht."@nl
+        ],
+        [ a form:ValidInteger ;
+            form:grouping form:MatchEvery ;
+            sh:path form:max ;
+            sh:resultMessage "Aantal moet een een geheel getal zijn."@nl
         ] ;
       form:displayType displayTypes:defaultInput ;
       sh:group ext:formFieldPg .
