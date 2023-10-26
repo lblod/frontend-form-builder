@@ -77,7 +77,8 @@ export default class AddValidationsToFormComponent extends Component {
       );
       this.savedBuilderTtlCode = sourceTtl;
     }
-
+    console.log(`Stores before the update to the parent`);
+    console.log(this.forkingStoreManager.getStoreOverView());
     this.args.onUpdateValidations(this.savedBuilderTtlCode);
   }
 
@@ -174,7 +175,7 @@ export default class AddValidationsToFormComponent extends Component {
     }
 
     yield this.mergeThFieldFormsWithTheBuilderForm();
-    this.registerToObservableForStoresWithForm();
+    // this.registerToObservableForStoresWithForm(); // SHOULD BE UNCOMMNETED TO PICK UP CHANGES
   }
 
   updateDifferencesInTriples(newTriples, oldTriples, store) {
@@ -240,8 +241,6 @@ export default class AddValidationsToFormComponent extends Component {
         return { subject: storeWithForm.subject, store: storeWithForm.store };
       })
     );
-
-    console.log(this.forkingStoreManager.getStoreOverView());
 
     return storesWithForm;
   }

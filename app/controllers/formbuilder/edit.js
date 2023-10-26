@@ -19,6 +19,7 @@ const SOURCE_NODE = new RDFNode('http://frontend.poc.form.builder/sourcenode');
 
 export default class FormbuilderEditController extends Controller {
   @service store;
+  @service('forking-store-manager') forkingStoreManager;
 
   @tracked formCode;
 
@@ -67,7 +68,8 @@ export default class FormbuilderEditController extends Controller {
 
     const { formTtl, metaTtl } = this.model;
 
-    this.builderStore = new ForkingStore();
+    this.forkingStoreManager.setBuilderStore(new ForkingStore());
+    this.builderStore = this.forkingStoreManager.getBuilderStore();
     this.builderStore.parse(formTtl, GRAPHS.formGraph.value, 'text/turtle');
     this.builderStore.parse(metaTtl, GRAPHS.metaGraph.value, 'text/turtle');
     this.builderStore.parse(
@@ -94,7 +96,8 @@ export default class FormbuilderEditController extends Controller {
     // and form arguments change, but we're not there yet.
     await timeout(1);
 
-    this.previewStore = new ForkingStore();
+    this.forkingStoreManager.setPreviewStore(new ForkingStore());
+    this.previewStore = this.forkingStoreManager.getPreviewStore();
     this.previewStore.parse(
       this.formCode,
       GRAPHS.formGraph.value,

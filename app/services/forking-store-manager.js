@@ -45,6 +45,11 @@ export default class ForkingStoreManagerService extends Service {
       throw `The store you want to assign to the builderStore is not a ForkingStore.`;
     }
 
+    if (this.builderStore) {
+      console.info(`Overwriting the builder store after set to null.`);
+      this.builderStore = null;
+    }
+
     this.builderStore = builderStore;
   }
 
@@ -57,16 +62,13 @@ export default class ForkingStoreManagerService extends Service {
   }
 
   addFieldStores(storesToAdd) {
-    const uniqueStoresToAdd = [];
     for (const storeWithSubject of storesToAdd) {
       this.addFieldStore(storeWithSubject.subject, storeWithSubject.store);
     }
-
-    this.fieldStores = [...this.fieldStores, ...uniqueStoresToAdd];
   }
 
   addFieldStore(fieldSubject, store) {
-    if (!this.isStoreInList(store)) {
+    if (!this.isFieldSubjectInList(fieldSubject)) {
       this.fieldStores.push({
         subject: fieldSubject,
         store: store,
@@ -74,11 +76,18 @@ export default class ForkingStoreManagerService extends Service {
     }
   }
 
-  isStoreInList(store) {
+  isFieldSubjectInList(fieldSubject) {
     const matches = this.fieldStores.filter(
-      (storeInList) => storeInList == store
+      (storeInList) => storeInList.subject.value == fieldSubject.value
     );
 
-    return matches.length == 0;
+    if (matches.length == 0) {
+      return false;
+    }
+
+    console.info(
+      `Tried adding a second field store for subject: ${fieldSubject.value}`
+    );
+    return true;
   }
 }
