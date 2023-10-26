@@ -22,7 +22,7 @@ import { showErrorToasterMessage } from '../utils/toaster-message-helper';
 import { getFieldsInStore } from '../utils/get-triples-per-field-in-store';
 import { createStoreForFieldData } from '../utils/create-store-for-field';
 import { getFieldAndValidationTriples } from '../utils/get-field-and-validation-triples';
-import { mergeFieldValidationFormWithBuilderForm as mergeFieldDataWithBuilderForm } from '../utils/merge-field-data-with-builder-form';
+import { mergeFieldValidationFormWithBuilderForm } from '../utils/merge-field-data-with-builder-form';
 import { addValidationTriplesToFormNodesL } from '../utils/validation/add-field-valdiations-to-formNodesL';
 
 export default class AddValidationsToFormComponent extends Component {
@@ -30,6 +30,7 @@ export default class AddValidationsToFormComponent extends Component {
 
   @service toaster;
 
+  isMerging = false;
   savedBuilderTtlCode;
 
   graphs = validationGraphs;
@@ -59,62 +60,60 @@ export default class AddValidationsToFormComponent extends Component {
     this.registerToObservableForStoresWithForm(this.storesWithForm);
   }
 
-  async mergeThFieldFormsWithTheBuilderForm() {
-    this.deregisterFromObservableForStoresWithForm(this.storesWithForm);
-
-    for (const fieldData of this.getFieldsData(this.storesWithForm)) {
-      const storeWithMergedField = await mergeFieldDataWithBuilderForm(
-        fieldData,
-        this.savedBuilderTtlCode,
-        this.graphs
-      );
-
-      const sourceTtl = storeWithMergedField.serializeDataMergedGraph(
-        this.graphs.sourceGraph
-      );
-      this.savedBuilderTtlCode = sourceTtl;
-    }
+  willDestroy() {
+    super.willDestroy(...arguments);
 
     this.args.onUpdateValidations(this.savedBuilderTtlCode);
   }
 
-  getFieldsData(storesWithForm) {
-    const fieldsData = [];
+  async mergeFieldDataWithBuilderForm(fieldData) {
+    this.isMerging = true;
+    const storeWithMergedField = await mergeFieldValidationFormWithBuilderForm(
+      fieldData,
+      this.savedBuilderTtlCode,
+      this.graphs
+    );
 
-    for (const storeWithForm of storesWithForm) {
-      const isValidTtl = areValidationsInGraphValidated(
+    const sourceTtl = storeWithMergedField.serializeDataMergedGraph(
+      this.graphs.sourceGraph
+    );
+    this.savedBuilderTtlCode = sourceTtl;
+    console.log(this.savedBuilderTtlCode);
+    this.args.onUpdateValidations(this.savedBuilderTtlCode);
+
+    this.isMerging = false;
+  }
+
+  getFieldDataForStoreWithForm(storeWithForm) {
+    const isValidTtl = areValidationsInGraphValidated(
+      storeWithForm.store,
+      this.graphs.sourceGraph
+    );
+    if (isValidTtl) {
+      const triples = getFieldAndValidationTriples(
+        storeWithForm.subject,
         storeWithForm.store,
         this.graphs.sourceGraph
       );
-      if (isValidTtl) {
-        const triples = getFieldAndValidationTriples(
-          storeWithForm.subject,
-          storeWithForm.store,
-          this.graphs.sourceGraph
-        );
 
-        fieldsData.push({
-          store: storeWithForm.store,
-          subject: storeWithForm.subject,
-          triples: triples,
-        });
-      } else {
-        showErrorToasterMessage(
-          this.toaster,
-          `Form of field with subject: ${storeWithForm.subject} is invalid.`
-        );
-        console.error(
-          `Current invalid field ttl for subject: ${storeWithForm.subject}`,
-          storeWithForm.store.serializeDataMergedGraph(this.graphs.sourceGraph)
-        );
-      }
+      return {
+        store: storeWithForm.store,
+        subject: storeWithForm.subject,
+        triples: triples,
+      };
+    } else {
+      showErrorToasterMessage(
+        this.toaster,
+        `Form of field with subject: ${storeWithForm.subject} is invalid.`
+      );
+      console.error(
+        `Current invalid field ttl for subject: ${storeWithForm.subject}`,
+        storeWithForm.store.serializeDataMergedGraph(this.graphs.sourceGraph)
+      );
     }
-
-    return fieldsData;
   }
 
-  @task({ restartable: true })
-  *updatedFormFieldValidations(builderStore) {
+  updatedFormFieldValidations(builderStore) {
     if (
       !areValidationsInGraphValidated(builderStore, this.graphs.sourceGraph)
     ) {
@@ -170,8 +169,16 @@ export default class AddValidationsToFormComponent extends Component {
       builderStore.addAll([statement]);
     }
 
-    yield this.mergeThFieldFormsWithTheBuilderForm();
-    this.registerToObservableForStoresWithForm()
+    const storeWithForm = this.storesWithForm
+      .filter((storeWithForm) => storeWithForm.store == builderStore)
+      .shift();
+    this.mergeFieldDataWithBuilderForm(
+      this.getFieldDataForStoreWithForm(storeWithForm)
+    );
+
+    builderStore.registerObserver(() => {
+      if (!this.isMerging) this.updatedFormFieldValidations(builderStore);
+    });
   }
 
   updateDifferencesInTriples(newTriples, oldTriples, store) {
@@ -243,10 +250,10 @@ export default class AddValidationsToFormComponent extends Component {
     }
   }
 
-  registerToObservableForStoresWithForm() {
-    for (const storeWithForm of this.storesWithForm) {
-      storeWithForm.store.registerObserver(async () => {
-        await this.updatedFormFieldValidations.perform(storeWithForm.store);
+  registerToObservableForStoresWithForm(storesWithForm) {
+    for (const storeWithForm of storesWithForm) {
+      storeWithForm.store.registerObserver(() => {
+        this.updatedFormFieldValidations(storeWithForm.store);
       });
     }
   }
