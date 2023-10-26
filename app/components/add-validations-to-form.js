@@ -74,6 +74,7 @@ export default class AddValidationsToFormComponent extends Component {
     this.args.onUpdateValidations(this.savedBuilderTtlCode);
   }
 
+<<<<<<< HEAD
   getFieldDataForStoreWithForm(storeWithForm) {
     const isValidTtl = areValidationsInGraphValidated(
       storeWithForm.store,
@@ -103,6 +104,8 @@ export default class AddValidationsToFormComponent extends Component {
     }
   }
 
+=======
+>>>>>>> 5823ffb (refactor: not all field forms are merged everytime only when something is changed in the specific field form)
   getFieldDataForStoreWithForm(storeWithForm) {
     const isValidTtl = areValidationsInGraphValidated(
       storeWithForm.store,
