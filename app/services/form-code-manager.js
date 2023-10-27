@@ -1,12 +1,10 @@
 import Service from '@ember/service';
 
-const startVersion = -1;
-
 export default class FormCodeManagerService extends Service {
   startVersion = -1;
 
   formCodeHistory = [];
-  version = startVersion; // -1 so start version is 0
+  version = this.startVersion; // -1 so start version is 0
 
   getLatestVersion() {
     return this.version;
@@ -18,7 +16,7 @@ export default class FormCodeManagerService extends Service {
 
   clearHistory() {
     this.formCodeHistory = [];
-    this.version = startVersion;
+    this.version = this.startVersion;
   }
 
   addFormCode(ttl) {
