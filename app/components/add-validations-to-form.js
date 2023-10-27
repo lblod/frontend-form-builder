@@ -78,7 +78,6 @@ export default class AddValidationsToFormComponent extends Component {
       this.graphs.sourceGraph
     );
     this.savedBuilderTtlCode = sourceTtl;
-    console.log(this.savedBuilderTtlCode);
     this.args.onUpdateValidations(this.savedBuilderTtlCode);
 
     this.isMerging = false;
