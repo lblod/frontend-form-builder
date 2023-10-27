@@ -13,9 +13,6 @@ export default class FormCodeManagerService extends Service {
 
   pinLatestVersionAsReferenceTtl() {
     this.referenceVersion = this.getLatestVersion();
-    console.info(
-      `Updated reference version to latest ${this.referenceVersion}`
-    );
   }
 
   getHistory() {
@@ -29,9 +26,6 @@ export default class FormCodeManagerService extends Service {
 
   addFormCode(ttl) {
     if (this.isTtlTheSameAsLatest(ttl)) {
-      console.info(
-        `Did not create a new entry as the ttl code is the same as latest.`
-      );
       return;
     }
 
@@ -47,11 +41,6 @@ export default class FormCodeManagerService extends Service {
 
   isLatestDeviatingFromReference() {
     if (this.getLatestVersion() == this.referenceVersion) {
-      console.info(
-        `Form is not changed in latest. Current version: ${this.getLatestVersion()}. reference version: ${
-          this.referenceVersion
-        }`
-      );
       return false;
     }
 
