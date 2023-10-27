@@ -60,12 +60,6 @@ export default class AddValidationsToFormComponent extends Component {
     this.registerToObservableForStoresWithForm(this.storesWithForm);
   }
 
-  willDestroy() {
-    super.willDestroy(...arguments);
-
-    this.args.onUpdateValidations(this.savedBuilderTtlCode);
-  }
-
   async mergeFieldDataWithBuilderForm(fieldData) {
     this.isMerging = true;
     const storeWithMergedField = await mergeFieldValidationFormWithBuilderForm(
