@@ -94,7 +94,7 @@ export default class FormbuilderEditController extends Controller {
     // and form arguments change, but we're not there yet.
     await timeout(1);
     this.formCodeManager.addFormCode(this.formCode);
-    this.setFormChanged(this.formCodeManager.isFormChangedInLastVersion());
+    this.setFormChanged(this.formCodeManager.isLatestDeviatingFromReference());
 
     this.previewStore = new ForkingStore();
     this.previewStore.parse(
@@ -141,6 +141,8 @@ export default class FormbuilderEditController extends Controller {
 
   setup(model) {
     this.formCode = this.getFormTtlCode(model.generatedForm);
+    this.formCodeManager.addFormCode(this.formCode);
+    this.formCodeManager.pinLatestVersionAsReferenceTtl();
     this.setupForms();
   }
 

@@ -5,9 +5,17 @@ export default class FormCodeManagerService extends Service {
 
   formCodeHistory = [];
   version = this.startVersion; // -1 so start version is 0
+  referenceVersion = this.startVersion;
 
   getLatestVersion() {
     return this.version;
+  }
+
+  pinLatestVersionAsReferenceTtl() {
+    this.referenceVersion = this.getLatestVersion();
+    console.info(
+      `Updated reference version to latest ${this.referenceVersion}`
+    );
   }
 
   getHistory() {
@@ -37,16 +45,18 @@ export default class FormCodeManagerService extends Service {
     return compareTtl == latestTtl;
   }
 
-  isFormChangedInLastVersion() {
-    if (this.getLatestVersion() == 0) {
+  isLatestDeviatingFromReference() {
+    if (this.getLatestVersion() == this.referenceVersion) {
       console.info(
-        `Form is not changed in latest. Current version ${this.getLatestVersion()}`
+        `Form is not changed in latest. Current version: ${this.getLatestVersion()}. reference version: ${
+          this.referenceVersion
+        }`
       );
       return false;
     }
 
-    const previousVersion = this.getLatestVersion() - 1;
-
-    return !this.isTtlTheSameAsLatest(this.formCodeHistory[previousVersion]);
+    return !this.isTtlTheSameAsLatest(
+      this.formCodeHistory[this.referenceVersion]
+    );
   }
 }
