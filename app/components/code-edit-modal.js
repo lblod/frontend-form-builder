@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { restartableTask, timeout } from 'ember-concurrency';
+import { restartableTask } from 'ember-concurrency';
 
 export default class CodeEditModal extends Component {
   @tracked formCode;
@@ -21,6 +21,10 @@ export default class CodeEditModal extends Component {
 
       return;
     }
+    // The newCode is not assigned to this.fromCode as than the editor
+    // loses focus as you are udpating the content in the editor.
+    // Keeping the changes in another variable and at the end assigning
+    // the formCode to the updated code
     this.formCodeUpdates = newCode;
     this.isButtonsDisabled = false;
   });
@@ -35,7 +39,7 @@ export default class CodeEditModal extends Component {
   updateForm() {
     this.isButtonsDisabled = true;
     this.formCode = this.formCodeUpdates;
-    console.log(`update code to `, this.formCode);
+
     this.args.onCodeChange?.(this.formCode);
     this.args.onClose(true);
   }
