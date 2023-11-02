@@ -3,7 +3,6 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { restartableTask } from 'ember-concurrency';
-import { TurtleLanguage } from 'codemirror-lang-turtle';
 
 export default class CodeEditModal extends Component {
   @service('form-code-manager') formCodeManager;
