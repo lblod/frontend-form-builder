@@ -9,12 +9,14 @@ export default class CodeEditModal extends Component {
 
   @tracked formCode;
   @tracked formCodeUpdates;
+  @tracked editorStartFormCode;
   @tracked isButtonsDisabled;
 
   constructor() {
     super(...arguments);
     this.formCode = this.formCodeManager.getTtlOfLatestVersion();
     this.formCodeUpdates = this.formCode;
+    this.editorStartFormCode = this.formCode;
     this.isButtonsDisabled = this.formCodeManager.isTtlTheSameAsLatest(
       this.formCode
     );
@@ -43,7 +45,7 @@ export default class CodeEditModal extends Component {
 
   @action
   restoreForm() {
-    this.formCode = this.formCodeManager.getTtlOfReferenceVersion();
+    this.formCode = this.editorStartFormCode;
     this.isButtonsDisabled = true;
 
     this.args.onCodeChange?.(this.formCode);
@@ -53,6 +55,7 @@ export default class CodeEditModal extends Component {
   updateForm() {
     this.formCode = this.formCodeUpdates;
     this.formCodeManager.addFormCode(this.formCode);
+    this.editorStartFormCode = this.formCodeManager.getTtlOfLatestVersion();
 
     this.args.onCodeChange?.(this.formCode);
     this.isButtonsDisabled = true;
