@@ -15,8 +15,9 @@ export default class CodeEditModal extends Component {
     super(...arguments);
     this.formCode = this.formCodeManager.getTtlOfLatestVersion();
     this.formCodeUpdates = this.formCode;
-    this.isButtonsDisabled =
-      !this.formCodeManager.isLatestDeviatingFromReference();
+    this.isButtonsDisabled = this.formCodeManager.isTtlTheSameAsLatest(
+      this.formCode
+    );
   }
 
   willDestroy() {
