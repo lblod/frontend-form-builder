@@ -20,7 +20,7 @@ export default class FormCodeManagerService extends Service {
   }
 
   addFormCode(ttl) {
-    if (this.#isTtlTheSameAsLatest(ttl)) {
+    if (this.isTtlTheSameAsLatest(ttl)) {
       return;
     }
 
@@ -28,12 +28,18 @@ export default class FormCodeManagerService extends Service {
     this.formCodeHistory[this.latestVersion] = ttl;
   }
 
+  isTtlTheSameAsLatest(compareTtl) {
+    const latestTtl = this.formCodeHistory[this.latestVersion];
+
+    return compareTtl == latestTtl;
+  }
+
   isLatestDeviatingFromReference() {
     if (this.latestVersion == this.referenceVersion) {
       return false;
     }
 
-    return !this.#isTtlTheSameAsLatest(
+    return !this.isTtlTheSameAsLatest(
       this.formCodeHistory[this.referenceVersion]
     );
   }
@@ -41,12 +47,6 @@ export default class FormCodeManagerService extends Service {
   clearHistory() {
     this.formCodeHistory = [];
     this.latestVersion = this.startVersion;
-  }
-
-  #isTtlTheSameAsLatest(compareTtl) {
-    const latestTtl = this.formCodeHistory[this.latestVersion];
-
-    return compareTtl == latestTtl;
   }
 
   #getTtlOfVersion(version) {
