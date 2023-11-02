@@ -7,6 +7,7 @@ export default class ToolbarComponent extends Component {
   @service store;
   @service router;
   @service toaster;
+  @service('form-code-manager') formCodeManager;
 
   @tracked showDeleteModal = false;
   @tracked showCodeModal = false;
@@ -67,6 +68,7 @@ export default class ToolbarComponent extends Component {
       this.toaster.success('Formulier bijgewerkt', 'Success', {
         timeOut: 5000,
       });
+      this.formCodeManager.pinLatestVersionAsReferenceTtl();
       this.showEditModal = false;
     } catch (err) {
       this.toaster.error('Oeps, er is iets mis gegaan', 'Error', {

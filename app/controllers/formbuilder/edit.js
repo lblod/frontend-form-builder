@@ -19,6 +19,7 @@ const SOURCE_NODE = new RDFNode('http://frontend.poc.form.builder/sourcenode');
 
 export default class FormbuilderEditController extends Controller {
   @service store;
+  @service('form-code-manager') formCodeManager;
 
   @tracked formCode;
 
@@ -47,7 +48,6 @@ export default class FormbuilderEditController extends Controller {
 
   @action
   refreshWithTheValidationFormTtlCode(validationTtlCode) {
-    this.formChanged = true;
     this.formCode = validationTtlCode;
     this.setupPreviewForm.perform();
   }
@@ -93,6 +93,8 @@ export default class FormbuilderEditController extends Controller {
     // Ideally the RdfForm component would do the right thing when the formStore
     // and form arguments change, but we're not there yet.
     await timeout(1);
+    this.formCodeManager.addFormCode(this.formCode);
+    this.setFormChanged(this.formCodeManager.isLatestDeviatingFromReference());
 
     this.previewStore = new ForkingStore();
     this.previewStore.parse(
@@ -116,14 +118,12 @@ export default class FormbuilderEditController extends Controller {
 
   @action
   async handleCodeChange(newCode) {
-    this.formChanged = true;
     this.formCode = newCode;
     this.setupForms();
   }
 
   handleBuilderFormChange = restartableTask(async () => {
     await timeout(1); // small timeout to group multiple store observer callbacks together
-    this.formChanged = true;
 
     const sourceTtl = this.builderStore.serializeDataMergedGraph(
       GRAPHS.sourceGraph
@@ -141,12 +141,14 @@ export default class FormbuilderEditController extends Controller {
 
   setup(model) {
     this.formCode = this.getFormTtlCode(model.generatedForm);
+    this.formCodeManager.addFormCode(this.formCode);
+    this.formCodeManager.pinLatestVersionAsReferenceTtl();
     this.setupForms();
   }
 
   reset() {
     this.deregisterFromObservable();
-    this.formChanged = false;
+    this.formCodeManager.clearHistory();
     this.isShowBuilder = true;
   }
 
