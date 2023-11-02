@@ -13,30 +13,40 @@ export default class CodeEditModal extends Component {
   constructor() {
     super(...arguments);
     this.formCode = this.formCodeManager.getTtlOfLatestVersion();
-    this.isButtonsDisabled = true;
+    this.updateButtonDisabledState();
+  }
+
+  willDestroy() {
+    super.willDestroy(...arguments);
+
+    this.args.onCodeChange?.(this.formCode);
   }
 
   handleCodeChange = restartableTask(async (newCode) => {
     this.formCodeManager.addFormCode(newCode);
-
-    this.isButtonsDisabled =
-      !this.formCodeManager.isLatestDeviatingFromReference();
+    this.updateButtonDisabledState();
   });
 
   @action
   restoreForm() {
-    this.isButtonsDisabled = true;
     this.formCode = this.formCodeManager.getTtlOfVersion(
       this.formCodeManager.getReferenceVersion()
     );
+    this.formCodeManager.addFormCode(this.formCode);
+    this.updateButtonDisabledState();
   }
 
   @action
   updateForm() {
-    this.isButtonsDisabled = true;
     this.formCode = this.formCodeManager.getTtlOfLatestVersion();
     this.formCodeManager.pinLatestVersionAsReferenceTtl();
 
     this.args.onCodeChange?.(this.formCode);
+    this.updateButtonDisabledState();
+  }
+
+  updateButtonDisabledState() {
+    this.isButtonsDisabled =
+      !this.formCodeManager.isLatestDeviatingFromReference();
   }
 }
