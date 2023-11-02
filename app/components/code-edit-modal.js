@@ -29,9 +29,7 @@ export default class CodeEditModal extends Component {
 
   @action
   restoreForm() {
-    this.formCode = this.formCodeManager.getTtlOfVersion(
-      this.formCodeManager.getReferenceVersion()
-    );
+    this.formCode = this.formCodeManager.getTtlOfReferenceVersion();
     this.formCodeManager.addFormCode(this.formCode);
     this.updateButtonDisabledState();
   }
@@ -39,7 +37,7 @@ export default class CodeEditModal extends Component {
   @action
   updateForm() {
     this.formCode = this.formCodeManager.getTtlOfLatestVersion();
-    this.formCodeManager.pinLatestVersionAsReferenceTtl();
+    this.formCodeManager.pinLatestVersionAsReference();
 
     this.args.onCodeChange?.(this.formCode);
     this.updateButtonDisabledState();

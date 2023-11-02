@@ -142,7 +142,7 @@ export default class FormbuilderEditController extends Controller {
   setup(model) {
     this.formCode = this.getFormTtlCode(model.generatedForm);
     this.formCodeManager.addFormCode(this.formCode);
-    this.formCodeManager.pinLatestVersionAsReferenceTtl();
+    this.formCodeManager.pinLatestVersionAsReference();
     this.setupForms();
   }
 

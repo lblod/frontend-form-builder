@@ -4,67 +4,59 @@ export default class FormCodeManagerService extends Service {
   startVersion = -1;
 
   formCodeHistory = [];
-  version = this.startVersion; // -1 so start version is 0
+  latestVersion = this.startVersion; // -1 so start version is 0
   referenceVersion = this.startVersion;
 
-  getLatestVersion() {
-    return this.version;
-  }
-
-  getReferenceVersion() {
-    return this.referenceVersion;
-  }
-
   getTtlOfLatestVersion() {
-    return this.getTtlOfVersion(this.getLatestVersion());
+    return this.#getTtlOfVersion(this.latestVersion);
   }
 
-  getTtlOfVersion(version) {
-    if (version <= this.startVersion) {
-      throw `The lowest version available is version: 0`;
+  getTtlOfReferenceVersion() {
+    return this.#getTtlOfVersion(this.referenceVersion);
+  }
+
+  pinLatestVersionAsReference() {
+    this.referenceVersion = this.latestVersion;
+  }
+
+  addFormCode(ttl) {
+    if (this.#isTtlTheSameAsLatest(ttl)) {
+      return;
     }
-    if (version > this.getLatestVersion()) {
-      throw `The highest version available is version: ${this.getLatestVersion()}`;
+
+    this.latestVersion++;
+    this.formCodeHistory[this.latestVersion] = ttl;
+  }
+
+  isLatestDeviatingFromReference() {
+    if (this.latestVersion == this.referenceVersion) {
+      return false;
     }
 
-    return this.formCodeHistory[version];
-  }
-
-  pinLatestVersionAsReferenceTtl() {
-    this.referenceVersion = this.getLatestVersion();
-  }
-
-  getHistory() {
-    return this.formCodeHistory;
+    return !this.#isTtlTheSameAsLatest(
+      this.formCodeHistory[this.referenceVersion]
+    );
   }
 
   clearHistory() {
     this.formCodeHistory = [];
-    this.version = this.startVersion;
+    this.latestVersion = this.startVersion;
   }
 
-  addFormCode(ttl) {
-    if (this.isTtlTheSameAsLatest(ttl)) {
-      return;
-    }
-
-    this.version++;
-    this.formCodeHistory[this.version] = ttl;
-  }
-
-  isTtlTheSameAsLatest(compareTtl) {
-    const latestTtl = this.formCodeHistory[this.getLatestVersion()];
+  #isTtlTheSameAsLatest(compareTtl) {
+    const latestTtl = this.formCodeHistory[this.latestVersion];
 
     return compareTtl == latestTtl;
   }
 
-  isLatestDeviatingFromReference() {
-    if (this.getLatestVersion() == this.referenceVersion) {
-      return false;
+  #getTtlOfVersion(version) {
+    if (version <= this.startVersion) {
+      throw `The lowest version available is version: 0`;
+    }
+    if (version > this.latestVersion) {
+      throw `The highest version available is version: ${this.latestVersion}`;
     }
 
-    return !this.isTtlTheSameAsLatest(
-      this.formCodeHistory[this.referenceVersion]
-    );
+    return this.formCodeHistory[version];
   }
 }
