@@ -37,7 +37,6 @@ export default class CodeEditModal extends Component {
   @action
   updateForm() {
     this.formCode = this.formCodeManager.getTtlOfLatestVersion();
-    this.formCodeManager.pinLatestVersionAsReference();
 
     this.args.onCodeChange?.(this.formCode);
     this.updateButtonDisabledState();
