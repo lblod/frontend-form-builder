@@ -1,46 +1,42 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { restartableTask } from 'ember-concurrency';
 
 export default class CodeEditModal extends Component {
+  @service('form-code-manager') formCodeManager;
+
   @tracked formCode;
-  @tracked formCodeUpdates;
   @tracked isButtonsDisabled;
 
   constructor() {
     super(...arguments);
-    this.formCode = this.args.code;
+    this.formCode = this.formCodeManager.getTtlOfLatestVersion();
     this.isButtonsDisabled = true;
   }
 
   handleCodeChange = restartableTask(async (newCode) => {
-    if (newCode == this.formCode) {
-      this.isButtonsDisabled = true;
-      this.formCode = this.formCodeUpdates;
+    this.formCodeManager.addFormCode(newCode);
 
-      return;
-    }
-    // The newCode is not assigned to this.fromCode as than the editor
-    // loses focus as you are udpating the content in the editor.
-    // Keeping the changes in another variable and at the end assigning
-    // the formCode to the updated code
-    this.formCodeUpdates = newCode;
-    this.isButtonsDisabled = false;
+    this.isButtonsDisabled =
+      !this.formCodeManager.isLatestDeviatingFromReference();
   });
 
   @action
   restoreForm() {
     this.isButtonsDisabled = true;
-    this.formCode = this.args.code;
+    this.formCode = this.formCodeManager.getTtlOfVersion(
+      this.formCodeManager.getReferenceVersion()
+    );
   }
 
   @action
   updateForm() {
     this.isButtonsDisabled = true;
-    this.formCode = this.formCodeUpdates;
+    this.formCode = this.formCodeManager.getTtlOfLatestVersion();
+    this.formCodeManager.pinLatestVersionAsReferenceTtl();
 
     this.args.onCodeChange?.(this.formCode);
-    this.args.onClose(true);
   }
 }

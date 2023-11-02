@@ -11,6 +11,25 @@ export default class FormCodeManagerService extends Service {
     return this.version;
   }
 
+  getReferenceVersion() {
+    return this.referenceVersion;
+  }
+
+  getTtlOfLatestVersion() {
+    return this.getTtlOfVersion(this.getLatestVersion());
+  }
+
+  getTtlOfVersion(version) {
+    if (version <= this.startVersion) {
+      throw `The lowest version available is version: 0`;
+    }
+    if (version > this.getLatestVersion()) {
+      throw `The highest version available is version: ${this.getLatestVersion()}`;
+    }
+
+    return this.formCodeHistory[version];
+  }
+
   pinLatestVersionAsReferenceTtl() {
     this.referenceVersion = this.getLatestVersion();
   }
