@@ -68,7 +68,7 @@ export default class ToolbarComponent extends Component {
       this.toaster.success('Formulier bijgewerkt', 'Success', {
         timeOut: 5000,
       });
-      this.formCodeManager.pinLatestVersionAsReferenceTtl();
+      this.formCodeManager.pinLatestVersionAsReference();
       this.showEditModal = false;
     } catch (err) {
       this.toaster.error('Oeps, er is iets mis gegaan', 'Error', {

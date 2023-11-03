@@ -1,13 +1,23 @@
-<AuModal
-  @modalOpen={{true}}
-  @closeModal={{@onClose}}
->
+<AuModal @modalOpen={{true}} @closeModal={{@onClose}}>
   <:title>Formulier code bewerken</:title>
   <:body>
     <div
-      {{editor @code (perform this.handleCodeChange)}}
+      {{editor this.formCode (perform this.handleCodeChange)}}
       {{!template-lint-disable no-inline-styles}}
       style="overflow: auto; height: 100%; width:100%"
     ></div>
+    <div class="au-u-text-right">
+      <AuButton
+        class="au-u-margin-left-small"
+        @skin="secondary"
+        @disabled={{this.isButtonsDisabled}}
+        {{on "click" this.restoreForm}}
+      >Reset</AuButton>
+      <AuButton
+        class="au-u-margin-left-small"
+        @disabled={{this.isButtonsDisabled}}
+        {{on "click" this.updateForm}}
+      >Bewaar</AuButton>
+    </div>
   </:body>
 </AuModal>

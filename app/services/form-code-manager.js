@@ -4,24 +4,19 @@ export default class FormCodeManagerService extends Service {
   startVersion = -1;
 
   formCodeHistory = [];
-  version = this.startVersion; // -1 so start version is 0
+  latestVersion = this.startVersion; // -1 so start version is 0
   referenceVersion = this.startVersion;
 
-  getLatestVersion() {
-    return this.version;
+  getTtlOfLatestVersion() {
+    return this.#getTtlOfVersion(this.latestVersion);
   }
 
-  pinLatestVersionAsReferenceTtl() {
-    this.referenceVersion = this.getLatestVersion();
+  getTtlOfReferenceVersion() {
+    return this.#getTtlOfVersion(this.referenceVersion);
   }
 
-  getHistory() {
-    return this.formCodeHistory;
-  }
-
-  clearHistory() {
-    this.formCodeHistory = [];
-    this.version = this.startVersion;
+  pinLatestVersionAsReference() {
+    this.referenceVersion = this.latestVersion;
   }
 
   addFormCode(ttl) {
@@ -29,23 +24,39 @@ export default class FormCodeManagerService extends Service {
       return;
     }
 
-    this.version++;
-    this.formCodeHistory[this.version] = ttl;
+    this.latestVersion++;
+    this.formCodeHistory[this.latestVersion] = ttl;
   }
 
   isTtlTheSameAsLatest(compareTtl) {
-    const latestTtl = this.formCodeHistory[this.getLatestVersion()];
+    const latestTtl = this.formCodeHistory[this.latestVersion];
 
     return compareTtl == latestTtl;
   }
 
   isLatestDeviatingFromReference() {
-    if (this.getLatestVersion() == this.referenceVersion) {
+    if (this.latestVersion == this.referenceVersion) {
       return false;
     }
 
     return !this.isTtlTheSameAsLatest(
       this.formCodeHistory[this.referenceVersion]
     );
+  }
+
+  clearHistory() {
+    this.formCodeHistory = [];
+    this.latestVersion = this.startVersion;
+  }
+
+  #getTtlOfVersion(version) {
+    if (version <= this.startVersion) {
+      throw `The lowest version available is version: 0`;
+    }
+    if (version > this.latestVersion) {
+      throw `The highest version available is version: ${this.latestVersion}`;
+    }
+
+    return this.formCodeHistory[version];
   }
 }
