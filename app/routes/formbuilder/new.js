@@ -17,8 +17,4 @@ export default class FormbuilderNewRoute extends Route {
 
     return await newForm.save();
   }
-
-  afterModel(model) {
-    this.router.transitionTo('formbuilder.edit', model.id);
-  }
 }

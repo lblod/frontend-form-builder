@@ -1,0 +1,32 @@
+<AuModal
+  @title="Bewerk naam en beschrijving"
+  @modalOpen={{true}}
+  @closeModal={{fn (mut this.showEditModal) false}} as |Modal| >
+  <Modal.Body>
+    <div class="au-o-grid au-o-grid--small">
+      <div class="au-o-grid__item au-1-1">
+        <AuLabel for="input-filelabel">
+          Naam
+        </AuLabel>
+        <AuInput
+          id="input-filelabel"
+          value={{this.formLabel}}
+          {{on "change" this.handleLabelChange}}
+        />
+      </div>
+      <div class="au-o-grid__item au-1-1">
+        <AuLabel for="input-filecomment">Beschrijving</AuLabel>
+        <AuTextarea
+          @width="block"
+          id="input-filecomment"
+          rows="10"
+          value={{this.formComment}}
+          {{on "input" this.handleCommentChange}}
+        />
+      </div>
+    </div>
+  </Modal.Body>
+  <Modal.Footer>
+    <AuButton {{on 'click' this.updateForm}}>Bijwerken</AuButton>
+  </Modal.Footer>
+</AuModal>
