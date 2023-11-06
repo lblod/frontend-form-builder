@@ -9,25 +9,51 @@
   @setFormChanged={{this.setFormChanged}}
 />
 
-<main id="main" class="au-c-main-container">
-  <div class="au-c-main-container__content">
-    <div class="formBuilderEdit">
-      {{outlet}}
-      <div class="formBuilderEdit__preview au-u-padding-small">
-        {{#if this.setupPreviewForm.isRunning}}
-          <AuLoader />
-        {{else}}
-          <RdfForm
-            @groupClass="au-u-margin-left-small au-u-margin-top"
-            @form={{this.previewForm}}
-            @graphs={{this.graphs}}
-            @sourceNode={{this.sourceNode}}
-            @formStore={{this.previewStore}}
-            @forceShowErrors={{true}}
-            @useNewListingLayout={{true}}
-          />
-        {{/if}}
-      </div>
+<AuBodyContainer>
+  <AuTabs
+    class="au-u-padding-left-small au-u-padding-right-small"
+    @reversed={{this.reversed}}
+    as |Tab|
+  >
+    <Tab>
+      <AuLink
+        @route="formbuilder.edit.editor"
+        @icon="indent"
+        @active={{false}}
+      >Editor</AuLink>
+    </Tab>
+    <Tab>
+      <AuLink
+        @route="formbuilder.edit.builder"
+        @icon="document"
+        @active={{false}}
+      >Builder</AuLink>
+    </Tab>
+    <Tab>
+      <AuLink
+        @route="formbuilder.edit.validations"
+        @icon="website"
+        @active={{false}}
+      >Validations</AuLink>
+    </Tab>
+
+  </AuTabs>
+  <div class="formBuilderEdit">
+    {{outlet}}
+    <div class="formBuilderEdit__preview au-u-padding-small">
+      {{#if this.setupPreviewForm.isRunning}}
+        <AuLoader />
+      {{else}}
+        <RdfForm
+          @groupClass="au-u-margin-left-small au-u-margin-top"
+          @form={{this.previewForm}}
+          @graphs={{this.graphs}}
+          @sourceNode={{this.sourceNode}}
+          @formStore={{this.previewStore}}
+          @forceShowErrors={{true}}
+          @useNewListingLayout={{true}}
+        />
+      {{/if}}
     </div>
   </div>
-</main>
+</AuBodyContainer>

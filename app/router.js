@@ -13,7 +13,11 @@ Router.map(function () {
   this.route('codelijsten');
   this.route('formbuilder', function () {
     this.route('new');
-    this.route('edit', { path: '/:id/edit' });
+    this.route('edit', { path: '/:id/edit' }, function () {
+      this.route('editor');
+      this.route('builder');
+      this.route('validations');
+    });
   });
   this.route('user-tests', function () {
     this.route('new');
