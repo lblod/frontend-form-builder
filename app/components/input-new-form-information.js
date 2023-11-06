@@ -8,7 +8,6 @@ export default class ToolbarComponent extends Component {
   @service router;
   @service toaster;
 
-  @tracked showEditModal = true;
   @tracked formLabel = this.args.model.label;
   @tracked formComment = this.args.model.comment;
 
@@ -47,7 +46,6 @@ export default class ToolbarComponent extends Component {
       this.toaster.success('Formulier aangemaakt', 'Success', {
         timeOut: 5000,
       });
-      this.showEditModal = false;
       this.router.transitionTo('formbuilder.edit', this.args.model.id);
     } catch (err) {
       this.toaster.error('Oeps, er is iets mis gegaan', 'Error', {
