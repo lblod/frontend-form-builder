@@ -8,6 +8,7 @@ import CountryCodeConceptSchemeSelectorComponent from '../../components/rdf-form
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { GRAPHS } from '../../controllers/formbuilder/edit';
 import { FORM, RDF } from '../../utils/rdflib';
+import basicFormTemplate from '../../utils/basic-form-template';
 
 export default class FormbuilderEditRoute extends Route {
   @service store;
@@ -103,7 +104,7 @@ export default class FormbuilderEditRoute extends Route {
     if (!generatedForm.ttlCode || generatedForm.ttlCode == '') {
       return basicFormTemplate;
     }
-    console.log({ ttl: generatedForm.ttlCode });
+
     return generatedForm.ttlCode;
   }
 }
