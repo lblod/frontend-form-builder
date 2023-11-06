@@ -30,21 +30,9 @@ export default class FormbuilderEditController extends Controller {
   @tracked builderForm;
 
   @tracked formChanged = false;
-  @tracked isShowBuilder = true;
 
   graphs = GRAPHS;
   sourceNode = SOURCE_NODE;
-
-  @action
-  async toggleIsAddingValidationToForm() {
-    this.isShowBuilder = !this.isShowBuilder;
-
-    if (this.isShowBuilder) {
-      this.setupBuilderForm.perform();
-    } else {
-      this.deregisterFromObservable();
-    }
-  }
 
   @action
   refreshWithTheValidationFormTtlCode(validationTtlCode) {
@@ -149,7 +137,6 @@ export default class FormbuilderEditController extends Controller {
   reset() {
     this.deregisterFromObservable();
     this.formCodeManager.clearHistory();
-    this.isShowBuilder = true;
   }
 
   getFormTtlCode(generatedForm) {
