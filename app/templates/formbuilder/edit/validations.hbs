@@ -1,3 +1,9 @@
 {{page-title "Validations"}}
 
-<p>VALIDATIONS</p>
+<AuBodyContainer class="formBuilderEdit__builder au-u-padding-small">
+  <AddValidationsToForm
+    @builderTtlCode={{@model.ttlCode}}
+    @sourceNode={{@model.form}}
+    @onUpdateValidations={{@model.updatedStore}}
+  />
+</AuBodyContainer>

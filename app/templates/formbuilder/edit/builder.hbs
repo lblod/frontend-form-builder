@@ -1,3 +1,14 @@
 {{page-title "Builder"}}
 
-<p>BUILDER</p>
+<AuBodyContainer
+  class="formBuilderEdit__builder au-u-padding-small"
+>
+  <RdfForm
+    @groupClass="au-o-grid__item"
+    @form={{@model.form}}
+    @graphs={{@model.graphs}}
+    @formStore={{@model.formStore}}
+    @forceShowErrors={{false}}
+    @useNewListingLayout={{true}}
+  />
+</AuBodyContainer>

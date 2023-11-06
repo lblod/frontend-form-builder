@@ -10,3 +10,10 @@
   overflow-x: hidden;
   background-color: $au-gray-100;
 }
+
+.formBuilderEdit__builder {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: $au-white;
+}

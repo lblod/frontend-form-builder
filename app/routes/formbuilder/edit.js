@@ -5,6 +5,9 @@ import PropertyGroupSelector from '../../components/rdf-form-fields/property-gro
 import ValidationConceptSchemeSelectorComponent from '../../components/rdf-form-fields/validation-concept-scheme-selector';
 import { getLocalFileContentAsText } from '../../utils/get-local-file-content';
 import CountryCodeConceptSchemeSelectorComponent from '../../components/rdf-form-fields/country-code-concept-scheme-selector';
+import { ForkingStore } from '@lblod/ember-submission-form-fields';
+import { GRAPHS } from '../../controllers/formbuilder/edit';
+import { FORM, RDF } from '../../utils/rdflib';
 
 export default class FormbuilderEditRoute extends Route {
   @service store;
@@ -20,11 +23,22 @@ export default class FormbuilderEditRoute extends Route {
       getLocalFileContentAsText('/forms/builder/form.ttl'),
       getLocalFileContentAsText('/forms/builder/meta.ttl'),
     ]);
+    const ttlCode = this.getFormTtlCode(generatedForm);
+    const formStore = await this.setupFormStore(ttlCode);
 
     return {
       generatedForm,
-      formTtl,
-      metaTtl,
+      ttlCode: ttlCode,
+      formTtl, // deprecated
+      metaTtl, // deprecated
+      graphs: GRAPHS,
+      formStore: formStore,
+      form: formStore.any(
+        undefined,
+        RDF('type'),
+        FORM('Form'),
+        GRAPHS.formGraph
+      ),
     };
   }
 
@@ -69,5 +83,27 @@ export default class FormbuilderEditRoute extends Route {
         edit: CountryCodeConceptSchemeSelectorComponent,
       },
     ]);
+  }
+
+  async setupFormStore(ttlCode) {
+    const [formTtl, metaTtl] = await Promise.all([
+      getLocalFileContentAsText('/forms/builder/form.ttl'),
+      getLocalFileContentAsText('/forms/builder/meta.ttl'),
+    ]);
+
+    const formStore = new ForkingStore();
+    formStore.parse(formTtl, GRAPHS.formGraph.value, 'text/turtle');
+    formStore.parse(metaTtl, GRAPHS.metaGraph.value, 'text/turtle');
+    formStore.parse(ttlCode, GRAPHS.sourceGraph.value, 'text/turtle');
+
+    return formStore;
+  }
+
+  getFormTtlCode(generatedForm) {
+    if (!generatedForm.ttlCode || generatedForm.ttlCode == '') {
+      return basicFormTemplate;
+    }
+    console.log({ ttl: generatedForm.ttlCode });
+    return generatedForm.ttlCode;
   }
 }
