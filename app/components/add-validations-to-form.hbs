@@ -1,14 +1,14 @@
 {{#each this.storesWithForm as |field|}}
   <p class="au-u-h4">{{field.name}}</p>
-  <br />
-  <RdfForm
-    @groupClass="au-o-grid__item"
-    @form={{field.form}}
-    @graphs={{this.graphs}}
-    @formStore={{field.store}}
-    @forceShowErrors={{false}}
-    @useNewListingLayout={{true}}
-    @sourceNode={{this.graphs.sourceNode}}
-  />
-  <br />
+  <span class="au-u-padding-top-small au-u-padding-bottom-small">
+    <RdfForm
+      @groupClass="au-o-grid__item"
+      @form={{field.form}}
+      @graphs={{this.graphs}}
+      @formStore={{field.store}}
+      @forceShowErrors={{false}}
+      @useNewListingLayout={{true}}
+      @sourceNode={{this.graphs.sourceNode}}
+    />
+  </span>
 {{/each}}
