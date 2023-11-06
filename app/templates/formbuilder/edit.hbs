@@ -1,4 +1,4 @@
-{{page-title "Formbuilder"}}
+{{page-title "Edit"}}
 
 <Toolbar
   @model={{this.model.generatedForm}}
@@ -19,14 +19,12 @@
       <AuLink
         @route="formbuilder.edit.builder"
         @icon="document"
-        @active={{false}}
       >Builder</AuLink>
     </Tab>
     <Tab>
       <AuLink
         @route="formbuilder.edit.validations"
         @icon="website"
-        @active={{false}}
       >Validations</AuLink>
     </Tab>
 

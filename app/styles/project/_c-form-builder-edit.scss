@@ -2,7 +2,7 @@
   display: grid;
   height: 100%;
   width: 100%;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, 1fr);
 }
 .formBuilderEdit__preview {
   height: 100%;
