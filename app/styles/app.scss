@@ -1,9 +1,9 @@
 @import "ember-appuniversum";
 @import "project/c-playground";
-@import 'project/c-app-chrome';
+@import "project/c-app-chrome";
+@import "project/c-form-builder-edit";
 
 @import "shame";
-
 
 // copied from loket
 .au-c-close {
@@ -38,4 +38,3 @@
   color: $au-gray-700;
   font-style: italic;
 }
-

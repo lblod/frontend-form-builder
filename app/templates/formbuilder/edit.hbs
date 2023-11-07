@@ -1,4 +1,4 @@
-{{page-title "Formbuilder"}}
+{{page-title "Edit"}}
 
 <Toolbar
   @model={{this.model.generatedForm}}
@@ -9,64 +9,42 @@
   @setFormChanged={{this.setFormChanged}}
 />
 
-<main id="main" class="au-c-main-container">
-  <div class="au-c-main-container__content">
-    <div class="playground-tab">
-      Builder
-      <AuToggleSwitch
-        @disabled={{or this.setupBuilderForm.isRunning this.setupPreviewForm.isRunning}}
-        @checked={{not this.isShowBuilder}}
-        @onChange={{this.toggleIsAddingValidationToForm}}
-      >Validation</AuToggleSwitch>
-    </div>
-    <div class="playground">
-      {{#if this.isShowBuilder}}
-        <div class="playground__edit">
-          <AuBodyContainer
-            @scroll={{true}}
-            class="au-o-box au-u-margin-bottom-large"
-          >
-            {{#if this.setupBuilderForm.isIdle}}
-              <RdfForm
-                @groupClass="au-o-grid__item"
-                @form={{this.builderForm}}
-                @graphs={{this.graphs}}
-                @formStore={{this.builderStore}}
-                @forceShowErrors={{true}}
-                @useNewListingLayout={{true}}
-                @sourceNode={{this.previewForm}}
-              />
-            {{else}}
-              <AuLoader />
-            {{/if}}
-          </AuBodyContainer>
-        </div>
+<AuBodyContainer>
+  <AuTabs
+    class="au-u-padding-left-small au-u-padding-right-small"
+    @reversed={{this.reversed}}
+    as |Tab|
+  >
+    <Tab>
+      <AuLink
+        @route="formbuilder.edit.builder"
+        @icon="document"
+      >Builder</AuLink>
+    </Tab>
+    <Tab>
+      <AuLink
+        @route="formbuilder.edit.validations"
+        @icon="website"
+      >Validations</AuLink>
+    </Tab>
+
+  </AuTabs>
+  <div class="formBuilderEdit">
+    {{outlet}}
+    <div class="formBuilderEdit__preview au-u-padding-small">
+      {{#if this.setupPreviewForm.isRunning}}
+        <AuLoader />
       {{else}}
-        <AuBodyContainer @scroll={{true}} class="au-o-box">
-          <AddValidationsToForm
-            @builderTtlCode={{this.formCode}}
-            @sourceNode={{this.sourceNode}}
-            @onUpdateValidations={{this.refreshWithTheValidationFormTtlCode}}
-          />
-        </AuBodyContainer>
+        <RdfForm
+          @groupClass="au-u-margin-left-small au-u-margin-top"
+          @form={{this.previewForm}}
+          @graphs={{this.graphs}}
+          @sourceNode={{this.sourceNode}}
+          @formStore={{this.previewStore}}
+          @forceShowErrors={{true}}
+          @useNewListingLayout={{true}}
+        />
       {{/if}}
-      <div class="playground__show">
-        <div class="au-u-margin-top-small">
-          {{#if this.setupPreviewForm.isRunning}}
-            <AuLoader />
-          {{else}}
-            <RdfForm
-              @groupClass="au-u-margin-left-small au-u-margin-top"
-              @form={{this.previewForm}}
-              @graphs={{this.graphs}}
-              @sourceNode={{this.sourceNode}}
-              @formStore={{this.previewStore}}
-              @forceShowErrors={{true}}
-              @useNewListingLayout={{true}}
-            />
-          {{/if}}
-        </div>
-      </div>
     </div>
   </div>
-</main>
+</AuBodyContainer>

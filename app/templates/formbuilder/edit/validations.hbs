@@ -1,0 +1,12 @@
+{{page-title "Validations"}}
+
+<AuBodyContainer class="formBuilderEdit__builder au-u-padding-small">
+  {{#if this.model.formCode}}
+    <AddValidationsToForm
+      @builderTtlCode={{this.model.formCode}}
+      @onUpdateValidations={{this.handleCodeChange}}
+    />
+  {{else}}
+    <AuLoader />
+  {{/if}}
+</AuBodyContainer>

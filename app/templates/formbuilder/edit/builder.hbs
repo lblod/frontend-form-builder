@@ -1,0 +1,16 @@
+{{page-title "Builder"}}
+
+<AuBodyContainer class="formBuilderEdit__builder au-u-padding-small">
+  {{#if (and this.builderStore this.builderForm)}}
+    <RdfForm
+      @groupClass="au-o-grid__item"
+      @form={{this.builderForm}}
+      @graphs={{this.model.graphs}}
+      @formStore={{this.builderStore}}
+      @forceShowErrors={{false}}
+      @useNewListingLayout={{true}}
+    />
+  {{else}}
+    <AuLoader />
+  {{/if}}
+</AuBodyContainer>
