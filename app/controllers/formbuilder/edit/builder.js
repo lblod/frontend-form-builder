@@ -5,9 +5,12 @@ import { inject as service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { FORM, RDF } from '../../../utils/rdflib';
+import { inject as controller } from '@ember/controller';
 
 export default class FormbuilderEditBuilderController extends Controller {
   @service('form-code-manager') formCodeManager;
+
+  @controller('formbuilder.edit') editController;
 
   @tracked builderStore;
   @tracked builderForm;
@@ -52,11 +55,10 @@ export default class FormbuilderEditBuilderController extends Controller {
       this.model.graphs.sourceGraph
     );
     this.formCode = sourceTtl;
-    this.formCodeManager.addFormCode(this.formCode);
+    this.editController.handleCodeChange(this.formCode);
   });
 
   setup() {
-    console.log(`setup builder controller`);
     this.formCode = this.formCodeManager.getTtlOfLatestVersion();
     this.setupBuilderForm.perform();
   }
