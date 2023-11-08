@@ -12,6 +12,10 @@ export const GRAPHS = {
   sourceGraph: new RDFNode(`http://data.lblod.info/sourcegraph`),
 };
 
+export const PREVIEW_SOURCE_NODE = new RDFNode(
+  'http://frontend.poc.form.builder/sourcenode'
+);
+
 export default class FormbuilderEditController extends Controller {
   @service store;
   @service router;

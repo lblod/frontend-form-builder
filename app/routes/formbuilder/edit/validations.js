@@ -7,6 +7,7 @@ export default class FormbuilderEditValidationsRoute extends Route {
   @service router;
 
   model() {
+    const editRoute = this.modelFor('formbuilder.edit');
     /* eslint ember/no-controller-access-in-routes: "warn" */
     const editController = this.controllerFor('formbuilder.edit');
     let ttlCode = null;
@@ -20,7 +21,14 @@ export default class FormbuilderEditValidationsRoute extends Route {
 
     return {
       formCode: ttlCode,
+      graphs: editRoute.graphs,
       handleCodeChange: editController.handleCodeChange,
     };
+  }
+
+  setupController(controller) {
+    super.setupController(...arguments);
+
+    controller.setup();
   }
 }

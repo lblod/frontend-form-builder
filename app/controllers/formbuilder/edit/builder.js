@@ -5,9 +5,7 @@ import { inject as service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { FORM, RDF } from '../../../utils/rdflib';
-import { sym as RDFNode } from 'rdflib';
-
-const SOURCE_NODE = new RDFNode('http://frontend.poc.form.builder/sourcenode');
+import { PREVIEW_SOURCE_NODE } from '../edit';
 
 export default class FormbuilderEditBuilderController extends Controller {
   @service('form-code-manager') formCodeManager;
@@ -18,7 +16,7 @@ export default class FormbuilderEditBuilderController extends Controller {
   @tracked previewStore;
   @tracked previewForm;
 
-  sourceNode = SOURCE_NODE;
+  sourceNode = PREVIEW_SOURCE_NODE;
 
   setupBuilderForm = restartableTask(async () => {
     // force a component recreation by unrendering it very briefly
