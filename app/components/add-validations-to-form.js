@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
+import { task, timeout } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { FORM, EXT } from '../utils/rdflib';
 import { areValidationsInGraphValidated } from '../utils/validation/are-validations-in-graph-validated';
@@ -73,6 +73,7 @@ export default class AddValidationsToFormComponent extends Component {
     );
     this.savedBuilderTtlCode = sourceTtl;
     this.args.onUpdateValidations(this.savedBuilderTtlCode);
+    await timeout(1);
 
     this.isMerging = false;
   }
