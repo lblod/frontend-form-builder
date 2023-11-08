@@ -6,6 +6,9 @@ import { restartableTask, timeout } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { FORM, RDF } from '../../../utils/rdflib';
 import { inject as controller } from '@ember/controller';
+import { sym as RDFNode } from 'rdflib';
+
+const SOURCE_NODE = new RDFNode('http://frontend.poc.form.builder/sourcenode');
 
 export default class FormbuilderEditBuilderController extends Controller {
   @service('form-code-manager') formCodeManager;
@@ -15,7 +18,12 @@ export default class FormbuilderEditBuilderController extends Controller {
   @tracked builderStore;
   @tracked builderForm;
 
+  @tracked previewStore;
+  @tracked previewForm;
+
   @tracked formCode;
+
+  sourceNode = SOURCE_NODE;
 
   setupBuilderForm = restartableTask(async () => {
     // force a component recreation by unrendering it very briefly
@@ -55,12 +63,14 @@ export default class FormbuilderEditBuilderController extends Controller {
       this.model.graphs.sourceGraph
     );
     this.formCode = sourceTtl;
-    this.editController.handleCodeChange(this.formCode);
+    this.formCodeManager.addFormCode(this.formCode);
+    this.setup();
   });
 
   setup() {
     this.formCode = this.formCodeManager.getTtlOfLatestVersion();
     this.setupBuilderForm.perform();
+    this.setupPreviewForm.perform();
   }
 
   deregisterFromObservable() {
@@ -68,4 +78,25 @@ export default class FormbuilderEditBuilderController extends Controller {
       this.builderStore.clearObservers();
     }
   }
+
+  setupPreviewForm = restartableTask(async () => {
+    // force a component recreation by unrendering it very briefly
+    // Ideally the RdfForm component would do the right thing when the formStore
+    // and form arguments change, but we're not there yet.
+    await timeout(1);
+    // check if the form has changed here
+    this.previewStore = new ForkingStore();
+    this.previewStore.parse(
+      this.formCodeManager.getTtlOfLatestVersion(),
+      this.model.graphs.formGraph,
+      'text/turtle'
+    );
+
+    this.previewForm = this.previewStore.any(
+      undefined,
+      RDF('type'),
+      FORM('Form'),
+      this.model.graphs.formGraph
+    );
+  });
 }

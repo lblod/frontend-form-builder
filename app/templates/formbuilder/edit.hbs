@@ -29,22 +29,5 @@
     </Tab>
 
   </AuTabs>
-  <div class="formBuilderEdit">
-    {{outlet}}
-    <div class="formBuilderEdit__preview au-u-padding-small">
-      {{#if this.setupPreviewForm.isRunning}}
-        <AuLoader />
-      {{else}}
-        <RdfForm
-          @groupClass="au-u-margin-left-small au-u-margin-top"
-          @form={{this.previewForm}}
-          @graphs={{this.graphs}}
-          @sourceNode={{this.sourceNode}}
-          @formStore={{this.previewStore}}
-          @forceShowErrors={{true}}
-          @useNewListingLayout={{true}}
-        />
-      {{/if}}
-    </div>
-  </div>
+  {{outlet}}
 </AuBodyContainer>
