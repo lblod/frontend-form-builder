@@ -21,8 +21,6 @@ export default class FormbuilderEditBuilderController extends Controller {
   @tracked previewStore;
   @tracked previewForm;
 
-  @tracked formCode;
-
   sourceNode = SOURCE_NODE;
 
   setupBuilderForm = restartableTask(async () => {
@@ -39,7 +37,7 @@ export default class FormbuilderEditBuilderController extends Controller {
     this.builderStore.parse(formTtl, graphs.formGraph.value, 'text/turtle');
     this.builderStore.parse(metaTtl, graphs.metaGraph.value, 'text/turtle');
     this.builderStore.parse(
-      this.formCode,
+      this.formCodeManager.getTtlOfLatestVersion(),
       this.model.graphs.sourceGraph.value,
       'text/turtle'
     );
@@ -62,13 +60,11 @@ export default class FormbuilderEditBuilderController extends Controller {
     const sourceTtl = this.builderStore.serializeDataMergedGraph(
       this.model.graphs.sourceGraph
     );
-    this.formCode = sourceTtl;
-    this.formCodeManager.addFormCode(this.formCode);
+    this.formCodeManager.addFormCode(sourceTtl);
     this.setup();
   });
 
   setup() {
-    this.formCode = this.formCodeManager.getTtlOfLatestVersion();
     this.setupBuilderForm.perform();
     this.setupPreviewForm.perform();
   }
