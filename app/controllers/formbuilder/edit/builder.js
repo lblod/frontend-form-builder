@@ -5,15 +5,12 @@ import { inject as service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { FORM, RDF } from '../../../utils/rdflib';
-import { inject as controller } from '@ember/controller';
 import { sym as RDFNode } from 'rdflib';
 
 const SOURCE_NODE = new RDFNode('http://frontend.poc.form.builder/sourcenode');
 
 export default class FormbuilderEditBuilderController extends Controller {
   @service('form-code-manager') formCodeManager;
-
-  @controller('formbuilder.edit') editController;
 
   @tracked builderStore;
   @tracked builderForm;
