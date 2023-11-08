@@ -14,11 +14,12 @@ export const GRAPHS = {
 
 export default class FormbuilderEditController extends Controller {
   @service store;
+  @service router;
   @service('form-code-manager') formCodeManager;
 
   @tracked formCode;
 
-  @tracked formChanged = false;
+  @tracked formChanged;
 
   @action
   setFormChanged(value) {
@@ -26,15 +27,19 @@ export default class FormbuilderEditController extends Controller {
   }
 
   @action
-  async handleCodeChange(newCode) {
-    this.formCode = newCode;
-    this.setupPreviewForm.perform();
+  handleCodeChange(newCode) {
+    if (newCode) {
+      this.formCode = newCode;
+      this.formCodeManager.addFormCode(this.formCode);
+    }
+    this.setFormChanged(this.formCodeManager.isLatestDeviatingFromReference());
   }
 
   setup(model) {
     this.formCode = this.getFormTtlCode(model.generatedForm);
     this.formCodeManager.addFormCode(this.formCode);
     this.formCodeManager.pinLatestVersionAsReference();
+    this.router.transitionTo('formbuilder.edit.builder');
   }
 
   reset() {
