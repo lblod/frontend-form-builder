@@ -4,8 +4,9 @@
   <AuBodyContainer class="formBuilderEdit__builder au-u-padding-small">
     {{#if this.model.formCode}}
       <AddValidationsToForm
-        @builderTtlCode={{this.model.formCode}}
-        @onUpdateValidations={{this.handleCodeChange}}
+        @builderTtlCode={{@model.formCode}}
+        @sourceNode={{@model.form}}
+        @onNewBuilderForm={{this.handleCodeChange}}
       />
     {{else}}
       <AuLoader />
@@ -27,5 +28,4 @@
       />
     {{/if}}
   </div>
-
 </div>

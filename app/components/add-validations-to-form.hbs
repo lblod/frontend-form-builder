@@ -1,14 +1,10 @@
 {{#each this.storesWithForm as |field|}}
   <strong>{{field.name}}</strong>
-  <br />
-  <RdfForm
-    @groupClass="au-o-grid__item"
+  <FieldValidationsForm
+    @fieldSubject={{field.subject}}
     @form={{field.form}}
     @graphs={{this.graphs}}
-    @formStore={{field.store}}
-    @forceShowErrors={{false}}
-    @useNewListingLayout={{true}}
-    @sourceNode={{this.graphs.sourceNode}}
+    @store={{field.store}}
+    @updateTtlCodeWithField={{this.updateTtlCodeWithField}}
   />
-  <br />
 {{/each}}
