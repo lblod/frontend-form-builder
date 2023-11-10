@@ -41,7 +41,7 @@ export function getFieldsInStore(store, graph) {
       fieldTriples.push(...validationTriples);
     }
 
-    let fieldName = 'Text field';
+    let fieldName = 'Field name';
     const fieldNameTriple = fieldTriples.find(
       (triple) => triple.predicate.value == SH('name').value
     );

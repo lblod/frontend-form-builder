@@ -9,7 +9,7 @@ nodes:24289e48-258f-4919-8c3e-5783a6acb4a4
     a form:Field;
     form:displayType displayTypes:defaultInput;
     sh:group nodes:d7b33768-3723-4291-a7be-3d8a7d7cdbc1;
-    sh:name "Text field";
+    sh:name "Field name";
     sh:order 2;
     sh:path nodes:e61f56db-6346-4a61-a75e-33e091789e40 .
 nodes:d7b33768-3723-4291-a7be-3d8a7d7cdbc1
