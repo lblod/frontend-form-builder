@@ -1,7 +1,7 @@
 {{page-title "Validations"}}
 
 <div class="formBuilderEdit">
-  <AuBodyContainer class="formBuilderEdit__builder au-u-padding-small">
+  <div class="formBuilderEdit__builder au-u-padding-small">
     {{#if this.formCode}}
       <AddValidationsToForm
         @builderTtlCode={{this.formCode}}
@@ -11,7 +11,7 @@
     {{else}}
       <AuLoader />
     {{/if}}
-  </AuBodyContainer>
+  </div>
 
   <div class="formBuilderEdit__preview au-u-padding-small">
     {{#if this.setupPreviewForm.isRunning}}
