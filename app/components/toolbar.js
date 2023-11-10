@@ -10,8 +10,6 @@ export default class ToolbarComponent extends Component {
   @service('form-code-manager') formCodeManager;
 
   @tracked showDeleteModal = false;
-  @tracked showCodeModal = false;
-  @tracked showCodeEditModal = false;
 
   @tracked showEditModal = false;
   @tracked formLabel = this.args.model.label;
