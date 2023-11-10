@@ -2,9 +2,9 @@
 
 <div class="formBuilderEdit">
   <AuBodyContainer class="formBuilderEdit__builder au-u-padding-small">
-    {{#if this.model.formCode}}
+    {{#if this.formCode}}
       <AddValidationsToForm
-        @builderTtlCode={{@model.formCode}}
+        @builderTtlCode={{this.formCode}}
         @sourceNode={{@model.form}}
         @onNewBuilderForm={{this.handleCodeChange}}
       />

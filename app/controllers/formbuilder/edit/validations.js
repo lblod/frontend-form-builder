@@ -14,12 +14,14 @@ export default class FormbuilderEditValidationsController extends Controller {
   @tracked previewStore;
   @tracked previewForm;
 
+  @tracked formCode;
+
   sourceNode = PREVIEW_SOURCE_NODE;
 
   @action
   handleCodeChange(ttlCode) {
     this.formCodeManager.addFormCode(ttlCode);
-    this.setupPreviewForm.perform();
+    this.setup();
     this.model.handleCodeChange();
   }
 
@@ -30,7 +32,7 @@ export default class FormbuilderEditValidationsController extends Controller {
     await timeout(1);
     this.previewStore = new ForkingStore();
     this.previewStore.parse(
-      this.formCodeManager.getTtlOfLatestVersion(),
+      this.formCode,
       this.model.graphs.formGraph,
       'text/turtle'
     );
@@ -44,6 +46,7 @@ export default class FormbuilderEditValidationsController extends Controller {
   });
 
   setup() {
+    this.formCode = this.formCodeManager.getTtlOfLatestVersion();
     this.setupPreviewForm.perform();
   }
 }

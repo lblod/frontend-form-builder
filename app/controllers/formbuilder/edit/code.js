@@ -24,9 +24,9 @@ export default class FormbuilderEditCodeController extends Controller {
   }
 
   setup() {
-    this.formCode = this.model.formCode;
-    this.formCodeUpdates = this.model.formCode;
-    this.setupPreviewForm.perform(this.model.formCode);
+    this.formCode = this.formCodeManager.getTtlOfLatestVersion();
+    this.formCodeUpdates = this.formCode;
+    this.setupPreviewForm.perform(this.formCode);
   }
 
   handleCodeChange = restartableTask(async (newCode) => {
