@@ -12,4 +12,17 @@ export default class CodelijstenController extends Controller {
   @action previousRoute() {
     window.history.back();
   }
+
+  setup() {
+    this.scheme = null;
+  }
+
+  get configurationCode() {
+    const jsonConfigCode = {
+      conceptScheme: this.scheme.uri,
+      searchEnabled: true,
+    };
+
+    return JSON.stringify(jsonConfigCode, null, 2).trim();
+  }
 }
