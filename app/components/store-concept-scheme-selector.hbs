@@ -1,0 +1,9 @@
+<AuLabel>Kies een concept scheme</AuLabel>
+<PowerSelect
+  @options={{this.options}}
+  @selected={{this.selected}}
+  @onChange={{this.setSelected}}
+  as |singleselect|
+>
+  {{singleselect.prefLabel.value}}
+</PowerSelect>

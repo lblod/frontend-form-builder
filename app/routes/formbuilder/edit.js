@@ -6,6 +6,7 @@ import ValidationConceptSchemeSelectorComponent from '../../components/rdf-form-
 import { getLocalFileContentAsText } from '../../utils/get-local-file-content';
 import CountryCodeConceptSchemeSelectorComponent from '../../components/rdf-form-fields/country-code-concept-scheme-selector';
 import { GRAPHS } from '../../controllers/formbuilder/edit';
+import StoreConceptSchemeSelectorComponent from '../../components/store-concept-scheme-selector';
 
 export default class FormbuilderEditRoute extends Route {
   @service store;
@@ -69,6 +70,11 @@ export default class FormbuilderEditRoute extends Route {
         displayType:
           'http://lblod.data.gift/display-types/countryCodeConceptSchemeSelector',
         edit: CountryCodeConceptSchemeSelectorComponent,
+      },
+      {
+        displayType:
+          'http://lblod.data.gift/display-types/storeConceptSchemeSelector',
+        edit: StoreConceptSchemeSelectorComponent,
       },
     ]);
   }
