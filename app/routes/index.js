@@ -7,4 +7,10 @@ export default class IndexRoute extends Route.extend(DataTableRouteMixin) {
   @service store;
 
   modelName = 'generated-form';
+
+  async setupController(controller, model) {
+    super.setupController(...arguments);
+
+    await controller.setup(model);
+  }
 }
