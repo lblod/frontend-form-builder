@@ -5,7 +5,7 @@
 
 .playground__codelist,
 .playground__show {
-  padding: $au-unit*1.5;
+  padding: $au-unit * 1.5;
   width: 45%;
 }
 
@@ -21,6 +21,12 @@
 
 .playground__codelist {
   overflow: auto;
+}
+.playground__codelist_code {
+  overflow-x: auto;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: $au-gray-100;
 }
 
 .playground__edit .playground__edit__header {
