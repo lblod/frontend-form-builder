@@ -2,15 +2,35 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { queryDB } from '../utils/query-sparql-query';
+import { inject as service } from '@ember/service';
 
 export default class StoreConceptSchemeSelectorComponent extends Component {
   @tracked selected;
   @tracked options;
 
+  @service toaster;
+
   constructor() {
     super(...arguments);
+    if (!this.args.field.rdflibOptions) {
+      this.toaster.warning(
+        'Je hebt geen configuratie meegegeven voor de dropdown.',
+        'Geen configuratie',
+        {
+          timeOut: 2000,
+        }
+      );
+      this.selected = null;
+      this.options = [];
+
+      return;
+    }
 
     this.loadOptions();
+  }
+
+  get fieldName() {
+    return this.args.field.rdflibLabel ?? '';
   }
 
   async loadOptions() {
