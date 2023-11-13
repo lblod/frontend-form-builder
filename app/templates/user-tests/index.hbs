@@ -15,7 +15,7 @@
 <main id="main" class="au-c-main-container">
   <div class="au-c-main-container__content">
     <div class="au-c-body-container">
-      <AuDataTable @content={{this.model}} @isLoading={{this.isLoading}} noDataMessage="Geen gebruiker-testen gevonden"
+      <AuDataTable @content={{this.userTests}} @isLoading={{this.isLoading}} noDataMessage="Geen gebruiker-testen gevonden"
                    @sort={{this.sort}} @page={{this.page}} @size={{this.size}}
                    class="container-flex--contain" as |t|>
         <t.content as |c|>
