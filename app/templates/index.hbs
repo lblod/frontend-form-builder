@@ -15,9 +15,15 @@
 <main id="main" class="au-c-main-container">
   <div class="au-c-main-container__content">
     <div class="au-c-body-container">
-      <AuDataTable @content={{this.generatedForms}} @isLoading={{this.isLoading}} noDataMessage="Geen formulieren gevonden"
-        @sort={{this.sort}} @page={{this.page}} @size={{this.size}}
-        class="container-flex--contain bbcdr-reports-data-table" as |t|>
+      <AuDataTable 
+        @content={{this.model}} 
+        @isLoading={{this.isLoadingModel}} 
+        @noDataMessage="Geen formulieren gevonden"
+        @sort={{this.sort}} 
+        @page={{this.page}} 
+        @size={{this.size}} 
+        as |t|
+      >
         <t.content as |c|>
           <c.header>
             <AuDataTableThSortable @label='Naam' @field='label' @currentSorting={{this.sort}}
