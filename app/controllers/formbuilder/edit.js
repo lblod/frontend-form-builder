@@ -43,7 +43,7 @@ export default class FormbuilderEditController extends Controller {
     this.formCode = this.getFormTtlCode(model.generatedForm);
     this.formCodeManager.addFormCode(this.formCode);
     this.formCodeManager.pinLatestVersionAsReference();
-    this.router.transitionTo('formbuilder.edit.builder');
+    this.router.transitionTo('formbuilder.edit.code');
   }
 
   reset() {

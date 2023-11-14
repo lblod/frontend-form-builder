@@ -76,7 +76,6 @@ export default class FormbuilderEditBuilderController extends Controller {
     // Ideally the RdfForm component would do the right thing when the formStore
     // and form arguments change, but we're not there yet.
     await timeout(1);
-    // check if the form has changed here
     this.previewStore = new ForkingStore();
     this.previewStore.parse(
       this.formCodeManager.getTtlOfLatestVersion(),

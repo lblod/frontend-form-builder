@@ -1,17 +1,9 @@
-{{page-title "Validations"}}
-
 <div class="formBuilderEdit">
-  <div class="formBuilderEdit__builder au-u-padding-small">
-    {{#if this.formCode}}
-      <AddValidationsToForm
-        @builderTtlCode={{this.formCode}}
-        @sourceNode={{@model.form}}
-        @onNewBuilderForm={{this.handleCodeChange}}
-      />
-    {{else}}
-      <AuLoader />
-    {{/if}}
-  </div>
+  <div
+    {{editor this.formCode (perform this.handleCodeChange)}}
+    {{!template-lint-disable no-inline-styles}}
+    style="overflow: auto; height: 100%; width:100%"
+  > </div>
 
   <div class="formBuilderEdit__preview au-u-padding-small">
     {{#if this.setupPreviewForm.isRunning}}
