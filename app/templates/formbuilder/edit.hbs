@@ -8,31 +8,22 @@
   @setFormChanged={{this.setFormChanged}}
 />
 
-<AuBodyContainer class="formBuilderEdit__actionsWithOutlet">
+<AuBodyContainer>
   <AuTabs
-    class="formBuilderEdit__actionsNav"
+    class="au-u-padding-left-small au-u-padding-right-small"
     @reversed={{this.reversed}}
     as |Tab|
   >
     <Tab>
-      <AuLink
-        @route="formbuilder.edit.code"
-        @icon="html"
-        @hideText={{true}}
-      >Code</AuLink>
+      <AuLink @route="formbuilder.edit.code" @icon="html">Code</AuLink>
     </Tab>
     <Tab>
-      <AuLink
-        @route="formbuilder.edit.builder"
-        @icon="sitemap"
-        @hideText={{true}}
-      >Builder</AuLink>
+      <AuLink @route="formbuilder.edit.builder" @icon="sitemap">Builder</AuLink>
     </Tab>
     <Tab>
       <AuLink
         @route="formbuilder.edit.validations"
         @icon="decided"
-        @hideText={{true}}
       >Validations</AuLink>
     </Tab>
 

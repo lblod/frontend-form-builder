@@ -24,30 +24,3 @@
   text-align: center;
   padding: 1rem 1.5rem;
 }
-
-.formBuilderEdit__actionsWithOutlet {
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  .formBuilderEdit__actionsNav {
-    padding-top: 1.5rem;
-    background-color: $au-gray-100;
-    width: 5rem;
-    .au-c-tabs-list {
-      display: grid;
-      gap: 1.5rem;
-      grid-template-rows: repeat(3, 1fr);
-    }
-    .au-c-tabs-list__item {
-      width: 100%;
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      &:hover {
-        background-color: white !important;
-      }
-    }
-  }
-}
