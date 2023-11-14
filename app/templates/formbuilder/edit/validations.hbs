@@ -1,0 +1,31 @@
+{{page-title "Validations"}}
+
+<div class="formBuilderEdit">
+  <AuBodyContainer class="formBuilderEdit__builder au-u-padding-small">
+    {{#if this.model.formCode}}
+      <AddValidationsToForm
+        @builderTtlCode={{@model.formCode}}
+        @sourceNode={{@model.form}}
+        @onNewBuilderForm={{this.handleCodeChange}}
+      />
+    {{else}}
+      <AuLoader />
+    {{/if}}
+  </AuBodyContainer>
+
+  <div class="formBuilderEdit__preview au-u-padding-small">
+    {{#if this.setupPreviewForm.isRunning}}
+      <AuLoader />
+    {{else}}
+      <RdfForm
+        @groupClass="au-u-margin-left-small au-u-margin-top"
+        @form={{this.previewForm}}
+        @graphs={{this.model.graphs}}
+        @formStore={{this.previewStore}}
+        @forceShowErrors={{false}}
+        @useNewListingLayout={{true}}
+        @sourceNode={{this.sourceNode}}
+      />
+    {{/if}}
+  </div>
+</div>

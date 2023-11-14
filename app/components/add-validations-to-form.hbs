@@ -1,14 +1,30 @@
-{{#each this.storesWithForm as |field|}}
-  <strong>{{field.name}}</strong>
-  <br />
-  <RdfForm
-    @groupClass="au-o-grid__item"
-    @form={{field.form}}
-    @graphs={{this.graphs}}
-    @formStore={{field.store}}
-    @forceShowErrors={{false}}
-    @useNewListingLayout={{true}}
-    @sourceNode={{this.graphs.sourceNode}}
-  />
-  <br />
-{{/each}}
+<AuBodyContainer>
+  <div class="fieldSelectionForValidations">
+    <AuDropdown @title={{"Select field"}} @skin="primary" role="menu">
+      {{#each this.storesWithForm as |field|}}
+
+        <AuButton
+          {{on "click" (fn this.setSelectedField field)}}
+          @skin="link"
+          role="menuitem"
+        >
+          {{field.name}}
+        </AuButton>
+      {{/each}}
+
+    </AuDropdown>
+  </div>
+
+  {{#if this.selectedField}}
+    <strong>{{this.selectedField.name}}</strong>
+    <FieldValidationsForm
+      @fieldSubject={{this.selectedField.subject}}
+      @form={{this.selectedField.form}}
+      @graphs={{this.graphs}}
+      @store={{this.selectedField.store}}
+      @updateTtlCodeWithField={{this.updateTtlCodeWithField}}
+    />
+  {{else}}
+    <AuLoader />
+  {{/if}}
+</AuBodyContainer>

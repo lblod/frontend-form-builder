@@ -10,15 +10,7 @@ export function getTriplesWithNodeAsSubject(node, store, graph) {
   return store.match(node, undefined, undefined, graph);
 }
 
-export function getTriplesWithNodeAsObject(node, store, graph) {
-  return store.match(undefined, undefined, node, graph);
-}
-
-export function getAllTriples(store, graph) {
-  return store.match(undefined, undefined, undefined, graph);
-}
-
-export function getNodeValidationTriples(node, store, graph) {
+function getNodeValidationTriples(node, store, graph) {
   return store.match(node, FORM('validations'), undefined, graph);
 }
 
