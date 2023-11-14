@@ -60,6 +60,7 @@
     "ember-concurrency": "^3.1.1",
     "ember-data": "~4.12.0",
     "ember-data-table": "^2.0.0",
+    "ember-feature-flags": "^6.0.0",
     "ember-fetch": "^8.1.2",
     "ember-load-initializers": "^2.1.2",
     "ember-modifier": "^3.2.7",
