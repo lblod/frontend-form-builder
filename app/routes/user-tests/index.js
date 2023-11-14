@@ -9,10 +9,4 @@ export default class UserTestIndexRoute extends Route.extend(
   @service store;
 
   modelName = 'user-test';
-
-  async setupController(controller, model) {
-    super.setupController(...arguments);
-
-    await controller.setup(model);
-  }
 }
