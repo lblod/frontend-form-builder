@@ -2,24 +2,14 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { queryDB } from '../utils/query-sparql-query';
-import { inject as service } from '@ember/service';
 
 export default class StoreConceptSchemeSelectorComponent extends Component {
   @tracked selected;
   @tracked options;
 
-  @service toaster;
-
   constructor() {
     super(...arguments);
     if (!this.args.field.rdflibOptions) {
-      this.toaster.warning(
-        'Je hebt geen configuratie meegegeven voor de dropdown.',
-        'Geen configuratie',
-        {
-          timeOut: 2000,
-        }
-      );
       this.selected = null;
       this.options = [];
 
@@ -34,13 +24,14 @@ export default class StoreConceptSchemeSelectorComponent extends Component {
   }
 
   async loadOptions() {
-    const conceptScheme = this.getOptionConfigurationFromField(
-      this.args.field
-    ).conceptScheme;
-
-    this.options = await queryDB(
-      this.getUriAndLabelForSchemeQuery(conceptScheme)
-    );
+    const config = this.getOptionConfigurationFromField(this.args.field);
+    if (config.conceptScheme) {
+      this.options = await queryDB(
+        this.getUriAndLabelForSchemeQuery(config.conceptScheme)
+      );
+    } else {
+      console.warn(`Key "conceptScheme" not found in json configuration`);
+    }
   }
 
   @action
@@ -51,9 +42,14 @@ export default class StoreConceptSchemeSelectorComponent extends Component {
 
   getOptionConfigurationFromField(field) {
     const dropdownConfigurationLiteral = field.rdflibOptions;
-    const configurationAsJson = JSON.parse(
-      dropdownConfigurationLiteral.value.trim()
-    );
+    let configurationAsJson = {};
+    try {
+      configurationAsJson = JSON.parse(
+        dropdownConfigurationLiteral.value.trim()
+      );
+    } catch (error) {
+      console.error(`Catched: could not parse configuration into json object.`);
+    }
 
     return configurationAsJson;
   }
