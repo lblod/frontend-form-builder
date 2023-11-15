@@ -22,12 +22,17 @@
   <div class="au-c-main-container__content">
     <div class="playground">
       <div class="playground__codelist">
+        {{!
+          Glimmer components only have two lifecycle hooks
+          This method will set the view to start without a scheme selected
+        }}
+        {{this.updateSelectedSchemeTo undefined}}
 
         <AuHeading @level="2" @skin="3" class="au-u-light">Kies een concept
           scheme waarvan u de inhoud wil bekijken</AuHeading>
 
         <div class="au-u-margin-top au-u-margin-bottom">
-          <ConceptSchemeUriSelector @update={{this.update}} />
+          <ConceptSchemeUriSelector @update={{this.updateSelectedSchemeTo}} />
         </div>
 
         <div class="au-u-margin-bottom">
