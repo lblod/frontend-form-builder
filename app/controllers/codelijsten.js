@@ -5,16 +5,12 @@ import { tracked } from '@glimmer/tracking';
 export default class CodelijstenController extends Controller {
   @tracked scheme;
 
-  @action update(scheme) {
+  @action updateSelectedSchemeTo(scheme) {
     this.scheme = scheme;
   }
 
   @action previousRoute() {
     window.history.back();
-  }
-
-  setup() {
-    this.scheme = null;
   }
 
   get configurationCode() {
