@@ -1,6 +1,6 @@
 {{page-title "Create codelist"}}
 
-{{#if (and this.builderStore this.builderForm)}}
+{{!-- {{#if (and this.builderStore this.builderForm)}}
   <RdfForm
     @groupClass="au-o-grid__item"
     @form={{this.builderForm}}
@@ -11,4 +11,49 @@
   />
 {{else}}
   <AuLoader />
-{{/if}}
+{{/if}} --}}
+<AuBodyContainer>
+  <div class="au-u-flex au-u-flex--row createCodelist">
+    <div>
+      <AuLabel @required={{true}} @error={{false}}>
+        Naam lijst:
+        <AuInput value={{this.listName}} {{on "change" this.updateListName}} />
+      </AuLabel>
+
+      <AuLabel @required={{true}} @error={{false}}>
+        Item
+        <AuInput
+          value={{this.newItem}}
+          {{on "change" this.updateNewItemValue}}
+        />
+      </AuLabel>
+
+      <AuButton {{on "click" this.addItemToList}}>Voeg item toe</AuButton>
+      <AuList @direction="vertical" @divider={{true}} as |Item|>
+        {{#each this.listItems as |listItem|}}
+          <Item>
+            {{listItem.name}}
+          </Item>
+        {{/each}}
+      </AuList>
+
+    </div>
+    <div class="previewAndCodeOfCodelist">
+      <div class="preview">
+        <PowerSelect
+          @options={{this.listItems}}
+          @selected={{this.selectedItem}}
+          @onChange={{this.setSelected}}
+          as |singleselect|
+        >
+          {{singleselect.name}}
+        </PowerSelect>
+      </div>
+      <div
+        {{editor this.generatedCodelistTtl}}
+        {{!template-lint-disable no-inline-styles}}
+        style="overflow: auto; height: 100%; width:100%"
+      > </div>
+    </div>
+  </div>
+</AuBodyContainer>

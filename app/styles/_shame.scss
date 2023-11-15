@@ -32,7 +32,7 @@
 }
 
 .au-c-tabs {
-  padding: 0
+  padding: 0;
 }
 
 .sf-listing-sub-form {
@@ -41,13 +41,33 @@
 }
 
 code {
-    background-color: #272822;
-    color: #f8f8f2;
-    border-radius: 0.3rem;
-    padding: 20px;
-    white-space: nowrap;
+  background-color: #272822;
+  color: #f8f8f2;
+  border-radius: 0.3rem;
+  padding: 20px;
+  white-space: nowrap;
 }
 
 .au-o-grid {
   display: block;
+}
+
+.createCodelist {
+  height: 100%;
+  width: 100%;
+  .previewAndCodeOfCodelist {
+    width: 100%;
+    display: grid;
+    grid-template-rows: 20% 80%;
+    .preview {
+      .ember-basic-dropdown-trigger {
+        width: 64rem;
+      }
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: $au-gray-100;
+    }
+  }
 }
