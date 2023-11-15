@@ -5,28 +5,46 @@
   <Modal.Body>
     <div class="au-o-grid au-o-grid--small">
       <div class="au-o-grid__item au-1-1">
-        <AuLabel for="input-filelabel">
+        <AuLabel for="input-filelabel"
+          @required={{true}}
+        >
           Naam
         </AuLabel>
         <AuInput
           id="input-filelabel"
+          @error={{this.emptyFormLabel}}
           value={{this.formLabel}}
           {{on "change" this.handleLabelChange}}
         />
+        {{#if this.emptyFormLabel}}
+          <AuHelpText @error={{true}}>Een naam geven is verplicht</AuHelpText>
+        {{/if}}
       </div>
       <div class="au-o-grid__item au-1-1">
-        <AuLabel for="input-filecomment">Beschrijving</AuLabel>
+        <AuLabel for="input-filecomment"
+          @required={{true}}
+        >
+          Beschrijving
+        </AuLabel>
         <AuTextarea
           @width="block"
           id="input-filecomment"
+          @error={{this.emptyFormComment}}
           rows="10"
           value={{this.formComment}}
           {{on "input" this.handleCommentChange}}
         />
+        {{#if this.emptyFormComment}}
+          <AuHelpText @error={{true}}>Een beschrijving geven is verplicht</AuHelpText>
+        {{/if}}
       </div>
     </div>
   </Modal.Body>
   <Modal.Footer>
-    <AuButton {{on 'click' this.updateForm}}>Maak formulier aan</AuButton>
+    <AuButton {{on 'click' this.updateForm}}
+      @disabled={{this.disableButton}}
+    >
+      Maak formulier aan
+    </AuButton>
   </Modal.Footer>
 </AuModal>

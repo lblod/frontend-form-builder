@@ -11,6 +11,18 @@ export default class ToolbarComponent extends Component {
   @tracked formLabel = this.args.model.label;
   @tracked formComment = this.args.model.comment;
 
+  get emptyFormLabel() {
+    return this.formLabel == '';
+  }
+
+  get emptyFormComment() {
+    return this.formComment == ``;
+  }
+
+  get disableButton() {
+    return this.emptyFormLabel || this.emptyFormComment;
+  }
+
   @action
   handleLabelChange(event) {
     this.formLabel = event.target.value;
