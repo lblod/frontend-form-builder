@@ -18,7 +18,9 @@ module.exports = function (environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
     },
-    featureFlags: {},
+    featureFlags: {
+      SHOW_CREATE_CODELIST: true,
+    },
   };
 
   if (environment === 'development') {
@@ -44,6 +46,7 @@ module.exports = function (environment) {
 
   if (environment === 'production') {
     // here you can enable a production-specific feature
+    ENV.featureFlags.SHOW_CREATE_CODELIST = false;
   }
 
   return ENV;

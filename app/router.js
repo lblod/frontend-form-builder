@@ -17,6 +17,7 @@ Router.map(function () {
       this.route('code');
       this.route('builder');
       this.route('validations');
+      this.route('create-codelist');
     });
   });
   this.route('user-tests', function () {

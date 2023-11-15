@@ -23,6 +23,7 @@ export default class FormbuilderEditController extends Controller {
   @service store;
   @service router;
   @service('form-code-manager') formCodeManager;
+  @service features;
 
   @tracked formCode;
 

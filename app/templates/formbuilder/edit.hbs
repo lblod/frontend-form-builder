@@ -25,6 +25,12 @@
       @icon="decided"
     >Validations</AuLink>
   </Tab>
+  {{#if this.features.SHOW_CREATE_CODELIST}}
+    <Tab>
+      <AuLink @route="formbuilder.edit.create-codelist" @icon="add">Create
+        codelist</AuLink>
+    </Tab>
+  {{/if}}
 </AuTabs>
 
 <AuBodyContainer>
@@ -50,4 +56,5 @@
       {{/if}}
     </div>
   </div>
+  {{outlet}}
 </AuBodyContainer>
