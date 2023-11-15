@@ -10,8 +10,8 @@ export default class FormbuilderNewRoute extends Route {
     const newForm = await this.store.createRecord('generated-form', {
       created: now,
       modified: now,
-      label: 'New form',
-      comment: `Blank form`,
+      label: '',
+      comment: ``,
       ttlCode: '',
     });
 
