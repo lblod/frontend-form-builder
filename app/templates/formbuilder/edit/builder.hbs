@@ -1,35 +1,17 @@
 {{page-title "Builder"}}
 
-<div class="formBuilderEdit">
-  <div class="formBuilderEdit__builder au-u-padding-small">
-    {{#if (and this.builderStore this.builderForm)}}
-      <RdfForm
-        @groupClass="au-o-grid__item"
-        @form={{this.builderForm}}
-        @graphs={{this.model.graphs}}
-        @formStore={{this.builderStore}}
-        @forceShowErrors={{false}}
-        @useNewListingLayout={{true}}
-        @sourceNode={{this.previewForm}}
-      />
-    {{else}}
-      <AuLoader />
-    {{/if}}
-  </div>
-
-  <div class="formBuilderEdit__preview au-u-padding-small">
-    {{#if this.setupPreviewForm.isRunning}}
-      <AuLoader />
-    {{else}}
-      <RdfForm
-        @groupClass="au-u-margin-left-small au-u-margin-top"
-        @form={{this.previewForm}}
-        @graphs={{this.model.graphs}}
-        @formStore={{this.previewStore}}
-        @forceShowErrors={{false}}
-        @useNewListingLayout={{true}}
-        @sourceNode={{this.sourceNode}}
-      />
-    {{/if}}
-  </div>
+<div class="formBuilderEdit__builder au-u-padding-small">
+  {{#if (and this.builderStore this.builderForm)}}
+    <RdfForm
+      @groupClass="au-o-grid__item"
+      @form={{this.builderForm}}
+      @graphs={{this.model.graphs}}
+      @formStore={{this.builderStore}}
+      @forceShowErrors={{false}}
+      @useNewListingLayout={{true}}
+      @sourceNode={{this.previewForm}}
+    />
+  {{else}}
+    <AuLoader />
+  {{/if}}
 </div>
