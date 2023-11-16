@@ -60,11 +60,12 @@ export default class FormbuilderEditCreateCodelistController extends Controller 
     const ttlItems = this.listItems.map((listItem) => {
       return this.createItemTtl(listItem.name);
     });
+    const formattedName = this.formatNameForTtl(this.listName);
 
     this.generatedCodelistTtl = `
       ${prefixes}
 
-      con:${this.listName.replace(' ', '-')} a skos:ConceptScheme ;
+      con:${formattedName} a skos:ConceptScheme ;
       skos:prefLabel  "${this.listName}" .
 
       ${ttlItems.join(' \n')}
@@ -72,12 +73,27 @@ export default class FormbuilderEditCreateCodelistController extends Controller 
   }
 
   createItemTtl(itemName) {
+    const formattedName = this.formatNameForTtl(itemName);
+
     return `
-    ext:customListItem${itemName.replace(' ', '-')}
+    ext:customListItem${formattedName}
       rdf:type  rdfs:Class , skos:Concept ;
-      skos:inScheme	con:${this.listName.replace(' ', '-')} ;
+      skos:inScheme	con:${formattedName} ;
       skos:prefLabel  "${itemName}" .
     `;
+  }
+
+  formatNameForTtl(name) {
+    const words = name.split(' ');
+
+    for (let i = 0; i < words.length; i++) {
+      const firstLetter = words[i][0];
+      const restOfWord = words[i].substr(1);
+      words[i] =
+        firstLetter.toUpperCase() + restOfWord ?? firstLetter + restOfWord;
+    }
+
+    return words.join('');
   }
 
   setup() {
@@ -108,10 +124,10 @@ export default class FormbuilderEditCreateCodelistController extends Controller 
       graphs.formGraph
     );
 
-    const sourceTtl = this.builderStore.serializeDataMergedGraph(
-      graphs.sourceGraph
-    );
-    console.log({ sourceTtl });
+    // const sourceTtl = this.builderStore.serializeDataMergedGraph(
+    //   graphs.sourceGraph
+    // );
+    // console.log({ sourceTtl });
 
     this.builderStore.registerObserver(() => {
       this.handleBuilderFormChange.perform();
