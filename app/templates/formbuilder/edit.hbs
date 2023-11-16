@@ -8,25 +8,25 @@
   @setFormChanged={{this.setFormChanged}}
 />
 
-<AuBodyContainer>
-  <AuTabs
-    class="au-u-padding-left-small au-u-padding-right-small"
-    @reversed={{this.reversed}}
-    as |Tab|
-  >
-    <Tab>
-      <AuLink @route="formbuilder.edit.code" @icon="html">Code</AuLink>
-    </Tab>
-    <Tab>
-      <AuLink @route="formbuilder.edit.builder" @icon="sitemap">Builder</AuLink>
-    </Tab>
-    <Tab>
-      <AuLink
-        @route="formbuilder.edit.validations"
-        @icon="decided"
-      >Validations</AuLink>
-    </Tab>
+<AuTabs
+  class="au-u-padding-left-small au-u-padding-right-small"
+  @reversed={{this.reversed}}
+  as |Tab|
+>
+  <Tab>
+    <AuLink @route="formbuilder.edit.code" @icon="html">Code</AuLink>
+  </Tab>
+  <Tab>
+    <AuLink @route="formbuilder.edit.builder" @icon="sitemap">Builder</AuLink>
+  </Tab>
+  <Tab>
+    <AuLink
+      @route="formbuilder.edit.validations"
+      @icon="decided"
+    >Validations</AuLink>
+  </Tab>
+</AuTabs>
 
-  </AuTabs>
+<AuBodyContainer>
   {{outlet}}
 </AuBodyContainer>
