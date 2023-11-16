@@ -57,7 +57,7 @@ export default class ToolbarComponent extends Component {
       this.args.model.id
     );
     form.modified = new Date();
-    form.ttlCode = this.args.code;
+    form.ttlCode = this.formCodeManager.getTtlOfLatestVersion();
     form.label = this.formLabel;
     form.comment = this.formComment;
 
