@@ -28,5 +28,26 @@
 </AuTabs>
 
 <AuBodyContainer>
-  {{outlet}}
+  <div class="formBuilderEdit">
+    {{outlet}}
+    <div class="formBuilderEdit__preview au-u-padding-small">
+      {{#if (and this.previewStore this.previewForm)}}
+        {{#if this.setupPreviewForm.isRunning}}
+          <AuLoader />
+        {{else}}
+          <RdfForm
+            @groupClass="au-u-margin-left-small au-u-margin-top"
+            @form={{this.previewForm}}
+            @graphs={{this.model.graphs}}
+            @formStore={{this.previewStore}}
+            @forceShowErrors={{false}}
+            @useNewListingLayout={{true}}
+            @sourceNode={{this.sourceNode}}
+          />
+        {{/if}}
+      {{else}}
+        <AuLoader />
+      {{/if}}
+    </div>
+  </div>
 </AuBodyContainer>

@@ -1,25 +1,7 @@
 {{page-title "Code editor"}}
 
-<div class="formBuilderEdit">
-  <div
-    {{editor this.formCode (perform this.handleCodeChange)}}
-    {{!template-lint-disable no-inline-styles}}
-    style="overflow: auto; height: 100%; width:100%"
-  > </div>
-
-  <div class="formBuilderEdit__preview au-u-padding-small">
-    {{#if this.setupPreviewForm.isRunning}}
-      <AuLoader />
-    {{else}}
-      <RdfForm
-        @groupClass="au-u-margin-left-small au-u-margin-top"
-        @form={{this.previewForm}}
-        @graphs={{this.model.graphs}}
-        @formStore={{this.previewStore}}
-        @forceShowErrors={{false}}
-        @useNewListingLayout={{true}}
-        @sourceNode={{this.sourceNode}}
-      />
-    {{/if}}
-  </div>
-</div>
+<div
+  {{editor this.formCode (perform this.handleCodeChange)}}
+  {{!template-lint-disable no-inline-styles}}
+  style="overflow: auto; height: 100%; width:100%"
+> </div>
