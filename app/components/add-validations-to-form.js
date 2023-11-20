@@ -16,6 +16,7 @@ import { createStoreForFieldData } from '../utils/create-store-for-field';
 import { addValidationTriplesToFormNodesL } from '../utils/validation/add-field-valdiations-to-formNodesL';
 import { getFieldAndValidationTriples } from '../utils/get-field-and-validation-triples';
 import { areValidationsInGraphValidated } from '../utils/validation/are-validations-in-graph-validated';
+import { createFieldDataForSubject } from '../utils/create-field-data-for-subject';
 
 export default class AddValidationsToFormComponent extends Component {
   @tracked storesWithForm;
@@ -59,8 +60,22 @@ export default class AddValidationsToFormComponent extends Component {
   @action
   async setSelectedField(storeWithForm) {
     this.selectedField = null;
-    await timeout(1);
-    this.selectedField = storeWithForm;
+    const fieldStoreWithForm = await createStoreForFieldData(
+      createFieldDataForSubject(storeWithForm.subject, {
+        store: this.builderStore,
+        graph: this.graphs.sourceGraph,
+      }),
+      this.savedBuilderTtlCode,
+      this.graphs
+    );
+
+    addValidationTriplesToFormNodesL(
+      fieldStoreWithForm.subject,
+      fieldStoreWithForm.store,
+      this.graphs
+    );
+
+    this.selectedField = fieldStoreWithForm;
   }
 
   @action
@@ -82,6 +97,7 @@ export default class AddValidationsToFormComponent extends Component {
       areValidationsInGraphValidated(this.builderStore, this.graphs.sourceGraph)
     ) {
       this.args.onNewBuilderForm(newBuilderForm);
+      this.savedBuilderTtlCode = newBuilderForm;
     }
   }
 
