@@ -3,13 +3,12 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task, timeout } from 'ember-concurrency';
+import { task } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import {
   parseStoreGraphs,
   validationGraphs,
 } from '../utils/validation/helpers';
-import { isForkingStore } from '../utils/forking-store-helpers';
 import { showErrorToasterMessage } from '../utils/toaster-message-helper';
 import { getFieldsInStore } from '../utils/get-triples-per-field-in-store';
 import { createStoreForFieldData } from '../utils/create-store-for-field';
@@ -19,7 +18,7 @@ import { areValidationsInGraphValidated } from '../utils/validation/are-validati
 import { createFieldDataForSubject } from '../utils/create-field-data-for-subject';
 
 export default class AddValidationsToFormComponent extends Component {
-  @tracked storesWithForm;
+  @tracked fields;
 
   @service toaster;
   @tracked selectedField;
@@ -38,7 +37,7 @@ export default class AddValidationsToFormComponent extends Component {
 
       throw errorMessage;
     }
-    this.storesWithForm = [];
+    this.fields = [];
     this.savedBuilderTtlCode = this.args.builderTtlCode;
 
     this.initialise.perform({ ttlCode: this.savedBuilderTtlCode });
@@ -49,19 +48,15 @@ export default class AddValidationsToFormComponent extends Component {
     this.builderStore = new ForkingStore();
     yield parseStoreGraphs(this.builderStore, ttlCode);
 
-    this.storesWithForm = yield this.createSeparateStorePerField(
-      this.builderStore
-    );
-    this.storesWithForm.length >= 1
-      ? (this.selectedField = this.storesWithForm[0])
-      : null;
+    this.fields = yield this.createSeparateStorePerField(this.builderStore);
+    this.fields.length >= 1 ? (this.selectedField = this.fields[0]) : null;
   }
 
   @action
-  async setSelectedField(storeWithForm) {
+  async setSelectedField(field) {
     this.selectedField = null;
-    const fieldStoreWithForm = await createStoreForFieldData(
-      createFieldDataForSubject(storeWithForm.subject, {
+    const fieldData = await createStoreForFieldData(
+      createFieldDataForSubject(field.subject, {
         store: this.builderStore,
         graph: this.graphs.sourceGraph,
       }),
@@ -70,12 +65,12 @@ export default class AddValidationsToFormComponent extends Component {
     );
 
     addValidationTriplesToFormNodesL(
-      fieldStoreWithForm.subject,
-      fieldStoreWithForm.store,
+      fieldData.subject,
+      fieldData.store,
       this.graphs
     );
 
-    this.selectedField = fieldStoreWithForm;
+    this.selectedField = fieldData;
   }
 
   @action
@@ -103,34 +98,24 @@ export default class AddValidationsToFormComponent extends Component {
 
   async createSeparateStorePerField(store) {
     const fieldsData = getFieldsInStore(store, this.graphs.sourceGraph);
-    const storesWithForm = [];
+    const fields = [];
 
-    for (const fieldData of fieldsData) {
-      const fieldStoreWithForm = await createStoreForFieldData(
-        fieldData,
+    for (const field of fieldsData) {
+      const fieldData = await createStoreForFieldData(
+        field,
         this.savedBuilderTtlCode,
         this.graphs
       );
 
       addValidationTriplesToFormNodesL(
-        fieldStoreWithForm.subject,
-        fieldStoreWithForm.store,
+        fieldData.subject,
+        fieldData.store,
         this.graphs
       );
 
-      storesWithForm.push(fieldStoreWithForm);
+      fields.push(fieldData);
     }
 
-    return storesWithForm;
-  }
-
-  willDestroy() {
-    super.willDestroy(...arguments);
-
-    for (const storeWithForm of this.storesWithForm) {
-      if (isForkingStore(storeWithForm.store)) {
-        storeWithForm.store.clearObservers();
-      }
-    }
+    return fields;
   }
 }
