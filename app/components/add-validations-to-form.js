@@ -23,6 +23,7 @@ export default class AddValidationsToFormComponent extends Component {
   @service toaster;
   @tracked selectedField;
 
+  builderStore;
   savedBuilderTtlCode;
 
   graphs = validationGraphs;

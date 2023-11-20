@@ -1,8 +1,5 @@
-import {
-  getTriplesWithNodeAsSubject,
-  getValidationSubjectsOnNode,
-} from './forking-store-helpers';
-import { EMBER, FORM, SH } from './rdflib';
+import { createFieldDataForSubject } from './create-field-data-for-subject';
+import { EMBER, FORM } from './rdflib';
 import { showErrorToasterMessage } from './toaster-message-helper';
 
 export function getFieldsInStore(store, graph) {
@@ -20,44 +17,13 @@ export function getFieldsInStore(store, graph) {
   const triplesPerField = [];
 
   for (const fieldSubject of possibleFieldSubjects) {
-    const fieldTriples = getTriplesWithNodeAsSubject(
-      fieldSubject,
-      store,
-      graph
-    );
+    const fieldData = createFieldDataForSubject(fieldSubject, {
+      store: store,
+      graph: graph,
+    });
 
-    const fieldValidationSubjects = getValidationSubjectsOnNode(
-      fieldSubject,
-      store,
-      graph
-    );
-    for (const subject of fieldValidationSubjects) {
-      const validationTriples = getTriplesWithNodeAsSubject(
-        subject,
-        store,
-        graph
-      );
-
-      fieldTriples.push(...validationTriples);
-    }
-
-    let fieldName = 'Field name';
-    const fieldNameTriple = fieldTriples.find(
-      (triple) => triple.predicate.value == SH('name').value
-    );
-    if (fieldNameTriple) {
-      fieldName = fieldNameTriple.object.value;
-    }
-
-    const tripleIsField = fieldTriples.find(
-      (triple) => triple.object.value == FORM('Field').value
-    );
-    if (tripleIsField) {
-      triplesPerField.push({
-        subject: fieldSubject,
-        name: fieldName,
-        triples: fieldTriples,
-      });
+    if (fieldData) {
+      triplesPerField.push(fieldData);
     }
   }
 
