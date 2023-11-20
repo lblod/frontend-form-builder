@@ -17,18 +17,20 @@ export function addValidationTriplesToFormNodesL(fieldSubject, store, graphs) {
       store,
       graphs.sourceBuilderGraph
     );
-    const formNodesLWithValidation = triple(
-      EXT('formNodesL'),
-      FORM('validations'),
-      validationTriples.shift().subject,
-      graphs.sourceGraph
-    );
-    store.addAll([
-      formNodesLWithValidation,
-      ...validationTriples.map((triple) => {
-        triple.graph = graphs.sourceGraph;
-        return triple;
-      }),
-    ]);
+    if (validationTriples.length >= 1) {
+      const formNodesLWithValidation = triple(
+        EXT('formNodesL'),
+        FORM('validations'),
+        validationTriples[0].subject,
+        graphs.sourceGraph
+      );
+      store.addAll([
+        formNodesLWithValidation,
+        ...validationTriples.map((triple) => {
+          triple.graph = graphs.sourceGraph;
+          return triple;
+        }),
+      ]);
+    }
   }
 }
