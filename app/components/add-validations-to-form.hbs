@@ -1,8 +1,7 @@
 <div>
   <div class="fieldSelectionForValidations">
     <AuDropdown @title={{"Select field"}} @skin="primary" role="menu">
-      {{#each this.storesWithForm as |field|}}
-
+      {{#each this.fields as |field|}}
         <AuButton
           {{on "click" (fn this.setSelectedField field)}}
           @skin="link"
@@ -11,7 +10,6 @@
           {{field.name}}
         </AuButton>
       {{/each}}
-
     </AuDropdown>
   </div>
 
