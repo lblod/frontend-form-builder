@@ -95,6 +95,13 @@ export default class FieldValidationsFormComponent extends Component {
       validationsToRemove.push(statement);
     }
 
+    applyStore.removeMatches(
+      EXT('formNodesL'),
+      FORM('validations'),
+      undefined,
+      this.graphs.sourceGraph
+    );
+
     applyStore.removeStatements(validationsToRemove);
     applyStore.addAll(validationsToApply);
 

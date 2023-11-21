@@ -1,4 +1,4 @@
-import { triple } from 'rdflib';
+import { Statement } from 'rdflib';
 import {
   getTriplesWithNodeAsSubject,
   getValidationSubjectsOnNode,
@@ -17,11 +17,12 @@ export function addValidationTriplesToFormNodesL(fieldSubject, store, graphs) {
       store,
       graphs.sourceBuilderGraph
     );
+
     if (validationTriples.length >= 1) {
-      const formNodesLWithValidation = triple(
+      const formNodesLWithValidation = new Statement(
         EXT('formNodesL'),
         FORM('validations'),
-        validationTriples[0].subject,
+        subject,
         graphs.sourceGraph
       );
       store.addAll([
