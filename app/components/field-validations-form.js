@@ -2,9 +2,12 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { getFieldAndValidationTriples } from '../utils/get-field-and-validation-triples';
-import { getValidationSubjectsOnNode } from '../utils/forking-store-helpers';
+import {
+  getTriplesWithNodeAsSubject,
+  getValidationSubjectsOnNode,
+} from '../utils/forking-store-helpers';
 import { EXT, FORM } from '../utils/rdflib';
-import { Statement } from 'rdflib';
+import { BlankNode, Statement } from 'rdflib';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 
 export default class FieldValidationsFormComponent extends Component {
@@ -51,6 +54,7 @@ export default class FieldValidationsFormComponent extends Component {
     const fieldTtl = this.store.serializeDataMergedGraph(
       this.graphs.sourceGraph
     );
+    console.log(`field ttl`, fieldTtl);
     const applyStore = new ForkingStore();
     applyStore.parse(fieldTtl, this.graphs.sourceGraph, 'text/turtle');
 
@@ -67,10 +71,14 @@ export default class FieldValidationsFormComponent extends Component {
 
     const validationsToApply = [];
     for (const validation of validations) {
+      const validationNode = this.createBlankNodeForValidation(
+        validation,
+        applyStore
+      );
       const statement = new Statement(
         this.fieldSubject,
         FORM('validations'),
-        validation,
+        validationNode,
         this.graphs.sourceGraph
       );
       validationsToApply.push(statement);
@@ -95,5 +103,28 @@ export default class FieldValidationsFormComponent extends Component {
       applyStore,
       this.graphs.sourceGraph
     );
+  }
+
+  createBlankNodeForValidation(validationNode, store) {
+    const blankNode = new BlankNode();
+    const triples = getTriplesWithNodeAsSubject(
+      validationNode,
+      store,
+      this.graphs.sourceGraph
+    );
+
+    const blankNodeStatements = [];
+    for (const triple of triples) {
+      const statement = new Statement(
+        blankNode,
+        triple.predicate,
+        triple.object,
+        this.graphs.sourceGraph
+      );
+      blankNodeStatements.push(statement);
+    }
+    store.addAll(blankNodeStatements);
+
+    return blankNode;
   }
 }
