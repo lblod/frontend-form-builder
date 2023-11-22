@@ -1,9 +1,7 @@
 import { Statement } from 'rdflib';
-import {
-  getTriplesWithNodeAsSubject,
-  getValidationSubjectsOnNode,
-} from '../forking-store-helpers';
+import { getValidationSubjectsOnNode } from '../forking-store-helpers';
 import { EXT, FORM } from '../rdflib';
+import { createBlankNodeForValidation } from './create-blankNode-for-validation';
 
 export function addValidationTriplesToFormNodesL(fieldSubject, store, graphs) {
   const validationSubjects = getValidationSubjectsOnNode(
@@ -11,27 +9,19 @@ export function addValidationTriplesToFormNodesL(fieldSubject, store, graphs) {
     store,
     graphs.sourceGraph
   );
+
   for (const subject of validationSubjects) {
-    const validationTriples = getTriplesWithNodeAsSubject(
+    const validation = createBlankNodeForValidation(
       subject,
       store,
-      graphs.sourceBuilderGraph
+      graphs.sourceGraph
     );
-
-    if (validationTriples.length >= 1) {
-      const formNodesLWithValidation = new Statement(
-        EXT('formNodesL'),
-        FORM('validations'),
-        subject,
-        graphs.sourceGraph
-      );
-      store.addAll([
-        formNodesLWithValidation,
-        ...validationTriples.map((triple) => {
-          triple.graph = graphs.sourceGraph;
-          return triple;
-        }),
-      ]);
-    }
+    const formNodesLWithValidation = new Statement(
+      EXT('formNodesL'),
+      FORM('validations'),
+      validation.node,
+      graphs.sourceGraph
+    );
+    store.addAll([formNodesLWithValidation, ...validation.statements]);
   }
 }
