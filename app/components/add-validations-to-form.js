@@ -48,8 +48,13 @@ export default class AddValidationsToFormComponent extends Component {
     this.builderStore = new ForkingStore();
     yield parseStoreGraphs(this.builderStore, ttlCode);
 
-    this.fields = yield this.createSeparateStorePerField(this.builderStore);
-    this.fields.length >= 1 ? (this.selectedField = this.fields[0]) : null;
+    this.fields = this.createFieldArray(this.builderStore);
+    this.fields.length >= 1
+      ? this.setSelectedField({
+          name: this.fields[0].name,
+          subject: this.fields[0].subject,
+        })
+      : null;
   }
 
   @action
@@ -96,24 +101,15 @@ export default class AddValidationsToFormComponent extends Component {
     }
   }
 
-  async createSeparateStorePerField(store) {
+  createFieldArray(store) {
     const fieldsData = getFieldsInStore(store, this.graphs.sourceGraph);
     const fields = [];
 
     for (const field of fieldsData) {
-      const fieldData = await createStoreForFieldData(
-        field,
-        this.savedBuilderTtlCode,
-        this.graphs
-      );
-
-      addValidationTriplesToFormNodesL(
-        fieldData.subject,
-        fieldData.store,
-        this.graphs
-      );
-
-      fields.push(fieldData);
+      fields.push({
+        name: field.name,
+        subject: field.subject,
+      });
     }
 
     return fields;
