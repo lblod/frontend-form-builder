@@ -6,7 +6,6 @@ import { EXT, FORM, RDF } from '../rdflib';
 export const validationGraphs = {
   ...GRAPHS,
   fieldGraph: new RDFNode(`http://data.lblod.info/fieldGraph`),
-  sourceBuilderGraph: new RDFNode(`http://data.lblod.info/sourceBuilderGraph`),
 };
 
 export async function parseStoreGraphs(store, ttlCode) {
