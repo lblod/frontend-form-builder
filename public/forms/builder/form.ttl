@@ -319,6 +319,7 @@ ext:formListingTableGenerator a form:Generator;
           a form:Field ;
           sh:name "The Nested Field" ;
           sh:path [] ;
+          sh:order 1 ;
           form:displayType displayTypes:defaultInput
         ];
         form:removeLabel "Remove row text"
