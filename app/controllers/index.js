@@ -14,6 +14,10 @@ export default class IndexController extends Controller {
   formToDelete;
 
   @tracked showDeleteModal = false;
+  @service store;
+  @tracked showModal = false;
+  @tracked name = "";
+  @tracked description = ``;
 
   @action
   openDeleteModal(generatedForm) {
@@ -39,5 +43,19 @@ export default class IndexController extends Controller {
       });
       console.error(err);
     }
+  }
+
+  @action
+  handleNameChange(event) {
+    this.name = event.target.value;
+  }
+
+  @action
+  handleCommentChange(event) {
+    this.comment = event.target.value;
+  }
+
+  get emptyName() {
+    return this.name == '';
   }
 }

@@ -6,9 +6,12 @@
     </AuHeading>
   </div>
   <div class="au-c-toolbar__group">
-    <AuLink @route="formbuilder.new" @skin="button" @icon="add">
+    <AuButton
+      @skin="primary" @icon="add"
+      {{on "click" (fn (mut this.showModal) true)}}
+    >
       Maak nieuw semantisch formulier
-    </AuLink>
+    </AuButton>
   </div>
 </div>
 
@@ -73,3 +76,60 @@
     @onClose={{fn (mut this.showDeleteModal) false}}
   />
 {{/if}}
+<AuModal
+  @title="Geef een naam en beschrijving"
+  @modalOpen={{this.showModal}}
+  @closeModal={{fn (mut this.showModal) false}} as |Modal| >
+  <Modal.Body>
+    {{this.hello}}
+    <div class="au-o-grid au-o-grid--small">
+      <div class="au-o-grid__item au-1-1">
+        <AuLabel for="input-filelabel"
+          @required={{true}}
+        >
+          Naam
+        </AuLabel>
+        <AuInput
+          id="input-filelabel"
+          @error={{this.emptyName}}
+          value={{this.name}}
+          {{on "change" this.handleNameChange}}
+        />
+        {{#if this.emptyName}}
+          <AuHelpText @error={{true}}>Een naam geven is verplicht</AuHelpText>
+        {{/if}}
+      </div>
+      <div class="au-o-grid__item au-1-1">
+        <AuLabel for="input-filecomment">Beschrijving</AuLabel>
+        <AuTextarea
+          @width="block"
+          id="input-filecomment"
+          rows="10"
+          value={{this.description}}
+          {{!-- {{on "input" this.handleCommentChange}} --}}
+        />
+        {{#if this.emptyFormComment}}
+          <AuHelpText @error={{true}}>Een beschrijving geven is verplicht</AuHelpText>
+        {{/if}}
+      </div>
+    </div>
+  </Modal.Body>
+  <Modal.Footer>
+    {{!-- <AuButton {{on 'click' this.updateForm}}
+      @disabled={{this.disableButton}}
+    >
+      Maak formulier aan
+    </AuButton> --}}
+    <AuLink 
+      @skin="button"
+      @route="formbuilder.new"
+      @name={{this.name}}
+      @description={{this.description}}
+      @icon="pencil"
+      @iconAlignment="left"
+      @disabled={{this.emptyName}}
+    >
+      Bouw formulier
+    </AuLink>
+  </Modal.Footer>
+</AuModal>
