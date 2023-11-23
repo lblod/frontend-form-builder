@@ -15,8 +15,6 @@ export default class FieldValidationsFormComponent extends Component {
   graphs;
   fieldSubject;
 
-  fieldAndValidationTriples = [];
-
   constructor() {
     super(...arguments);
 
@@ -24,12 +22,6 @@ export default class FieldValidationsFormComponent extends Component {
     this.store = this.args.store;
     this.form = this.args.form;
     this.graphs = this.args.graphs;
-
-    this.fieldAndValidationTriples = getFieldAndValidationTriples(
-      this.fieldSubject,
-      this.store,
-      this.graphs.sourceGraph
-    );
 
     this.store.registerObserver(() => {
       this.updateFieldForm.perform();
