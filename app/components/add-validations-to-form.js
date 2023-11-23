@@ -25,7 +25,6 @@ export default class AddValidationsToFormComponent extends Component {
 
   builderStore;
   savedBuilderTtlCode;
-  allFields;
 
   graphs = validationGraphs;
 
@@ -60,7 +59,6 @@ export default class AddValidationsToFormComponent extends Component {
 
   @action
   async setSelectedField(field) {
-    this.fields = this.allFields;
     this.selectedField = null;
 
     const fieldData = await createStoreForFieldData(
@@ -78,9 +76,6 @@ export default class AddValidationsToFormComponent extends Component {
     );
 
     this.selectedField = fieldData;
-    this.fields = this.fields.filter(
-      (fieldInList) => fieldInList.name !== this.selectedField.name
-    );
   }
 
   @action
@@ -116,8 +111,6 @@ export default class AddValidationsToFormComponent extends Component {
         subject: field.subject,
       });
     }
-
-    this.allFields = fields;
 
     return fields;
   }
