@@ -8,7 +8,6 @@ export function isDefaultCountryCodeAddedToValidPhoneNumber(store, graph) {
     graph
   );
 
-  const subjectsToAddDefaultTo = [];
   for (const triple of validPhoneNumber) {
     const countryCodeValues = store.match(
       triple.subject,
@@ -18,12 +17,9 @@ export function isDefaultCountryCodeAddedToValidPhoneNumber(store, graph) {
     );
 
     if (!countryCodeValues.length >= 1) {
-      subjectsToAddDefaultTo.push(triple.subject);
+      return false;
     }
   }
 
-  return {
-    isAdded: subjectsToAddDefaultTo.length == 0,
-    subjectsToAddDefaultTo: subjectsToAddDefaultTo,
-  };
+  return true;
 }
