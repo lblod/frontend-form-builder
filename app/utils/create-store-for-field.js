@@ -13,13 +13,15 @@ export async function createStoreForFieldData(fieldData, graphs) {
   );
 
   const ttl = fieldStore.serializeDataMergedGraph(graphs.sourceGraph);
-  await parseStoreGraphs(fieldStore, ttl);
+
+  const builderStore = new ForkingStore();
+  await parseStoreGraphs(builderStore, ttl);
 
   return {
     name: fieldData.name,
     subject: fieldData.subject,
-    store: fieldStore,
-    form: fieldStore.any(
+    store: builderStore,
+    form: builderStore.any(
       undefined,
       RDF('type'),
       FORM('Form'),
