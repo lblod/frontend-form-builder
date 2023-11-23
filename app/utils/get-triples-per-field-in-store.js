@@ -1,6 +1,5 @@
 import { createFieldDataForSubject } from './create-field-data-for-subject';
 import { EMBER, FORM } from './rdflib';
-import { showErrorToasterMessage } from './toaster-message-helper';
 
 export function getFieldsInStore(store, graph) {
   const possibleFieldSubjects = store
@@ -9,7 +8,6 @@ export function getFieldsInStore(store, graph) {
 
   if (possibleFieldSubjects.length == 0) {
     const errorMessage = `No fields found in form.`;
-    showErrorToasterMessage(this.toaster, errorMessage);
 
     throw errorMessage;
   }
