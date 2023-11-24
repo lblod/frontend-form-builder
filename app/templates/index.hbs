@@ -106,7 +106,7 @@
           id="input-filecomment"
           rows="10"
           value={{this.description}}
-          {{!-- {{on "input" this.handleCommentChange}} --}}
+          {{on "input" this.handleDescriptionChange}}
         />
         {{#if this.emptyFormComment}}
           <AuHelpText @error={{true}}>Een beschrijving geven is verplicht</AuHelpText>
@@ -115,12 +115,14 @@
     </div>
   </Modal.Body>
   <Modal.Footer>
-    {{!-- <AuButton {{on 'click' this.updateForm}}
-      @disabled={{this.disableButton}}
-    >
-      Maak formulier aan
-    </AuButton> --}}
-    <AuLink 
+      <AuButton 
+        @disabled={{this.emptyName}}
+        {{on "click" this.initiateForm}}
+      >
+        Bouw formulier
+      </AuButton>
+     
+    {{!-- <AuLink 
       @skin="button"
       @route="formbuilder.new"
       @name={{this.name}}
@@ -130,6 +132,6 @@
       @disabled={{this.emptyName}}
     >
       Bouw formulier
-    </AuLink>
+    </AuLink> --}}
   </Modal.Footer>
 </AuModal>

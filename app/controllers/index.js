@@ -15,8 +15,10 @@ export default class IndexController extends Controller {
 
   @tracked showDeleteModal = false;
   @service store;
+  @service router;
+
   @tracked showModal = false;
-  @tracked name = "";
+  @tracked name = '';
   @tracked description = ``;
 
   @action
@@ -51,11 +53,24 @@ export default class IndexController extends Controller {
   }
 
   @action
-  handleCommentChange(event) {
-    this.comment = event.target.value;
+  handleDescriptionChange(event) {
+    this.description = event.target.value;
   }
 
   get emptyName() {
     return this.name == '';
+  }
+
+  @action
+  initiateForm() {
+    this.router.transitionTo('formbuilder.new', {
+      queryParams: {
+        label: this.name,
+        comment: this.description,
+      },
+    });
+    this.showModal = false;
+    this.name = '';
+    this.description = ``;
   }
 }
