@@ -18,6 +18,7 @@ export default class IndexController extends Controller {
   @service router;
 
   @tracked showModal = false;
+  @tracked hasBeenFocused = false;
   @tracked name = '';
   @tracked description = ``;
 
@@ -47,7 +48,15 @@ export default class IndexController extends Controller {
     }
   }
 
-  get emptyName() {
+  get errorEmptyName() {
+    if (this.hasBeenFocused){
+      return this.name == '';
+    } else {
+      return false;
+    }
+  }
+
+  get disableSubmit() {
     return this.name == '';
   }
 
@@ -56,11 +65,14 @@ export default class IndexController extends Controller {
     this.name = '';
     this.description = ``;
     this.showModal = false;
+    this.hasBeenFocused = false;
+
   }
 
   @action
   handleNameChange(event) {
     this.name = event.target.value;
+    this.hasBeenFocused = true;
   }
 
   @action
@@ -77,6 +89,7 @@ export default class IndexController extends Controller {
       },
     });
     this.showModal = false;
+    this.hasBeenFocused = false;
     this.name = '';
     this.description = ``;
   }
