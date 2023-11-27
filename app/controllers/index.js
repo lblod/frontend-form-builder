@@ -47,6 +47,17 @@ export default class IndexController extends Controller {
     }
   }
 
+  get emptyName() {
+    return this.name == '';
+  }
+
+  @action
+  closeModal() {
+    this.name = '';
+    this.description = ``;
+    this.showModal = false;
+  }
+
   @action
   handleNameChange(event) {
     this.name = event.target.value;
@@ -55,10 +66,6 @@ export default class IndexController extends Controller {
   @action
   handleDescriptionChange(event) {
     this.description = event.target.value;
-  }
-
-  get emptyName() {
-    return this.name == '';
   }
 
   @action
