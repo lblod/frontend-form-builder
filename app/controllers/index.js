@@ -49,7 +49,7 @@ export default class IndexController extends Controller {
   }
 
   get errorEmptyName() {
-    if (this.hasBeenFocused){
+    if (this.hasBeenFocused) {
       return this.name == '';
     } else {
       return false;
@@ -66,7 +66,6 @@ export default class IndexController extends Controller {
     this.description = ``;
     this.showModal = false;
     this.hasBeenFocused = false;
-
   }
 
   @action
@@ -88,9 +87,6 @@ export default class IndexController extends Controller {
         comment: this.description,
       },
     });
-    this.showModal = false;
-    this.hasBeenFocused = false;
-    this.name = '';
-    this.description = ``;
+    this.closeModal();
   }
 }
