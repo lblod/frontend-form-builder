@@ -87,7 +87,7 @@ fields:validatonSelectorF a form:Field ;
   sh:order 2 ;
   form:help """
    """;
-  form:validations 
+  form:validations
     [ a form:RequiredConstraint ;
         form:grouping form:Bag ;
         sh:path rdf:type ;
@@ -174,7 +174,7 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
       sh:name "Max characters" ;
       sh:order 101 ;
       sh:path form:max ;
-      form:validations 
+      form:validations
         [ a form:RequiredConstraint ;
             form:grouping form:Bag ;
             sh:path form:max ;
@@ -187,7 +187,7 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
         ] ;
       form:displayType displayTypes:defaultInput ;
       sh:group ext:formFieldPg .
-    
+
     ##########################################################
     #  Exact value field
     ##########################################################
@@ -195,7 +195,7 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
       sh:name "Exact value" ;
       sh:order 102 ;
       sh:path form:customValue ;
-      form:validations 
+      form:validations
         [ a form:RequiredConstraint ;
             form:grouping form:Bag ;
             sh:path form:customValue ;
@@ -203,7 +203,7 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
         ] ;
       form:displayType displayTypes:defaultInput ;
       sh:group ext:formFieldPg .
-   
+
     ##########################################################
     #  Phone number: country code field
     ##########################################################
@@ -211,6 +211,12 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
       sh:name "CountryCode" ;
       sh:order 103 ;
       sh:path form:defaultCountry ;
+      form:validations
+        [ a form:RequiredConstraint ;
+            form:grouping form:Bag ;
+            sh:path form:defaultCountry ;
+            sh:resultMessage "Dit veld is verplicht."@nl
+        ] ;
       form:displayType displayTypes:countryCodeConceptSchemeSelector ;
       form:options """{"conceptScheme":"http://lblod.data.gift/concept-schemes/countryCodes","searchEnabled":true}""" ;
       sh:group ext:formFieldPg .

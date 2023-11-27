@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
 import { SKOS, updateSimpleFormValue } from '@lblod/submission-form-helpers';
 import { Statement, namedNode } from 'rdflib';
-import { EXT, FORM } from '../../utils/rdflib';
+import { FORM } from '../../utils/rdflib';
 import { getPrefLabelOfNode } from '../../utils/forking-store-helpers';
 
 function byLabel(a, b) {
@@ -12,11 +12,6 @@ function byLabel(a, b) {
   const textB = b.label.toUpperCase();
   return textA < textB ? -1 : textA > textB ? 1 : 0;
 }
-
-export const defaultCountryCode = {
-  label: 'BE',
-  subject: EXT('countryCodeBE'),
-};
 
 export default class CountryCodeConceptSchemeSelectorComponent extends InputFieldComponent {
   inputId = 'select-' + guidFor(this);
@@ -28,7 +23,7 @@ export default class CountryCodeConceptSchemeSelectorComponent extends InputFiel
   constructor() {
     super(...arguments);
     this.loadOptions();
-    this.loadSelectedOrDefaultCountryCodeOption();
+    this.loadSelectedCountryCodeOption();
   }
 
   loadOptions() {
@@ -54,20 +49,18 @@ export default class CountryCodeConceptSchemeSelectorComponent extends InputFiel
     this.countryCodeOptions.sort(byLabel);
   }
 
-  loadSelectedOrDefaultCountryCodeOption() {
-    const currentDefaultCountry = this.storeOptions.store.any(
+  loadSelectedCountryCodeOption() {
+    const selectedDefaultCountry = this.storeOptions.store.any(
       this.storeOptions.sourceNode,
       FORM('defaultCountry'),
       undefined,
       this.storeOptions.sourceGraph
     );
 
-    if (currentDefaultCountry) {
+    if (selectedDefaultCountry) {
       this.selectedCountryCode = this.countryCodeOptions.find(
-        (opt) => currentDefaultCountry.value == opt.label
+        (opt) => selectedDefaultCountry.value == opt.label
       );
-    } else {
-      this.selectedCountryCode = defaultCountryCode;
     }
   }
 
