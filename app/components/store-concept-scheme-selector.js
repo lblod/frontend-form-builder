@@ -9,7 +9,7 @@ export default class StoreConceptSchemeSelectorComponent extends Component {
 
   constructor() {
     super(...arguments);
-    if (!this.args.field.rdflibOptions) {
+    if (!this.args.field.options) {
       this.selected = null;
       this.options = [];
 
@@ -20,14 +20,13 @@ export default class StoreConceptSchemeSelectorComponent extends Component {
   }
 
   get fieldName() {
-    return this.args.field.rdflibLabel ?? '';
+    return this.args.field.label ?? '';
   }
 
   async loadOptions() {
-    const config = this.getOptionConfigurationFromField(this.args.field);
-    if (config.conceptScheme) {
+    if (this.args.field.options.conceptScheme) {
       this.options = await queryDB(
-        this.getUriAndLabelForSchemeQuery(config.conceptScheme)
+        this.getUriAndLabelForSchemeQuery(this.args.field.options.conceptScheme)
       );
     } else {
       console.warn(`Key "conceptScheme" not found in json configuration`);
@@ -37,21 +36,7 @@ export default class StoreConceptSchemeSelectorComponent extends Component {
   @action
   setSelected(value) {
     this.selected = value;
-    // What should happen here?
-  }
-
-  getOptionConfigurationFromField(field) {
-    const dropdownConfigurationLiteral = field.rdflibOptions;
-    let configurationAsJson = {};
-    try {
-      configurationAsJson = JSON.parse(
-        dropdownConfigurationLiteral.value.trim()
-      );
-    } catch (error) {
-      console.error(`Catched: could not parse configuration into json object.`);
-    }
-
-    return configurationAsJson;
+    // This is a display component so it should not do anything
   }
 
   getUriAndLabelForSchemeQuery(schemeUri) {
