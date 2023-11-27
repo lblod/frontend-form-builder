@@ -1,10 +1,10 @@
 import { createFieldDataForSubject } from './create-field-data-for-subject';
-import { EMBER, FORM } from './rdflib';
+import { FORM, RDF } from './rdflib';
 
 export function getFieldsInStore(store, graph) {
   const possibleFieldSubjects = store
-    .match(EMBER('source-node'), FORM('includes'), undefined, graph)
-    .map((triple) => triple.object);
+    .match(undefined, RDF('type'), FORM('Field'), graph)
+    .map((triple) => triple.subject);
 
   if (possibleFieldSubjects.length == 0) {
     const errorMessage = `No fields found in form.`;
