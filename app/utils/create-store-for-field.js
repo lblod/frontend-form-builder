@@ -3,11 +3,7 @@ import { parseStoreGraphs } from './validation/helpers';
 import { FORM, RDF } from './rdflib';
 import { fieldValidationFormTemplate } from './validation/form-templates/template';
 
-export async function createStoreForFieldData(
-  fieldData,
-  builderTtlCode,
-  graphs
-) {
+export async function createStoreForFieldData(fieldData, graphs) {
   const fieldStore = new ForkingStore();
   fieldStore.addAll(fieldData.triples);
   fieldStore.parse(
@@ -17,15 +13,15 @@ export async function createStoreForFieldData(
   );
 
   const ttl = fieldStore.serializeDataMergedGraph(graphs.sourceGraph);
-  await parseStoreGraphs(fieldStore, ttl);
 
-  fieldStore.parse(builderTtlCode, graphs.sourceBuilderGraph, 'text/turtle');
+  const builderStore = new ForkingStore();
+  await parseStoreGraphs(builderStore, ttl);
 
   return {
     name: fieldData.name,
     subject: fieldData.subject,
-    store: fieldStore,
-    form: fieldStore.any(
+    store: builderStore,
+    form: builderStore.any(
       undefined,
       RDF('type'),
       FORM('Form'),

@@ -56,7 +56,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     const fieldDisplayType = getDisplayTypeOfNode(
       this.getFieldSubject(),
       this.args.formStore,
-      this.args.graphs.sourceBuilderGraph
+      this.args.graphs.sourceGraph
     );
 
     const metaGraph = this.args.graphs.metaGraph;

@@ -6,6 +6,7 @@ import { getValidationSubjectsOnNode } from '../utils/forking-store-helpers';
 import { EXT, FORM } from '../utils/rdflib';
 import { Statement } from 'rdflib';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
+import { createBlankNodeForValidation } from '../utils/validation/create-blankNode-for-validation';
 
 export default class FieldValidationsFormComponent extends Component {
   @tracked store;
@@ -14,8 +15,6 @@ export default class FieldValidationsFormComponent extends Component {
   graphs;
   fieldSubject;
 
-  fieldAndValidationTriples = [];
-
   constructor() {
     super(...arguments);
 
@@ -23,12 +22,6 @@ export default class FieldValidationsFormComponent extends Component {
     this.store = this.args.store;
     this.form = this.args.form;
     this.graphs = this.args.graphs;
-
-    this.fieldAndValidationTriples = getFieldAndValidationTriples(
-      this.fieldSubject,
-      this.store,
-      this.graphs.sourceGraph
-    );
 
     this.store.registerObserver(() => {
       this.updateFieldForm.perform();
@@ -67,13 +60,19 @@ export default class FieldValidationsFormComponent extends Component {
 
     const validationsToApply = [];
     for (const validation of validations) {
+      const validationNode = createBlankNodeForValidation(
+        validation,
+        applyStore,
+        this.graphs.sourceGraph
+      );
+
       const statement = new Statement(
         this.fieldSubject,
         FORM('validations'),
-        validation,
+        validationNode.node,
         this.graphs.sourceGraph
       );
-      validationsToApply.push(statement);
+      validationsToApply.push(...[statement, ...validationNode.statements]);
     }
 
     const validationsToRemove = [];
@@ -86,6 +85,13 @@ export default class FieldValidationsFormComponent extends Component {
       );
       validationsToRemove.push(statement);
     }
+
+    applyStore.removeMatches(
+      EXT('formNodesL'),
+      FORM('validations'),
+      undefined,
+      this.graphs.sourceGraph
+    );
 
     applyStore.removeStatements(validationsToRemove);
     applyStore.addAll(validationsToApply);
