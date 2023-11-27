@@ -64,9 +64,8 @@
 <AuModal
   @title="Geef een naam en beschrijving"
   @modalOpen={{this.showModal}}
-  @closeModal={{fn (mut this.showModal) false}} as |Modal| >
+  @closeModal={{this.closeModal}} as |Modal| >
   <Modal.Body>
-    {{this.hello}}
     <div class="au-o-grid au-o-grid--small">
       <div class="au-o-grid__item au-1-1">
         <AuLabel for="input-filelabel"
@@ -106,17 +105,5 @@
       >
         Bouw formulier
       </AuButton>
-     
-    {{!-- <AuLink 
-      @skin="button"
-      @route="formbuilder.new"
-      @name={{this.name}}
-      @description={{this.description}}
-      @icon="pencil"
-      @iconAlignment="left"
-      @disabled={{this.emptyName}}
-    >
-      Bouw formulier
-    </AuLink> --}}
   </Modal.Footer>
 </AuModal>
