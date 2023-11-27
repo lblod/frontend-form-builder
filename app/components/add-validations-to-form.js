@@ -61,6 +61,10 @@ export default class AddValidationsToFormComponent extends Component {
   async setSelectedField(field) {
     this.selectedField = null;
 
+    if (field == null) {
+      return;
+    }
+
     const fieldData = await createStoreForFieldData(
       createFieldDataForSubject(field.subject, {
         store: this.builderStore,

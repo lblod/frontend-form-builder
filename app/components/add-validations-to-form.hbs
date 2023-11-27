@@ -1,28 +1,37 @@
 <div>
-  <div class="fieldSelectionForValidations">
-    <AuDropdown @title={{"Select field"}} @skin="primary" role="menu">
-      {{#each this.fields as |field|}}
-        <AuButton
-          {{on "click" (fn this.setSelectedField field)}}
-          @skin="link"
-          role="menuitem"
-        >
-          {{field.name}}
-        </AuButton>
-      {{/each}}
-    </AuDropdown>
-  </div>
-
-  {{#if this.selectedField}}
-    <strong>{{this.selectedField.name}}</strong>
-    <FieldValidationsForm
-      @fieldSubject={{this.selectedField.subject}}
-      @form={{this.selectedField.form}}
-      @graphs={{this.graphs}}
-      @store={{this.selectedField.store}}
-      @updateTtlCodeWithField={{this.updateTtlCodeWithField}}
-    />
-  {{else}}
+  {{#if this.initialise.isRunning}}
     <AuLoader />
+  {{else}}
+    <PowerSelect
+      @searchField="name"
+      @searchEnabled={{true}}
+      @selected={{this.selectedField}}
+      @options={{this.fields}}
+      @onChange={{this.setSelectedField}}
+      @allowClear={{true}}
+      @loadingMessage="Aan het laden..."
+      @noMatchesMessage="Geen resultaten gevonden"
+      as |field|
+    >
+      <span>
+        {{field.name}}
+      </span>
+    </PowerSelect>
+
+    <AuHr />
+
+    {{#if this.selectedField}}
+      <FieldValidationsForm
+        @fieldSubject={{this.selectedField.subject}}
+        @form={{this.selectedField.form}}
+        @graphs={{this.graphs}}
+        @store={{this.selectedField.store}}
+        @updateTtlCodeWithField={{this.updateTtlCodeWithField}}
+      />
+    {{else}}
+      <span class="formBuilderEdit__noFields">
+        <p class="au-u-h3">No field selected</p>
+      </span>
+    {{/if}}
   {{/if}}
 </div>

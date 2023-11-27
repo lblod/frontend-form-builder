@@ -2,7 +2,7 @@ import {
   getTriplesWithNodeAsSubject,
   getValidationSubjectsOnNode,
 } from './forking-store-helpers';
-import { FORM, SH } from './rdflib';
+import { SH } from './rdflib';
 
 export function createFieldDataForSubject(fieldSubject, { store, graph }) {
   const fieldTriples = getTriplesWithNodeAsSubject(fieldSubject, store, graph);
@@ -28,14 +28,6 @@ export function createFieldDataForSubject(fieldSubject, { store, graph }) {
   );
   if (fieldNameTriple) {
     fieldName = fieldNameTriple.object.value;
-  }
-
-  const tripleIsField = fieldTriples.find(
-    (triple) => triple.object.value == FORM('Field').value
-  );
-
-  if (!tripleIsField) {
-    return null;
   }
 
   return {
