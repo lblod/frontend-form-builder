@@ -75,11 +75,11 @@
         </AuLabel>
         <AuInput
           id="input-filelabel"
-          @error={{this.emptyName}}
+          @error={{this.errorEmptyName}}
           value={{this.name}}
-          {{on "change" this.handleNameChange}}
+          {{on "blur" this.handleNameChange}}
         />
-        {{#if this.emptyName}}
+        {{#if this.errorEmptyName}}
           <AuHelpText @error={{true}}>Een naam geven is verplicht</AuHelpText>
         {{/if}}
       </div>
@@ -100,7 +100,7 @@
   </Modal.Body>
   <Modal.Footer>
       <AuButton 
-        @disabled={{this.emptyName}}
+        @disabled={{this.disableSubmit}}
         {{on "click" this.initiateForm}}
       >
         Bouw formulier
