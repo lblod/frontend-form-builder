@@ -23,7 +23,7 @@ function addEmptyLineAfterDotForLine(line, viewUpdate) {
     currentLine = viewUpdate.state.doc.line(line);
     nextLine = viewUpdate.state.doc.line(currentLine.number + 1);
   } catch (error) {
-    if (currentLine.text !== '') {
+    if (currentLine.text.trim() !== '') {
       viewUpdate.view.dispatch({
         changes: { from: currentLine.to, to: currentLine.to, insert: '\n' },
       });
@@ -36,9 +36,9 @@ function addEmptyLineAfterDotForLine(line, viewUpdate) {
   }
 
   if (
-    currentLine.text.endsWith('.') &&
+    currentLine.text.trim().slice(-1) == '.' &&
     nextLine.text.trim() !== '' &&
-    !nextLine.text.startsWith('@prefix')
+    !nextLine.text.trim().startsWith('@prefix')
   ) {
     viewUpdate.view.dispatch({
       changes: { from: currentLine.to, to: currentLine.to, insert: '\n' },
