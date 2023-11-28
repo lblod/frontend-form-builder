@@ -4,7 +4,7 @@ import { syntaxTree } from '@codemirror/language';
 import { linter, lintGutter } from '@codemirror/lint';
 
 import { modifier } from 'ember-modifier';
-import { addEmptyLineAfterDots } from '../utils/code-editor-rules/add-empty-line-after-dot';
+import { addNewLineAfterDots } from '../utils/code-editor-rules/add-new-line-after-dot';
 
 function simpleLinter() {
   return linter((view) => {
@@ -43,7 +43,7 @@ export default modifier(
 
     const updateListener = EditorView.updateListener.of((viewUpdate) => {
       if (viewUpdate.focusChanged) {
-        addEmptyLineAfterDots(viewUpdate);
+        addNewLineAfterDots(viewUpdate);
       }
       if (viewUpdate.docChanged) {
         const doc = viewUpdate.state.doc;
@@ -59,7 +59,6 @@ export default modifier(
       doc,
       extensions,
     });
-    console.log(`editor`, editor);
 
     return () => {
       editor.destroy();
