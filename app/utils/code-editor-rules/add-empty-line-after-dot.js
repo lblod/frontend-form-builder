@@ -1,0 +1,47 @@
+export function addEmptyLineAfterDots(viewUpdate, startLineNumber = 1) {
+  const totalLinesInEditor = viewUpdate.state.doc.lines;
+
+  for (let index = 0; index < totalLinesInEditor; index++) {
+    const currentLine = index + startLineNumber;
+
+    addEmptyLineAfterDotForLine(currentLine, viewUpdate);
+  }
+
+  const firstLine = viewUpdate.state.doc.line(startLineNumber);
+  viewUpdate.view.dispatch({
+    selection: {
+      anchor: firstLine.from,
+      head: firstLine.from,
+    },
+  });
+}
+
+function addEmptyLineAfterDotForLine(line, viewUpdate) {
+  let currentLine = null;
+  let nextLine = null;
+  try {
+    currentLine = viewUpdate.state.doc.line(line);
+    nextLine = viewUpdate.state.doc.line(currentLine.number + 1);
+  } catch (error) {
+    if (currentLine.text !== '') {
+      viewUpdate.view.dispatch({
+        changes: { from: currentLine.to, to: currentLine.to, insert: '\n' },
+      });
+    }
+
+    return;
+  }
+  if (!nextLine) {
+    return;
+  }
+
+  if (
+    currentLine.text.endsWith('.') &&
+    nextLine.text.trim() !== '' &&
+    !nextLine.text.startsWith('@prefix')
+  ) {
+    viewUpdate.view.dispatch({
+      changes: { from: currentLine.to, to: currentLine.to, insert: '\n' },
+    });
+  }
+}
