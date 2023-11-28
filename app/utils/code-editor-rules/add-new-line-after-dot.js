@@ -1,10 +1,10 @@
-export function addEmptyLineAfterDots(viewUpdate, startLineNumber = 1) {
+export function addNewLineAfterDots(viewUpdate, startLineNumber = 1) {
   const totalLinesInEditor = viewUpdate.state.doc.lines;
 
   for (let index = 0; index < totalLinesInEditor; index++) {
     const currentLine = index + startLineNumber;
 
-    addEmptyLineAfterDotForLine(currentLine, viewUpdate);
+    addNewLineAfterDotForLine(currentLine, viewUpdate);
   }
 
   const firstLine = viewUpdate.state.doc.line(startLineNumber);
@@ -16,7 +16,7 @@ export function addEmptyLineAfterDots(viewUpdate, startLineNumber = 1) {
   });
 }
 
-function addEmptyLineAfterDotForLine(line, viewUpdate) {
+function addNewLineAfterDotForLine(line, viewUpdate) {
   let currentLine = null;
   let nextLine = null;
   try {
