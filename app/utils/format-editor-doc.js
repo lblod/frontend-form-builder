@@ -6,6 +6,7 @@ import { getDocWithParsedLinesThatEndOnDotAndIncludeSemicolons } from './code-ed
 import { getDocWithAllSpacesRemovedFromEachLine } from './code-editor-format-rules/remove-all-spaces-from-each-line';
 
 export async function getFormattedEditorCode(doc) {
+  // Watch out with changing these from order
   doc = await getDocWithAllSpacesRemovedFromEachLine(doc);
   doc =
     await getDocWithTabBeforeLineEndingOnDotAndPreviousLineEndsWithSemiColon(
@@ -14,7 +15,6 @@ export async function getFormattedEditorCode(doc) {
   doc = await getDocWithNewLineAfterDots(doc);
   doc = await getDocWithTabBeforeLineWithSemicolon(doc);
   doc = await getDocWithFormattedValidations(doc);
-  doc = await getDocWithParsedLinesThatEndOnDotAndIncludeSemicolons(doc);
 
-  return doc;
+  return await getDocWithParsedLinesThatEndOnDotAndIncludeSemicolons(doc);
 }
