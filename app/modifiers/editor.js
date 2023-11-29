@@ -4,7 +4,7 @@ import { syntaxTree } from '@codemirror/language';
 import { linter, lintGutter } from '@codemirror/lint';
 
 import { modifier } from 'ember-modifier';
-import { addNewLineAfterDots } from '../utils/code-editor-rules/add-new-line-after-dot';
+import { getFormattedEditorCode } from '../utils/format-editor-doc';
 
 function simpleLinter() {
   return linter((view) => {
@@ -41,10 +41,19 @@ export default modifier(
     const extensions = [basicSetup, turtle(), simpleLinter(), lintGutter()];
     const doc = code || '';
 
-    const updateListener = EditorView.updateListener.of((viewUpdate) => {
+    const updateListener = EditorView.updateListener.of(async (viewUpdate) => {
       if (viewUpdate.focusChanged) {
-        addNewLineAfterDots(viewUpdate);
+        const newDoc = await getFormattedEditorCode(viewUpdate.state.doc);
+
+        viewUpdate.view.dispatch({
+          changes: {
+            from: 0,
+            to: viewUpdate.state.doc.length,
+            insert: newDoc.join('\n'),
+          },
+        });
       }
+
       if (viewUpdate.docChanged) {
         const doc = viewUpdate.state.doc;
         const newCode = doc.toString();
