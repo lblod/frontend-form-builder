@@ -8,7 +8,7 @@
   <div class="au-c-toolbar__group">
     <AuButton
       @skin="primary" @icon="add"
-      {{on "click" (fn (mut this.showModal) true)}}
+      {{on "click" this.openModal}}
     >
       Maak nieuw semantisch formulier
     </AuButton>
@@ -90,12 +90,15 @@
         </AuLabel>
         <AuInput
           id="input-filelabel"
-          @error={{this.errorEmptyName}}
+          @error={{this.errorInput}}
           value={{this.name}}
           {{on "blur" this.handleNameChange}}
         />
         {{#if this.errorEmptyName}}
           <AuHelpText @error={{true}}>Een naam geven is verplicht</AuHelpText>
+        {{/if}}
+        {{#if this.errorDuplicateName}}
+          <AuHelpText @error={{true}}>Deze naam is al eens gebruikt</AuHelpText>
         {{/if}}
       </div>
       <div class="au-o-grid__item au-1-1">
