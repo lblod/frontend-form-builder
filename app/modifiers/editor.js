@@ -49,7 +49,7 @@ export default modifier(
       lintGutter(),
       keymap.of([indentWithTab, completionKeymap]),
       autocompletion({
-        activateOnTyping: false,
+        activateOnTyping: true,
         override: [completeWord],
       }),
     ];
