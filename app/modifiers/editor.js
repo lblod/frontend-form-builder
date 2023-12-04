@@ -2,6 +2,8 @@ import { EditorView, basicSetup } from 'codemirror';
 import { turtle } from 'codemirror-lang-turtle';
 import { syntaxTree } from '@codemirror/language';
 import { linter, lintGutter } from '@codemirror/lint';
+import { indentWithTab } from '@codemirror/commands';
+import { keymap } from '@codemirror/view';
 
 import { modifier } from 'ember-modifier';
 import { getFormattedEditorCode } from '../utils/format-editor-doc';
@@ -38,7 +40,13 @@ function simpleLinter() {
 
 export default modifier(
   function editor(parent, [code, onCodeChangeHandler]) {
-    const extensions = [basicSetup, turtle(), simpleLinter(), lintGutter()];
+    const extensions = [
+      basicSetup,
+      turtle(),
+      simpleLinter(),
+      lintGutter(),
+      keymap.of([indentWithTab]),
+    ];
     const doc = code || '';
 
     const updateListener = EditorView.updateListener.of(async (viewUpdate) => {
