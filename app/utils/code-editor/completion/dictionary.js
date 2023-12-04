@@ -1,10 +1,10 @@
-import { getDisplayTypeCompletions } from './sections/display-types';
-import { getFormGroupingTypeCompletions } from './sections/form-grouping-types';
-import { getFormPredicateCompletions } from './sections/form-predicates';
-import { getFormTypeCompletions } from './sections/form-types';
-import { getPrefixCompletions } from './sections/prefixes';
-import { getShaclPredicateCompletions } from './sections/sh-predicates';
-import { getValidationCompletions } from './sections/validation-types';
+import { getDisplayTypeCompletions } from './section/display-types';
+import { getFormGroupingTypeCompletions } from './section/form-grouping-types';
+import { getFormPredicateCompletions } from './section/form-predicates';
+import { getFormTypeCompletions } from './section/form-types';
+import { getPrefixCompletions } from './section/prefixes';
+import { getShaclPredicateCompletions } from './section/sh-predicates';
+import { getValidationCompletions } from './section/validation-types';
 
 export default [
   ...getFormTypeCompletions(),
