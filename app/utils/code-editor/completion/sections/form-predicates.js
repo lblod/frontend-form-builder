@@ -9,10 +9,11 @@ export function getFormPredicateCompletions() {
       boost: 98, // This is not doing anything IMO
     },
     [
-      `form:displayType `,
-      `form:grouping `,
+      `form:displayType`,
+      `form:grouping`,
       `form:validations [] ;`,
       `form:help """""" ;`,
+      `form:includes`,
     ]
   );
 }
