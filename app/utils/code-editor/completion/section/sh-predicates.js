@@ -9,12 +9,12 @@ export function getShaclPredicateCompletions() {
       boost: 98, // This is not doing anything IMO
     },
     [
-      `sh:name `,
-      `sh:group `,
-      `sh:order `,
-      `sh:path `,
-      `sh:description """""" ;`,
-      `sh:resultMessage "" ;`,
+      `sh:name`,
+      `sh:group`,
+      `sh:order`,
+      `sh:path`,
+      `sh:description """"""`,
+      `sh:resultMessage ""`,
     ]
   );
 }

@@ -9,19 +9,19 @@ export function getDisplayTypeCompletions() {
       boost: 96, // This is not doing anything IMO
     },
     [
-      `displayTypes:defaultInput ;`,
-      `displayTypes:numericalInput ;`,
-      `displayTypes:date ;`,
-      `displayTypes:dateRange ;`,
-      `displayTypes:textArea ;`,
-      `displayTypes:files ;`,
-      `displayTypes:remoteUrls ;`,
-      `displayTypes:switch ;`,
-      `displayTypes:checkbox ;`,
-      `displayTypes:conceptSchemeSelector ;`,
-      `displayTypes:conceptSchemeRadioButtons ;`,
-      `displayTypes:conceptSchemeMultiSelectCheckboxes ;`,
-      `displayTypes:conceptSchemeMultiSelector ;`,
+      `displayTypes:defaultInput`,
+      `displayTypes:numericalInput`,
+      `displayTypes:date`,
+      `displayTypes:dateRange`,
+      `displayTypes:textArea`,
+      `displayTypes:files`,
+      `displayTypes:remoteUrls`,
+      `displayTypes:switch`,
+      `displayTypes:checkbox`,
+      `displayTypes:conceptSchemeSelector`,
+      `displayTypes:conceptSchemeRadioButtons`,
+      `displayTypes:conceptSchemeMultiSelectCheckboxes`,
+      `displayTypes:conceptSchemeMultiSelector`,
     ]
   );
 }

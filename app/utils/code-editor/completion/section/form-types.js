@@ -9,12 +9,12 @@ export function getFormTypeCompletions() {
       boost: 99, // This is not doing anything IMO
     },
     [
-      `a form:Field ;`,
-      `a form:PropertyGroup ;`,
-      `a form:Listing ;`,
-      `a form:SubForm ;`,
-      `a form:Scope ;`,
-      `a form:Generator ;`,
+      `form:Field`,
+      `form:PropertyGroup`,
+      `form:Listing`,
+      `form:SubForm`,
+      `form:Scope`,
+      `form:Generator`,
     ]
   );
 }

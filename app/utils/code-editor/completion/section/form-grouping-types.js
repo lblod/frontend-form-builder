@@ -8,6 +8,6 @@ export function getFormGroupingTypeCompletions() {
       info: `Form grouping types`,
       boost: 95, // This is not doing anything IMO
     },
-    [`form:Bag ;`, `form:MatchEvery ;`, `form:MatchSome ;`]
+    [`form:Bag`, `form:MatchEvery`, `form:MatchSome`]
   );
 }
