@@ -96,5 +96,9 @@
   },
   "ember": {
     "edition": "octane"
+  },
+  "dependencies": {
+    "@codemirror/commands": "^6.3.2",
+    "@codemirror/state": "^6.3.2"
   }
 }
