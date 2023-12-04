@@ -21,7 +21,7 @@ export default class IndexController extends Controller {
   @tracked hasBeenFocused = false;
   @tracked name = '';
   @tracked description = ``;
-  @tracked labels = [];
+  @tracked nameCheck = [];
 
   @action
   openDeleteModal(generatedForm) {
@@ -49,35 +49,24 @@ export default class IndexController extends Controller {
     }
   }
 
-  async fetchAllForms() {
-    let forms = await this.store.findAll('generated-form');
-    return forms;
-  }
-
-  @action
-  openModal() {
-    this.showModal = true;
-    this.fetchAllForms().then((allForms) => {
-      allForms.forEach((form) => {
-        this.labels.addObject(form.label);
-      });
-    });
-    console.log(this.labels);
-  }
-
   @action
   closeModal() {
     this.name = '';
     this.description = ``;
     this.showModal = false;
     this.hasBeenFocused = false;
-    this.labels = [];
   }
 
   @action
-  handleNameChange(event) {
+  async handleNameChange(event) {
     this.name = event.target.value;
+    this.nameCheck = await this.store.query('generated-form', {
+      filter: {
+        ':exact:label': this.name,
+      },
+    });
     this.hasBeenFocused = true;
+    console.log(this.nameCheck);
   }
 
   @action
@@ -106,10 +95,8 @@ export default class IndexController extends Controller {
 
   get errorDuplicateName() {
     if (this.hasBeenFocused) {
-      for (const label of this.labels) {
-        if (label === this.name) {
-          return true;
-        }
+      if (this.nameCheck.length > 0) {
+        return true;
       }
       return false;
     } else {
