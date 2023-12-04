@@ -4,9 +4,11 @@ import { syntaxTree } from '@codemirror/language';
 import { linter, lintGutter } from '@codemirror/lint';
 import { indentWithTab } from '@codemirror/commands';
 import { keymap } from '@codemirror/view';
+import { autocompletion, completionKeymap } from '@codemirror/autocomplete';
 
 import { modifier } from 'ember-modifier';
 import { getFormattedEditorCode } from '../utils/code-editor/format/format-editor-doc';
+import { completeWord } from '../utils/code-editor/completion/complete-word';
 
 function simpleLinter() {
   return linter((view) => {
@@ -45,7 +47,11 @@ export default modifier(
       turtle(),
       simpleLinter(),
       lintGutter(),
-      keymap.of([indentWithTab]),
+      keymap.of([indentWithTab, completionKeymap]),
+      autocompletion({
+        activateOnTyping: false,
+        override: [completeWord],
+      }),
     ];
     const doc = code || '';
 
