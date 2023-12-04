@@ -66,7 +66,6 @@ export default class IndexController extends Controller {
       },
     });
     this.hasBeenFocused = true;
-    console.log(this.nameCheck);
   }
 
   @action
