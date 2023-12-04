@@ -4,7 +4,7 @@ export function getFormTypeCompletions() {
   return createCompletionsFor(
     {
       type: `keyword`,
-      section: `form types`,
+      section: `Form types`,
       info: `Form types`,
       boost: 99, // This is not doing anything IMO
     },

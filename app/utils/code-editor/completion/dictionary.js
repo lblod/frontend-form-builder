@@ -1,4 +1,5 @@
 import { getDisplayTypeCompletions } from './sections/display-types';
+import { getFormGroupingTypeCompletions } from './sections/form-grouping-types';
 import { getFormPredicateCompletions } from './sections/form-predicates';
 import { getFormTypeCompletions } from './sections/form-types';
 import { getPrefixCompletions } from './sections/prefixes';
@@ -11,5 +12,6 @@ export default [
   ...getShaclPredicateCompletions(),
   ...getValidationCompletions(),
   ...getDisplayTypeCompletions(),
+  ...getFormGroupingTypeCompletions(),
   ...getPrefixCompletions(),
 ];
