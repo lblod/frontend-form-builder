@@ -6,7 +6,7 @@ import { indentWithTab } from '@codemirror/commands';
 import { keymap } from '@codemirror/view';
 
 import { modifier } from 'ember-modifier';
-import { getFormattedEditorCode } from '../utils/format-editor-doc';
+import { getFormattedEditorCode } from '../utils/code-editor/format/format-editor-doc';
 
 function simpleLinter() {
   return linter((view) => {
