@@ -1,7 +1,7 @@
 export function createCompletionsFor({ type, info, section, boost }, array) {
-  return array.map((prefix) => {
+  return array.map((value) => {
     return {
-      label: prefix,
+      label: value,
       type: type,
       info: info,
       section: section,
