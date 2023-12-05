@@ -4,7 +4,7 @@ export function getPrefixCompletions() {
   return createCompletionsFor(
     {
       type: `variable`,
-      section: `@prefix`,
+      section: `Prefix`,
       info: `Prefix aliases`,
       boost: -99, // This is not doing anything IMO
     },
