@@ -72,9 +72,9 @@ display:textArea
   core:uuid "2e114946-3f3e-43ee-af16-d7c7255977e3" ;
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Text area"@en .
-display:storeConceptSchemeSelector
+display:conceptSchemeSelector
   rdf:type  rdfs:Class , skos:Concept ;
-  ext:displayType "storeConceptSchemeSelector" ;
+  ext:displayType "conceptSchemeSelector" ;
   ext:usesConceptScheme "true"^^xsd:boolean ;
   ext:canHaveValidation
       form:RequiredConstraint ;
