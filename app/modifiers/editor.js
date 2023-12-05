@@ -3,8 +3,13 @@ import { turtle } from 'codemirror-lang-turtle';
 import { lintGutter } from '@codemirror/lint';
 import { indentWithTab } from '@codemirror/commands';
 import { keymap } from '@codemirror/view';
-import { autocompletion, completionKeymap } from '@codemirror/autocomplete';
 import { modifier } from 'ember-modifier';
+import {
+  autocompletion,
+  acceptCompletion,
+  closeCompletion,
+  startCompletion,
+} from '@codemirror/autocomplete';
 
 import { getFormattedEditorCode } from '../utils/code-editor/format/format-editor-doc';
 import { completeWord } from '../utils/code-editor/completion/complete-word';
@@ -17,7 +22,25 @@ export default modifier(
       turtle(),
       simpleLinter(),
       lintGutter(),
-      keymap.of([indentWithTab, completionKeymap]),
+      keymap.of([
+        indentWithTab,
+        {
+          key: 'Alt-i',
+          run: async function (context) {
+            const newDoc = await getFormattedEditorCode(context.state.doc);
+            context.docView.view.dispatch({
+              changes: {
+                from: 0,
+                to: context.state.doc.length,
+                insert: newDoc.join('\n'),
+              },
+            });
+          },
+        },
+        { key: 'Ctrl-Space', run: startCompletion },
+        { key: 'Escape', run: closeCompletion },
+        { key: 'Enter', run: acceptCompletion },
+      ]),
       autocompletion({
         activateOnTyping: true,
         override: [completeWord],
@@ -26,18 +49,6 @@ export default modifier(
     const doc = code || '';
 
     const updateListener = EditorView.updateListener.of(async (viewUpdate) => {
-      if (viewUpdate.focusChanged) {
-        const newDoc = await getFormattedEditorCode(viewUpdate.state.doc);
-
-        viewUpdate.view.dispatch({
-          changes: {
-            from: 0,
-            to: viewUpdate.state.doc.length,
-            insert: newDoc.join('\n'),
-          },
-        });
-      }
-
       if (viewUpdate.docChanged) {
         const doc = viewUpdate.state.doc;
         const newCode = doc.toString();
