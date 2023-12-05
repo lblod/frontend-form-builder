@@ -11,9 +11,9 @@ import {
   startCompletion,
 } from '@codemirror/autocomplete';
 
-import { getFormattedEditorCode } from '../utils/code-editor/format/format-editor-doc';
 import { completeWord } from '../utils/code-editor/completion/complete-word';
 import { simpleLinter } from '../utils/code-editor/format/simple-linter';
+import formatCodeOnKey from '../utils/code-editor/key-map/format-code-on-key';
 
 export default modifier(
   function editor(parent, [code, onCodeChangeHandler]) {
@@ -24,19 +24,7 @@ export default modifier(
       lintGutter(),
       keymap.of([
         indentWithTab,
-        {
-          key: 'Alt-i',
-          run: async function (context) {
-            const newDoc = await getFormattedEditorCode(context.state.doc);
-            context.docView.view.dispatch({
-              changes: {
-                from: 0,
-                to: context.state.doc.length,
-                insert: newDoc.join('\n'),
-              },
-            });
-          },
-        },
+        formatCodeOnKey,
         { key: 'Ctrl-Space', run: startCompletion },
         { key: 'Escape', run: closeCompletion },
         { key: 'Enter', run: acceptCompletion },
