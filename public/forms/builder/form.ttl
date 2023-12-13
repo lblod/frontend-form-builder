@@ -128,11 +128,11 @@ ext:formNodesL a form:Listing;
 ##########################################################
 ext:formNodesFormItem a form:SubForm;
   form:includes ext:formNodesNameF;
-  form:includes ext:formNodesTypeF;
   form:includes ext:formNodeHelpTextF;
   form:includes ext:formNodePropertyGroupF;
-  form:hasFieldGroup ext:formFieldPg ;
-  form:hasConditionalFieldGroup fields:codelistSelectionCFG .
+  form:hasFieldGroup ext:formFieldPg .
+
+  ext:formFieldPg form:hasField ext:formNodesTypeF .
 
 ext:formNodesNameF a form:Field ;
   sh:name "Field name" ;
@@ -150,7 +150,8 @@ ext:formNodesTypeF a form:Field ;
    """;
   form:displayType displayTypes:conceptSchemeSelector ;
   form:options """{"conceptScheme":"http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6","searchEnabled":true}""" ;
-  sh:group ext:formFieldPg .
+  sh:group ext:formFieldPg ;
+  form:hasConditionalFieldGroup fields:codelistSelectionCFG .
 
 fieldGroups:codelistSelectorFG a form:FieldGroup ;
   form:hasField ext:formNodeOptionsF .
@@ -159,7 +160,7 @@ fields:codelistSelectionCFG a form:ConditionalFieldGroup ;
   form:conditions
     [ a form:MatchValues ;
         form:grouping form:Bag ;
-        sh:path rdf:type ;
+        sh:path form:displayType ;
         form:valuesIn (
           <http://lblod.data.gift/display-types/conceptSchemeMultiSelector>
           <http://lblod.data.gift/display-types/conceptSchemeRadioButtons>
