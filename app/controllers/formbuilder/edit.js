@@ -55,6 +55,11 @@ export default class FormbuilderEditController extends Controller {
     await timeout(1);
     this.previewStore = new ForkingStore();
     this.previewStore.parse(
+      this.model.conceptSchemesTtl,
+      this.model.graphs.metaGraph,
+      'text/turtle'
+    );
+    this.previewStore.parse(
       ttlCode,
       this.model.graphs.formGraph,
       'text/turtle'
@@ -86,4 +91,13 @@ export default class FormbuilderEditController extends Controller {
 
     return generatedForm.ttlCode;
   }
+
+  createTriplesForStoreConcepts = restartableTask(async () => {
+    const concepts = await this.store.query('concept', {
+      page: {
+        size: 99999,
+      },
+    });
+    console.log({ concepts });
+  });
 }
