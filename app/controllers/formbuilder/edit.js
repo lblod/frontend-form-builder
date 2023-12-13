@@ -91,13 +91,4 @@ export default class FormbuilderEditController extends Controller {
 
     return generatedForm.ttlCode;
   }
-
-  createTriplesForStoreConcepts = restartableTask(async () => {
-    const concepts = await this.store.query('concept', {
-      page: {
-        size: 99999,
-      },
-    });
-    console.log({ concepts });
-  });
 }
