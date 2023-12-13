@@ -1,9 +1,11 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { queryDB } from '../utils/query-sparql-query';
+import { inject as service } from '@ember/service';
 
 export default class ConceptSchemeUriSelectorComponent extends Component {
+  @service store;
+
   @tracked selected;
   @tracked options;
 
@@ -12,26 +14,21 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
     this.loadOptions();
   }
 
+  @action
   async loadOptions() {
-    this.options = await queryDB(`
-    SELECT DISTINCT * {
-      ?uri a <http://www.w3.org/2004/02/skos/core#ConceptScheme>;
-        <http://www.w3.org/2004/02/skos/core#prefLabel> ?prefLabel.
-    }
-  `);
+    const conceptSchemes = await this.store.query('concept-scheme', {
+      include: 'concepts',
+    });
+
+    this.options = this.getSortedOptions(conceptSchemes);
   }
 
   async update() {
-    let concepts = await queryDB(`
-      SELECT DISTINCT ?prefLabel {
-        ?s <http://www.w3.org/2004/02/skos/core#inScheme> <${this.selected.uri.value}>;
-        <http://www.w3.org/2004/02/skos/core#prefLabel> ?prefLabel.
-      }
-    `);
+    const concepts = await this.selected.concepts;
 
     this.args.update({
-      uri: this.selected.uri.value,
-      concepts: concepts.map((concept) => concept.prefLabel.value),
+      uri: this.selected.uri,
+      concepts: [...concepts].map((concept) => concept.label),
     });
   }
 
@@ -39,5 +36,17 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
   setSelected(value) {
     this.selected = value;
     this.update();
+  }
+
+  getSortedOptions(conceptSchememodels) {
+    return [...conceptSchememodels].sort(function (a, b) {
+      if (a.label < b.label) {
+        return -1;
+      }
+      if (a.label > b.label) {
+        return 1;
+      }
+      return 0;
+    });
   }
 }
