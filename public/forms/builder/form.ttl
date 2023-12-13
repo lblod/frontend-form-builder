@@ -6,6 +6,9 @@
 @prefix schema: <http://schema.org/>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix nie: <http://www.semanticdesktop.org/ontologies/2007/01/19/nie#>.
+@prefix conceptSchemes: <http://lblod.data.gift/concept-schemes/>.
+@prefix fields: <http://data.lblod.info/fields/> .
+@prefix fieldGroups: <http://data.lblod.info/field-groups/> .
 
 ##########################################################
 # form
@@ -127,9 +130,9 @@ ext:formNodesFormItem a form:SubForm;
   form:includes ext:formNodesNameF;
   form:includes ext:formNodesTypeF;
   form:includes ext:formNodeHelpTextF;
-  form:includes ext:formNodeOptionsF;
   form:includes ext:formNodePropertyGroupF;
-  form:hasFieldGroup ext:formFieldPg.
+  form:hasFieldGroup ext:formFieldPg ;
+  form:hasConditionalFieldGroup fields:codelistSelectionCFG .
 
 ext:formNodesNameF a form:Field ;
   sh:name "Field name" ;
@@ -148,6 +151,22 @@ ext:formNodesTypeF a form:Field ;
   form:displayType displayTypes:conceptSchemeSelector ;
   form:options """{"conceptScheme":"http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6","searchEnabled":true}""" ;
   sh:group ext:formFieldPg .
+
+fieldGroups:codelistSelectorFG a form:FieldGroup ;
+  form:hasField ext:formNodeOptionsF .
+
+fields:codelistSelectionCFG a form:ConditionalFieldGroup ;
+  form:conditions
+    [ a form:MatchValues ;
+        form:grouping form:Bag ;
+        sh:path rdf:type ;
+        form:valuesIn (
+          <http://lblod.data.gift/display-types/conceptSchemeMultiSelector>
+          <http://lblod.data.gift/display-types/conceptSchemeRadioButtons>
+          <http://lblod.data.gift/display-types/conceptSchemeSelector>
+        );
+    ] ;
+  form:hasFieldGroup fieldGroups:codelistSelectorFG .
 
 ext:formNodeHelpTextF a form:Field;
   sh:name "Helptext" ;
