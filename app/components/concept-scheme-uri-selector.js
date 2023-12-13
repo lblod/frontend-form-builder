@@ -16,15 +16,19 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
 
   @action
   async loadOptions() {
-    const conceptSchemes = await this.store.query('concept-scheme', {
-      include: 'concepts',
-    });
+    const conceptSchemes = await this.store.query('concept-scheme', {});
 
     this.options = this.getSortedOptions(conceptSchemes);
   }
 
   async update() {
-    const concepts = await this.selected.concepts;
+    const concepts = await this.store.query('concept', {
+      filter: {
+        'concept-schemes': {
+          ':uri:': this.selected.uri,
+        },
+      },
+    });
 
     this.args.update({
       uri: this.selected.uri,
