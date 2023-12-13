@@ -12,16 +12,16 @@ export default class IndexController extends Controller {
   size = 20;
 
   formToDelete;
+  hasBeenFocused = false;
 
   @tracked showDeleteModal = false;
   @service store;
   @service router;
 
   @tracked showModal = false;
-  @tracked hasBeenFocused = false;
   @tracked name = '';
   @tracked description = ``;
-  @tracked nameCheck = [];
+  @tracked duplicateNames = [];
 
   @action
   openDeleteModal(generatedForm) {
@@ -49,6 +49,7 @@ export default class IndexController extends Controller {
     }
   }
 
+
   @action
   closeModal() {
     this.name = '';
@@ -60,7 +61,7 @@ export default class IndexController extends Controller {
   @action
   async handleNameChange(event) {
     this.name = event.target.value;
-    this.nameCheck = await this.store.query('generated-form', {
+    this.duplicateNames = await this.store.query('generated-form', {
       filter: {
         ':exact:label': this.name,
       },
@@ -84,32 +85,21 @@ export default class IndexController extends Controller {
     this.closeModal();
   }
 
-  get errorEmptyName() {
-    if (this.hasBeenFocused) {
-      return this.name == '';
-    } else {
-      return false;
+  get inputErrorMessage() {
+    if (this.name.trim() == '' && this.hasBeenFocused) {
+      return 'Een naam geven is verplicht';
     }
-  }
-
-  get errorDuplicateName() {
-    if (this.hasBeenFocused) {
-      if (this.nameCheck.length > 0) {
-        return true;
-      }
-      return false;
-    } else {
-      return false;
+    if (this.duplicateNames.length > 0) {
+      return 'Deze naam is al eens gebruikt';
     }
-  }
-
-  get errorInput() {
-    return this.errorEmptyName || this.errorDuplicateName;
+    return false;
   }
 
   get disableSubmit() {
     return (
-      this.errorEmptyName || this.errorDuplicateName || !this.hasBeenFocused
+      (this.name.trim() == '' && this.hasBeenFocused) ||
+      this.duplicateNames.length > 0 ||
+      !this.hasBeenFocused
     );
   }
 }

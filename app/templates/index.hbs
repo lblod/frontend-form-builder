@@ -90,16 +90,14 @@
         </AuLabel>
         <AuInput
           id="input-filelabel"
-          @error={{this.errorInput}}
+          @error={{this.inputErrorMessage}}
           value={{this.name}}
           {{on "blur" this.handleNameChange}}
         />
-        {{#if this.errorEmptyName}}
-          <AuHelpText @error={{true}}>Een naam geven is verplicht</AuHelpText>
+        {{#if this.inputErrorMessage}}
+          <AuHelpText @error={{true}}>{{this.inputErrorMessage}}</AuHelpText>
         {{/if}}
-        {{#if this.errorDuplicateName}}
-          <AuHelpText @error={{true}}>Deze naam is al eens gebruikt</AuHelpText>
-        {{/if}}
+        
       </div>
       <div class="au-o-grid__item au-1-1">
         <AuLabel for="input-filecomment">Beschrijving</AuLabel>
