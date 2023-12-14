@@ -192,13 +192,23 @@ ext:formNodesGenerator a form:Generator;
 ##########################################################
 #  listing-scope:
 ##########################################################
+ext:formListingTableS a form:Scope;
+  sh:path form:includes;
+  form:constraint [
+     a sh:NodeShape ;
+     sh:property [
+       sh:path rdf:type ;
+       sh:targetNode form:ListingTable
+     ];
+  ].
+
 ext:formListingS a form:Scope;
   sh:path form:includes;
   form:constraint [
      a sh:NodeShape ;
      sh:property [
        sh:path rdf:type ;
-       sh:targetNode form:Listing
+       sh:targetNode form:ListingBasic
      ];
   ].
 
@@ -221,7 +231,7 @@ ext:formListingL a form:Listing;
 ##########################################################
 ext:formListingTableL a form:Listing;
   form:each ext:formListingFormItem;
-  form:scope ext:formListingS;
+  form:scope ext:formListingTableS;
   form:createGenerator ext:formListingTableGenerator;
   form:canAdd true;
   form:addLabel "Add new table listing";
@@ -277,7 +287,7 @@ ext:subFormPropertyGroupF a form:Field ;
 ext:formListingGenerator a form:Generator;
   form:prototype [
     form:shape [
-      a form:Listing;
+      a form:Listing, form:ListingBasic;
       form:each [
         a form:SubForm;
         form:includes [
