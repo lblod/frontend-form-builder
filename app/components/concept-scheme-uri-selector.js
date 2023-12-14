@@ -2,6 +2,11 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import {
+  triplesForPath,
+  updateSimpleFormValue,
+} from '@lblod/submission-form-helpers';
+import { Literal } from 'rdflib';
 
 export default class ConceptSchemeUriSelectorComponent extends Component {
   @service store;
@@ -12,6 +17,10 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
   constructor() {
     super(...arguments);
     this.loadOptions();
+  }
+
+  isForSelectingConceptSchemeOptions() {
+    return this.args.field && this.args.formStore && this.args.graphs;
   }
 
   @action
@@ -30,10 +39,16 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
       },
     });
 
-    this.args.update({
-      uri: this.selected.uri,
-      concepts: [...concepts].map((concept) => concept.label),
-    });
+    if (this.isForSelectingConceptSchemeOptions()) {
+      this.addConceptSchemeOptionsToField();
+    } else if (this.args.update) {
+      this.args.update({
+        uri: this.selected.uri,
+        concepts: [...concepts].map((concept) => concept.label),
+      });
+    } else {
+      return;
+    }
   }
 
   @action
@@ -52,5 +67,37 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
       }
       return 0;
     });
+  }
+
+  addConceptSchemeOptionsToField() {
+    const { field, graphs, formStore, sourceNode } = this.args;
+    const storeOptions = {
+      store: formStore,
+      path: field.rdflibPath,
+      formGraph: graphs.formGraph,
+      sourceGraph: graphs.sourceGraph,
+      sourceNode: sourceNode,
+    };
+
+    // Cleanup old value(s) in the store
+    const matches = triplesForPath(this.args, true).values;
+    const matchingOptions = matches.filter((m) =>
+      this.options.find((opt) => m.equals(opt.subject))
+    );
+    matchingOptions.forEach((m) =>
+      updateSimpleFormValue(storeOptions, undefined, m)
+    );
+
+    // Insert new value in the store
+    if (this.selected) {
+      const optionConfig = {
+        conceptScheme: this.selected.uri,
+        searchEnabled: true,
+      };
+      updateSimpleFormValue(
+        storeOptions,
+        new Literal(JSON.stringify(optionConfig))
+      );
+    }
   }
 }

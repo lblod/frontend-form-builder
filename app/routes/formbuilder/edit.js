@@ -4,6 +4,7 @@ import { registerFormFields } from '@lblod/ember-submission-form-fields';
 import PropertyGroupSelector from '../../components/rdf-form-fields/property-group-selector';
 import ValidationConceptSchemeSelectorComponent from '../../components/rdf-form-fields/validation-concept-scheme-selector';
 import { getLocalFileContentAsText } from '../../utils/get-local-file-content';
+import ConceptSchemeUriSelectorComponent from '../../components/concept-scheme-uri-selector';
 import CountryCodeConceptSchemeSelectorComponent from '../../components/rdf-form-fields/country-code-concept-scheme-selector';
 import { GRAPHS } from '../../controllers/formbuilder/edit';
 
@@ -69,6 +70,11 @@ export default class FormbuilderEditRoute extends Route {
         displayType:
           'http://lblod.data.gift/display-types/countryCodeConceptSchemeSelector',
         edit: CountryCodeConceptSchemeSelectorComponent,
+      },
+      {
+        displayType:
+          'http://lblod.data.gift/display-types/conceptSchemeUriSelectorComponent',
+        edit: ConceptSchemeUriSelectorComponent,
       },
     ]);
   }
