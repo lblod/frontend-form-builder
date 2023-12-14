@@ -184,6 +184,12 @@ ext:formNodeOptionsF a form:Field;
   sh:order 5 ;
   sh:path form:options ;
   form:displayType displayTypes:textArea;
+  form:validations
+    [ a form:RequiredConstraint ;
+        form:grouping form:Bag ;
+        sh:path form:options ;
+        sh:resultMessage "Dit veld is verplicht."@nl
+    ] ;
   sh:group ext:formFieldPg .
 
 ext:formNodePropertyGroupF a form:Field;
