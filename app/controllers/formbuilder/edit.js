@@ -53,7 +53,18 @@ export default class FormbuilderEditController extends Controller {
     // Ideally the RdfForm component would do the right thing when the formStore
     // and form arguments change, but we're not there yet.
     await timeout(1);
-    this.previewStore = new ForkingStore();
+
+    // Clear the form graph so the new ttl can be added.
+    // This is done so the meta graph of the store does not need to be parsed each time
+    // Parsing the meta graph is causing a lag in the editor because the file is that big..
+    // TODO
+    this.previewStore.removeMatches(
+      undefined,
+      undefined,
+      undefined,
+      this.model.graphs.formGraph
+    );
+
     this.previewStore.parse(
       ttlCode,
       this.model.graphs.formGraph,
@@ -72,6 +83,14 @@ export default class FormbuilderEditController extends Controller {
     this.formCode = this.getFormTtlCode(model.generatedForm);
     this.formCodeManager.addFormCode(this.formCode);
     this.formCodeManager.pinLatestVersionAsReference();
+
+    this.previewStore = new ForkingStore();
+    this.previewStore.parse(
+      this.model.conceptSchemesTtl,
+      this.model.graphs.metaGraph,
+      'text/turtle'
+    );
+
     this.router.transitionTo('formbuilder.edit.code');
   }
 
