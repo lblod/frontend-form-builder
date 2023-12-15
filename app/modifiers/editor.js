@@ -41,7 +41,8 @@ export default modifier(
     const doc = code || '';
 
     const updateListener = EditorView.updateListener.of((viewUpdate) => {
-      if (viewUpdate.docChanged) {
+      // todo: viewUpdate.docChanged SFB-71 - to prevent lagging of tthe typeing in the editor
+      if (viewUpdate.focusChanged) {
         const doc = viewUpdate.state.doc;
         const newCode = doc.toString();
         onCodeChangeHandler(newCode);
