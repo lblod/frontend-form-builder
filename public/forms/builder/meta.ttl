@@ -136,12 +136,3 @@ display:conceptSchemeMultiSelector
   core:uuid "ce803ee6-fb61-43f6-a2f7-22968ca9a7e6" ;
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Multi selector"@en .
-display:search
-  rdf:type  rdfs:Class , skos:Concept ;
-  ext:displayType "search" ;
-  ext:usesConceptScheme "false"^^xsd:boolean ;
-  ext:canHaveValidation
-      form:RequiredConstraint ;
-  core:uuid "ec03d1ee-8542-48d8-b75a-0597080b5aa6" ;
-  skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
-  skos:prefLabel  "Search"@en .
