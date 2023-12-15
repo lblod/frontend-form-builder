@@ -7,6 +7,9 @@ import {
   updateSimpleFormValue,
 } from '@lblod/submission-form-helpers';
 import { Literal } from 'rdflib';
+import { getTriplesWithNodeAsSubject } from '../utils/forking-store-helpers';
+import { FORM } from '../utils/rdflib';
+import { task } from 'ember-concurrency';
 
 export default class ConceptSchemeUriSelectorComponent extends Component {
   @service store;
@@ -17,10 +20,47 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
   constructor() {
     super(...arguments);
     this.loadOptions();
+    this.initiateSelected.perform();
   }
 
   isForSelectingConceptSchemeOptions() {
     return this.args.field && this.args.formStore && this.args.graphs;
+  }
+
+  @task({ restartable: false })
+  *initiateSelected() {
+    const { graphs, formStore, sourceNode } = this.args;
+    const fieldTriples = getTriplesWithNodeAsSubject(
+      sourceNode,
+      formStore,
+      graphs.sourceGraph
+    );
+    const option = fieldTriples.find(
+      (triple) => triple.predicate?.value == FORM('options').value
+    );
+
+    if (option) {
+      try {
+        const config = JSON.parse(option.object?.value);
+        const conceptSchemes = yield this.store.query('concept-scheme', {
+          filter: {
+            ':uri:': config.conceptScheme,
+          },
+        });
+        if ([...conceptSchemes].length >= 1) {
+          this.selected = {
+            label: [...conceptSchemes][0].label,
+            uri: config.conceptScheme,
+          };
+        }
+      } catch (error) {
+        console.error(
+          `Could not parse the form:options to JSON. (${sourceNode.value})`,
+          { caught: error }
+        );
+        return;
+      }
+    }
   }
 
   @action
@@ -53,6 +93,7 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
 
   @action
   setSelected(value) {
+    console.log(value);
     this.selected = value;
     this.update();
   }
@@ -81,9 +122,11 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
 
     // Cleanup old value(s) in the store
     const matches = triplesForPath(this.args, true).values;
+    console.log({ matches });
     const matchingOptions = matches.filter((m) =>
       this.options.find((opt) => m.equals(opt.subject))
     );
+    console.log({ matchingOptions });
     matchingOptions.forEach((m) =>
       updateSimpleFormValue(storeOptions, undefined, m)
     );
