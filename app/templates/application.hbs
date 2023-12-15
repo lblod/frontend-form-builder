@@ -3,11 +3,18 @@
 <AuModalContainer />
 
 <AuApp>
-  <AuMainHeader @appTitle="Semantic form builder" @brandLink="https://www.vlaanderen.be/nl" @homeRoute="index"/>
+  <AuMainHeader
+    @appTitle="Semantic form builder"
+    @brandLink="https://www.vlaanderen.be/nl"
+    @homeRoute="index"
+  />
+
+  <AuAlert @skin={{"warning"}} @icon={{"alert-triangle"}} @size={{"small"}}>
+    <p class="au-u-text-center">The features shown are still in review! (open
+      PR's)</p>
+  </AuAlert>
 
   {{outlet}}
 </AuApp>
 
-<AuToaster
-  @position="bottom"
-/>
+<AuToaster @position="bottom" />
