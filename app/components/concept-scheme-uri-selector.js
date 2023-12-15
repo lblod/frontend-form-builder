@@ -50,12 +50,18 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
             ':uri:': config.conceptScheme,
           },
         });
-        if ([...conceptSchemes].length >= 1) {
-          this.selected = {
-            label: [...conceptSchemes][0].label,
-            uri: config.conceptScheme,
-          };
+
+        if (!conceptSchemes || [...conceptSchemes].length == 0) {
+          console.error(
+            `Coudl not find concept-scheme: '${config.conceptScheme}'`
+          );
+          return;
         }
+
+        this.selected = {
+          label: [...conceptSchemes][0].label,
+          uri: config.conceptScheme,
+        };
       } catch (error) {
         console.error(
           `Could not parse the form:options to JSON. (${sourceNode.value})`,
@@ -96,7 +102,6 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
 
   @action
   setSelected(value) {
-    console.log(value);
     this.selected = value;
     this.update();
   }
@@ -123,19 +128,15 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
       sourceNode: sourceNode,
     };
 
-    // Cleanup old value(s) in the store
-    const matches = triplesForPath(this.args, true).values;
-    console.log({ matches });
-    const matchingOptions = matches.filter((m) =>
-      this.options.find((opt) => m.equals(opt.subject))
-    );
-    console.log({ matchingOptions });
-    matchingOptions.forEach((m) =>
-      updateSimpleFormValue(storeOptions, undefined, m)
-    );
-
     // Insert new value in the store
     if (this.selected) {
+      formStore.removeMatches(
+        sourceNode,
+        FORM('options'),
+        undefined,
+        graphs.sourceGraph
+      );
+
       const optionConfig = {
         conceptScheme: this.selected.uri,
         searchEnabled: true,
