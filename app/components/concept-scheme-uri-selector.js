@@ -20,7 +20,10 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
   constructor() {
     super(...arguments);
     this.loadOptions();
-    this.initiateSelected.perform();
+
+    if (this.isForSelectingConceptSchemeOptions()) {
+      this.initiateSelected.perform();
+    }
   }
 
   isForSelectingConceptSchemeOptions() {
