@@ -18,7 +18,9 @@ module.exports = function (environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
     },
-    featureFlags: {},
+    featureFlags: {
+      HIDE_CODELIST_BUTTON_IN_TOOLBAR: true,
+    },
   };
 
   if (environment === 'development') {

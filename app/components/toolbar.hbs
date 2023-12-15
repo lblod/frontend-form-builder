@@ -36,7 +36,9 @@
         </h1>
       </Group>
       <Group class="au-c-toolbar__group--actions">
-        <AuLink @route="codelijsten">Codelijsten</AuLink>
+        {{#unless this.features.HIDE_CODELIST_BUTTON_IN_TOOLBAR}}
+          <AuLink @route="codelijsten">Codelijsten</AuLink>
+        {{/unless}}
         <AuDropdown @title="Formulier acties" @alignment="right" role="menu">
           <AuButton
             @skin="link"
