@@ -45,6 +45,16 @@
             <td class="au-u-visible-medium-up">
               <AuLink @route="formbuilder.edit" @model={{generatedForm.id}} @icon="pencil" @iconAlignment="left" @ariaHidden={{true}}>Bewerk</AuLink>
             </td>
+            <td>
+              <AuButton
+              @skin="link"
+                @icon="bin"
+                @alert={{true}}
+                {{on "click" (fn this.OpenDeleteModal generatedForm)}}
+              >  
+                Verwijder
+              </AuButton>
+            </td>
             <td class="au-u-visible-medium-up">
               <LinkTo @route="user-tests.new" @query={{hash form=generatedForm.id}} class="au-c-link">
                 <AuIcon @icon="user-popup" @alignment="left" @size="large" @ariaHidden={{true}} />
@@ -57,3 +67,10 @@
     </div>
   </div>
 </main>
+
+{{#if this.showDeleteModal}}
+  <ConfirmDeletionModal
+    @onDelete={{this.deleteForm}}
+    @onClose={{fn (mut this.showDeleteModal) false}}
+  />
+{{/if}}
