@@ -45,7 +45,7 @@ ext:formFieldPg a form:PropertyGroup;
 #    model. (It's not forbidden though)
 ##########################################################
 ext:propertyGroupS a form:Scope;
-  sh:path sh:group ;
+  sh:path form:includes ;
   form:constraint [
      a sh:NodeShape ;
      sh:targetNode form:PropertyGroup
@@ -258,7 +258,7 @@ ext:subFormPropertyGroupF a form:Field ;
   e.g. 'Overview Books', 'Overview Subsidy Measures', etc..
   """;
   sh:order 50 ;
-  sh:path sh:group ;
+  sh:path form:partOf ;
   form:displayType displayTypes:propertyGroupSelector;
   sh:group ext:listingPg .
 
