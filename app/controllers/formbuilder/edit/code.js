@@ -3,6 +3,7 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { restartableTask } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
+import { ForkingStore } from '@lblod/ember-submission-form-fields';
 
 export default class FormbuilderEditCodeController extends Controller {
   @service('form-code-manager') formCodeManager;
@@ -18,6 +19,18 @@ export default class FormbuilderEditCodeController extends Controller {
 
   handleCodeChange = restartableTask(async (newCode) => {
     if (this.formCodeManager.isTtlTheSameAsLatest(newCode)) {
+      return;
+    }
+    const builderStore = new ForkingStore();
+    try {
+      builderStore.parse(
+        newCode,
+        this.model.graphs.sourceGraph.value,
+        'text/turtle'
+      );
+    } catch (error) {
+      console.warn({ caught: error });
+      // This is limiting the errors thrown in the console while editing the code
       return;
     }
 
