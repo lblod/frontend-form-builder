@@ -63,7 +63,7 @@ export default class IndexController extends Controller {
     this.name = event.target.value;
     this.duplicateNames = await this.store.query('generated-form', {
       filter: {
-        ':exact:label': this.name,
+        ':exact:label': this.name.trim(),
       },
     });
     this.hasBeenFocused = true;
