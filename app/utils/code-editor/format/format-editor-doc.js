@@ -1,23 +1,32 @@
-import { getDocWithNewLineAfterDots } from './rules/add-new-line-after-dot';
-import { getDocWithTabBeforeLineEndingOnDotAndPreviousLineEndsWithSemiColon } from './rules/add-tab-before-line-ending-with-dot-and-previous-with-semicolon';
-import { getDocWithTabBeforeLineWithSemicolon } from './rules/add-tab-before-line-with-semicolon';
-import { getDocWhereAllIncludesAreTabbed } from './rules/add-tab-before-item-that-is-included';
-import { getDocWithFormattedValidations } from './rules/format-blankNode-validations';
-import { getDocWithParsedLinesThatEndOnDotAndIncludeSemicolons } from './rules/parse-line-when-ending-on-dot-and-semicolon-included';
-import { getDocWithAllSpacesRemovedFromEachLine } from './rules/remove-all-spaces-from-each-line';
+import { addTabBeforeLineEndingOnSemiColon } from './rules/add-tab-before-line-ending-with-semicolon';
+import { splitDocPerSubject } from './separate-doc-subjects-with-their-predicates';
+import { formatPrefixes } from './rules/prefixes';
+import { addNewLineAfterLastPredicateOfSubject } from './rules/add-new-line-after-line-ending-with-dot';
+import { findValueOnIndex } from '../../find-value-on-index';
 
 export async function getFormattedEditorCode(doc) {
-  // Watch out with the order
-  doc = await getDocWithAllSpacesRemovedFromEachLine(doc);
-  doc = await getDocWhereAllIncludesAreTabbed(doc);
-  doc =
-    await getDocWithTabBeforeLineEndingOnDotAndPreviousLineEndsWithSemiColon(
-      doc
-    );
-  doc = await getDocWithNewLineAfterDots(doc);
-  doc = await getDocWithTabBeforeLineWithSemicolon(doc);
-  doc = await getDocWithFormattedValidations(doc);
-  doc = await getDocWithParsedLinesThatEndOnDotAndIncludeSemicolons(doc);
+  let newDoc = [];
+  const docPerSubject = await splitDocPerSubject(doc);
 
-  return await getDocWithNewLineAfterDots(doc); // this rule is done twice because all the rules before could have changed this "a nice finisher"
+  for (const subjectLine of docPerSubject) {
+    for (const line of subjectLine) {
+      let formattedLine = line;
+      formattedLine = await addNewLineAfterLastPredicateOfSubject(
+        subjectLine,
+        line
+      );
+      formattedLine = await addTabBeforeLineEndingOnSemiColon(formattedLine);
+
+      newDoc.push(formattedLine);
+    }
+  }
+
+  for (const newDocLine of newDoc) {
+    const currentLineIndex = newDoc.indexOf(newDocLine);
+    const nextLine = findValueOnIndex(newDoc, currentLineIndex + 1);
+
+    newDoc[currentLineIndex] = await formatPrefixes(newDocLine, nextLine);
+  }
+
+  return newDoc;
 }
