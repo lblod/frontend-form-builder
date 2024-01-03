@@ -127,7 +127,6 @@ ext:formNodesFormItem a form:SubForm;
   form:includes ext:formNodesNameF;
   form:includes ext:formNodesTypeF;
   form:includes ext:formNodeHelpTextF;
-  form:includes ext:formNodeOptionsF;
   form:includes ext:formNodePropertyGroupF;
   form:hasFieldGroup ext:formFieldPg.
 
@@ -156,13 +155,6 @@ ext:formNodeHelpTextF a form:Field;
     Order of the section, calculated from top to bottom.
    """;
   sh:path form:help ;
-  form:displayType displayTypes:textArea;
-  sh:group ext:formFieldPg .
-
-ext:formNodeOptionsF a form:Field;
-  sh:name "Extra configuration options as JSON" ;
-  sh:order 5 ;
-  sh:path form:options ;
   form:displayType displayTypes:textArea;
   sh:group ext:formFieldPg .
 
