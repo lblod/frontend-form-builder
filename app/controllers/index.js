@@ -16,20 +16,15 @@ export default class IndexController extends Controller {
   @tracked showDeleteModal = false;
 
   @action
-  OpenDeleteModal(generatedForm) {
+  openDeleteModal(generatedForm) {
     this.selectedForm = generatedForm;
     this.showDeleteModal = true;
   }
 
   @action
   async deleteForm() {
-    const formToDelete = await this.store.peekRecord(
-      'generated-form',
-      this.selectedForm.id
-    );
-    const isDeleted = await formToDelete.destroyRecord();
-    if (isDeleted) {
-      this.showDeleteModal = false;
+    try {
+      await this.selectedForm.destroyRecord();
       this.toaster.success(
         'Formulier: ' + this.selectedForm.label + ' verwijderd',
         'Success',
@@ -37,6 +32,12 @@ export default class IndexController extends Controller {
           timeOut: 5000,
         }
       );
+      this.showEditModal = false;
+    } catch (err) {
+      this.toaster.error('Oeps, er is iets mis gegaan', 'Error', {
+        timeOut: 5000,
+      });
+      console.error(err);
     }
   }
 }

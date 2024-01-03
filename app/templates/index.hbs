@@ -35,7 +35,7 @@
               class="au-u-visible-small-up" />
             <AuDataTableThSortable @label='Aangepast op' @field='modified' @currentSorting={{this.sort}}
               class="au-u-visible-small-up" />
-            <th colspan="2">Acties</th>
+            <th colspan="3">Acties</th>
           </c.header>
           <c.body as |generatedForm|>
             <td class="au-u-visible-medium-up">{{generatedForm.label}}</td>
@@ -45,12 +45,12 @@
             <td class="au-u-visible-medium-up">
               <AuLink @route="formbuilder.edit" @model={{generatedForm.id}} @icon="pencil" @iconAlignment="left" @ariaHidden={{true}}>Bewerk</AuLink>
             </td>
-            <td>
+            <td class="au-u-visible-medium-up">
               <AuButton
               @skin="link"
                 @icon="bin"
                 @alert={{true}}
-                {{on "click" (fn this.OpenDeleteModal generatedForm)}}
+                {{on "click" (fn this.openDeleteModal generatedForm)}}
               >  
                 Verwijder
               </AuButton>
