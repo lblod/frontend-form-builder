@@ -29,10 +29,10 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
         },
       },
     });
-
     this.args.update({
       uri: this.selected.uri,
       concepts: [...concepts].map((concept) => concept.label),
+      field: this.args.forField,
     });
   }
 

@@ -6,23 +6,30 @@ import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { restartableTask } from 'ember-concurrency';
 import { getPropertyGroupFields } from '../../../utils/get-property-group-items';
 import { tracked } from '@glimmer/tracking';
+import {
+  getDisplayTypeOfNode,
+  getNameOfNode,
+} from '../../../utils/forking-store-helpers';
+import { Literal, Statement } from 'rdflib';
+import { FORM } from '../../../utils/rdflib';
 
 export default class FormbuilderConfigurationController extends Controller {
   @service('form-code-manager') formCodeManager;
 
   @tracked sections = [];
   @tracked selectedSection;
+  @tracked fieldsForSection = [];
 
   initialise = restartableTask(async () => {
-    const builderStore = new ForkingStore();
-    builderStore.parse(
+    this.builderStore = new ForkingStore();
+    this.builderStore.parse(
       this.formCodeManager.getTtlOfLatestVersion(),
       this.model.graphs.sourceGraph.value,
       'text/turtle'
     );
 
     this.sections = getPropertyGroupFields(
-      builderStore,
+      this.builderStore,
       this.model.graphs.sourceGraph
     );
   });
@@ -43,8 +50,61 @@ export default class FormbuilderConfigurationController extends Controller {
   }
 
   @action
+  updateFieldOptions(scheme) {
+    const conceptSchemeConfig = {
+      conceptScheme: scheme.uri,
+      searchEnabled: true,
+    };
+    try {
+      this.builderStore.removeMatches(
+        scheme.field.subject,
+        FORM('options'),
+        undefined,
+        this.model.graphs.sourceGraph
+      );
+    } catch (error) {
+      console.warning({ caught: error });
+    }
+    this.builderStore.addAll([
+      new Statement(
+        scheme.field.subject,
+        FORM('options'),
+        new Literal(JSON.stringify(conceptSchemeConfig, null, 2).trim()),
+        this.model.graphs.sourceGraph
+      ),
+    ]);
+
+    const ttl = this.builderStore.serializeDataMergedGraph(
+      this.model.graphs.sourceGraph
+    );
+    this.formCodeManager.addFormCode(ttl);
+  }
+
+  @action
   setSelectedSection(selectedOption) {
     this.selectedSection = selectedOption;
+    if (!this.selectedSection) {
+      return;
+    }
+    this.fieldsForSection = [];
+
+    for (const child of this.selectedSection.childs) {
+      const displayType = getDisplayTypeOfNode(
+        child,
+        this.builderStore,
+        this.model.graphs.sourceGraph
+      );
+      const name = getNameOfNode(
+        child,
+        this.builderStore,
+        this.model.graphs.sourceGraph
+      );
+      this.fieldsForSection.push({
+        name: name,
+        subject: child,
+        displayType: displayType,
+      });
+    }
   }
 
   setup() {

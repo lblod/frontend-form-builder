@@ -1,4 +1,4 @@
-<div class="au-u-padding-small">
+<div class="formBuilderEdit__configuration au-u-padding-small">
   {{#if this.initialise.isRunning}}
     <AuLoader />
   {{else}}
@@ -20,12 +20,33 @@
 
     <AuHr />
 
-    {{#if this.selectedSection}}
-      <p>Section is selected</p>
-    {{else}}
-      <span class="formBuilderEdit__noFields">
-        <p class="au-u-h3">No section selected</p>
-      </span>
-    {{/if}}
+    <div class="fieldsOfSection">
+      {{#if (and this.selectedSection this.fieldsForSection)}}
+        {{#each this.fieldsForSection as |field|}}
+          <AuCard @expandable={{false}} as |c|>
+            <c.header>
+              <AuHeading @level="2" @skin="4">
+                {{field.name}}
+              </AuHeading>
+              <p>
+                {{field.displayType}}
+              </p>
+            </c.header>
+            <c.content>
+              {{#if (is-display-type-with-options field.displayType)}}
+                <ConceptSchemeUriSelector
+                  @forField={{field}}
+                  @update={{this.updateFieldOptions}}
+                />
+              {{/if}}
+            </c.content>
+          </AuCard>
+        {{/each}}
+      {{else}}
+        <span class="formBuilderEdit__noFields">
+          <p class="au-u-h3">No section selected</p>
+        </span>
+      {{/if}}
+    </div>
   {{/if}}
 </div>
