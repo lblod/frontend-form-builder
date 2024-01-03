@@ -39,3 +39,6 @@ export function getFirstPathOfNode(node, store, graph) {
 export function getPrefLabelOfNode(node, store, graph) {
   return store.any(node, SKOS('prefLabel'), undefined, graph);
 }
+export function getNameOfNode(node, store, graph) {
+  return store.any(node, SH('name'), undefined, graph);
+}

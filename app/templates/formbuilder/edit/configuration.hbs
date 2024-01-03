@@ -1,1 +1,31 @@
-<h1>configuration</h1>
+<div class="au-u-padding-small">
+  {{#if this.initialise.isRunning}}
+    <AuLoader />
+  {{else}}
+    <PowerSelect
+      @searchField="name"
+      @searchEnabled={{true}}
+      @selected={{this.selectedSection}}
+      @options={{this.sortedSections}}
+      @onChange={{this.setSelectedSection}}
+      @allowClear={{true}}
+      @loadingMessage="Aan het laden..."
+      @noMatchesMessage="Geen resultaten gevonden"
+      as |section|
+    >
+      <span>
+        {{section.name}}
+      </span>
+    </PowerSelect>
+
+    <AuHr />
+
+    {{#if this.selectedSection}}
+      <p>Section is selected</p>
+    {{else}}
+      <span class="formBuilderEdit__noFields">
+        <p class="au-u-h3">No section selected</p>
+      </span>
+    {{/if}}
+  {{/if}}
+</div>
