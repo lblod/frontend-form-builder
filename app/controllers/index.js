@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 export default class IndexController extends Controller {
   @service store;
@@ -11,28 +11,28 @@ export default class IndexController extends Controller {
   page = 0;
   size = 20;
 
-  selectedForm;
+  formToDelete;
 
   @tracked showDeleteModal = false;
 
   @action
   openDeleteModal(generatedForm) {
-    this.selectedForm = generatedForm;
+    this.formToDelete = generatedForm;
     this.showDeleteModal = true;
   }
 
   @action
   async deleteForm() {
     try {
-      await this.selectedForm.destroyRecord();
+      await this.formToDelete.destroyRecord();
       this.toaster.success(
-        'Formulier: ' + this.selectedForm.label + ' verwijderd',
+        'Formulier: ' + this.formToDelete.label + ' verwijderd',
         'Success',
         {
           timeOut: 5000,
         }
       );
-      this.showEditModal = false;
+      this.showDeleteModal = false;
     } catch (err) {
       this.toaster.error('Oeps, er is iets mis gegaan', 'Error', {
         timeOut: 5000,
