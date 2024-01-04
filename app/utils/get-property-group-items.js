@@ -1,8 +1,4 @@
-import {
-  getNameOfNode,
-  getOrderOfNode,
-  getRdfTypeOfNode,
-} from './forking-store-helpers';
+import { getMinimalNodeInfo, getRdfTypeOfNode } from './forking-store-helpers';
 import { FORM, RDF, SH } from './rdflib';
 
 export function getPropertyGroupFields(store, graph) {
@@ -13,6 +9,7 @@ export function getPropertyGroupFields(store, graph) {
     .map((triple) => triple.subject);
 
   for (const propertyGroupSubject of propertyGroupSubjects) {
+    const nodeInfo = getMinimalNodeInfo(propertyGroupSubject, store, graph);
     const subjectsOfGroup = store
       .match(undefined, SH('group'), propertyGroupSubject, graph)
       .map((triple) => triple.subject);
@@ -27,10 +24,11 @@ export function getPropertyGroupFields(store, graph) {
       }
       fieldsSubjectsToDisplay.push(subjectInGroup);
     }
+
     config.push({
       parent: propertyGroupSubject,
-      order: getOrderOfNode(propertyGroupSubject, store, graph),
-      name: getNameOfNode(propertyGroupSubject, store, graph),
+      name: nodeInfo.name,
+      order: nodeInfo.order,
       childs: fieldsSubjectsToDisplay,
     });
   }

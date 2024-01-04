@@ -58,3 +58,12 @@ export function getOrderOfNode(node, store, graph) {
 
   return Number(order);
 }
+
+export function getMinimalNodeInfo(node, store, graph) {
+  return {
+    subject: node,
+    name: getNameOfNode(node, store, graph),
+    order: getOrderOfNode(node, store, graph),
+    displayType: getDisplayTypeOfNode(node, store, graph),
+  };
+}

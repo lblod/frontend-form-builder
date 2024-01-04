@@ -6,11 +6,7 @@ import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { restartableTask } from 'ember-concurrency';
 import { getPropertyGroupFields } from '../../../utils/get-property-group-items';
 import { tracked } from '@glimmer/tracking';
-import {
-  getDisplayTypeOfNode,
-  getNameOfNode,
-  getOrderOfNode,
-} from '../../../utils/forking-store-helpers';
+import { getMinimalNodeInfo } from '../../../utils/forking-store-helpers';
 import { Literal, Statement } from 'rdflib';
 import { FORM } from '../../../utils/rdflib';
 
@@ -60,27 +56,17 @@ export default class FormbuilderConfigurationController extends Controller {
     this.fieldsForSection = [];
 
     for (const child of this.selectedSection.childs) {
-      const displayType = getDisplayTypeOfNode(
-        child,
-        this.builderStore,
-        this.model.graphs.sourceGraph
-      );
-      const name = getNameOfNode(
-        child,
-        this.builderStore,
-        this.model.graphs.sourceGraph
-      );
-      const order = getOrderOfNode(
+      const nodeInfo = getMinimalNodeInfo(
         child,
         this.builderStore,
         this.model.graphs.sourceGraph
       );
 
       this.fieldsForSection.push({
-        name: name,
-        order: order,
+        name: nodeInfo.name,
+        order: nodeInfo.order,
         subject: child,
-        displayType: displayType,
+        displayType: nodeInfo.displayType,
       });
     }
   }
