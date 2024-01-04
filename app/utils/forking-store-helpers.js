@@ -39,6 +39,22 @@ export function getFirstPathOfNode(node, store, graph) {
 export function getPrefLabelOfNode(node, store, graph) {
   return store.any(node, SKOS('prefLabel'), undefined, graph);
 }
+
 export function getNameOfNode(node, store, graph) {
-  return store.any(node, SH('name'), undefined, graph);
+  const name = store.any(node, SH('name'), undefined, graph);
+  if (!name) {
+    console.error(`Could not get 'name' of node ${node.value}`);
+    return null;
+  }
+
+  return name;
+}
+
+export function getOrderOfNode(node, store, graph) {
+  const order = store.any(node, SH('order'), undefined, graph);
+  if (!order) {
+    console.error(`Could not get 'order' of node ${node.value}`);
+  }
+
+  return Number(order);
 }
