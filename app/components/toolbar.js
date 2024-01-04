@@ -12,6 +12,7 @@ export default class ToolbarComponent extends Component {
   @service router;
   @service toaster;
   @service('form-code-manager') formCodeManager;
+  @service features;
 
   @tracked showDeleteModal = false;
 
