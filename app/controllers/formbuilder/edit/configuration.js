@@ -21,50 +21,6 @@ export default class FormbuilderConfigurationController extends Controller {
   @tracked selectedSection;
   @tracked fieldsForSection = [];
 
-  initialise = restartableTask(async () => {
-    this.builderStore = new ForkingStore();
-    this.builderStore.parse(
-      this.formCodeManager.getTtlOfLatestVersion(),
-      this.model.graphs.sourceGraph.value,
-      'text/turtle'
-    );
-
-    this.sections = getPropertyGroupFields(
-      this.builderStore,
-      this.model.graphs.sourceGraph
-    );
-  });
-
-  get sortedSections() {
-    return this.sections.sort((a, b) => {
-      let fa = a.order,
-        fb = b.order;
-
-      if (fa < fb) {
-        return -1;
-      }
-      if (fa > fb) {
-        return 1;
-      }
-      return 0;
-    });
-  }
-
-  get sortedFieldsForSection() {
-    return this.fieldsForSection.sort((a, b) => {
-      let fa = a.order,
-        fb = b.order;
-
-      if (fa < fb) {
-        return -1;
-      }
-      if (fa > fb) {
-        return 1;
-      }
-      return 0;
-    });
-  }
-
   @action
   updateFieldOptions(scheme) {
     const conceptSchemeConfig = {
@@ -129,7 +85,51 @@ export default class FormbuilderConfigurationController extends Controller {
     }
   }
 
+  initialise = restartableTask(async () => {
+    this.builderStore = new ForkingStore();
+    this.builderStore.parse(
+      this.formCodeManager.getTtlOfLatestVersion(),
+      this.model.graphs.sourceGraph.value,
+      'text/turtle'
+    );
+
+    this.sections = getPropertyGroupFields(
+      this.builderStore,
+      this.model.graphs.sourceGraph
+    );
+  });
+
   setup() {
     this.initialise.perform();
+  }
+
+  get sortedSections() {
+    return this.sections.sort((a, b) => {
+      let fa = a.order,
+        fb = b.order;
+
+      if (fa < fb) {
+        return -1;
+      }
+      if (fa > fb) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+
+  get sortedFieldsForSection() {
+    return this.fieldsForSection.sort((a, b) => {
+      let fa = a.order,
+        fb = b.order;
+
+      if (fa < fb) {
+        return -1;
+      }
+      if (fa > fb) {
+        return 1;
+      }
+      return 0;
+    });
   }
 }
