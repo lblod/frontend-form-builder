@@ -55,16 +55,14 @@ export default class FormbuilderConfigurationController extends Controller {
       conceptScheme: scheme.uri,
       searchEnabled: true,
     };
-    try {
-      this.builderStore.removeMatches(
-        scheme.field.subject,
-        FORM('options'),
-        undefined,
-        this.model.graphs.sourceGraph
-      );
-    } catch (error) {
-      console.warning({ caught: error });
-    }
+    const existingOptionsOnField = this.builderStore.match(
+      scheme.field.subject,
+      FORM('options'),
+      undefined,
+      this.model.graphs.sourceGraph
+    );
+
+    this.builderStore.removeStatements(existingOptionsOnField);
     this.builderStore.addAll([
       new Statement(
         scheme.field.subject,
