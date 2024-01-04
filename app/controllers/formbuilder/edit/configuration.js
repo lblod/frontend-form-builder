@@ -100,6 +100,9 @@ export default class FormbuilderConfigurationController extends Controller {
   });
 
   setup() {
+    this.fieldsForSection = [];
+    this.setSelectedSection(undefined);
+
     this.initialise.perform();
   }
 
