@@ -17,6 +17,7 @@ export default class IndexController extends Controller {
   @tracked showDeleteModal = false;
   @service store;
   @service router;
+  @service toaster;
 
   @tracked showModal = false;
   @tracked name = '';
@@ -87,8 +88,18 @@ export default class IndexController extends Controller {
       ttlCode: '',
     });
 
-    await newForm.save();
-    this.router.transitionTo('formbuilder.edit', newForm.id);
+    try {
+      await newForm.save();
+      this.router.transitionTo('formbuilder.edit', newForm.id);
+      this.toaster.success('Formulier succesvol aangemaakt', 'Success', {
+        timeOut: 5000,
+      });
+    } catch (err) {
+      this.toaster.error('Oeps, er is iets mis gegaan', 'Error', {
+        timeOut: 5000,
+      });
+      console.error(err);
+    }
     this.closeModal();
   }
 
