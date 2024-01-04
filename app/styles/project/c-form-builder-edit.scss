@@ -32,12 +32,12 @@
 
 .formBuilderEdit__configuration {
   height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
   background-color: $au-white;
   .fieldsOfSection {
-    display: grid;
-    grid-template-rows: auto;
+    display: flex;
+    flex-direction: column;
     gap: 1rem;
-    overflow-y: auto;
-    overflow-x: hidden;
   }
 }
