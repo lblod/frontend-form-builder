@@ -108,9 +108,6 @@
           value={{this.description}}
           {{on "input" this.handleDescriptionChange}}
         />
-        {{#if this.emptyFormComment}}
-          <AuHelpText @error={{true}}>Een beschrijving geven is verplicht</AuHelpText>
-        {{/if}}
       </div>
     </div>
   </Modal.Body>
