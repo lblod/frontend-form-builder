@@ -77,7 +77,8 @@ export default class FormbuilderConfigurationController extends Controller {
     const ttl = this.builderStore.serializeDataMergedGraph(
       this.model.graphs.sourceGraph
     );
-    this.formCodeManager.addFormCode(ttl);
+
+    this.model.handleCodeChange(ttl);
   }
 
   @action
