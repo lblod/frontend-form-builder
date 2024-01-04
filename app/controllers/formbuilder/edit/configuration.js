@@ -9,6 +9,7 @@ import { tracked } from '@glimmer/tracking';
 import { getMinimalNodeInfo } from '../../../utils/forking-store-helpers';
 import { Literal, Statement } from 'rdflib';
 import { FORM } from '../../../utils/rdflib';
+import { sortObjectsOnProperty } from '../../../utils/sort-object-on-property';
 
 export default class FormbuilderConfigurationController extends Controller {
   @service('form-code-manager') formCodeManager;
@@ -93,32 +94,10 @@ export default class FormbuilderConfigurationController extends Controller {
   }
 
   get sortedSections() {
-    return this.sections.sort((a, b) => {
-      let fa = a.order,
-        fb = b.order;
-
-      if (fa < fb) {
-        return -1;
-      }
-      if (fa > fb) {
-        return 1;
-      }
-      return 0;
-    });
+    return sortObjectsOnProperty(this.sections, 'order');
   }
 
   get sortedFieldsForSection() {
-    return this.fieldsForSection.sort((a, b) => {
-      let fa = a.order,
-        fb = b.order;
-
-      if (fa < fb) {
-        return -1;
-      }
-      if (fa > fb) {
-        return 1;
-      }
-      return 0;
-    });
+    return sortObjectsOnProperty(this.fieldsForSection, 'order');
   }
 }
