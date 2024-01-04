@@ -15,13 +15,13 @@
 <main id="main" class="au-c-main-container">
   <div class="au-c-main-container__content">
     <div class="au-c-body-container">
-      <AuDataTable 
-        @content={{this.model}} 
-        @isLoading={{this.isLoadingModel}} 
+      <AuDataTable
+        @content={{this.model}}
+        @isLoading={{this.isLoadingModel}}
         @noDataMessage="Geen formulieren gevonden"
-        @sort={{this.sort}} 
-        @page={{this.page}} 
-        @size={{this.size}} 
+        @sort={{this.sort}}
+        @page={{this.page}}
+        @size={{this.size}}
         as |t|
       >
         <t.content as |c|>
@@ -35,23 +35,22 @@
               class="au-u-visible-small-up" />
             <AuDataTableThSortable @label='Aangepast op' @field='modified' @currentSorting={{this.sort}}
               class="au-u-visible-small-up" />
-            <th colspan="3">Acties</th>
+            <th colspan="2">Acties</th>
           </c.header>
           <c.body as |generatedForm|>
-            <td class="au-u-visible-medium-up">{{generatedForm.label}}</td>
+            <td class="au-u-visible-medium-up">
+              <AuLink @route="formbuilder.edit" @model={{generatedForm.id}} @ariaHidden={{true}}>{{generatedForm.label}}</AuLink>
+            </td>
             <td class="au-u-visible-medium-up">{{generatedForm.comment}}</td>
             <td class="au-u-visible-medium-up">{{format-date generatedForm.created}}</td>
             <td class="au-u-visible-medium-up">{{format-date-time generatedForm.modified}}</td>
-            <td class="au-u-visible-medium-up">
-              <AuLink @route="formbuilder.edit" @model={{generatedForm.id}} @icon="pencil" @iconAlignment="left" @ariaHidden={{true}}>Bewerk</AuLink>
-            </td>
             <td class="au-u-visible-medium-up">
               <AuButton
               @skin="link"
                 @icon="bin"
                 @alert={{true}}
                 {{on "click" (fn this.openDeleteModal generatedForm)}}
-              >  
+              >
                 Verwijder
               </AuButton>
             </td>
