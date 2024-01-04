@@ -22,7 +22,7 @@
 
     <div class="fieldsOfSection">
       {{#if (and this.selectedSection this.fieldsForSection)}}
-        {{#each this.fieldsForSection as |field|}}
+        {{#each this.sortedFieldsForSection as |field|}}
           <AuCard @expandable={{false}} as |c|>
             <c.header>
               <AuHeading @level="2" @skin="4">

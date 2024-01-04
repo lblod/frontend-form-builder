@@ -9,6 +9,7 @@ import { tracked } from '@glimmer/tracking';
 import {
   getDisplayTypeOfNode,
   getNameOfNode,
+  getOrderOfNode,
 } from '../../../utils/forking-store-helpers';
 import { Literal, Statement } from 'rdflib';
 import { FORM } from '../../../utils/rdflib';
@@ -36,6 +37,21 @@ export default class FormbuilderConfigurationController extends Controller {
 
   get sortedSections() {
     return this.sections.sort((a, b) => {
+      let fa = a.order,
+        fb = b.order;
+
+      if (fa < fb) {
+        return -1;
+      }
+      if (fa > fb) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+
+  get sortedFieldsForSection() {
+    return this.fieldsForSection.sort((a, b) => {
       let fa = a.order,
         fb = b.order;
 
@@ -98,8 +114,15 @@ export default class FormbuilderConfigurationController extends Controller {
         this.builderStore,
         this.model.graphs.sourceGraph
       );
+      const order = getOrderOfNode(
+        child,
+        this.builderStore,
+        this.model.graphs.sourceGraph
+      );
+
       this.fieldsForSection.push({
         name: name,
+        order: order,
         subject: child,
         displayType: displayType,
       });
