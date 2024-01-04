@@ -1,4 +1,8 @@
-import { getNameOfNode, getRdfTypeOfNode } from './forking-store-helpers';
+import {
+  getNameOfNode,
+  getOrderOfNode,
+  getRdfTypeOfNode,
+} from './forking-store-helpers';
 import { FORM, RDF, SH } from './rdflib';
 
 export function getPropertyGroupFields(store, graph) {
@@ -25,6 +29,7 @@ export function getPropertyGroupFields(store, graph) {
     }
     config.push({
       parent: propertyGroupSubject,
+      order: getOrderOfNode(propertyGroupSubject, store, graph),
       name: getNameOfNode(propertyGroupSubject, store, graph),
       childs: fieldsSubjectsToDisplay,
     });

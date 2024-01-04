@@ -36,8 +36,8 @@ export default class FormbuilderConfigurationController extends Controller {
 
   get sortedSections() {
     return this.sections.sort((a, b) => {
-      let fa = a.name?.value.toLowerCase(),
-        fb = b.name?.value.toLowerCase();
+      let fa = a.order,
+        fb = b.order;
 
       if (fa < fb) {
         return -1;
