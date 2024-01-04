@@ -56,6 +56,7 @@ export default class IndexController extends Controller {
     this.description = ``;
     this.showModal = false;
     this.hasBeenFocused = false;
+    this.duplicateNames = [];
   }
 
   @action
@@ -75,13 +76,19 @@ export default class IndexController extends Controller {
   }
 
   @action
-  initiateForm() {
-    this.router.transitionTo('formbuilder.new', {
-      queryParams: {
-        label: this.name,
-        comment: this.description,
-      },
+  async initiateForm() {
+    const now = new Date();
+
+    const newForm = await this.store.createRecord('generated-form', {
+      created: now,
+      modified: now,
+      label: this.name,
+      comment: this.description,
+      ttlCode: '',
     });
+
+    await newForm.save();
+    this.router.transitionTo('formbuilder.edit', newForm.id);
     this.closeModal();
   }
 
