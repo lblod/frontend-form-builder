@@ -83,13 +83,13 @@
   <Modal.Body>
     <div class="au-o-grid au-o-grid--small">
       <div class="au-o-grid__item au-1-1">
-        <AuLabel for="input-filelabel"
+        <AuLabel for="input-form-name"
           @required={{true}}
         >
           Naam
         </AuLabel>
         <AuInput
-          id="input-filelabel"
+          id="input-form-name"
           @error={{this.inputErrorMessage}}
           value={{this.name}}
           {{on "blur" this.handleNameChange}}
@@ -100,10 +100,10 @@
         
       </div>
       <div class="au-o-grid__item au-1-1">
-        <AuLabel for="input-filecomment">Beschrijving</AuLabel>
+        <AuLabel for="input-form-comment">Beschrijving</AuLabel>
         <AuTextarea
           @width="block"
-          id="input-filecomment"
+          id="input-form-comment"
           rows="10"
           value={{this.description}}
           {{on "input" this.handleDescriptionChange}}
