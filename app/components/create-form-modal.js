@@ -11,12 +11,15 @@ export default class CreateFormModal extends Component {
   @tracked name = '';
   @tracked description = ``;
   @tracked duplicateNames = [];
-
-  hasBeenFocused = false;
+  @tracked hasBeenFocused = false;
 
   @action
   closeModal() {
     this.args.closeModal();
+    this.name = '';
+    this.description = '';
+    this.duplicateNames = [];
+    this.hasBeenFocused = false;
   }
 
   @action
