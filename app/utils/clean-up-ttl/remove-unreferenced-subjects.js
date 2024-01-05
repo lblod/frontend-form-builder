@@ -1,25 +1,42 @@
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { GRAPHS } from '../../controllers/formbuilder/edit';
-import { EMBER, FORM, SH } from '../rdflib';
+import { EMBER } from '../rdflib';
 
-///////////////////////
-// I don't like this //
-///////////////////////
-const POSSIBLE_REFERENCES = [
-  FORM('hasField'),
-  FORM('hasFieldGroup'),
-  FORM('hasConditionalFieldGroup'),
-  FORM('scope'),
-  FORM('includes'),
-  FORM('prototype'),
-  SH('group'),
-];
+const BASE_SUBJECTS = [EMBER('source-node').value];
 
-const BASE_SUBJECTS = [EMBER('source-node')];
-
-export function getTtlWithUnReferencedSubjectsRemoved(ttlCode) {
+export function getTtlWithUnReferencedSubjectsRemoved(ttlCode, toaster) {
   const store = new ForkingStore();
   store.parse(ttlCode, GRAPHS.sourceGraph, 'text/turtle');
 
+  for (const subject of getAllUniqueSubjectsInStore(store)) {
+    if (isSubjectReferenced(subject, store)) {
+      continue;
+    }
+
+    toaster.error(
+      `Subject is not referenced: ${subject.value ?? undefined}`,
+      'Error',
+      {
+        timeOut: 5000,
+      }
+    );
+  }
+
   return ttlCode;
+}
+
+function getAllUniqueSubjectsInStore(store) {
+  const allSubjects = store
+    .match(undefined, undefined, undefined, GRAPHS.sourceGraph)
+    .map((triple) => triple.subject);
+
+  return new Array(...new Set(allSubjects));
+}
+
+function isSubjectReferenced(subject, store) {
+  if (BASE_SUBJECTS.includes(subject.value)) {
+    return true;
+  }
+
+  return store.any(undefined, undefined, subject);
 }
