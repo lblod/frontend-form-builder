@@ -43,9 +43,7 @@ export default class FormbuilderEditController extends Controller {
   handleCodeChange(newCode) {
     if (newCode) {
       this.formCode = newCode;
-      const ttlWithoutDuplicateValidations =
-        getTtlWithDuplicateValidationsRemoved(this.formCode);
-      this.formCodeManager.addFormCode(ttlWithoutDuplicateValidations);
+      this.formCodeManager.addFormCode(this.formCode);
     }
     this.setFormChanged(this.formCodeManager.isLatestDeviatingFromReference());
     this.setupPreviewForm.perform(this.formCodeManager.getTtlOfLatestVersion());
