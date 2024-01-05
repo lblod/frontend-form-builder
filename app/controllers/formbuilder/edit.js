@@ -8,7 +8,6 @@ import basicFormTemplate from '../../utils/basic-form-template';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { FORM, RDF } from '../../utils/rdflib';
-import { getTtlWithDuplicateValidationsRemoved } from '../../utils/clean-up-ttl/remove-all-duplicate-validations';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
