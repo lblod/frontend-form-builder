@@ -12,6 +12,7 @@
         </AuLabel>
         <AuInput
           id="input-form-name"
+          @width="block"
           @error={{this.inputErrorMessage}}
           value={{this.name}}
           {{on "blur" this.handleNameChange}}
