@@ -16,10 +16,6 @@ export default class CreateFormModal extends Component {
   @action
   closeModal() {
     this.args.closeModal();
-    this.name = '';
-    this.description = '';
-    this.duplicateNames = [];
-    this.hasBeenFocused = false;
   }
 
   @action

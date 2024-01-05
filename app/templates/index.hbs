@@ -77,7 +77,8 @@
   />
 {{/if}}
 
-<CreateFormModal
-  @showModal={{this.showCreateFormModal}}
-  @closeModal={{this.closeCreateFormModal}}
-/>
+{{#if this.showCreateFormModal}}
+  <CreateFormModal
+    @closeModal={{this.closeCreateFormModal}}
+  />
+{{/if}}
