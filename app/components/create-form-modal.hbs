@@ -3,8 +3,8 @@
   @modalOpen={{@showModal}}
   @closeModal={{this.closeModal}} as |Modal| >
   <Modal.Body>
-    <div class="au-o-grid au-o-grid--small">
-      <div class="au-o-grid__item au-1-1">
+    <div class="au-o-flow">
+      <div class="au-o-flow--small">
         <AuLabel for="input-form-name"
           @required={{true}}
         >
@@ -22,7 +22,7 @@
         {{/if}}
         
       </div>
-      <div class="au-o-grid__item au-1-1">
+      <div class="au-o-flow--small">
         <AuLabel for="input-form-comment">Beschrijving</AuLabel>
         <AuTextarea
           @width="block"
