@@ -16,12 +16,14 @@ import { addValidationTriplesToFormNodesL } from '../utils/validation/add-field-
 import { getFieldAndValidationTriples } from '../utils/get-field-and-validation-triples';
 import { areValidationsInGraphValidated } from '../utils/validation/are-validations-in-graph-validated';
 import { createFieldDataForSubject } from '../utils/create-field-data-for-subject';
+import { getTtlWithDuplicateValidationsRemoved } from '../utils/clean-up-ttl/remove-all-duplicate-validations';
 
 export default class AddValidationsToFormComponent extends Component {
   @tracked fields;
 
   @service toaster;
   @tracked selectedField;
+  @service('form-code-manager') formCodeManager;
 
   builderStore;
   savedBuilderTtlCode;
@@ -97,11 +99,17 @@ export default class AddValidationsToFormComponent extends Component {
       this.graphs.sourceGraph
     );
 
+    if (this.formCodeManager.isTtlTheSameAsLatest(newBuilderForm)) {
+      return;
+    }
+
     if (
       areValidationsInGraphValidated(this.builderStore, this.graphs.sourceGraph)
     ) {
-      this.args.onNewBuilderForm(newBuilderForm);
-      this.savedBuilderTtlCode = newBuilderForm;
+      const ttlWithoutDuplicateValidations =
+        getTtlWithDuplicateValidationsRemoved(newBuilderForm);
+      this.args.onNewBuilderForm(ttlWithoutDuplicateValidations);
+      this.savedBuilderTtlCode = ttlWithoutDuplicateValidations;
     }
   }
 
