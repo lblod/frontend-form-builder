@@ -6,23 +6,31 @@ import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { module, test } from 'qunit';
 import { Namespace } from 'frontend-form-builder/utils/rdflib';
 import { GRAPHS } from 'frontend-form-builder/controllers/formbuilder/edit';
+import basicForm from './resources/remove-unreferenced-subjects/basic-form';
 
 module('Unit | Utility | Clean up ttl | Unreferenced subject', function () {
   module('helper method => getAllUniqueSubjectsInStore', function () {
     test('store only has unique subjects', function (assert) {
       // Store should be mock?
       const store = new ForkingStore();
-      const allSubjects = store.match(
+      store.parse(basicForm, GRAPHS.sourceGraph, 'text/turtle');
+      const predicatesInTtl = 13;
+      const uniqueSubjectsInTtl = 3;
+      const allFoundSubjects = store.match(
         undefined,
         undefined,
         undefined,
         GRAPHS.sourceGraph
       );
-      assert.strictEqual(allSubjects.length, 2, `Store has ${2} items`);
+      assert.strictEqual(
+        allFoundSubjects.length,
+        predicatesInTtl,
+        `Store has ${predicatesInTtl} items`
+      );
       assert.strictEqual(
         getAllUniqueSubjectsInStore(store).length,
-        1,
-        `Store has ${2} unqiue item so no duplicates`
+        uniqueSubjectsInTtl,
+        `Store has ${uniqueSubjectsInTtl} unqiue item so no duplicates`
       );
     });
     test('store only has duplicate subjects', function (assert) {
