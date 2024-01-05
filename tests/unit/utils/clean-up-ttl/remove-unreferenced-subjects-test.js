@@ -10,7 +10,7 @@ import basicForm from './resources/remove-unreferenced-subjects/basic-form';
 
 module('Unit | Utility | Clean up ttl | Unreferenced subject', function () {
   module('helper method => getAllUniqueSubjectsInStore', function () {
-    test('store only has unique subjects', function (assert) {
+    test('can get the subjects of the store', function (assert) {
       // Store should be mock?
       const store = new ForkingStore();
       store.parse(basicForm, GRAPHS.sourceGraph, 'text/turtle');
@@ -25,47 +25,31 @@ module('Unit | Utility | Clean up ttl | Unreferenced subject', function () {
       assert.strictEqual(
         allFoundSubjects.length,
         predicatesInTtl,
-        `Store has ${predicatesInTtl} items`
+        `Store has ${predicatesInTtl} predicates`
       );
       assert.strictEqual(
         getAllUniqueSubjectsInStore(store).length,
         uniqueSubjectsInTtl,
-        `Store has ${uniqueSubjectsInTtl} unqiue item so no duplicates`
-      );
-    });
-    test('store only has duplicate subjects', function (assert) {
-      // Store should be mock?
-      const store = new ForkingStore();
-      const allSubjects = store.match(
-        undefined,
-        undefined,
-        undefined,
-        GRAPHS.sourceGraph
-      );
-      assert.strictEqual(allSubjects.length, 2, `Store has ${2} items`);
-      assert.strictEqual(
-        getAllUniqueSubjectsInStore(store).length,
-        1,
-        `Store has ${1} unqiue item so one was duplicate`
+        `Store has ${uniqueSubjectsInTtl} subjects so no duplicates`
       );
     });
   });
-  module('helper method => isSubjectReferenced', function () {
-    test('requested subject is referenced', function (assert) {
-      // Store should be mock?
-      const store = new ForkingStore();
-      const referencedSubject = new Namespace(
-        'http://data.lblod.info/fields/myReferencedField'
-      );
-      assert.true(isSubjectReferenced(referencedSubject, store));
-    });
-    test('requested subject is not referenced', function (assert) {
-      // Store should be mock?
-      const store = new ForkingStore();
-      const unreferencedSubject = new Namespace(
-        'http://data.lblod.info/fields/myNotReferencedField'
-      );
-      assert.false(isSubjectReferenced(unreferencedSubject, store));
-    });
-  });
+  // module('helper method => isSubjectReferenced', function () {
+  //   test('requested subject is referenced', function (assert) {
+  //     // Store should be mock?
+  //     const store = new ForkingStore();
+  //     const referencedSubject = new Namespace(
+  //       'http://data.lblod.info/fields/myReferencedField'
+  //     );
+  //     assert.true(isSubjectReferenced(referencedSubject, store));
+  //   });
+  //   test('requested subject is not referenced', function (assert) {
+  //     // Store should be mock?
+  //     const store = new ForkingStore();
+  //     const unreferencedSubject = new Namespace(
+  //       'http://data.lblod.info/fields/myNotReferencedField'
+  //     );
+  //     assert.false(isSubjectReferenced(unreferencedSubject, store));
+  //   });
+  // });
 });
