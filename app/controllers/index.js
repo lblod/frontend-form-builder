@@ -12,10 +12,9 @@ export default class IndexController extends Controller {
   size = 20;
 
   formToDelete;
-  hasBeenFocused = false;
 
   @tracked showDeleteModal = false;
-  @tracked showModal = false;
+  @tracked showCreateFormModal = false;
 
   @action
   openDeleteModal(generatedForm) {
@@ -44,12 +43,12 @@ export default class IndexController extends Controller {
   }
 
   @action
-  openModal() {
-    this.showModal = true;
+  openCreateFormModal() {
+    this.showCreateFormModal = true;
   }
 
   @action
-  closeModal() {
-    this.showModal = false;
+  closeCreateFormModal() {
+    this.showCreateFormModal = false;
   }
 }
