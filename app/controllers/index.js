@@ -15,10 +15,6 @@ export default class IndexController extends Controller {
   hasBeenFocused = false;
 
   @tracked showDeleteModal = false;
-  @service store;
-  @service router;
-  @service toaster;
-
   @tracked showModal = false;
 
   @action
