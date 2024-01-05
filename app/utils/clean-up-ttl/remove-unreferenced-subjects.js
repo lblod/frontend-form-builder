@@ -32,7 +32,7 @@ export function getTtlWithUnReferencedSubjectsRemoved(ttlCode, toaster) {
   return ttlCode;
 }
 
-function getAllUniqueSubjectsInStore(store) {
+export function getAllUniqueSubjectsInStore(store) {
   const allSubjects = store
     .match(undefined, undefined, undefined, GRAPHS.sourceGraph)
     .map((triple) => triple.subject);
@@ -40,7 +40,7 @@ function getAllUniqueSubjectsInStore(store) {
   return new Array(...new Set(allSubjects));
 }
 
-function isSubjectReferenced(subject, store) {
+export function isSubjectReferenced(subject, store) {
   if (BASE_SUBJECTS.includes(subject.value)) {
     return true;
   }
