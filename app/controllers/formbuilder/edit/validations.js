@@ -11,7 +11,6 @@ export default class FormbuilderEditValidationsController extends Controller {
 
   @action
   handleCodeChange(ttlCode) {
-    this.formCodeManager.addFormCode(ttlCode);
     this.model.handleCodeChange(ttlCode);
   }
 
