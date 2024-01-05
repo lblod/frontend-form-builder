@@ -7,6 +7,7 @@ import {
 } from '../forking-store-helpers';
 
 export function getTtlWithDuplicateValidationsRemoved(ttlCode) {
+  let hasTtlChanged = false;
   const store = new ForkingStore();
   store.parse(ttlCode, GRAPHS.sourceGraph, 'text/turtle');
 
@@ -16,6 +17,10 @@ export function getTtlWithDuplicateValidationsRemoved(ttlCode) {
     undefined,
     GRAPHS.sourceGraph
   );
+
+  if (validations.length == 0) {
+    return ttlCode;
+  }
 
   const mappedValidationsForSubjects =
     getMappedValidationSubjectsPerNode(validations);
@@ -41,7 +46,7 @@ export function getTtlWithDuplicateValidationsRemoved(ttlCode) {
         );
         continue;
       }
-
+      hasTtlChanged = true;
       store.removeStatements([
         ...foundValidationNodeToRemove,
         ...getTriplesWithNodeAsSubject(
@@ -52,7 +57,10 @@ export function getTtlWithDuplicateValidationsRemoved(ttlCode) {
       ]);
     }
   }
-  return store.serializeDataMergedGraph(GRAPHS.sourceGraph);
+
+  return hasTtlChanged
+    ? store.serializeDataMergedGraph(GRAPHS.sourceGraph)
+    : ttlCode;
 }
 
 function getMappedValidationSubjectsPerNode(validations) {
