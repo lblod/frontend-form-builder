@@ -45,5 +45,9 @@ export function isSubjectReferenced(subject, store) {
     return true;
   }
 
-  return store.any(undefined, undefined, subject);
+  if (store.any(undefined, undefined, subject)) {
+    return true;
+  }
+
+  return;
 }
