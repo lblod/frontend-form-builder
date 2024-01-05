@@ -55,6 +55,10 @@ export function getTtlWithDuplicateValidationsRemoved(ttlCode) {
           GRAPHS.sourceGraph
         ),
       ]);
+      console.warn(
+        `Removed DUPLICATE validation from ttl`,
+        foundValidationNodeToRemove
+      );
     }
   }
 
