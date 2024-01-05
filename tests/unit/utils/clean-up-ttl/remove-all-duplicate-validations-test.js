@@ -2,6 +2,8 @@ import { getTtlWithDuplicateValidationsRemoved } from 'frontend-form-builder/uti
 import { module, test } from 'qunit';
 import basicFormWithoutValidations from './resources/basic-form-without-validations';
 import basicFormWithOneValidationOnField from './resources/basic-form-with-one-validation-on-field';
+import basicFormWithDuplicateValidationOnField from './resources/basic-form-with-duplicate-validation-on-field';
+import basicFormWithDuplicateValidationOnFieldResult from './resources/basic-form-with-duplicate-validation-on-field-result';
 
 module('Unit | Utility | Clean up ttl | Duplicate validations', function () {
   module('Will not remove anything', function () {
@@ -23,6 +25,18 @@ module('Unit | Utility | Clean up ttl | Duplicate validations', function () {
         stringToArray(updatedTtlCode),
         stringToArray(basicFormWithOneValidationOnField),
         'The updated ttl code is the same as the original'
+      );
+    });
+  });
+  module('Will remove duplicates', function () {
+    test('duplicate required validation on field removed', function (assert) {
+      const updatedTtlCode = getTtlWithDuplicateValidationsRemoved(
+        basicFormWithDuplicateValidationOnField
+      );
+      assert.deepEqual(
+        stringToArray(updatedTtlCode),
+        stringToArray(basicFormWithDuplicateValidationOnFieldResult),
+        'The duplicate required validation is removed'
       );
     });
   });
