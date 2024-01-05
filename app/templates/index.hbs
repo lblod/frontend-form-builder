@@ -8,7 +8,7 @@
   <div class="au-c-toolbar__group">
     <AuButton
       @skin="primary" @icon="add"
-      {{on "click" (fn (mut this.showModal) true)}}
+      {{on "click" this.openModal}}
     >
       Maak nieuw semantisch formulier
     </AuButton>
@@ -120,3 +120,8 @@
       </AuButton>
   </Modal.Footer>
 </AuModal>
+<CreateFormModal
+  @showModal={{this.showModal}}
+  @closeModal={{this.closeModal}}
+/>
+
