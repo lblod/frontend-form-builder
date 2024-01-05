@@ -1,0 +1,45 @@
+<AuModal
+  @title="Geef een naam en beschrijving"
+  @modalOpen={{true}}
+  @closeModal={{this.closeModal}} as |Modal| >
+  <Modal.Body>
+    <div class="au-o-flow">
+      <div class="au-o-flow--small">
+        <AuLabel for="input-form-name"
+          @required={{true}}
+        >
+          Naam
+        </AuLabel>
+        <AuInput
+          id="input-form-name"
+          @width="block"
+          @error={{this.inputErrorMessage}}
+          value={{this.name}}
+          {{on "blur" this.handleNameChange}}
+        />
+        {{#if this.inputErrorMessage}}
+          <AuHelpText @error={{true}}>{{this.inputErrorMessage}}</AuHelpText>
+        {{/if}}
+        
+      </div>
+      <div class="au-o-flow--small">
+        <AuLabel for="input-form-comment">Beschrijving</AuLabel>
+        <AuTextarea
+          @width="block"
+          id="input-form-comment"
+          rows="10"
+          value={{this.description}}
+          {{on "input" this.handleDescriptionChange}}
+        />
+      </div>
+    </div>
+  </Modal.Body>
+  <Modal.Footer>
+      <AuButton 
+        @disabled={{this.disableSubmit}}
+        {{on "click" this.initiateForm}}
+      >
+        Bouw formulier
+      </AuButton>
+  </Modal.Footer>
+</AuModal>

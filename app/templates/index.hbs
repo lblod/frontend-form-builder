@@ -6,9 +6,12 @@
     </AuHeading>
   </div>
   <div class="au-c-toolbar__group">
-    <AuLink @route="formbuilder.new" @skin="button" @icon="add">
+    <AuButton
+      @skin="primary" @icon="add"
+      {{on "click" this.openCreateFormModal}}
+    >
       Maak nieuw semantisch formulier
-    </AuLink>
+    </AuButton>
   </div>
 </div>
 
@@ -71,5 +74,11 @@
   <ConfirmDeletionModal
     @onDelete={{this.deleteForm}}
     @onClose={{fn (mut this.showDeleteModal) false}}
+  />
+{{/if}}
+
+{{#if this.showCreateFormModal}}
+  <CreateFormModal
+    @closeModal={{this.closeCreateFormModal}}
   />
 {{/if}}

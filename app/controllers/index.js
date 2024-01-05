@@ -14,6 +14,7 @@ export default class IndexController extends Controller {
   formToDelete;
 
   @tracked showDeleteModal = false;
+  @tracked showCreateFormModal = false;
 
   @action
   openDeleteModal(generatedForm) {
@@ -39,5 +40,15 @@ export default class IndexController extends Controller {
       });
       console.error(err);
     }
+  }
+
+  @action
+  openCreateFormModal() {
+    this.showCreateFormModal = true;
+  }
+
+  @action
+  closeCreateFormModal() {
+    this.showCreateFormModal = false;
   }
 }
