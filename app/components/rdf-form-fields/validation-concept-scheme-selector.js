@@ -121,7 +121,10 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
         this.args.graphs.sourceGraph
       );
 
-      if (validationType.value == selectedOption.subject.value) {
+      if (
+        validationType &&
+        validationType.value == selectedOption.subject.value
+      ) {
         return true;
       }
     }
