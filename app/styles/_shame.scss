@@ -51,3 +51,13 @@ code {
 .au-o-grid {
   display: block;
 }
+
+.removeTableLines {
+  table {
+    border-collapse: unset !important;
+  }
+  .au-c-data-table__table th + th:after,
+  .au-c-data-table__table td + td:after {
+    border-left: none !important;
+  }
+}
