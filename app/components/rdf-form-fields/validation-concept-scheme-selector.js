@@ -9,13 +9,6 @@ import {
   getFirstFieldSubject,
   getPossibleValidationsForDisplayType,
 } from '../../utils/validation/helpers';
-import {
-  getDisplayTypeOfNode,
-  getFirstPathOfNode,
-  getGroupingTypeOfNode,
-  getPrefLabelOfNode,
-  getRdfTypeOfNode,
-} from '../../utils/forking-store-helpers';
 import { showErrorToasterMessage } from '../../utils/toaster-message-helper';
 import { FORM, RDF, SH } from '../../utils/rdflib';
 import { getGroupingTypeForValidation } from '../../utils/validation/get-grouping-type-for-validation';
@@ -53,7 +46,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
   }
 
   loadValidationTypes() {
-    const fieldDisplayType = getDisplayTypeOfNode(
+    const fieldDisplayType = ForkingStoreHelper.getDisplayTypeOfNode(
       this.getFieldSubject(),
       this.args.formStore,
       this.args.graphs.sourceGraph
@@ -75,7 +68,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     const allOptions = this.args.formStore
       .match(undefined, SKOS('inScheme'), conceptScheme, metaGraph)
       .map((t) => {
-        const label = getPrefLabelOfNode(
+        const label = ForkingStoreHelper.getPrefLabelOfNode(
           t.subject,
           this.args.formStore,
           metaGraph
@@ -94,7 +87,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
 
   loadProvidedValidationType() {
     if (this.isValid) {
-      const assignedRdfTypeOnSourceNode = getRdfTypeOfNode(
+      const assignedRdfTypeOnSourceNode = ForkingStoreHelper.getRdfTypeOfNode(
         this.storeOptions.sourceNode,
         this.storeOptions.store,
         this.storeOptions.sourceGraph
@@ -115,7 +108,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     );
 
     for (const validationNode of validationNodes) {
-      const validationType = getRdfTypeOfNode(
+      const validationType = ForkingStoreHelper.getRdfTypeOfNode(
         validationNode,
         this.args.formStore,
         this.args.graphs.sourceGraph
@@ -182,8 +175,16 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
   }
 
   removeValidationTypeAndGroupingFromGraph(sourceNode, store, graph) {
-    const rdfType = getRdfTypeOfNode(sourceNode, store, graph);
-    const groupingType = getGroupingTypeOfNode(sourceNode, store, graph);
+    const rdfType = ForkingStoreHelper.getRdfTypeOfNode(
+      sourceNode,
+      store,
+      graph
+    );
+    const groupingType = ForkingStoreHelper.getGroupingTypeOfNode(
+      sourceNode,
+      store,
+      graph
+    );
 
     const statements = this.createStatementForRdfTypeAndGrouping(
       sourceNode,
@@ -210,7 +211,11 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
   }
 
   getStatementToAddFieldPathToValidationPath(validationSubject, store, graph) {
-    const fieldPath = getFirstPathOfNode(this.getFieldSubject(), store, graph);
+    const fieldPath = ForkingStoreHelper.getFirstPathOfNode(
+      this.getFieldSubject(),
+      store,
+      graph
+    );
 
     return new Statement(validationSubject, SH('path'), fieldPath, graph);
   }

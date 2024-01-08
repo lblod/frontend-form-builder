@@ -5,7 +5,7 @@ import InputFieldComponent from '@lblod/ember-submission-form-fields/components/
 import { SKOS, updateSimpleFormValue } from '@lblod/submission-form-helpers';
 import { Statement, namedNode } from 'rdflib';
 import { FORM } from '../../utils/rdflib';
-import { getPrefLabelOfNode } from '../../utils/forking-store-helpers';
+import { ForkingStoreHelper } from '../../utils/forking-store-helper';
 
 function byLabel(a, b) {
   const textA = a.label.toUpperCase();
@@ -38,7 +38,7 @@ export default class CountryCodeConceptSchemeSelectorComponent extends InputFiel
     this.countryCodeOptions = this.args.formStore
       .match(undefined, SKOS('inScheme'), conceptScheme, metaGraph)
       .map((t) => {
-        const label = getPrefLabelOfNode(
+        const label = ForkingStoreHelper.getPrefLabelOfNode(
           t.subject,
           this.args.formStore,
           metaGraph
