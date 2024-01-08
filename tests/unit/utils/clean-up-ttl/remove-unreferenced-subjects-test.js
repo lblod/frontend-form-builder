@@ -7,6 +7,7 @@ import { module, test } from 'qunit';
 import { NODES } from 'frontend-form-builder/utils/rdflib';
 import { GRAPHS } from 'frontend-form-builder/controllers/formbuilder/edit';
 import basicForm from './resources/remove-unreferenced-subjects/basic-form';
+import basicFormWithUnreferencedField from './resources/remove-unreferenced-subjects/basic-form-with-unreferenced-field';
 
 module('Unit | Utility | Clean up ttl | Unreferenced subject', function () {
   module('helper method => getAllUniqueSubjectsInStore', function () {
@@ -46,6 +47,11 @@ module('Unit | Utility | Clean up ttl | Unreferenced subject', function () {
     test('field subject is unreferenced', function (assert) {
       // Store should be mock?
       const store = new ForkingStore();
+      store.parse(
+        basicFormWithUnreferencedField,
+        GRAPHS.sourceGraph,
+        'text/turtle'
+      );
 
       assert.false(isSubjectReferenced(fieldSubject, store));
     });

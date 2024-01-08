@@ -49,5 +49,5 @@ export function isSubjectReferenced(subject, store) {
     return true;
   }
 
-  return;
+  return false;
 }
