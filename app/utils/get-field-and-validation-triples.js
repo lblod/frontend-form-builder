@@ -1,11 +1,13 @@
-import {
-  getTriplesWithNodeAsSubject,
-  getValidationSubjectsOnNode,
-} from './forking-store-helpers';
+import { ForkingStoreHelper } from './forking-store-helper';
+import { getValidationSubjectsOnNode } from './forking-store-helpers';
 
 export function getFieldAndValidationTriples(fieldSubject, store, graph) {
   const triples = [];
-  const fieldTriples = getTriplesWithNodeAsSubject(fieldSubject, store, graph);
+  const fieldTriples = ForkingStoreHelper.getTriplesWithNodeAsSubject(
+    fieldSubject,
+    store,
+    graph
+  );
 
   triples.push(...fieldTriples);
   const fieldValidationSubjects = getValidationSubjectsOnNode(
@@ -14,7 +16,7 @@ export function getFieldAndValidationTriples(fieldSubject, store, graph) {
     graph
   );
   for (const validationSubject of fieldValidationSubjects) {
-    const validationTriples = getTriplesWithNodeAsSubject(
+    const validationTriples = ForkingStoreHelper.getTriplesWithNodeAsSubject(
       validationSubject,
       store,
       graph

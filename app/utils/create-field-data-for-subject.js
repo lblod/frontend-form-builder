@@ -1,11 +1,13 @@
-import {
-  getTriplesWithNodeAsSubject,
-  getValidationSubjectsOnNode,
-} from './forking-store-helpers';
+import { ForkingStoreHelper } from './forking-store-helper';
+import { getValidationSubjectsOnNode } from './forking-store-helpers';
 import { SH } from './rdflib';
 
 export function createFieldDataForSubject(fieldSubject, { store, graph }) {
-  const fieldTriples = getTriplesWithNodeAsSubject(fieldSubject, store, graph);
+  const fieldTriples = ForkingStoreHelper.getTriplesWithNodeAsSubject(
+    fieldSubject,
+    store,
+    graph
+  );
 
   const fieldValidationSubjects = getValidationSubjectsOnNode(
     fieldSubject,
@@ -13,7 +15,7 @@ export function createFieldDataForSubject(fieldSubject, { store, graph }) {
     graph
   );
   for (const subject of fieldValidationSubjects) {
-    const validationTriples = getTriplesWithNodeAsSubject(
+    const validationTriples = ForkingStoreHelper.getTriplesWithNodeAsSubject(
       subject,
       store,
       graph

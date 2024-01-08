@@ -1,9 +1,13 @@
 import { BlankNode, Statement } from 'rdflib';
-import { getTriplesWithNodeAsSubject } from '../forking-store-helpers';
+import { ForkingStoreHelper } from '../forking-store-helper';
 
 export function createBlankNodeForValidation(validationNode, store, graph) {
   const blankNode = new BlankNode();
-  const triples = getTriplesWithNodeAsSubject(validationNode, store, graph);
+  const triples = ForkingStoreHelper.getTriplesWithNodeAsSubject(
+    validationNode,
+    store,
+    graph
+  );
 
   const blankNodeStatements = [];
   for (const triple of triples) {
