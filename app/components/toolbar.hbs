@@ -31,21 +31,21 @@
             </AuPill>
           {{/if}}
         </div>
-        <h1 class="au-c-app-chrome__title">
-          {{@model.label}}
-        </h1>
+        <div class="titleEdit">
+          <h1 class="au-c-app-chrome__title">
+            {{@model.label}}
+          </h1>
+          <AuButton
+            @skin={{"link-secondary"}}
+            @icon={{"pencil"}}
+            @hideText={{true}}
+            {{on "click" (fn (mut this.showEditModal) true)}}
+          />
+        </div>
       </Group>
       <Group class="au-c-toolbar__group--actions">
         <AuLink @route="codelijsten">Codelijsten</AuLink>
         <AuDropdown @title="Formulier acties" @alignment="right" role="menu">
-          <AuButton
-            @skin="link"
-            @icon="copy"
-            role="menuitem"
-            {{on "click" (fn (mut this.showEditModal) true)}}
-          >
-            Bewerk naam en beschrijving
-          </AuButton>
           <AuButton
             @skin="link"
             @icon="export"
@@ -83,7 +83,7 @@
 <AuModal
   @title="Bewerk naam en beschrijving"
   @modalOpen={{this.showEditModal}}
-  @closeModal={{fn (mut this.showEditModal) false}}
+  @closeModal={{this.closeEditNameModal}}
   as |Modal|
 >
   <Modal.Body>
