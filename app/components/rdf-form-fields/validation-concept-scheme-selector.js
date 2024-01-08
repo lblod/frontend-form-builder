@@ -15,11 +15,11 @@ import {
   getGroupingTypeOfNode,
   getPrefLabelOfNode,
   getRdfTypeOfNode,
-  getValidationSubjectsOnNode,
 } from '../../utils/forking-store-helpers';
 import { showErrorToasterMessage } from '../../utils/toaster-message-helper';
 import { FORM, RDF, SH } from '../../utils/rdflib';
 import { getGroupingTypeForValidation } from '../../utils/validation/get-grouping-type-for-validation';
+import { ForkingStoreHelper } from '../../utils/forking-store-helper';
 
 function byLabel(a, b) {
   const textA = a.label.toUpperCase();
@@ -108,7 +108,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
   }
 
   isSelectedValidationAlreadyOnField(selectedOption) {
-    const validationNodes = getValidationSubjectsOnNode(
+    const validationNodes = ForkingStoreHelper.getValidationSubjectsOnNode(
       this.getFieldSubject(),
       this.args.formStore,
       this.args.graphs.sourceGraph

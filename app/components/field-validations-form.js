@@ -2,11 +2,11 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { getFieldAndValidationTriples } from '../utils/get-field-and-validation-triples';
-import { getValidationSubjectsOnNode } from '../utils/forking-store-helpers';
 import { EXT, FORM } from '../utils/rdflib';
 import { Statement } from 'rdflib';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { createBlankNodeForValidation } from '../utils/validation/create-blankNode-for-validation';
+import { ForkingStoreHelper } from '../utils/forking-store-helper';
 
 export default class FieldValidationsFormComponent extends Component {
   @tracked store;
@@ -47,12 +47,12 @@ export default class FieldValidationsFormComponent extends Component {
     const applyStore = new ForkingStore();
     applyStore.parse(fieldTtl, this.graphs.sourceGraph, 'text/turtle');
 
-    const validationsOnField = getValidationSubjectsOnNode(
+    const validationsOnField = ForkingStoreHelper.getValidationSubjectsOnNode(
       this.fieldSubject,
       applyStore,
       this.graphs.sourceGraph
     );
-    const validations = getValidationSubjectsOnNode(
+    const validations = ForkingStoreHelper.getValidationSubjectsOnNode(
       EXT('formNodesL'),
       applyStore,
       this.graphs.sourceGraph
