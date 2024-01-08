@@ -1,11 +1,7 @@
 import { FORM, RDF, SH } from './rdflib';
 import { SKOS } from '@lblod/submission-form-helpers';
-import { ForkingStore } from '@lblod/ember-submission-form-fields';
 
 export const ForkingStoreHelper = {
-  isForkingStore: (store) => {
-    return store instanceof ForkingStore;
-  },
   getTriplesWithNodeAsSubject: (node, store, graph) => {
     return store.match(node, undefined, undefined, graph);
   },
