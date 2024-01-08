@@ -83,7 +83,7 @@
 <AuModal
   @title="Bewerk naam en beschrijving"
   @modalOpen={{this.showEditModal}}
-  @closeModal={{fn (mut this.showEditModal) false}}
+  @closeModal={{this.closeEditNameModal}}
   as |Modal|
 >
   <Modal.Body>

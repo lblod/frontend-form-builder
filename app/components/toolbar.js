@@ -77,4 +77,11 @@ export default class ToolbarComponent extends Component {
 
     this.args.setFormChanged(false);
   }
+
+  @action
+  closeEditNameModal() {
+    this.showEditModal = false;
+    this.formLabel = this.args.model.label;
+    this.formComment = this.args.model.comment;
+  }
 }
