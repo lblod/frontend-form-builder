@@ -5,9 +5,6 @@ export const ForkingStoreHelper = {
   getTriplesWithNodeAsSubject: (node, store, graph) => {
     return store.match(node, undefined, undefined, graph);
   },
-  getNodeValidationTriples: (node, store, graph) => {
-    return store.match(node, FORM('validations'), undefined, graph);
-  },
   getValidationSubjectsOnNode: (node, store, graph) => {
     return store
       .match(node, FORM('validations'), undefined, graph)
