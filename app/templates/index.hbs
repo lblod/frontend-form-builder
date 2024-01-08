@@ -17,7 +17,7 @@
 
 <main id="main" class="au-c-main-container">
   <div class="au-c-main-container__content">
-    <div class="au-c-body-container">
+    <div class="au-c-body-container removeTableLines">
       <AuDataTable
         @content={{this.model}}
         @isLoading={{this.isLoadingModel}}
@@ -48,6 +48,12 @@
             <td class="au-u-visible-medium-up">{{format-date generatedForm.created}}</td>
             <td class="au-u-visible-medium-up">{{format-date-time generatedForm.modified}}</td>
             <td class="au-u-visible-medium-up">
+              <LinkTo @route="user-tests.new" @query={{hash form=generatedForm.id}} class="au-c-link">
+                <AuIcon @icon="eye" @alignment="left" @size="large" @ariaHidden={{true}} />
+                Preview
+              </LinkTo>
+            </td>
+            <td class="au-u-visible-medium-up">
               <AuButton
               @skin="link"
                 @icon="bin"
@@ -56,12 +62,6 @@
               >
                 Verwijder
               </AuButton>
-            </td>
-            <td class="au-u-visible-medium-up">
-              <LinkTo @route="user-tests.new" @query={{hash form=generatedForm.id}} class="au-c-link">
-                <AuIcon @icon="user-popup" @alignment="left" @size="large" @ariaHidden={{true}} />
-                Test
-              </LinkTo>
             </td>
           </c.body>
         </t.content>

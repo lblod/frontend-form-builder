@@ -51,3 +51,9 @@ code {
 .au-o-grid {
   display: block;
 }
+
+.removeTableLines {
+  table {
+    border-collapse: unset !important;
+  }
+}
