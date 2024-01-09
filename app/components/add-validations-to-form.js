@@ -3,7 +3,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { task } from 'ember-concurrency';
+import { restartableTask, task, timeout } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import {
   parseStoreGraphs,
@@ -23,6 +23,8 @@ export default class AddValidationsToFormComponent extends Component {
 
   @service toaster;
   @tracked selectedField;
+  @service('form-code-manager') formCodeManager;
+
   @service('form-code-manager') formCodeManager;
 
   builderStore;
@@ -84,34 +86,60 @@ export default class AddValidationsToFormComponent extends Component {
     this.selectedField = fieldData;
   }
 
-  @action
-  updateTtlCodeWithField({ fieldSubject, triples }) {
-    const builderStoreTriples = getFieldAndValidationTriples(
-      fieldSubject,
-      this.builderStore,
-      this.graphs.sourceGraph
-    );
+  updateTtlCodeWithField = restartableTask(
+    async ({ fieldSubject, triples }) => {
+      const savedSelected = this.selectedField;
+      this.selectedField.store = undefined;
 
-    this.builderStore.removeStatements(builderStoreTriples);
-    this.builderStore.addAll(triples);
+      const builderStoreTriples = getFieldAndValidationTriples(
+        fieldSubject,
+        this.builderStore,
+        this.graphs.sourceGraph
+      );
 
-    const newBuilderForm = this.builderStore.serializeDataMergedGraph(
-      this.graphs.sourceGraph
-    );
+      this.builderStore.removeStatements(builderStoreTriples);
+      this.builderStore.addAll(triples);
 
-    if (this.formCodeManager.isTtlTheSameAsLatest(newBuilderForm)) {
-      return;
+      const newBuilderForm = this.builderStore.serializeDataMergedGraph(
+        this.graphs.sourceGraph
+      );
+
+      if (this.formCodeManager.isTtlTheSameAsLatest(newBuilderForm)) {
+        return;
+      }
+
+      const fieldData = await createStoreForFieldData(
+        createFieldDataForSubject(savedSelected.subject, {
+          store: this.builderStore,
+          graph: this.graphs.sourceGraph,
+        }),
+        this.graphs
+      );
+
+      addValidationTriplesToFormNodesL(
+        fieldData.subject,
+        fieldData.store,
+        this.graphs
+      );
+
+      if (
+        areValidationsInGraphValidated(
+          this.builderStore,
+          this.graphs.sourceGraph
+        )
+      ) {
+        this.selectedField = null;
+        await timeout(0.1);
+        this.selectedField = fieldData;
+
+        const ttlWithoutDuplicateValidations =
+          getTtlWithDuplicateValidationsRemoved(newBuilderForm);
+
+        this.args.onNewBuilderForm(ttlWithoutDuplicateValidations);
+        this.savedBuilderTtlCode = ttlWithoutDuplicateValidations;
+      }
     }
-
-    if (
-      areValidationsInGraphValidated(this.builderStore, this.graphs.sourceGraph)
-    ) {
-      const ttlWithoutDuplicateValidations =
-        getTtlWithDuplicateValidationsRemoved(newBuilderForm);
-      this.args.onNewBuilderForm(ttlWithoutDuplicateValidations);
-      this.savedBuilderTtlCode = ttlWithoutDuplicateValidations;
-    }
-  }
+  );
 
   createFieldArray(store) {
     const fieldsData = getFieldsInStore(store, this.graphs.sourceGraph);
