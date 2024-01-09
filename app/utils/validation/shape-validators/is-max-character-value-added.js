@@ -14,8 +14,15 @@ export function isMaxCharacterValueAddedToMaxLengthValidation(store, graph) {
       undefined,
       graph
     );
+
     if (!maxCharactersValues.length >= 1) {
       return false;
+    }
+
+    for (const maxCharactersValue of maxCharactersValues) {
+      if (!Number(maxCharactersValue.object.value)) {
+        return false;
+      }
     }
   }
 
