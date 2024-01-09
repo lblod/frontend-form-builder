@@ -1,8 +1,10 @@
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { GRAPHS } from '../../controllers/formbuilder/edit';
-import { EMBER } from '../rdflib';
+import { Namespace } from 'rdflib';
 
-const BASE_SUBJECTS = [EMBER('source-node').value];
+const BASE_SUBJECTS = [
+  new Namespace('http://ember-submission-form-fields/')('source-node').value,
+];
 
 export function getTtlWithUnReferencedSubjectsRemoved(ttlCode, toaster) {
   const store = new ForkingStore();
