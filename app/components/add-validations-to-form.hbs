@@ -20,18 +20,36 @@
 
     <AuHr />
 
-    {{#if this.selectedField}}
-      <FieldValidationsForm
-        @fieldSubject={{this.selectedField.subject}}
-        @form={{this.selectedField.form}}
-        @graphs={{this.graphs}}
-        @store={{this.selectedField.store}}
-        @updateTtlCodeWithField={{this.updateTtlCodeWithField.perform}}
-      />
-    {{else}}
-      <span class="formBuilderEdit__noFields">
-        <p class="au-u-h3">No field selected</p>
-      </span>
-    {{/if}}
+    <div class="addValidationsToForm__wrapper">
+      <div class="addValidationsToForm__coverUp">
+        {{#if this.coverUp}}
+          <FieldValidationsForm
+            @fieldSubject={{this.coverUp.subject}}
+            @form={{this.coverUp.form}}
+            @graphs={{this.graphs}}
+            @store={{this.coverUp.store}}
+            @updateTtlCodeWithField={{this.up}}
+          />
+        {{/if}}
+      </div>
+
+      <div class="addValidationsToForm__original">
+        {{#if this.selectedField}}
+          <FieldValidationsForm
+            @fieldSubject={{this.selectedField.subject}}
+            @form={{this.selectedField.form}}
+            @graphs={{this.graphs}}
+            @store={{this.selectedField.store}}
+            @updateTtlCodeWithField={{this.updateTtlCodeWithField.perform}}
+          />
+        {{else}}
+          {{#unless this.coverUp}}
+            <span class="formBuilderEdit__noFields">
+              <p class="au-u-h3">No field selected</p>
+            </span>
+          {{/unless}}
+        {{/if}}
+      </div>
+    </div>
   {{/if}}
 </div>
