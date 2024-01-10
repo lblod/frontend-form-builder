@@ -32,7 +32,7 @@
 }
 
 .au-c-tabs {
-  padding: 0
+  padding: 0;
 }
 
 .sf-listing-sub-form {
@@ -41,11 +41,11 @@
 }
 
 code {
-    background-color: #272822;
-    color: #f8f8f2;
-    border-radius: 0.3rem;
-    padding: 20px;
-    white-space: nowrap;
+  background-color: #272822;
+  color: #f8f8f2;
+  border-radius: 0.3rem;
+  padding: 20px;
+  white-space: nowrap;
 }
 
 .au-o-grid {
@@ -55,5 +55,27 @@ code {
 .removeTableLines {
   table {
     border-collapse: unset !important;
+  }
+}
+
+.fieldValidations__fadeIn {
+  opacity: 0;
+  transform-origin: top center;
+  animation: fadeInScale 1.5s ease-in forwards;
+}
+
+@keyframes fadeInScale {
+  0% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  25% {
+    transform: scaleY(1);
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
   }
 }
