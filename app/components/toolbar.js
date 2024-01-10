@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
+const DESCRIPTION_PLACEHOLDER = '';
 export default class ToolbarComponent extends Component {
   @service store;
   @service router;
@@ -13,16 +14,10 @@ export default class ToolbarComponent extends Component {
 
   @tracked showEditModal = false;
   @tracked formLabel = this.args.model.label;
-  @tracked formComment = this.args.model.comment;
 
   @action
   handleLabelChange(event) {
     this.formLabel = event.target.value;
-  }
-
-  @action
-  handleCommentChange(event) {
-    this.formComment = event.target.value;
   }
 
   @action
@@ -59,7 +54,7 @@ export default class ToolbarComponent extends Component {
     form.modified = new Date();
     form.ttlCode = this.formCodeManager.getTtlOfLatestVersion();
     form.label = this.formLabel;
-    form.comment = this.formComment;
+    form.comment = DESCRIPTION_PLACEHOLDER;
 
     try {
       await form.save();
@@ -82,6 +77,6 @@ export default class ToolbarComponent extends Component {
   closeEditNameModal() {
     this.showEditModal = false;
     this.formLabel = this.args.model.label;
-    this.formComment = this.args.model.comment;
+    this.formComment = DESCRIPTION_PLACEHOLDER;
   }
 }
