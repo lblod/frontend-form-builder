@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { DESCRIPTION_NOT_USED_PLACEHOLDER } from '../utils/constants';
 
 export default class CreateFormModal extends Component {
   @service store;
@@ -9,7 +10,6 @@ export default class CreateFormModal extends Component {
   @service toaster;
 
   @tracked name = '';
-  @tracked description = ``;
   @tracked duplicateNames = [];
   @tracked hasBeenFocused = false;
 
@@ -30,11 +30,6 @@ export default class CreateFormModal extends Component {
   }
 
   @action
-  handleDescriptionChange(event) {
-    this.description = event.target.value;
-  }
-
-  @action
   async initiateForm() {
     const now = new Date();
 
@@ -42,11 +37,12 @@ export default class CreateFormModal extends Component {
       created: now,
       modified: now,
       label: this.name,
-      comment: this.description,
+      comment: DESCRIPTION_NOT_USED_PLACEHOLDER,
       ttlCode: '',
     });
 
     try {
+      await newForm.save();
       await newForm.save();
       this.router.transitionTo('formbuilder.edit', newForm.id);
       this.toaster.success('Formulier succesvol aangemaakt', 'Success', {

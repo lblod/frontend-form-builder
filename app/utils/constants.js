@@ -1,0 +1,1 @@
+export const DESCRIPTION_NOT_USED_PLACEHOLDER = '';
