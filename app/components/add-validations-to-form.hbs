@@ -20,6 +20,17 @@
 
     <AuHr />
 
+    <AuAlert
+      @title={{"Attention"}}
+      @skin={{"warning"}}
+      @icon={{"alert-triangle"}}
+      @size={{"small"}}
+      @closable={{false}}
+    >
+      <p>When adding a new validation to the field, the underlying content will
+        be re-rendered.</p>
+    </AuAlert>
+
     {{#if this.selectedField}}
       <FieldValidationsForm
         @fieldSubject={{this.selectedField.subject}}
