@@ -2,7 +2,10 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { DESCRIPTION_NOT_USED_PLACEHOLDER } from '../utils/constants';
+import {
+  DESCRIPTION_NOT_USED_PLACEHOLDER,
+  NAME_INPUT_CHAR_LIMIT,
+} from '../utils/constants';
 
 export default class ToolbarComponent extends Component {
   @service store;
@@ -83,6 +86,18 @@ export default class ToolbarComponent extends Component {
   @action
   async updateFormName() {
     this.formLabel = this.formLabel.trim();
+
+    if (this.formLabel.length > NAME_INPUT_CHAR_LIMIT) {
+      this.toaster.warning(
+        `Maxmim aantal toegelaten karakters is ${NAME_INPUT_CHAR_LIMIT}`,
+        'Karakters',
+        {
+          timeOut: 5000,
+        }
+      );
+      return;
+    }
+
     const formsWithDuplicateName = await this.store.query('generated-form', {
       filter: {
         ':exact:label': this.formLabel,
