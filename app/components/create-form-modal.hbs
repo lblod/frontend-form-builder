@@ -16,7 +16,7 @@
           @error={{this.inputErrorMessage}}
           @warning={{this.hasReachedMaxCharaters}}
           value={{this.name}}
-          {{on "blur" this.handleNameChange}}
+          {{on "blur" this.handleNameChange.perform}}
         />
         <div class="input__helpTextAndCharacterCount">
           {{#if this.inputErrorMessage}}
@@ -32,7 +32,12 @@
     </div>
   </Modal.Body>
   <Modal.Footer>
-    <AuButton @disabled={{this.disableSubmit}} {{on "click" this.initiateForm}}>
+    <AuButton
+      @loading={{this.handleNameChange.isRunning}}
+      @loadingMessage={{" "}}
+      @disabled={{this.disableSubmit}}
+      {{on "click" this.initiateForm}}
+    >
       Bouw formulier
     </AuButton>
   </Modal.Footer>

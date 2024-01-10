@@ -6,6 +6,7 @@ import {
   DESCRIPTION_NOT_USED_PLACEHOLDER,
   NAME_INPUT_CHAR_LIMIT,
 } from '../utils/constants';
+import { restartableTask } from 'ember-concurrency';
 
 export default class CreateFormModal extends Component {
   @service store;
@@ -21,8 +22,7 @@ export default class CreateFormModal extends Component {
     this.args.closeModal();
   }
 
-  @action
-  async handleNameChange(event) {
+  handleNameChange = restartableTask(async (event) => {
     this.name = event.target.value;
     this.duplicateNames = await this.store.query('generated-form', {
       filter: {
@@ -30,7 +30,7 @@ export default class CreateFormModal extends Component {
       },
     });
     this.hasBeenFocused = true;
-  }
+  });
 
   @action
   async initiateForm() {
