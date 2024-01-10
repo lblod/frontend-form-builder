@@ -12,13 +12,8 @@ export default class ToolbarComponent extends Component {
 
   @tracked showDeleteModal = false;
 
-  @tracked showEditModal = false;
+  @tracked isEditingName = false;
   @tracked formLabel = this.args.model.label;
-
-  @action
-  handleLabelChange(event) {
-    this.formLabel = event.target.value;
-  }
 
   @action
   saveLocally() {
@@ -33,7 +28,7 @@ export default class ToolbarComponent extends Component {
     // Click file to download then destroy link
     downloadLink.click();
     downloadLink.remove();
-    this.showEditModal = false;
+    this.isEditingName = false;
   }
 
   @action
@@ -62,7 +57,7 @@ export default class ToolbarComponent extends Component {
         timeOut: 5000,
       });
       this.formCodeManager.pinLatestVersionAsReference();
-      this.showEditModal = false;
+      this.isEditingName = false;
     } catch (err) {
       this.toaster.error('Oeps, er is iets mis gegaan', 'Error', {
         timeOut: 5000,
@@ -75,7 +70,14 @@ export default class ToolbarComponent extends Component {
 
   @action
   closeEditNameModal() {
-    this.showEditModal = false;
+    this.isEditingName = false;
     this.formLabel = this.args.model.label;
+  }
+
+  @action
+  async saveUpdatedName(event) {
+    this.formLabel = event.target.value.trim();
+    await this.updateForm();
+    this.isEditingName = false;
   }
 }

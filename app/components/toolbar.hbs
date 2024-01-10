@@ -32,15 +32,24 @@
           {{/if}}
         </div>
         <div class="titleEdit">
-          <h1 class="au-c-app-chrome__title">
-            {{@model.label}}
-          </h1>
-          <AuButton
-            @skin={{"link-secondary"}}
-            @icon={{"pencil"}}
-            @hideText={{true}}
-            {{on "click" (fn (mut this.showEditModal) true)}}
-          />
+          {{#if this.isEditingName}}
+            <AuInput
+              id="input-filelabel"
+              value={{this.formLabel}}
+              {{on "blur" this.saveUpdatedName}}
+            />
+          {{else}}
+            <h1 class="au-c-app-chrome__title">
+              {{@model.label}}
+            </h1>
+            <AuButton
+              @skin={{"link-secondary"}}
+              @icon={{"pencil"}}
+              @hideText={{true}}
+              {{on "click" (fn (mut this.isEditingName) true)}}
+            />
+          {{/if}}
+
         </div>
       </Group>
       <Group class="au-c-toolbar__group--actions">
@@ -89,28 +98,3 @@
     @onClose={{fn (mut this.showDeleteModal) false}}
   />
 {{/if}}
-
-<AuModal
-  @title="Bewerk naam en beschrijving"
-  @modalOpen={{this.showEditModal}}
-  @closeModal={{this.closeEditNameModal}}
-  as |Modal|
->
-  <Modal.Body>
-    <div class="au-o-grid au-o-grid--small">
-      <div class="au-o-grid__item au-1-1">
-        <AuLabel for="input-filelabel">
-          Naam
-        </AuLabel>
-        <AuInput
-          id="input-filelabel"
-          value={{this.formLabel}}
-          {{on "change" this.handleLabelChange}}
-        />
-      </div>
-    </div>
-  </Modal.Body>
-  <Modal.Footer>
-    <AuButton {{on "click" this.updateForm}}>Bijwerken</AuButton>
-  </Modal.Footer>
-</AuModal>
