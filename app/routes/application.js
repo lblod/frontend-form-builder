@@ -1,7 +1,15 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import { service } from '@ember/service';
 
 export default class FormsPlaygroundRoute extends Route {
+  @service intl; // Inject the intl service
+
+  beforeModel() {
+    // Set the locale before the model is loaded (you can adjust the locale as needed)
+    this.intl.setLocale(['en-us']);
+  }
+
   @action
   willTransition(transition) {
     /* eslint ember/no-controller-access-in-routes: "warn" */
