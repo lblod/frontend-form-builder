@@ -2,7 +2,7 @@
   <div class="au-c-toolbar__group">
 
     <AuHeading @level="1" @skin="2">
-      Semantische Formulierenbouwer Loket
+      {{t "formOverview.title"}}
     </AuHeading>
   </div>
   <div class="au-c-toolbar__group">
@@ -10,7 +10,7 @@
       @skin="primary" @icon="add"
       {{on "click" this.openCreateFormModal}}
     >
-      Maak nieuw semantisch formulier
+      {{t "formOverview.createNew"}}
     </AuButton>
   </div>
 </div>
@@ -29,13 +29,16 @@
       >
         <t.content as |c|>
           <c.header>
-            <AuDataTableThSortable @label='Naam' @field='label' @currentSorting={{this.sort}}
+            <AuDataTableThSortable @label='Name' @field='label' @currentSorting={{this.sort}}
               class="au-u-visible-medium-up" />
-            <AuDataTableThSortable @label='Aangemaakt op' @field='created' @currentSorting={{this.sort}}
+            <AuDataTableThSortable @label='Description' @field='comment' @currentSorting={{this.sort}}
+              class="au-u-visible-medium-up" />
+
+            <AuDataTableThSortable @label='Created on' @field='created' @currentSorting={{this.sort}}
               class="au-u-visible-small-up" />
-            <AuDataTableThSortable @label='Aangepast op' @field='modified' @currentSorting={{this.sort}}
+            <AuDataTableThSortable @label='Updated on' @field='modified' @currentSorting={{this.sort}}
               class="au-u-visible-small-up" />
-            <th colspan="2">Acties</th>
+            <th colspan="2">Actions</th>
           </c.header>
           <c.body as |generatedForm|>
             <td class="au-u-visible-medium-up">
@@ -56,7 +59,7 @@
                 @alert={{true}}
                 {{on "click" (fn this.openDeleteModal generatedForm)}}
               >
-                Verwijder
+                Delete
               </AuButton>
             </td>
           </c.body>

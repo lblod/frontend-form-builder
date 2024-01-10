@@ -1,1 +1,3 @@
-price_banner: The {product} costs {price, number, ::currency/USD}
+formOverview:
+  title: Semantic form-builder Loket
+  createNew: Create new semantic form
