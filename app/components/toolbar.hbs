@@ -36,7 +36,7 @@
             <AuInput
               id="input-formName"
               value={{this.formLabel}}
-              {{on "blur" this.updateFormName}}
+              {{on "blur" this.handleFormNameChange}}
             />
             <AuButton
               @skin={{"primary"}}
@@ -48,7 +48,7 @@
               @skin={{"secondary"}}
               @icon={{"cross"}}
               @hideText={{true}}
-              {{on "click" (fn (mut this.isEditingName) false)}}
+              {{on "click" this.closeEditNameModal}}
             />
           {{else}}
             <h1 class="au-c-app-chrome__title">

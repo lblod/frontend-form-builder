@@ -32,6 +32,11 @@ export default class ToolbarComponent extends Component {
   }
 
   @action
+  handleFormNameChange(event) {
+    this.formLabel = event.target.value;
+  }
+
+  @action
   async deleteForm() {
     const generatedForm = this.args.model;
     const isDeleted = await generatedForm.destroyRecord();
@@ -76,14 +81,8 @@ export default class ToolbarComponent extends Component {
   }
 
   @action
-  async updateFormName(event) {
-    if (!event.target.value) {
-      this.isEditingName = false;
-
-      return;
-    }
-
-    this.formLabel = event.target.value.trim();
+  async updateFormName() {
+    this.formLabel = this.formLabel.trim();
     const formsWithDuplicateName = await this.store.query('generated-form', {
       filter: {
         ':exact:label': this.formLabel,
