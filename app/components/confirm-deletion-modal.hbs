@@ -3,9 +3,9 @@
   @closeModal={{this.close}}
   data-test-confirm-deletion-modal="modal"
 >
-  <:title>Formulier verwijderen?</:title>
+  <:title>{{t "confirmation.deleteTitle"}}</:title>
   <:body>
-    Bent u zeker dat u dit formulier wilt verwijderen? Deze actie is permanent.
+    {{t "confirmation.deleteQuestion"}}
   </:body>
   <:footer>
     <AuButtonGroup>
@@ -19,7 +19,7 @@
         {{on "click" (perform this.delete)}}
         data-test-confirm-deletion-modal="delete-button"
       >
-        Verwijderen
+        {{t "crud.delete"}}
       </AuButton>
       <AuButton
         @skin="secondary"
@@ -27,7 +27,7 @@
         {{on "click" this.close}}
         data-test-confirm-deletion-modal="cancel-button"
       >
-        Annuleer
+        {{t "crud.cancel"}}
       </AuButton>
     </AuButtonGroup>
   </:footer>

@@ -8,7 +8,7 @@
     <div class="au-o-flow">
       <div class="au-o-flow--small">
         <AuLabel for="input-form-name" @required={{true}}>
-          Naam
+          {{t "editNameModal.name"}}
         </AuLabel>
         <AuInput
           id="input-form-name"
@@ -32,13 +32,8 @@
     </div>
   </Modal.Body>
   <Modal.Footer>
-    <AuButton
-      @loading={{this.handleNameChange.isRunning}}
-      @loadingMessage={{" "}}
-      @disabled={{this.disableSubmit}}
-      {{on "click" this.initiateForm}}
-    >
-      Bouw formulier
+    <AuButton @disabled={{this.disableSubmit}} {{on "click" this.initiateForm}}>
+      {{t "editNameModal.createForm"}}
     </AuButton>
   </Modal.Footer>
 </AuModal>
