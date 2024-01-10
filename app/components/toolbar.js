@@ -42,6 +42,7 @@ export default class ToolbarComponent extends Component {
 
   @action
   async updateForm() {
+    this.isEditingName = false;
     const form = await this.store.findRecord(
       'generated-form',
       this.args.model.id
@@ -75,9 +76,36 @@ export default class ToolbarComponent extends Component {
   }
 
   @action
-  async saveUpdatedName(event) {
+  async updateFormName(event) {
+    if (!event.target.value) {
+      this.isEditingName = false;
+
+      return;
+    }
+
     this.formLabel = event.target.value.trim();
-    await this.updateForm();
+    const formsWithDuplicateName = await this.store.query('generated-form', {
+      filter: {
+        ':exact:label': this.formLabel,
+      },
+    });
+
+    if (this.formLabel == this.args.model.label) {
+      this.isEditingName = false;
+
+      return;
+    }
+
+    if (formsWithDuplicateName.length >= 1) {
+      this.toaster.error('Deze naam bestaat al', 'Error', {
+        timeOut: 5000,
+      });
+      return;
+    }
+
     this.isEditingName = false;
+    await this.updateForm();
+
+    return;
   }
 }

@@ -34,9 +34,21 @@
         <div class="titleEdit">
           {{#if this.isEditingName}}
             <AuInput
-              id="input-filelabel"
+              id="input-formName"
               value={{this.formLabel}}
-              {{on "blur" this.saveUpdatedName}}
+              {{on "blur" this.updateFormName}}
+            />
+            <AuButton
+              @skin={{"primary"}}
+              @icon={{"check"}}
+              @hideText={{true}}
+              {{on "click" this.updateFormName}}
+            />
+            <AuButton
+              @skin={{"secondary"}}
+              @icon={{"cross"}}
+              @hideText={{true}}
+              {{on "click" (fn (mut this.isEditingName) false)}}
             />
           {{else}}
             <h1 class="au-c-app-chrome__title">
