@@ -1,3 +1,12 @@
 formOverview:
-  title: Semantic form-builder Loket
-  createNew: Create new semantic form
+  title: "Semantic form-builder Loket"
+  createNew: "Create new semantic form"
+
+formBuilder:
+  edit:
+    tabs:
+      code: "Code"
+      build: "Builder"
+      validations: "Validations"
+    error:
+      couldNotFetchFormWithId: "Could not fetch generated-form with id: {id}"

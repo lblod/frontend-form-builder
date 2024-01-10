@@ -14,16 +14,19 @@
   as |Tab|
 >
   <Tab>
-    <AuLink @route="formbuilder.edit.code" @icon="html">Code</AuLink>
+    <AuLink @route="formbuilder.edit.code" @icon="html">{{t
+        "formBuilder.edit.tabs.code"
+      }}</AuLink>
   </Tab>
   <Tab>
-    <AuLink @route="formbuilder.edit.builder" @icon="sitemap">Builder</AuLink>
+    <AuLink @route="formbuilder.edit.builder" @icon="sitemap">{{t
+        "formBuilder.edit.tabs.build"
+      }}</AuLink>
   </Tab>
   <Tab>
-    <AuLink
-      @route="formbuilder.edit.validations"
-      @icon="decided"
-    >Validations</AuLink>
+    <AuLink @route="formbuilder.edit.validations" @icon="decided">{{t
+        "formBuilder.edit.tabs.validations"
+      }}</AuLink>
   </Tab>
   <Tab>
     <AuLink
