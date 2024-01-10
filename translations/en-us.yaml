@@ -1,6 +1,10 @@
-formOverview:
+main:
   title: "Semantic form-builder Loket"
   createNew: "Create new semantic form"
+
+navigation:
+  backToOverview: "Back to overview"
+  backToFormBuilder: "Back to form-builder"
 
 formBuilder:
   edit:
@@ -12,12 +16,13 @@ formBuilder:
 messages:
   error:
     couldNotFetchFormWithId: "Could not fetch generated-form with id: {id}"
-    couldNotUpdateForm: "Oops, something went wrong"
+    somethingWentWrong: "Oops, something went wrong"
     cannotAddValidationsToEmptyForm: "Cannot add validations to an empty form."
     duplicateValidationType: "Validation {type} is duplicate."
   success:
     formCreated: "Form created successfully"
     formUpdated: "Form updated successfully"
+    formDeleted: "Form: {name} deleted"
 
 toolbar:
   backToOverview: "Back to overview"
@@ -27,13 +32,17 @@ toolbar:
   formUpToDate: "Form is up-to-date"
   codelists: "Codelists"
 
-conceptSchemeUriSelector:
-  choose: "Choose a concept scheme"
-
 editNameModal:
   name: "Name"
   description: "Description"
   createForm: "Create form"
+
+codelists:
+  chooseList: "Choose a concept scheme whose content you wish to view"
+  uri: "URI: gives more information and activates the concept scheme"
+  chooseConcept: "Choose a concept scheme"
+  contentOfList: "View content of concept schemes"
+  chooseLeftFirst: "First, choose a concept scheme in the left field."
 
 confirmation:
   deleteTitle: "Delete form?"

@@ -75,7 +75,7 @@ export default class ToolbarComponent extends Component {
       this.isEditingName = false;
     } catch (err) {
       this.toaster.error(
-        this.intl.t('messages.error.couldNotUpdateForm'),
+        this.intl.t('messages.error.somethingWentWrong'),
         'Error',
         {
           timeOut: 5000,

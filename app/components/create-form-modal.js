@@ -58,7 +58,7 @@ export default class CreateFormModal extends Component {
       );
     } catch (err) {
       this.toaster.error(
-        this.intl.t('messages.error.couldNotUpdateForm'),
+        this.intl.t('messages.error.somethingWentWrong'),
         'Error',
         {
           timeOut: 5000,
