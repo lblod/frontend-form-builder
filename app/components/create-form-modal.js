@@ -69,7 +69,7 @@ export default class CreateFormModal extends Component {
     }
 
     if (this.name.length > NAME_INPUT_CHAR_LIMIT) {
-      return `Maximum karakters overschreden`;
+      return `Maximum characters exceeded`;
     }
 
     return false;

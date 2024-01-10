@@ -89,8 +89,8 @@ export default class ToolbarComponent extends Component {
 
     if (this.formLabel.length > NAME_INPUT_CHAR_LIMIT) {
       this.toaster.warning(
-        `Maxmim aantal toegelaten karakters is ${NAME_INPUT_CHAR_LIMIT}`,
-        'Karakters',
+        `The max character limit is ${NAME_INPUT_CHAR_LIMIT}`,
+        'Characters',
         {
           timeOut: 5000,
         }
@@ -111,7 +111,7 @@ export default class ToolbarComponent extends Component {
     }
 
     if (formsWithDuplicateName.length >= 1) {
-      this.toaster.error('Deze naam bestaat al', 'Error', {
+      this.toaster.error('This name already exists', 'Error', {
         timeOut: 5000,
       });
       return;
