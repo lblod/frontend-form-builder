@@ -14,13 +14,20 @@
           id="input-form-name"
           @width="block"
           @error={{this.inputErrorMessage}}
+          @warning={{this.hasReachedMaxCharaters}}
           value={{this.name}}
           {{on "blur" this.handleNameChange}}
         />
-        {{#if this.inputErrorMessage}}
-          <AuHelpText @error={{true}}>{{this.inputErrorMessage}}</AuHelpText>
-        {{/if}}
-
+        <div class="input__helpTextAndCharacterCount">
+          {{#if this.inputErrorMessage}}
+            <AuHelpText @error={{true}}>{{this.inputErrorMessage}}</AuHelpText>
+          {{else}}
+            <span></span>
+          {{/if}}
+          <AuPill @size={{"small"}} class="au-u-margin-small">
+            {{this.getCharacters}}
+          </AuPill>
+        </div>
       </div>
     </div>
   </Modal.Body>

@@ -2,7 +2,10 @@ import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { DESCRIPTION_NOT_USED_PLACEHOLDER } from '../utils/constants';
+import {
+  DESCRIPTION_NOT_USED_PLACEHOLDER,
+  NAME_INPUT_CHAR_LIMIT,
+} from '../utils/constants';
 
 export default class CreateFormModal extends Component {
   @service store;
@@ -64,14 +67,24 @@ export default class CreateFormModal extends Component {
     if (this.duplicateNames.length > 0) {
       return 'Deze naam is al eens gebruikt';
     }
+
+    if (this.name.length > NAME_INPUT_CHAR_LIMIT) {
+      return `Maximum karakters overschreden`;
+    }
+
     return false;
+  }
+
+  get getCharacters() {
+    return `Remaing characters: ${NAME_INPUT_CHAR_LIMIT - this.name.length}`;
   }
 
   get disableSubmit() {
     return (
       (this.name.trim() == '' && this.hasBeenFocused) ||
       this.duplicateNames.length > 0 ||
-      !this.hasBeenFocused
+      !this.hasBeenFocused ||
+      this.name.length > NAME_INPUT_CHAR_LIMIT
     );
   }
 }

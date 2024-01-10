@@ -1,1 +1,2 @@
 export const DESCRIPTION_NOT_USED_PLACEHOLDER = '';
+export const NAME_INPUT_CHAR_LIMIT = 120;

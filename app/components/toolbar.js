@@ -54,7 +54,7 @@ export default class ToolbarComponent extends Component {
     form.modified = new Date();
     form.ttlCode = this.formCodeManager.getTtlOfLatestVersion();
     form.label = this.formLabel;
-    form.comment = DESCRIPTION_NOT_USED_PLACEHOLDER;
+    form.comment = this.args.model.comment ?? DESCRIPTION_NOT_USED_PLACEHOLDER;
 
     try {
       await form.save();
@@ -77,6 +77,5 @@ export default class ToolbarComponent extends Component {
   closeEditNameModal() {
     this.showEditModal = false;
     this.formLabel = this.args.model.label;
-    this.formComment = DESCRIPTION_NOT_USED_PLACEHOLDER;
   }
 }

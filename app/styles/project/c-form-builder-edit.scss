@@ -22,3 +22,9 @@
   color: $au-gray-400;
   text-align: center;
 }
+
+.input__helpTextAndCharacterCount {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
