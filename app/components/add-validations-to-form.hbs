@@ -28,10 +28,15 @@
         @store={{this.selectedField.store}}
         @updateTtlCodeWithField={{this.updateTtlCodeWithField.perform}}
       />
-    {{else}}
-      <span class="formBuilderEdit__noFields">
-        <p class="au-u-h3">No field selected</p>
-      </span>
     {{/if}}
+
+    {{#unless this.selectedField}}
+      {{#unless this.updateTtlCodeWithField.isRunning}}
+        <span class="formBuilderEdit__noFields">
+          <p class="au-u-h3">No field selected</p>
+        </span>
+      {{/unless}}
+    {{/unless}}
+
   {{/if}}
 </div>
