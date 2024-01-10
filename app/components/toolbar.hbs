@@ -3,7 +3,7 @@
     <AuToolbar @size="small" class="au-u-padding-bottom-none" as |Group|>
       <Group>
         <AuLink @route="index" @skin="secondary" @icon="arrow-left">
-          Terug naar overzicht
+          {{t "toolbar.backToOverview"}}
         </AuLink>
         <span class="au-c-app-chrome__entity">{{@model.label}}</span>
       </Group>
@@ -11,7 +11,7 @@
         <ul class="au-c-list-horizontal au-u-padding-right-tiny">
           <li class="au-c-list-horizontal__item">
             <span class="au-c-app-chrome__status">
-              Bewaard op
+              {{t "toolbar.savedOn"}}
               {{or @model.modified @model.created}}
             </span>
           </li>
@@ -23,11 +23,11 @@
         <div>
           {{#if @formChanged}}
             <AuPill @skin="warning" @icon="alert-triangle">
-              Aanpassingen nog niet bewaard
+              {{t "toolbar.unSavedChanges"}}
             </AuPill>
           {{else}}
             <AuPill @skin="success" @icon="circle-check">
-              Formulier up-to-date
+              {{t "toolbar.formUpToDate"}}
             </AuPill>
           {{/if}}
         </div>
@@ -65,13 +65,13 @@
         </div>
       </Group>
       <Group class="au-c-toolbar__group--actions">
-        <AuLink @route="codelijsten">Codelijsten</AuLink>
+        <AuLink @route="codelijsten">{{t "toolbar.codelists"}}</AuLink>
         <div class="saveSplitButton">
           <AuButton
             id="saveSplitButton_save"
             @disabled={{not @formChanged}}
             {{on "click" this.updateForm}}
-          >Bewaar</AuButton>
+          >{{t "crud.save"}}</AuButton>
           <AuDropdown
             id="saveSplitButton_dropdown"
             @title=""
@@ -86,7 +86,7 @@
               role="menuitem"
               {{on "click" this.saveLocally}}
             >
-              Exporteer code
+              {{t "toolbar.exportCode"}}
             </AuButton>
             <AuButton
               @skin="link"
@@ -95,7 +95,7 @@
               @alert={{true}}
               {{on "click" (fn (mut this.showDeleteModal) true)}}
             >
-              Verwijder
+              {{t "crud.delete"}}
             </AuButton>
           </AuDropdown>
         </div>

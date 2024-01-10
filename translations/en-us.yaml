@@ -8,5 +8,26 @@ formBuilder:
       code: "Code"
       build: "Builder"
       validations: "Validations"
-    error:
-      couldNotFetchFormWithId: "Could not fetch generated-form with id: {id}"
+
+messages:
+  error:
+    couldNotFetchFormWithId: "Could not fetch generated-form with id: {id}"
+    couldNotUpdateForm: "Oops, something went wrong"
+  success:
+    formUpdated: "Form updated successfully"
+
+toolbar:
+  backToOverview: "Back to overview"
+  savedOn: "Saved on"
+  exportCode: "Export code"
+  unSavedChanges: "Form has unsaved changes"
+  formUpToDate: "Form is up-to-date"
+  codelists: "Codelists"
+  editNameModal:
+    name: "Name"
+    description: "Description"
+
+crud:
+  save: "Save"
+  delete: "Delete"
+  delete: "Update"

@@ -53,7 +53,7 @@ export default class FormbuilderEditRoute extends Route {
 
       return form;
     } catch (error) {
-      throw this.intl.t('formBuilder.edit.error.couldNotFetchFormWithId', {
+      throw this.intl.t('messages.error.couldNotFetchFormWithId', {
         id: generatedFormId,
       });
     }

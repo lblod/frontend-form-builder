@@ -11,6 +11,7 @@ export default class ToolbarComponent extends Component {
   @service store;
   @service router;
   @service toaster;
+  @service intl;
   @service('form-code-manager') formCodeManager;
   @service features;
 
@@ -63,15 +64,23 @@ export default class ToolbarComponent extends Component {
 
     try {
       await form.save();
-      this.toaster.success('Formulier bijgewerkt', 'Success', {
-        timeOut: 5000,
-      });
+      this.toaster.success(
+        this.intl.t('messages.success.formUpdated'),
+        'Success',
+        {
+          timeOut: 5000,
+        }
+      );
       this.formCodeManager.pinLatestVersionAsReference();
       this.isEditingName = false;
     } catch (err) {
-      this.toaster.error('Oeps, er is iets mis gegaan', 'Error', {
-        timeOut: 5000,
-      });
+      this.toaster.error(
+        this.intl.t('messages.error.couldNotUpdateForm'),
+        'Error',
+        {
+          timeOut: 5000,
+        }
+      );
       console.error(err);
     }
 
