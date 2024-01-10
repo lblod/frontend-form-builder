@@ -23,7 +23,6 @@ export default class AddValidationsToFormComponent extends Component {
 
   @service toaster;
   @tracked selectedField;
-  @tracked coverUp;
 
   @service('form-code-manager') formCodeManager;
 
@@ -84,12 +83,13 @@ export default class AddValidationsToFormComponent extends Component {
     );
 
     this.selectedField = fieldData;
-    this.coverUp = null;
   }
 
   updateTtlCodeWithField = restartableTask(
     async ({ fieldSubject, triples }) => {
-      this.coverUp = null;
+      const savedSelected = this.selectedField;
+      this.selectedField.store = undefined;
+
       const builderStoreTriples = getFieldAndValidationTriples(
         fieldSubject,
         this.builderStore,
@@ -108,14 +108,7 @@ export default class AddValidationsToFormComponent extends Component {
       }
 
       const fieldData = await createStoreForFieldData(
-        createFieldDataForSubject(this.selectedField.subject, {
-          store: this.builderStore,
-          graph: this.graphs.sourceGraph,
-        }),
-        this.graphs
-      );
-      const fieldDataCoverUp = await createStoreForFieldData(
-        createFieldDataForSubject(this.selectedField.subject, {
+        createFieldDataForSubject(savedSelected.subject, {
           store: this.builderStore,
           graph: this.graphs.sourceGraph,
         }),
@@ -127,11 +120,6 @@ export default class AddValidationsToFormComponent extends Component {
         fieldData.store,
         this.graphs
       );
-      addValidationTriplesToFormNodesL(
-        fieldDataCoverUp.subject,
-        fieldDataCoverUp.store,
-        this.graphs
-      );
 
       if (
         areValidationsInGraphValidated(
@@ -139,12 +127,9 @@ export default class AddValidationsToFormComponent extends Component {
           this.graphs.sourceGraph
         )
       ) {
-        this.coverUp = fieldDataCoverUp;
-        await timeout(1000);
         this.selectedField = null;
         await timeout(0.1);
         this.selectedField = fieldData;
-        console.log('DONE');
 
         const ttlWithoutDuplicateValidations =
           getTtlWithDuplicateValidationsRemoved(newBuilderForm);
@@ -154,10 +139,6 @@ export default class AddValidationsToFormComponent extends Component {
       }
     }
   );
-  @action
-  up(item) {
-    console.log(item);
-  }
 
   createFieldArray(store) {
     const fieldsData = getFieldsInStore(store, this.graphs.sourceGraph);

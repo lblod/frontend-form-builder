@@ -32,7 +32,7 @@
 }
 
 .au-c-tabs {
-  padding: 0;
+  padding: 0
 }
 
 .sf-listing-sub-form {
@@ -41,11 +41,11 @@
 }
 
 code {
-  background-color: #272822;
-  color: #f8f8f2;
-  border-radius: 0.3rem;
-  padding: 20px;
-  white-space: nowrap;
+    background-color: #272822;
+    color: #f8f8f2;
+    border-radius: 0.3rem;
+    padding: 20px;
+    white-space: nowrap;
 }
 
 .au-o-grid {
@@ -55,21 +55,5 @@ code {
 .removeTableLines {
   table {
     border-collapse: unset !important;
-  }
-}
-
-.addValidationsToForm__wrapper {
-  position: relative;
-  .addValidationsToForm__coverUp {
-    pointer-events: none;
-    margin-top: 12px;
-    width: 100%;
-    position: absolute;
-  }
-
-  .addValidationsToForm__original {
-    // background-color: $au-white;
-    position: relative;
-    z-index: 2;
   }
 }
