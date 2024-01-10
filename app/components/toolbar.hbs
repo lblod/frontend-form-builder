@@ -45,29 +45,39 @@
       </Group>
       <Group class="au-c-toolbar__group--actions">
         <AuLink @route="codelijsten">Codelijsten</AuLink>
-        <AuDropdown @title="Formulier acties" @alignment="right" role="menu">
+        <div class="saveSplitButton">
           <AuButton
-            @skin="link"
-            @icon="export"
-            role="menuitem"
-            {{on "click" this.saveLocally}}
+            id="saveSplitButton_save"
+            @disabled={{not @formChanged}}
+            {{on "click" this.updateForm}}
+          >Bewaar</AuButton>
+          <AuDropdown
+            id="saveSplitButton_dropdown"
+            @title=""
+            @hideText={{true}}
+            @alignment="left"
+            role="menu"
+            @skin="primary"
           >
-            Exporteer code
-          </AuButton>
-          <AuButton
-            @skin="link"
-            @icon="bin"
-            role="menuitem"
-            @alert={{true}}
-            {{on "click" (fn (mut this.showDeleteModal) true)}}
-          >
-            Verwijder
-          </AuButton>
-        </AuDropdown>
-        <AuButton
-          @disabled={{not @formChanged}}
-          {{on "click" this.updateForm}}
-        >Bewaar</AuButton>
+            <AuButton
+              @skin="link"
+              @icon="export"
+              role="menuitem"
+              {{on "click" this.saveLocally}}
+            >
+              Exporteer code
+            </AuButton>
+            <AuButton
+              @skin="link"
+              @icon="bin"
+              role="menuitem"
+              @alert={{true}}
+              {{on "click" (fn (mut this.showDeleteModal) true)}}
+            >
+              Verwijder
+            </AuButton>
+          </AuDropdown>
+        </div>
       </Group>
     </AuToolbar>
   </div>

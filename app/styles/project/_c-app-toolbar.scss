@@ -1,0 +1,14 @@
+.saveSplitButton {
+  display: flex;
+  flex-direction: row;
+  #saveSplitButton_save {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  #saveSplitButton_dropdown {
+    button {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+}
