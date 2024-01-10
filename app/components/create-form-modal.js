@@ -23,10 +23,10 @@ export default class CreateFormModal extends Component {
   }
 
   handleNameChange = restartableTask(async (event) => {
-    this.name = event.target.value;
+    this.name = event.target.value.trim();
     this.duplicateNames = await this.store.query('generated-form', {
       filter: {
-        ':exact:label': this.name.trim(),
+        ':exact:label': this.name,
       },
     });
     this.hasBeenFocused = true;
