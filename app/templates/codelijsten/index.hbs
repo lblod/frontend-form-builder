@@ -7,12 +7,12 @@
   </div>
   <div class="au-c-toolbar__group">
     <AuButtonGroup>
-      <AuButton
-        @skin="secondary"
+      <AuLink
+        @route="index"
+        @skin="button-secondary"
         @icon="arrow-left"
         @iconAlignment="left"
-        {{on "click" this.previousRoute}}
-      >{{t "navigation.backToFormBuilder"}}</AuButton>
+      >Terug naar formulierenbouwer</AuLink>
     </AuButtonGroup>
   </div>
 </div>
