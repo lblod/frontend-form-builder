@@ -24,7 +24,13 @@ export default class CodelijstenEditRoute extends Route {
 
   async getConceptsOfConceptSchemeById(conceptSchemeId) {
     try {
-      const concepts = await this.store.query('concept', conceptSchemeId);
+      const concepts = await this.store.query('concept', {
+        filter: {
+          'concept-schemes': {
+            ':id:': conceptSchemeId,
+          },
+        },
+      });
 
       return concepts;
     } catch (error) {
