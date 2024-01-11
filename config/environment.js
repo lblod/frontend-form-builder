@@ -18,7 +18,9 @@ module.exports = function (environment) {
       // Here you can pass flags/options to your application instance
       // when it is created
     },
-    featureFlags: {},
+    featureFlags: {
+      SHOW_ORIGNAL_CODELIST_PAGE: true,
+    },
   };
 
   if (environment === 'development') {
