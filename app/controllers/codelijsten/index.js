@@ -7,6 +7,10 @@ export default class CodelijstenController extends Controller {
   @service features;
   @tracked scheme;
 
+  sort = '-prefLabel';
+  page = 0;
+  size = 20;
+  //#region orignal codelijsten
   @action updateSelectedSchemeTo(scheme) {
     this.scheme = scheme;
   }
@@ -22,5 +26,11 @@ export default class CodelijstenController extends Controller {
     };
 
     return JSON.stringify(jsonConfigCode, null, 2).trim();
+  }
+  //#endregion
+
+  @action
+  openDeleteModal(conceptSchemeModel) {
+    console.log(`delete `, conceptSchemeModel);
   }
 }
