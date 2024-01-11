@@ -15,10 +15,6 @@ export default class CodelijstenController extends Controller {
     this.scheme = scheme;
   }
 
-  @action previousRoute() {
-    window.history.back();
-  }
-
   get configurationCode() {
     const jsonConfigCode = {
       conceptScheme: this.scheme.uri,
