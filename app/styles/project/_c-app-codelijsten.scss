@@ -1,0 +1,10 @@
+.codelijsten__edit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  .codelijsten__EditHeading {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}

@@ -1,2 +1,29 @@
 {{page-title "Edit"}}
-<h1>Temp edit codelist</h1>
+<div class="au-u-padding-small codelijsten__edit">
+  <div class="codelijsten__EditHeading au-u-padding-small">
+    <h1 class="au-u-h1">Codelijsten edit</h1>
+    <AuButtonGroup @inline={{this.inline}}>
+      <AuButton @skin="primary">
+        Save
+      </AuButton>
+      <AuLink @route="codelijsten" @skin="button-secondary">Cancel</AuLink>
+    </AuButtonGroup>
+  </div>
+  <AuHr />
+  {{#if this.isGenericConceptScheme}}
+    <AuAlert @title={{"Opgelet"}} @skin={{"warning"}} @icon={{"login"}}>
+      <p>Generieke codelijsten kunnen niet aangepast worden.</p>
+    </AuAlert>
+  {{/if}}
+  <div class="au-u-3-5">
+    <AuLabel for="input-codelist-name" @required={{true}}>
+      Naam van de codelijst
+    </AuLabel>
+    <AuInput
+      id="input-codelist-name"
+      @width="block"
+      @disabled={{this.isGenericConceptScheme}}
+      value={{this.name}}
+    />
+  </div>
+</div>
