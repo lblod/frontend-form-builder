@@ -19,7 +19,7 @@ module.exports = function (environment) {
       // when it is created
     },
     featureFlags: {
-      SHOW_ORIGNAL_CODELIST_PAGE: true,
+      SHOW_ORIGNAL_CODELIST_PAGE: false,
     },
   };
 

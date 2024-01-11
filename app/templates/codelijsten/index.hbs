@@ -17,10 +17,10 @@
   </div>
 </div>
 
-{{#if this.features.SHOW_ORIGNAL_CODELIST_PAGE}}
-  <main id="main" class="au-c-main-container">
-
-    <div class="au-c-main-container__content">
+<main id="main" class="au-c-main-container">
+  <div class="au-c-main-container__content">
+    {{! Code below is the original codelist page }}
+    {{#if this.features.SHOW_ORIGNAL_CODELIST_PAGE}}
       <div class="playground">
         <div class="playground__codelist">
           {{!
@@ -104,9 +104,58 @@
           </AuContent>
         </div>
       </div>
-    </div>
+    {{else}}
+      {{! Start new codelist page }}
+      <div class="au-c-body-container removeTableLines">
+        <AuDataTable
+          @content={{this.model}}
+          @isLoading={{this.isLoadingModel}}
+          @noDataMessage="Geen codelijsten gevonden"
+          @page={{this.page}}
+          @size={{this.size}}
+          as |t|
+        >
+          <t.content as |c|>
+            <c.header>
+              <AuDataTableThSortable
+                @label="Naam"
+                @field="preflabel"
+                @currentSorting={{this.sort}}
+                class="au-u-visible-medium-up"
+              />
+              <AuDataTableThSortable
+                @label="Id"
+                @field="id"
+                @currentSorting={{this.sort}}
+                class="au-u-visible-medium-up"
+              />
+              <th colspan="1">Acties</th>
+            </c.header>
+            <c.body as |conceptScheme|>
+              <td class="au-u-visible-medium-up">
+                <AuLink
+                  @route="codelijsten.edit"
+                  @model={{conceptScheme.id}}
+                  @ariaHidden={{true}}
+                >{{conceptScheme.label}}</AuLink>
+              </td>
+              <td class="au-u-visible-medium-up">{{conceptScheme.id}}</td>
+              <td class="au-u-visible-medium-up">
+                <AuButton
+                  @skin="link"
+                  @icon="bin"
+                  @alert={{true}}
+                  {{on "click" (fn this.openDeleteModal conceptScheme)}}
+                >
+                  Verwijder
+                </AuButton>
+              </td>
+            </c.body>
+          </t.content>
+        </AuDataTable>
+      </div>
+    {{/if}}
+  </div>
+</main>
 
-  </main>
-
-  {{outlet}}
-{{/if}}
+{{outlet}}
