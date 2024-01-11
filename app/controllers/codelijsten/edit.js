@@ -10,7 +10,12 @@ export default class CodelijstenEditController extends Controller {
   @action
   setup(model) {
     this.name = model.conceptScheme.label;
-    this.concepts = model.concepts;
+    this.concepts = new Array(...model.concepts);
     this.isGenericConceptScheme = model.isGenericConceptScheme;
+    console.log(this.concepts);
+  }
+
+  get isSaveButtonDisabled() {
+    return this.isGenericConceptScheme;
   }
 }
