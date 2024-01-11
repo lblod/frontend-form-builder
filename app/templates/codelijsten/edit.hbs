@@ -17,8 +17,8 @@
   </div>
 </div>
 
-<div class="au-u-padding-small codelijsten__edit">
-  <span class="codelijsten__scroll au-u-padding-bottom-small">
+<div class="codelijsten__edit">
+  <span class="au-u-padding">
     {{#if this.isGenericConceptScheme}}
       <AuAlert @title={{"Opgelet"}} @skin={{"warning"}} @icon={{"login"}}>
         <p>Generieke codelijsten kunnen niet aangepast worden.</p>
@@ -35,34 +35,34 @@
         value={{this.name}}
       />
     </div>
-    <div>
-      {{#if this.concepts}}
-        <AuDataTable
-          @content={{this.concepts}}
-          @fields="preflabel"
-          @noDataMessage="Geen concepten"
-          @sort={{this.sort}}
-          as |t|
-        >
-          <t.content as |c|>
-            <c.header>
-              <AuDataTableThSortable
-                @field="preflabel"
-                @currentSorting={{this.sort}}
-                @label="Label"
-                @class="data-table__header-title"
-              />
-            </c.header>
-            <c.body as |concept|>
-              {{#if this.isGenericConceptScheme}}
-                <td>{{concept.label}}</td>
-              {{else}}
-                <td><AuInput id={{concept.id}} value={{concept.label}} /></td>
-              {{/if}}
-            </c.body>
-          </t.content>
-        </AuDataTable>
-      {{/if}}
-    </div>
   </span>
+  <div>
+    {{#if this.concepts}}
+      <AuDataTable
+        @content={{this.concepts}}
+        @fields="preflabel"
+        @noDataMessage="Geen concepten"
+        @sort={{this.sort}}
+        as |t|
+      >
+        <t.content as |c|>
+          <c.header>
+            <AuDataTableThSortable
+              @field="preflabel"
+              @currentSorting={{this.sort}}
+              @label="Label"
+              @class="data-table__header-title"
+            />
+          </c.header>
+          <c.body as |concept|>
+            {{#if this.isGenericConceptScheme}}
+              <td>{{concept.label}}</td>
+            {{else}}
+              <td><AuInput id={{concept.id}} value={{concept.label}} /></td>
+            {{/if}}
+          </c.body>
+        </t.content>
+      </AuDataTable>
+    {{/if}}
+  </div>
 </div>

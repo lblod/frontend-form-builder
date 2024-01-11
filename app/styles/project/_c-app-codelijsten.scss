@@ -3,15 +3,6 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-
-  .codelijsten__EditHeading {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
-  .codelijsten__scroll {
-    overflow-y: auto;
-    margin: 1rem 0;
-  }
+  height: 100%;
+  overflow-y: auto;
 }
