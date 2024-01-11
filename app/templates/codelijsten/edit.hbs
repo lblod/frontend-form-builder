@@ -3,27 +3,58 @@
   <div class="codelijsten__EditHeading au-u-padding-small">
     <h1 class="au-u-h1">Codelijsten edit</h1>
     <AuButtonGroup @inline={{this.inline}}>
-      <AuButton @skin="primary">
+      <AuButton @skin="primary" @disabled={{this.isSaveButtonDisabled}}>
         Save
       </AuButton>
       <AuLink @route="codelijsten" @skin="button-secondary">Cancel</AuLink>
     </AuButtonGroup>
   </div>
   <AuHr />
-  {{#if this.isGenericConceptScheme}}
-    <AuAlert @title={{"Opgelet"}} @skin={{"warning"}} @icon={{"login"}}>
-      <p>Generieke codelijsten kunnen niet aangepast worden.</p>
-    </AuAlert>
-  {{/if}}
-  <div class="au-u-3-5">
-    <AuLabel for="input-codelist-name" @required={{true}}>
-      Naam van de codelijst
-    </AuLabel>
-    <AuInput
-      id="input-codelist-name"
-      @width="block"
-      @disabled={{this.isGenericConceptScheme}}
-      value={{this.name}}
-    />
-  </div>
+  <span class="codelijsten__scroll au-u-padding-bottom-small">
+    {{#if this.isGenericConceptScheme}}
+      <AuAlert @title={{"Opgelet"}} @skin={{"warning"}} @icon={{"login"}}>
+        <p>Generieke codelijsten kunnen niet aangepast worden.</p>
+      </AuAlert>
+    {{/if}}
+    <div class="au-u-3-5 au-u-margin-bottom-large">
+      <AuLabel for="input-codelist-name" @required={{true}}>
+        Naam van de codelijst
+      </AuLabel>
+      <AuInput
+        id="input-codelist-name"
+        @width="block"
+        @disabled={{this.isGenericConceptScheme}}
+        value={{this.name}}
+      />
+    </div>
+    <div>
+      {{#if this.concepts}}
+        <AuDataTable
+          @content={{this.concepts}}
+          @fields="preflabel"
+          @noDataMessage="Geen concepten"
+          @sort={{this.sort}}
+          as |t|
+        >
+          <t.content as |c|>
+            <c.header>
+              <AuDataTableThSortable
+                @field="preflabel"
+                @currentSorting={{this.sort}}
+                @label="Label"
+                @class="data-table__header-title"
+              />
+            </c.header>
+            <c.body as |concept|>
+              {{#if this.isGenericConceptScheme}}
+                <td>{{concept.label}}</td>
+              {{else}}
+                <td><AuInput id={{concept.id}} value={{concept.label}} /></td>
+              {{/if}}
+            </c.body>
+          </t.content>
+        </AuDataTable>
+      {{/if}}
+    </div>
+  </span>
 </div>
