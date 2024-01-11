@@ -17,93 +17,96 @@
   </div>
 </div>
 
-<main id="main" class="au-c-main-container">
+{{#if this.features.SHOW_ORIGNAL_CODELIST_PAGE}}
+  <main id="main" class="au-c-main-container">
 
-  <div class="au-c-main-container__content">
-    <div class="playground">
-      <div class="playground__codelist">
-        {{!
+    <div class="au-c-main-container__content">
+      <div class="playground">
+        <div class="playground__codelist">
+          {{!
           Glimmer components only have two lifecycle hooks
           This method will set the view to start without a scheme selected
         }}
-        {{this.updateSelectedSchemeTo undefined}}
+          {{this.updateSelectedSchemeTo undefined}}
 
-        <AuHeading @level="2" @skin="3" class="au-u-light">Kies een concept
-          scheme waarvan u de inhoud wil bekijken</AuHeading>
+          <AuHeading @level="2" @skin="3" class="au-u-light">Kies een concept
+            scheme waarvan u de inhoud wil bekijken</AuHeading>
 
-        <div class="au-u-margin-top au-u-margin-bottom">
-          <ConceptSchemeUriSelector @update={{this.updateSelectedSchemeTo}} />
+          <div class="au-u-margin-top au-u-margin-bottom">
+            <ConceptSchemeUriSelector @update={{this.updateSelectedSchemeTo}} />
+          </div>
+
+          <div class="au-u-margin-bottom">
+            <AuLabel>URI: geeft meer informatie en activeert de concept scheme</AuLabel>
+            <AuContent class="au-u-margin-bottom">
+              {{#if this.scheme.uri}}
+                <AuPanel as |Section|>
+                  <Section class="playground__codelist_code">
+                    <a
+                      class="au-c-link"
+                      href={{this.scheme.uri}}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >{{this.scheme.uri}}</a>
+                  </Section>
+                </AuPanel>
+                <AuPanel as |Section|>
+                  <Section class="playground__codelist_code">
+                    <pre>{{this.configurationCode}}</pre>
+                  </Section>
+                </AuPanel>
+              {{else}}
+                <AuHelpText @skin="tertiary">Kies eerst een concept scheme.</AuHelpText>
+              {{/if}}
+              <AuAlert
+                @icon="info-circle"
+                @title="Hoe de concept scheme gebruiken:"
+                @skin="info"
+                @size="small"
+              >
+                <ul class="au-u-margin-bottom-small">
+                  <li>Kopieer de link en plak ze bij
+                    <strong>form:options</strong>
+                    en vervang de link achter
+                    <strong>conceptScheme</strong>
+                    om de concept scheme te activeren.</li>
+                  <li>Sommige links omvatten meer informatie over de concept
+                    scheme zelf. Klik op de link om die informatie te
+                    achterhalen.</li>
+                </ul>
+                <img
+                  src="/img/example-concept-scheme.png"
+                  style="border: 1px solid lightgray;"
+                  alt="concept scheme"
+                  {{! template-lint-disable no-inline-styles}}
+                />
+              </AuAlert>
+            </AuContent>
+          </div>
+
         </div>
+        <div class="playground__show">
 
-        <div class="au-u-margin-bottom">
-          <AuLabel>URI: geeft meer informatie en activeert de concept scheme</AuLabel>
           <AuContent class="au-u-margin-bottom">
+            <AuLabel>Bekijk inhoud van concept schemes</AuLabel>
             {{#if this.scheme.uri}}
-              <AuPanel as |Section|>
-                <Section class="playground__codelist_code">
-                  <a
-                    class="au-c-link"
-                    href={{this.scheme.uri}}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >{{this.scheme.uri}}</a>
-                </Section>
-              </AuPanel>
-              <AuPanel as |Section|>
-                <Section class="playground__codelist_code">
-                  <pre>{{this.configurationCode}}</pre>
-                </Section>
-              </AuPanel>
-            {{else}}
-              <AuHelpText @skin="tertiary">Kies eerst een concept scheme.</AuHelpText>
-            {{/if}}
-            <AuAlert
-              @icon="info-circle"
-              @title="Hoe de concept scheme gebruiken:"
-              @skin="info"
-              @size="small"
-            >
-              <ul class="au-u-margin-bottom-small">
-                <li>Kopieer de link en plak ze bij
-                  <strong>form:options</strong>
-                  en vervang de link achter
-                  <strong>conceptScheme</strong>
-                  om de concept scheme te activeren.</li>
-                <li>Sommige links omvatten meer informatie over de concept
-                  scheme zelf. Klik op de link om die informatie te achterhalen.</li>
+              <ul>
+                {{#each this.scheme.concepts as |concept|}}
+                  <li>
+                    {{concept}}
+                  </li>
+                {{/each}}
               </ul>
-              <img
-                src="/img/example-concept-scheme.png"
-                style="border: 1px solid lightgray;"
-                alt="concept scheme"
-                {{! template-lint-disable no-inline-styles}}
-              />
-            </AuAlert>
+            {{else}}
+              <AuHelpText @skin="tertiary">Kies eerst een concept scheme in het
+                linkerveld.</AuHelpText>
+            {{/if}}
           </AuContent>
         </div>
-
-      </div>
-      <div class="playground__show">
-
-        <AuContent class="au-u-margin-bottom">
-          <AuLabel>Bekijk inhoud van concept schemes</AuLabel>
-          {{#if this.scheme.uri}}
-            <ul>
-              {{#each this.scheme.concepts as |concept|}}
-                <li>
-                  {{concept}}
-                </li>
-              {{/each}}
-            </ul>
-          {{else}}
-            <AuHelpText @skin="tertiary">Kies eerst een concept scheme in het
-              linkerveld.</AuHelpText>
-          {{/if}}
-        </AuContent>
       </div>
     </div>
-  </div>
 
-</main>
+  </main>
 
-{{outlet}}
+  {{outlet}}
+{{/if}}
