@@ -1,15 +1,23 @@
 {{page-title "Edit"}}
-<div class="au-u-padding-small codelijsten__edit">
-  <div class="codelijsten__EditHeading au-u-padding-small">
-    <h1 class="au-u-h1">Codelijsten edit</h1>
+<div class="au-c-toolbar au-c-toolbar--bottom au-c-toolbar--large">
+  <div class="au-c-toolbar__group">
+    <AuHeading @level="1" @skin="2">
+      Codelijsten edit
+    </AuHeading>
+  </div>
+  <div class="au-c-toolbar__group">
     <AuButtonGroup @inline={{this.inline}}>
-      <AuButton @skin="primary" @disabled={{this.isSaveButtonDisabled}}>
-        Save
-      </AuButton>
-      <AuLink @route="codelijsten" @skin="button-secondary">Cancel</AuLink>
+      <AuLink
+        @route="codelijsten"
+        @skin="button-secondary"
+        @icon="arrow-left"
+        @iconAlignment="left"
+      >Terug naar de codelijsten</AuLink>
     </AuButtonGroup>
   </div>
-  <AuHr />
+</div>
+
+<div class="au-u-padding-small codelijsten__edit">
   <span class="codelijsten__scroll au-u-padding-bottom-small">
     {{#if this.isGenericConceptScheme}}
       <AuAlert @title={{"Opgelet"}} @skin={{"warning"}} @icon={{"login"}}>
