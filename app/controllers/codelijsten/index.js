@@ -7,7 +7,7 @@ export default class CodelijstenController extends Controller {
   @service features;
   @tracked scheme;
 
-  sort = '-prefLabel';
+  sort = '-preflabel';
   page = 0;
   size = 20;
   //#region orignal codelijsten
