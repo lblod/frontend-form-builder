@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 
 import { action } from '@ember/object';
+import { A } from '@ember/array';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 
@@ -12,11 +13,12 @@ export default class CodelijstenEditController extends Controller {
   @tracked name;
   @tracked concepts;
   @tracked isDeleteModalOpen;
+  @tracked nameErrorMessage;
 
   @action
   setup(model) {
     this.name = model.conceptScheme.label;
-    this.concepts = new Array(...model.concepts);
+    this.concepts = A(new Array(...model.concepts));
   }
 
   get isSaveDisabled() {
@@ -25,6 +27,95 @@ export default class CodelijstenEditController extends Controller {
 
   get isPrivateConceptScheme() {
     return !this.model.conceptScheme.isPublic;
+  }
+
+  @action
+  handleNameChange(event) {
+    const newName = event.target.value;
+    this.nameErrorMessage = null;
+    console.log('handle name', newName);
+
+    if (!newName || newName.trim() == '') {
+      this.nameErrorMessage = 'Dit veld is verplicht';
+      return;
+    }
+
+    this.name = newName.trim();
+  }
+
+  @action
+  handleConceptChange(concept, event) {
+    if (event.target && event.target.value.trim() == '') {
+      this.toaster.error(
+        `Optie mag niet leeg zijn (${concept.label})`,
+        'Error',
+        {
+          timeOut: 5000,
+        }
+      );
+
+      return;
+    }
+
+    const foundConcept = this.concepts.find((c) => c.id == concept.id);
+    this.concepts[this.concepts.indexOf(foundConcept)].preflabel =
+      event.target.value.trim();
+  }
+
+  @action
+  async addNewConcept() {
+    const concept = this.store.createRecord('concept', {
+      preflabel: '',
+    });
+    await concept.save();
+    this.concepts.pushObject(concept);
+  }
+
+  @action
+  async save() {
+    let conceptScheme = await this.store.findRecord(
+      'concept-scheme',
+      this.model.conceptScheme.id
+    );
+    conceptScheme.preflabel = this.name;
+    try {
+      conceptScheme.save();
+      conceptScheme.reload();
+      this.toaster.success('Codelijst naam bijgewerkt', 'Success', {
+        timeOut: 5000,
+      });
+    } catch (error) {
+      this.toaster.error('Oeps, er is iets mis gegaan', 'Error', {
+        timeOut: 5000,
+      });
+      console.error(error);
+    }
+
+    await this.updateConcepts();
+  }
+
+  async updateConcepts() {
+    for (const concept of this.concepts) {
+      let conceptToUpdate = await this.store.findRecord('concept', concept.id);
+      if (concept.label.trim() == conceptToUpdate.label) {
+        return;
+      }
+
+      conceptToUpdate.preflabel = concept.label;
+      try {
+        conceptToUpdate.save();
+        conceptToUpdate.reload();
+      } catch (error) {
+        this.toaster.error(
+          `Kon concept met id: ${concept.id} niet updaten`,
+          'Error',
+          {
+            timeOut: 5000,
+          }
+        );
+        console.error(error);
+      }
+    }
   }
 
   async deleteConcepts(concepts) {

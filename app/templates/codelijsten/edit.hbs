@@ -1,21 +1,42 @@
 {{page-title "Edit"}}
-<div class="au-c-toolbar au-c-toolbar--bottom au-c-toolbar--large">
-  <div class="au-c-toolbar__group">
-    <AuHeading @level="1" @skin="2">
-      Codelijsten edit
-    </AuHeading>
-  </div>
-  <div class="au-c-toolbar__group">
-    <AuButtonGroup @inline={{this.inline}}>
-      <AuLink
-        @route="codelijsten"
-        @skin="button-secondary"
-        @icon="arrow-left"
-        @iconAlignment="left"
-      >Terug naar de codelijsten</AuLink>
-    </AuButtonGroup>
-  </div>
-</div>
+
+<AuToolbar @size="medium" @skin="tint" @border="bottom" as |Group|>
+  <Group>
+    <ul class="au-c-list-horizontal au-c-list-horizontal--small">
+      <li class="au-c-list-horizontal__item">
+        <AuLink
+          @route="codelijsten"
+          @skin="primary"
+          @icon="arrow-left"
+          @iconAlignment="left"
+        >Terug naar codelijsten</AuLink>
+      </li>
+      <li class="au-c-list-horizontal__item au-u-bold">
+        Codelijst detail
+      </li>
+    </ul>
+  </Group>
+  <AuButtonGroup>
+    <AuButton
+      @skin="primary"
+      @disabled={{this.isSaveDisabled}}
+      {{on "click" this.save}}
+    >
+      Bewaar
+    </AuButton>
+    <AuButton
+      @skin="secondary"
+      @icon="bin"
+      @iconAlignment="left"
+      @alert={{true}}
+      @disabled={{this.isPrivateConceptScheme}}
+      @loadingMessage="Aan het verwijderen"
+      {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
+    >
+      Verwijderen
+    </AuButton>
+  </AuButtonGroup>
+</AuToolbar>
 
 <div class="codelijsten__edit">
   <span class="au-u-padding">
@@ -33,7 +54,11 @@
         @width="block"
         @disabled={{this.isGenericConceptScheme}}
         value={{this.name}}
+        {{on "blur" this.handleNameChange}}
       />
+      {{#if this.nameErrorMessage}}
+        <AuHelpText @error={{true}}>{{this.nameErrorMessage}}</AuHelpText>
+      {{/if}}
     </div>
   </span>
   <div>
@@ -44,17 +69,35 @@
         </tr>
       </:header>
       <:body>
-        {{#each this.concepts as |concept|}}
-          <tr>
-            <td class="au-u-visible-medium-up">
-              {{#if this.isGenericConceptScheme}}
-                <td>{{concept.label}}</td>
+        {{#if this.concepts}}
+          {{#each this.concepts as |concept|}}
+            <tr>
+              {{#if this.isPrivateConceptScheme}}
+                <td class="au-u-visible-medium-up">
+                  {{concept.label}}</td>
               {{else}}
-                <td><AuInput id={{concept.id}} value={{concept.label}} /></td>
+                <td class="au-u-visible-medium-up">
+                  <AuInput
+                    id={{concept.id}}
+                    value={{concept.label}}
+                    {{on "blur" (fn this.handleConceptChange concept)}}
+                  /></td>
               {{/if}}
-            </td>
-          </tr>
-        {{/each}}
+            </tr>
+          {{/each}}
+        {{/if}}
+        <tr class="au-u-flex au-u-flex--center">
+          <td class="au-u-visible-medium-up">
+            <AuButton
+              @skin="secondary"
+              @icon="plus"
+              @iconAlignment="left"
+              {{on "click" this.addNewConcept}}
+            >
+              Voeg een concept toe aan de lijst
+            </AuButton>
+          </td>
+        </tr>
       </:body>
     </AuTable>
   </div>
