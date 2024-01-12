@@ -24,9 +24,4 @@ export default class CodelijstenController extends Controller {
     return JSON.stringify(jsonConfigCode, null, 2).trim();
   }
   //#endregion
-
-  @action
-  openDeleteModal(conceptSchemeModel) {
-    console.log(`delete `, conceptSchemeModel);
-  }
 }

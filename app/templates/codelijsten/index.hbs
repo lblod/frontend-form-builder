@@ -125,11 +125,12 @@
       </div>
     {{else}}
       {{! Start new codelist page }}
-      <AuTable @size={{this.size}} class="au-u-margin-bottom-small">
+      <AuTable class="au-u-margin-bottom-small">
         <:header>
           <tr>
             <th>Naam</th>
             <th>Id</th>
+            <th></th>
           </tr>
         </:header>
         <:body>
@@ -143,6 +144,23 @@
                 >{{conceptScheme.label}}</AuLink>
               </td>
               <td class="au-u-visible-medium-up">{{conceptScheme.id}}</td>
+              <td>
+                {{#if conceptScheme.isPublic}}
+                  <AuPill
+                    @skin="success"
+                    @icon="info-circle"
+                    @iconAlignment="left"
+                  >Eigen codelijst
+                  </AuPill>
+                {{else}}
+                  <AuPill
+                    @skin="warning"
+                    @icon="info-circle"
+                    @iconAlignment="left"
+                  >Generiek
+                  </AuPill>
+                {{/if}}
+              </td>
             </tr>
           {{/each}}
         </:body>

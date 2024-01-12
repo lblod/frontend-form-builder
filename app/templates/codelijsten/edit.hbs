@@ -16,13 +16,29 @@
       </li>
     </ul>
   </Group>
+  <AuButtonGroup>
+    <AuButton @skin="primary" @disabled={{this.isSaveDisabled}}>
+      Bewaar
+    </AuButton>
+    <AuButton
+      @skin="secondary"
+      @icon="bin"
+      @iconAlignment="left"
+      @alert={{true}}
+      @disabled={{this.isPrivateConceptScheme}}
+      @loadingMessage="Aan het verwijderen"
+      {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
+    >
+      Verwijderen
+    </AuButton>
+  </AuButtonGroup>
 </AuToolbar>
 
 <div class="codelijsten__edit">
   <span class="au-u-padding">
-    {{#if this.isGenericConceptScheme}}
+    {{#if this.isPrivateConceptScheme}}
       <AuAlert @title={{"Opgelet"}} @skin={{"warning"}} @icon={{"login"}}>
-        <p>Generieke codelijsten kunnen niet aangepast worden.</p>
+        <p>Niet publieke codelijsten kunnen niet aangepast worden.</p>
       </AuAlert>
     {{/if}}
     <div class="au-u-3-5 au-u-margin-bottom-large">
@@ -32,7 +48,7 @@
       <AuInput
         id="input-codelist-name"
         @width="block"
-        @disabled={{this.isGenericConceptScheme}}
+        @disabled={{this.isPrivateConceptScheme}}
         value={{this.name}}
       />
     </div>
@@ -48,7 +64,7 @@
         {{#each this.concepts as |concept|}}
           <tr>
             <td class="au-u-visible-medium-up">
-              {{#if this.isGenericConceptScheme}}
+              {{#if this.isPrivateConceptScheme}}
                 <td>{{concept.label}}</td>
               {{else}}
                 <td><AuInput id={{concept.id}} value={{concept.label}} /></td>
@@ -60,3 +76,30 @@
     </AuTable>
   </div>
 </div>
+
+<AuModal @modalOpen={{this.isDeleteModalOpen}} @closeModal={{this.close}}>
+  <:title>Codelijst verwijderen?</:title>
+  <:body>
+    Bent u zeker dat u deze codelijst wilt verwijderen? Deze actie is permanent.
+  </:body>
+  <:footer>
+    <AuButtonGroup>
+      <AuButton
+        @icon="bin"
+        @iconAlignment="left"
+        @alert={{true}}
+        @loadingMessage="Aan het verwijderen"
+        {{on "click" this.deleteCodelist}}
+      >
+        Verwijderen
+      </AuButton>
+      <AuButton
+        @skin="secondary"
+        @disabled={{this.delete.isRunning}}
+        {{on "click" (fn (mut this.isDeleteModalOpen) false)}}
+      >
+        Annuleer
+      </AuButton>
+    </AuButtonGroup>
+  </:footer>
+</AuModal>
