@@ -17,7 +17,11 @@
     </ul>
   </Group>
   <AuButtonGroup>
-    <AuButton @skin="primary" @disabled={{this.isSaveDisabled}}>
+    <AuButton
+      @skin="primary"
+      @disabled={{this.isSaveDisabled}}
+      {{on "click" this.save}}
+    >
       Bewaar
     </AuButton>
     <AuButton
@@ -50,7 +54,11 @@
         @width="block"
         @disabled={{this.isPrivateConceptScheme}}
         value={{this.name}}
+        {{on "blur" this.handleNameChange}}
       />
+      {{#if this.nameErrorMessage}}
+        <AuHelpText @error={{true}}>{{this.nameErrorMessage}}</AuHelpText>
+      {{/if}}
     </div>
   </span>
   <div>
@@ -61,17 +69,35 @@
         </tr>
       </:header>
       <:body>
-        {{#each this.concepts as |concept|}}
-          <tr>
-            <td class="au-u-visible-medium-up">
+        {{#if this.concepts}}
+          {{#each this.concepts as |concept|}}
+            <tr>
               {{#if this.isPrivateConceptScheme}}
-                <td>{{concept.label}}</td>
+                <td class="au-u-visible-medium-up">
+                  {{concept.label}}</td>
               {{else}}
-                <td><AuInput id={{concept.id}} value={{concept.label}} /></td>
+                <td class="au-u-visible-medium-up">
+                  <AuInput
+                    id={{concept.id}}
+                    value={{concept.label}}
+                    {{on "blur" (fn this.handleConceptChange concept)}}
+                  /></td>
               {{/if}}
-            </td>
-          </tr>
-        {{/each}}
+            </tr>
+          {{/each}}
+        {{/if}}
+        <tr class="au-u-flex au-u-flex--center">
+          <td class="au-u-visible-medium-up">
+            <AuButton
+              @skin="secondary"
+              @icon="plus"
+              @iconAlignment="left"
+              {{on "click" this.addNewConcept}}
+            >
+              Voeg een concept toe aan de lijst
+            </AuButton>
+          </td>
+        </tr>
       </:body>
     </AuTable>
   </div>
