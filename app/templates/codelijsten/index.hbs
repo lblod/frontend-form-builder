@@ -1,18 +1,34 @@
 {{page-title "Concept schemes"}}
+
+<AuToolbar @size="medium" @skin="tint" @border="bottom" as |Group|>
+  <Group>
+    <ul class="au-c-list-horizontal au-c-list-horizontal--small">
+      <li class="au-c-list-horizontal__item">
+        <AuLink
+          @route="index"
+          @skin="primary"
+          @icon="arrow-left"
+          @iconAlignment="left"
+        >Terug naar formulierenbouwer</AuLink>
+      </li>
+      <li class="au-c-list-horizontal__item au-u-bold">
+        Codelijsten
+      </li>
+    </ul>
+  </Group>
+</AuToolbar>
+
 <div class="au-c-toolbar au-c-toolbar--bottom au-c-toolbar--large">
   <div class="au-c-toolbar__group">
     <AuHeading @level="1" @skin="2">
-      Semantische Formulierenbouwer Loket
+      Codelijsten
     </AuHeading>
   </div>
   <div class="au-c-toolbar__group">
     <AuButtonGroup>
-      <AuLink
-        @route="index"
-        @skin="button-secondary"
-        @icon="arrow-left"
-        @iconAlignment="left"
-      >Terug naar formulierenbouwer</AuLink>
+      <AuButton @skin="primary" @icon="add">
+        Maak een eigen codelijst
+      </AuButton>
     </AuButtonGroup>
   </div>
 </div>
