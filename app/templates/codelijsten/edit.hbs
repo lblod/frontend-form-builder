@@ -86,18 +86,20 @@
             </tr>
           {{/each}}
         {{/if}}
-        <tr class="au-u-flex au-u-flex--center">
-          <td class="au-u-visible-medium-up">
-            <AuButton
-              @skin="secondary"
-              @icon="plus"
-              @iconAlignment="left"
-              {{on "click" this.addNewConcept}}
-            >
-              Voeg een concept toe aan de lijst
-            </AuButton>
-          </td>
-        </tr>
+        {{#unless this.isPrivateConceptScheme}}
+          <tr class="au-u-flex au-u-flex--center">
+            <td class="au-u-visible-medium-up">
+              <AuButton
+                @skin="secondary"
+                @icon="plus"
+                @iconAlignment="left"
+                {{on "click" this.addNewConcept}}
+              >
+                Voeg een concept toe aan de lijst
+              </AuButton>
+            </td>
+          </tr>
+        {{/unless}}
       </:body>
     </AuTable>
   </div>
