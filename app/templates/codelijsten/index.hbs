@@ -117,18 +117,8 @@
         >
           <t.content as |c|>
             <c.header>
-              <AuDataTableThSortable
-                @label="Naam"
-                @field="preflabel"
-                @currentSorting={{this.sort}}
-                class="au-u-visible-medium-up"
-              />
-              <AuDataTableThSortable
-                @label="Id"
-                @field="id"
-                @currentSorting={{this.sort}}
-                class="au-u-visible-medium-up"
-              />
+              <th colspan="1">Name</th>
+              <th colspan="1">Id</th>
               {{#if false}}
                 <th colspan="1"></th>
               {{/if}}
