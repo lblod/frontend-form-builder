@@ -9,10 +9,12 @@ export default class CodelijstenEditRoute extends Route {
   }
 
   async model(params) {
+    const conceptScheme = await this.getConceptSchemeById(params.id);
+
     return {
-      conceptScheme: await this.getConceptSchemeById(params.id),
+      conceptScheme: conceptScheme,
       concepts: await this.getConceptsOfConceptSchemeById(params.id),
-      isGenericConceptScheme: true,
+      isGenericConceptScheme: conceptScheme.isPrivate,
     };
   }
 
