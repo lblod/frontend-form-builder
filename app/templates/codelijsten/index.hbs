@@ -26,9 +26,12 @@
   </div>
   <div class="au-c-toolbar__group">
     <AuButtonGroup>
-      <AuButton @skin="primary" @icon="add">
-        Maak een eigen codelijst
-      </AuButton>
+      <AuLink
+        @route="codelijsten.new"
+        @skin="button"
+        @icon="plus"
+        @iconAlignment="left"
+      >Maak een codelijst</AuLink>
     </AuButtonGroup>
   </div>
 </div>
