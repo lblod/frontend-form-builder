@@ -14,7 +14,6 @@ export default class CodelijstenEditRoute extends Route {
     return {
       conceptScheme: conceptScheme,
       concepts: await this.getConceptsOfConceptSchemeById(params.id),
-      isGenericConceptScheme: conceptScheme.isPrivate,
     };
   }
 

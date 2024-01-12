@@ -7,8 +7,8 @@ export default class CodelijstenNewRoute extends Route {
 
   async model() {
     const conceptScheme = this.store.createRecord('concept-scheme', {
-      preflabel: 'Nieuwe codelijst',
-      isPublic: true,
+      preflabel: '<naam codelijst>',
+      ispublic: true,
     });
     await conceptScheme.save();
 
