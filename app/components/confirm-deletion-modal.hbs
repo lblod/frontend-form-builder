@@ -15,7 +15,7 @@
         @alert={{true}}
         @disabled={{this.delete.isRunning}}
         @loading={{this.delete.isRunning}}
-        @loadingMessage="Aan het verwijderen"
+        @loadingMessage={{t "messages.feedback.isDeleting"}}
         {{on "click" (perform this.delete)}}
         data-test-confirm-deletion-modal="delete-button"
       >

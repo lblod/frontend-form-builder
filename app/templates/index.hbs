@@ -10,7 +10,7 @@
       @skin="primary" @icon="add"
       {{on "click" this.openCreateFormModal}}
     >
-      {{t "main.createNew"}}
+      {{t "main.createNewForm"}}
     </AuButton>
   </div>
 </div>
@@ -21,7 +21,7 @@
       <AuDataTable
         @content={{this.model}}
         @isLoading={{this.isLoadingModel}}
-        @noDataMessage="Geen formulieren gevonden"
+        @noDataMessage={{t "messages.feedback.noFormsFound"}}
         @sort={{this.sort}}
         @page={{this.page}}
         @size={{this.size}}
@@ -29,14 +29,14 @@
       >
         <t.content as |c|>
           <c.header>
-            <AuDataTableThSortable @label='Name' @field='label' @currentSorting={{this.sort}}
+            <AuDataTableThSortable @label='Naam' @field='label' @currentSorting={{this.sort}}
               class="au-u-visible-medium-up" />
-            <AuDataTableThSortable @label='Description' @field='comment' @currentSorting={{this.sort}}
+            <AuDataTableThSortable @label='Beschrijving' @field='comment' @currentSorting={{this.sort}}
               class="au-u-visible-medium-up" />
 
-            <AuDataTableThSortable @label='Created on' @field='created' @currentSorting={{this.sort}}
+            <AuDataTableThSortable @label='Aangemaakt op' @field='created' @currentSorting={{this.sort}}
               class="au-u-visible-small-up" />
-            <AuDataTableThSortable @label='Updated on' @field='modified' @currentSorting={{this.sort}}
+            <AuDataTableThSortable @label='Aangepast op' @field='modified' @currentSorting={{this.sort}}
               class="au-u-visible-small-up" />
             <th colspan="2">Actions</th>
           </c.header>
@@ -49,7 +49,7 @@
             <td class="au-u-visible-medium-up">
               <LinkTo @route="user-tests.new" @query={{hash form=generatedForm.id}} class="au-c-link">
                 <AuIcon @icon="eye" @alignment="left" @size="large" @ariaHidden={{true}} />
-                Preview
+                Voorbeeld
               </LinkTo>
             </td>
             <td class="au-u-visible-medium-up">
@@ -59,7 +59,7 @@
                 @alert={{true}}
                 {{on "click" (fn this.openDeleteModal generatedForm)}}
               >
-                Delete
+                Verwijder
               </AuButton>
             </td>
           </c.body>

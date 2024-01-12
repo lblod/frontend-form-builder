@@ -1,60 +1,65 @@
 main:
-  title: "Semantic form-builder Loket"
-  createNew: "Create new semantic form"
+  title: "Semantische Formulierenbouwer Loket"
+  createNewForm: "Maak nieuw semantisch formulier"
 
 navigation:
-  backToOverview: "Back to overview"
-  backToFormBuilder: "Back to form-builder"
+  backToFormOverview: "Terug naar formulieren"
+  backToFormBuilder: "Terug naar formulierenbouwer"
 
 formBuilder:
   edit:
     tabs:
       code: "Code"
-      build: "Builder"
-      validations: "Validations"
+      build: "Bouwer"
+      validations: "Validaties"
 
 messages:
   error:
-    couldNotFetchFormWithId: "Could not fetch generated-form with id: {id}"
-    somethingWentWrong: "Oops, something went wrong"
-    cannotAddValidationsToEmptyForm: "Cannot add validations to an empty form."
-    duplicateValidationType: "Validation {type} is duplicate."
+    couldNotFetchFormWithId: "Kon formulier met id: {id} niet vinden"
+    somethingWentWrong: "Oeps, er is iets mis gegaan"
+    cannotAddValidationsToEmptyForm: "Kan geen validaties toevoegen aan een leeg formulier"
+    duplicateValidationType: "Validatietype {type} is duplicaat"
   success:
-    formCreated: "Form created successfully"
-    formUpdated: "Form updated successfully"
-    formDeleted: "Form: {name} deleted"
+    formCreated: "Formulier succesvol aangemaakt"
+    formUpdated: "Formulier bijgewerkt"
+    formDeleted: "Formulier: {name} verwijderd"
+  feedback:
+    noFieldSelected: "Geen veld geselecteerd"
+    isLoading: "Aan het laden..."
+    isDeleting: "Aan het verwijderen"
+    noResults: "Geen resultaten gevonden"
+    noFormsFound: "Geen formulieren gevonden"
 
 toolbar:
-  backToOverview: "Back to overview"
-  savedOn: "Saved on"
-  exportCode: "Export code"
-  unSavedChanges: "Form has unsaved changes"
-  formUpToDate: "Form is up-to-date"
-  codelists: "Codelists"
+  savedOn: "Bewaard op"
+  exportCode: "Exporteer code"
+  unSavedChanges: "Aanpassingen nog niet bewaard"
+  formUpToDate: "Formulier up-to-date"
+  codelists: "Codelijsten"
 
 editNameModal:
-  name: "Name"
-  description: "Description"
-  createForm: "Create form"
+  title: "Geef een naam en beschrijving"
+  name: "Naam"
+  description: "Beschrijving"
+  createForm: "Bouw formulier"
 
 codelists:
-  chooseList: "Choose a concept scheme whose content you wish to view"
-  uri: "URI: gives more information and activates the concept scheme"
-  chooseConcept: "Choose a concept scheme"
-  contentOfList: "View content of concept schemes"
-  chooseLeftFirst: "First, choose a concept scheme in the left field."
+  chooseList: "Kies een concept scheme waarvan u de inhoud wil bekijken"
+  uri: "URI: geeft meer informatie en activeert de concept scheme"
+  chooseConcept: "Kies eerst een concept scheme."
+  contentOfList: "Bekijk inhoud van concept schemes"
+  chooseLeftFirst: "Kies eerst een concept scheme in het linkerveld."
 
 confirmation:
-  deleteTitle: "Delete form?"
-  deleteQuestion: "Are you sure you want to delete this form? This action is permanent."
-  cancel: "Cancel"
+  deleteTitle: "Formulier verwijderen?"
+  deleteQuestion: "Bent u zeker dat u dit formulier wilt verwijderen? Deze actie is permanent."
 
 constraints:
-  mandatoryName: "Please fill in the name"
-  duplicateName: "Name is already used"
+  mandatoryField: "Dit is een verplicht veld"
+  duplicateName: "Deze naam is al eens gebruikt"
 
 crud:
-  save: "Save"
-  delete: "Delete"
-  update: "Update"
-  cancel: "Cancel"
+  save: "Bewaar"
+  delete: "Verwijder"
+  update: "Bijwerken"
+  cancel: "Annuleer"
