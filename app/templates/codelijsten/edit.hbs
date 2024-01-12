@@ -37,32 +37,25 @@
     </div>
   </span>
   <div>
-    {{#if this.concepts}}
-      <AuDataTable
-        @content={{this.concepts}}
-        @fields="preflabel"
-        @noDataMessage="Geen concepten"
-        @sort={{this.sort}}
-        as |t|
-      >
-        <t.content as |c|>
-          <c.header>
-            <AuDataTableThSortable
-              @field="preflabel"
-              @currentSorting={{this.sort}}
-              @label="Label"
-              @class="data-table__header-title"
-            />
-          </c.header>
-          <c.body as |concept|>
-            {{#if this.isGenericConceptScheme}}
-              <td>{{concept.label}}</td>
-            {{else}}
-              <td><AuInput id={{concept.id}} value={{concept.label}} /></td>
-            {{/if}}
-          </c.body>
-        </t.content>
-      </AuDataTable>
-    {{/if}}
+    <AuTable class="au-u-margin-bottom-small">
+      <:header>
+        <tr>
+          <th>Label</th>
+        </tr>
+      </:header>
+      <:body>
+        {{#each this.concepts as |concept|}}
+          <tr>
+            <td class="au-u-visible-medium-up">
+              {{#if this.isGenericConceptScheme}}
+                <td>{{concept.label}}</td>
+              {{else}}
+                <td><AuInput id={{concept.id}} value={{concept.label}} /></td>
+              {{/if}}
+            </td>
+          </tr>
+        {{/each}}
+      </:body>
+    </AuTable>
   </div>
 </div>
