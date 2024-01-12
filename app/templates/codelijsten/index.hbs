@@ -106,34 +106,16 @@
       </div>
     {{else}}
       {{! Start new codelist page }}
-      <div class="au-c-body-container removeTableLines">
-        <AuDataTable
-          @content={{this.model}}
-          @isLoading={{this.isLoadingModel}}
-          @noDataMessage="Geen codelijsten gevonden"
-          @page={{this.page}}
-          @size={{this.size}}
-          as |t|
-        >
-          <t.content as |c|>
-            <c.header>
-              <AuDataTableThSortable
-                @label="Naam"
-                @field="preflabel"
-                @currentSorting={{this.sort}}
-                class="au-u-visible-medium-up"
-              />
-              <AuDataTableThSortable
-                @label="Id"
-                @field="id"
-                @currentSorting={{this.sort}}
-                class="au-u-visible-medium-up"
-              />
-              {{#if false}}
-                <th colspan="1"></th>
-              {{/if}}
-            </c.header>
-            <c.body as |conceptScheme|>
+      <AuTable @size={{this.size}} class="au-u-margin-bottom-small">
+        <:header>
+          <tr>
+            <th>Naam</th>
+            <th>Id</th>
+          </tr>
+        </:header>
+        <:body>
+          {{#each this.model as |conceptScheme|}}
+            <tr>
               <td class="au-u-visible-medium-up">
                 <AuLink
                   @route="codelijsten.edit"
@@ -142,23 +124,10 @@
                 >{{conceptScheme.label}}</AuLink>
               </td>
               <td class="au-u-visible-medium-up">{{conceptScheme.id}}</td>
-              {{#if false}}
-                <td class="au-u-visible-medium-up">
-                  <AuButton
-                    @skin="link"
-                    @icon="bin"
-                    @alert={{true}}
-                    {{on "click" (fn this.openDeleteModal conceptScheme)}}
-                  >
-                    Verwijder
-                  </AuButton>
-                </td>
-              {{/if}}
-
-            </c.body>
-          </t.content>
-        </AuDataTable>
-      </div>
+            </tr>
+          {{/each}}
+        </:body>
+      </AuTable>
     {{/if}}
   </div>
 </main>
