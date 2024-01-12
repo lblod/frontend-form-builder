@@ -129,7 +129,9 @@
                 @currentSorting={{this.sort}}
                 class="au-u-visible-medium-up"
               />
-              <th colspan="1">Acties</th>
+              {{#if false}}
+                <th colspan="1"></th>
+              {{/if}}
             </c.header>
             <c.body as |conceptScheme|>
               <td class="au-u-visible-medium-up">
@@ -140,16 +142,19 @@
                 >{{conceptScheme.label}}</AuLink>
               </td>
               <td class="au-u-visible-medium-up">{{conceptScheme.id}}</td>
-              <td class="au-u-visible-medium-up">
-                <AuButton
-                  @skin="link"
-                  @icon="bin"
-                  @alert={{true}}
-                  {{on "click" (fn this.openDeleteModal conceptScheme)}}
-                >
-                  Verwijder
-                </AuButton>
-              </td>
+              {{#if false}}
+                <td class="au-u-visible-medium-up">
+                  <AuButton
+                    @skin="link"
+                    @icon="bin"
+                    @alert={{true}}
+                    {{on "click" (fn this.openDeleteModal conceptScheme)}}
+                  >
+                    Verwijder
+                  </AuButton>
+                </td>
+              {{/if}}
+
             </c.body>
           </t.content>
         </AuDataTable>
