@@ -15,6 +15,7 @@ export default class CodelijstenEditController extends Controller {
   @tracked conceptsToDelete;
   @tracked isConceptListUnchanged;
   @tracked isDeleteModalOpen;
+  @tracked isDuplicateName;
   @tracked nameErrorMessage;
 
   @action
@@ -30,11 +31,13 @@ export default class CodelijstenEditController extends Controller {
       })
     );
     this.isConceptListUnchanged = true;
+    this.isDuplicateName = false;
   }
 
   get isSaveDisabled() {
     return (
       this.isPrivateConceptScheme ||
+      this.isDuplicateName ||
       (this.model.conceptScheme.label.trim() == this.name.trim() &&
         this.isConceptListUnchanged)
     );
@@ -45,7 +48,7 @@ export default class CodelijstenEditController extends Controller {
   }
 
   @action
-  handleNameChange(event) {
+  async handleNameChange(event) {
     const newName = event.target.value;
     this.nameErrorMessage = null;
 
@@ -54,6 +57,10 @@ export default class CodelijstenEditController extends Controller {
     }
 
     this.name = newName.trim();
+    this.isDuplicateName = await this.isNameDuplicate();
+    if (this.name !== '' && this.isDuplicateName) {
+      this.nameErrorMessage = `Naam is duplicaat`;
+    }
   }
 
   @action
@@ -262,5 +269,21 @@ export default class CodelijstenEditController extends Controller {
     }
 
     return false;
+  }
+  async isNameDuplicate() {
+    const duplicates = await this.store.query('concept-scheme', {
+      filter: {
+        ':exact:preflabel': this.name,
+      },
+    });
+
+    if (
+      duplicates.length == 1 &&
+      duplicates[0].id == this.model.conceptScheme.id
+    ) {
+      return false;
+    }
+
+    return duplicates.length !== 0;
   }
 }
