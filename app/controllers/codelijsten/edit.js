@@ -12,6 +12,7 @@ export default class CodelijstenEditController extends Controller {
 
   @tracked name;
   @tracked concepts;
+  @tracked isConceptListUnchanged = true;
   @tracked isDeleteModalOpen;
   @tracked nameErrorMessage;
 
@@ -29,7 +30,11 @@ export default class CodelijstenEditController extends Controller {
   }
 
   get isSaveDisabled() {
-    return !this.model.conceptScheme.isPublic;
+    return (
+      !this.model.conceptScheme.isPublic ||
+      (this.model.conceptScheme.label.trim() == this.name.trim() &&
+        this.isConceptListUnchanged)
+    );
   }
 
   get isPrivateConceptScheme() {
@@ -66,6 +71,8 @@ export default class CodelijstenEditController extends Controller {
     const foundConcept = this.concepts.find((c) => c.id == concept.id);
     this.concepts[this.concepts.indexOf(foundConcept)].label =
       event.target.value.trim();
+
+    this.isConceptListUnchanged = !this.isConceptListChanged();
   }
 
   @action
@@ -106,6 +113,9 @@ export default class CodelijstenEditController extends Controller {
   async updateConcepts() {
     for (const concept of this.concepts) {
       let conceptToUpdate = await this.store.findRecord('concept', concept.id);
+      if (concept.label.trim() == '') {
+        conceptToUpdate.destroyRecord();
+      }
       if (
         concept.label.trim() == conceptToUpdate.label ||
         concept.label.trim() == ''
@@ -169,12 +179,7 @@ export default class CodelijstenEditController extends Controller {
       const deletedAllConcepts = await this.deleteConcepts(this.concepts);
 
       if (deletedAllConcepts) {
-        // const conceptScheme = await this.store.findRecord(
-        //   'concept-concept-scheme',
-        //   this.model.id
-        // );
         await this.model.conceptScheme.destroyRecord();
-        this.router.transitionTo('codelijsten');
 
         this.toaster.success(
           'Codelijst: ' + this.name + ' verwijderd',
@@ -183,6 +188,7 @@ export default class CodelijstenEditController extends Controller {
             timeOut: 5000,
           }
         );
+        this.router.transitionTo('codelijsten');
       } else {
         this.toaster.warning(
           'Codelijst: ' + this.name + ' niet verwijderd',
@@ -200,5 +206,31 @@ export default class CodelijstenEditController extends Controller {
       });
       console.error(err);
     }
+  }
+
+  isConceptListChanged() {
+    if (this.concepts.length == 0) return false;
+
+    const existingConceptIdsOnScheme = this.model.concepts.map(
+      (concept) => concept.id
+    );
+    const existingConceptLabelsOnScheme = this.model.concepts.map(
+      (concept) => concept.label
+    );
+
+    for (const concept of this.concepts) {
+      if (concept.label.trim() == '') {
+        return false;
+      }
+
+      if (!existingConceptIdsOnScheme.includes(concept.id)) {
+        return true;
+      }
+      if (!existingConceptLabelsOnScheme.includes(concept.label)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
