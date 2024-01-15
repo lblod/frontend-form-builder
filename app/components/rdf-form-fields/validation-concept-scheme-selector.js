@@ -17,6 +17,7 @@ import {
 import { showErrorToasterMessage } from '../../utils/toaster-message-helper';
 import { FORM, RDF, SH } from '../../utils/rdflib';
 import { getGroupingTypeForValidation } from '../../utils/validation/get-grouping-type-for-validation';
+import { getDefaultErrorMessageForValidation } from '../../utils/validation/get-default-error-message-for-validation';
 
 function byLabel(a, b) {
   const textA = a.label.toUpperCase();
@@ -164,6 +165,12 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
         this.storeOptions.metaGraph
       );
 
+      const defaultErrorMessage = getDefaultErrorMessageForValidation(
+        this.selectedValidationType.subject,
+        this.storeOptions.store,
+        this.storeOptions.metaGraph
+      );
+
       const validationPathStatement =
         this.getStatementToAddFieldPathToValidationPath(
           this.storeOptions.sourceNode,
@@ -178,10 +185,17 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
           groupingType,
           this.storeOptions.sourceGraph
         );
+      const defaultErrorMessageStatement =
+        this.createStatementForDefaultErrorMessage(
+          this.storeOptions.sourceNode,
+          defaultErrorMessage.value,
+          this.storeOptions.sourceGraph
+        );
 
       this.storeOptions.store.addAll([
         validationPathStatement,
         ...rdfTypeAndGroupingStatements,
+        defaultErrorMessageStatement,
       ]);
     }
 
@@ -220,6 +234,19 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
       new Statement(sourceNode, RDF('type'), rdfType, graph),
       new Statement(sourceNode, FORM('grouping'), groupingType, graph),
     ];
+  }
+
+  createStatementForDefaultErrorMessage(
+    sourceNode,
+    defaultErrorMessage,
+    graph
+  ) {
+    return new Statement(
+      sourceNode,
+      SH('resultMessage'),
+      defaultErrorMessage,
+      graph
+    );
   }
 
   getStatementToAddFieldPathToValidationPath(validationSubject, store, graph) {
