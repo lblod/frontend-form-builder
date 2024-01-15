@@ -23,6 +23,10 @@ export default class CodelijstenEditRoute extends Route {
     controller.setup(model);
   }
 
+  async resetController(controller) {
+    await controller.removeEmptyConcepts();
+  }
+
   async getConceptSchemeById(conceptSchemeId) {
     try {
       const conceptScheme = await this.store.findRecord(

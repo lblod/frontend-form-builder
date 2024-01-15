@@ -159,6 +159,14 @@ export default class CodelijstenEditController extends Controller {
     }
   }
 
+  async removeEmptyConcepts() {
+    const emptyConcepts = this.concepts.filter(
+      (concept) => concept.label.trim() == ''
+    );
+
+    await this.deleteConcepts(emptyConcepts);
+  }
+
   async deleteConcepts(concepts) {
     if (!concepts || concepts.length == 0) {
       return true;
