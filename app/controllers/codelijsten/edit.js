@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { A } from '@ember/array';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
+import { NAME_INPUT_CHAR_LIMIT } from '../../utils/constants';
 
 export default class CodelijstenEditController extends Controller {
   @service toaster;
@@ -38,6 +39,7 @@ export default class CodelijstenEditController extends Controller {
     return (
       this.isPrivateConceptScheme ||
       this.isDuplicateName ||
+      this.name.length > NAME_INPUT_CHAR_LIMIT ||
       (this.model.conceptScheme.label.trim() == this.name.trim() &&
         this.isConceptListUnchanged)
     );
@@ -60,6 +62,10 @@ export default class CodelijstenEditController extends Controller {
     this.isDuplicateName = await this.isNameDuplicate();
     if (this.name !== '' && this.isDuplicateName) {
       this.nameErrorMessage = `Naam is duplicaat`;
+    }
+
+    if (this.name.length > NAME_INPUT_CHAR_LIMIT) {
+      this.nameErrorMessage = 'Maximum characters exceeded';
     }
   }
 
