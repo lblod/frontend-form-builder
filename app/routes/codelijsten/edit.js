@@ -24,7 +24,7 @@ export default class CodelijstenEditRoute extends Route {
   }
 
   async resetController(controller) {
-    await controller.removeEmptyConcepts();
+    await controller.removeEmptyConceptsAndScheme();
   }
 
   async getConceptSchemeById(conceptSchemeId) {

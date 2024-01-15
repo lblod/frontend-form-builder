@@ -171,12 +171,16 @@ export default class CodelijstenEditController extends Controller {
     }
   }
 
-  async removeEmptyConcepts() {
+  async removeEmptyConceptsAndScheme() {
     const emptyConcepts = this.concepts.filter(
       (concept) => concept.label.trim() == ''
     );
 
     await this.deleteConcepts(emptyConcepts);
+
+    if (this.model.conceptScheme.label.trim() == '') {
+      await this.deleteCodelist();
+    }
   }
 
   async deleteConcepts(concepts) {
