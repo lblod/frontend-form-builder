@@ -13,7 +13,7 @@ export default class CodelijstenEditRoute extends Route {
 
     return {
       conceptScheme: conceptScheme,
-      concepts: await this.getConceptsOfConceptSchemeById(params.id),
+      concepts: await conceptScheme.concepts,
     };
   }
 
@@ -23,21 +23,6 @@ export default class CodelijstenEditRoute extends Route {
     controller.setup(model);
   }
 
-  async getConceptsOfConceptSchemeById(conceptSchemeId) {
-    try {
-      const concepts = await this.store.query('concept', {
-        filter: {
-          'concept-schemes': {
-            ':id:': conceptSchemeId,
-          },
-        },
-      });
-
-      return concepts;
-    } catch (error) {
-      throw `Could not fetch concepts from concept-scheme with id: ${conceptSchemeId}`;
-    }
-  }
   async getConceptSchemeById(conceptSchemeId) {
     try {
       const conceptScheme = await this.store.findRecord(
