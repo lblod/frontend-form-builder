@@ -66,7 +66,7 @@ export default class ToolbarComponent extends Component {
       await form.save();
       this.toaster.success(
         this.intl.t('messages.success.formUpdated'),
-        'Success',
+        this.intl.t('messages.subjects.success'),
         {
           timeOut: 5000,
         }
@@ -76,7 +76,7 @@ export default class ToolbarComponent extends Component {
     } catch (err) {
       this.toaster.error(
         this.intl.t('messages.error.somethingWentWrong'),
-        'Error',
+        this.intl.t('messages.subjects.error'),
         {
           timeOut: 5000,
         }
@@ -99,8 +99,10 @@ export default class ToolbarComponent extends Component {
 
     if (this.formLabel.length > NAME_INPUT_CHAR_LIMIT) {
       this.toaster.warning(
-        `The max character limit is ${NAME_INPUT_CHAR_LIMIT}`,
-        'Characters',
+        this.intl.t('constraints.maxCharactersReachedWithCount', {
+          count: NAME_INPUT_CHAR_LIMIT,
+        }),
+        this.intl.t('messages.subjects.characters'),
         {
           timeOut: 5000,
         }
@@ -121,9 +123,13 @@ export default class ToolbarComponent extends Component {
     }
 
     if (formsWithDuplicateName.length >= 1) {
-      this.toaster.error('This name already exists', 'Error', {
-        timeOut: 5000,
-      });
+      this.toaster.error(
+        this.intl.t('constraints.duplicateName'),
+        this.intl.t('messages.subjects.error'),
+        {
+          timeOut: 5000,
+        }
+      );
       return;
     }
 

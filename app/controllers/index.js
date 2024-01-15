@@ -31,7 +31,7 @@ export default class IndexController extends Controller {
         this.intl.t('messages.success.formDeleted', {
           name: this.formToDelete.label,
         }),
-        'Success',
+        this.intl.t('messages.subjects.success'),
         {
           timeOut: 5000,
         }
@@ -40,7 +40,7 @@ export default class IndexController extends Controller {
     } catch (err) {
       this.toaster.error(
         this.intl.t('messages.error.somethingWentWrong'),
-        'Error',
+        this.intl.t('messages.subjects.error'),
         {
           timeOut: 5000,
         }

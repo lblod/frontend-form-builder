@@ -14,6 +14,10 @@ formBuilder:
       validations: "Validaties"
 
 messages:
+  subjects:
+    success: "Success"
+    error: "Error"
+    characters: "Karakters"
   error:
     couldNotFetchFormWithId: "Kon formulier met id: {id} niet vinden"
     somethingWentWrong: "Oeps, er is iets mis gegaan"
@@ -29,6 +33,7 @@ messages:
     isDeleting: "Aan het verwijderen"
     noResults: "Geen resultaten gevonden"
     noFormsFound: "Geen formulieren gevonden"
+    remainingCharacters: "Karakters: {currentCount}"
 
 toolbar:
   savedOn: "Bewaard op"
@@ -57,6 +62,8 @@ confirmation:
 constraints:
   mandatoryField: "Dit is een verplicht veld"
   duplicateName: "Deze naam is al eens gebruikt"
+  maxCharactersReached: "Max. karakters overschreden"
+  maxCharactersReachedWithCount: "Max. karakters van {count} overschreden"
 
 crud:
   save: "Bewaar"

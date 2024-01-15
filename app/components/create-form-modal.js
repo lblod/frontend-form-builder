@@ -78,14 +78,16 @@ export default class CreateFormModal extends Component {
     }
 
     if (this.name.length > NAME_INPUT_CHAR_LIMIT) {
-      return `Maximum characters exceeded`;
+      return this.intl.t('constraints.maxCharactersReached');
     }
 
     return false;
   }
 
   get getCharacters() {
-    return `Remaing characters: ${NAME_INPUT_CHAR_LIMIT - this.name.length}`;
+    return this.intl.t('messages.feedback.remainingCharacters', {
+      currentCount: NAME_INPUT_CHAR_LIMIT - this.name.length,
+    });
   }
 
   get disableSubmit() {
