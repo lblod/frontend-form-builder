@@ -27,8 +27,12 @@ export default class CodelijstenEditRoute extends Route {
     try {
       const conceptScheme = await this.store.findRecord(
         'concept-scheme',
-        conceptSchemeId
+        conceptSchemeId,
+        {
+          include: 'concepts',
+        }
       );
+      await conceptScheme.reload();
 
       return conceptScheme;
     } catch (error) {
