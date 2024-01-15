@@ -18,7 +18,14 @@ export default class CodelijstenEditController extends Controller {
   @action
   setup(model) {
     this.name = model.conceptScheme.label;
-    this.concepts = A(new Array(...model.concepts));
+    this.concepts = A(
+      new Array(...model.concepts).map((concept) => {
+        return {
+          id: concept.id,
+          label: concept.label,
+        };
+      })
+    );
   }
 
   get isSaveDisabled() {
@@ -33,7 +40,6 @@ export default class CodelijstenEditController extends Controller {
   handleNameChange(event) {
     const newName = event.target.value;
     this.nameErrorMessage = null;
-    console.log('handle name', newName);
 
     if (!newName || newName.trim() == '') {
       this.nameErrorMessage = 'Dit veld is verplicht';
@@ -58,7 +64,7 @@ export default class CodelijstenEditController extends Controller {
     }
 
     const foundConcept = this.concepts.find((c) => c.id == concept.id);
-    this.concepts[this.concepts.indexOf(foundConcept)].preflabel =
+    this.concepts[this.concepts.indexOf(foundConcept)].label =
       event.target.value.trim();
   }
 
@@ -66,29 +72,32 @@ export default class CodelijstenEditController extends Controller {
   async addNewConcept() {
     const concept = this.store.createRecord('concept', {
       preflabel: '',
+      conceptSchemes: [this.model.conceptScheme],
     });
     await concept.save();
-    this.concepts.pushObject(concept);
+    await concept.reload();
+    this.concepts.pushObject({
+      id: concept.id,
+      label: concept.label,
+    });
   }
 
   @action
   async save() {
-    let conceptScheme = await this.store.findRecord(
-      'concept-scheme',
-      this.model.conceptScheme.id
-    );
-    conceptScheme.preflabel = this.name;
-    try {
-      conceptScheme.save();
-      conceptScheme.reload();
-      this.toaster.success('Codelijst naam bijgewerkt', 'Success', {
-        timeOut: 5000,
-      });
-    } catch (error) {
-      this.toaster.error('Oeps, er is iets mis gegaan', 'Error', {
-        timeOut: 5000,
-      });
-      console.error(error);
+    if (this.model.conceptScheme.label.trim() !== this.name) {
+      this.model.conceptScheme.preflabel = this.name;
+      try {
+        this.model.conceptScheme.save();
+        this.model.conceptScheme.reload();
+        this.toaster.success('Codelijst naam bijgewerkt', 'Success', {
+          timeOut: 5000,
+        });
+      } catch (error) {
+        this.toaster.error('Oeps, er is iets mis gegaan', 'Error', {
+          timeOut: 5000,
+        });
+        console.error(error);
+      }
     }
 
     await this.updateConcepts();
@@ -97,14 +106,20 @@ export default class CodelijstenEditController extends Controller {
   async updateConcepts() {
     for (const concept of this.concepts) {
       let conceptToUpdate = await this.store.findRecord('concept', concept.id);
-      if (concept.label.trim() == conceptToUpdate.label) {
-        return;
+      if (
+        concept.label.trim() == conceptToUpdate.label ||
+        concept.label.trim() == ''
+      ) {
+        continue;
       }
 
       conceptToUpdate.preflabel = concept.label;
       try {
         conceptToUpdate.save();
         conceptToUpdate.reload();
+        this.toaster.success('Concepten bijgewerkt', 'Success', {
+          timeOut: 5000,
+        });
       } catch (error) {
         this.toaster.error(
           `Kon concept met id: ${concept.id} niet updaten`,
@@ -150,7 +165,6 @@ export default class CodelijstenEditController extends Controller {
 
   @action
   async deleteCodelist() {
-    console.log(this.model.conceptScheme);
     try {
       const deletedAllConcepts = await this.deleteConcepts(this.concepts);
 
