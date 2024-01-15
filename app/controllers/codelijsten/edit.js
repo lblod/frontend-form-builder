@@ -34,7 +34,7 @@ export default class CodelijstenEditController extends Controller {
 
   get isSaveDisabled() {
     return (
-      !this.model.conceptScheme.isPublic ||
+      this.isPrivateConceptScheme ||
       (this.model.conceptScheme.label.trim() == this.name.trim() &&
         this.isConceptListUnchanged)
     );
@@ -51,7 +51,6 @@ export default class CodelijstenEditController extends Controller {
 
     if (!newName || newName.trim() == '') {
       this.nameErrorMessage = 'Dit veld is verplicht';
-      return;
     }
 
     this.name = newName.trim();
