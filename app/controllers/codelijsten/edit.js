@@ -12,13 +12,15 @@ export default class CodelijstenEditController extends Controller {
 
   @tracked name;
   @tracked concepts;
-  @tracked isConceptListUnchanged = true;
+  @tracked conceptsToDelete;
+  @tracked isConceptListUnchanged;
   @tracked isDeleteModalOpen;
   @tracked nameErrorMessage;
 
   @action
   setup(model) {
     this.name = model.conceptScheme.label;
+    this.conceptsToDelete = [];
     this.concepts = A(
       new Array(...model.concepts).map((concept) => {
         return {
@@ -27,6 +29,7 @@ export default class CodelijstenEditController extends Controller {
         };
       })
     );
+    this.isConceptListUnchanged = true;
   }
 
   get isSaveDisabled() {
@@ -107,7 +110,10 @@ export default class CodelijstenEditController extends Controller {
       }
     }
 
+    await this.deleteConcepts(this.conceptsToDelete);
+
     await this.updateConcepts();
+    this.isConceptListUnchanged = true;
   }
 
   async updateConcepts() {
@@ -143,6 +149,16 @@ export default class CodelijstenEditController extends Controller {
     }
   }
 
+  @action
+  temporaryDeleteConcept(concept) {
+    const conceptToDelete = this.concepts.find((con) => con.id == concept.id);
+    if (conceptToDelete) {
+      this.concepts.removeObject(conceptToDelete);
+      this.conceptsToDelete.push(conceptToDelete);
+      this.isConceptListUnchanged = false;
+    }
+  }
+
   async deleteConcepts(concepts) {
     if (!concepts || concepts.length == 0) {
       return true;
@@ -155,7 +171,14 @@ export default class CodelijstenEditController extends Controller {
           'concept',
           conceptToDelete.id
         );
-        concept.destroyRecord();
+        await concept.destroyRecord();
+        this.toaster.warning(
+          `Concept met id ${concept.id} successvol verwijderd`,
+          'Success',
+          {
+            timeOut: 5000,
+          }
+        );
       } catch (error) {
         allConceptsRemoved = false;
         this.toaster.error(

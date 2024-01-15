@@ -66,6 +66,9 @@
       <:header>
         <tr>
           <th>Label</th>
+          {{#unless this.isPrivateConceptScheme}}
+            <th>Acties</th>
+          {{/unless}}
         </tr>
       </:header>
       <:body>
@@ -83,11 +86,25 @@
                     {{on "blur" (fn this.handleConceptChange concept)}}
                   /></td>
               {{/if}}
+              {{#unless this.isPrivateConceptScheme}}
+                <td class="au-u-visible-medium-up">
+                  <AuButton
+                    @icon="bin"
+                    @hideText={{true}}
+                    @iconAlignment="left"
+                    @alert={{true}}
+                    @loadingMessage="Aan het verwijderen"
+                    {{on "click" (fn this.temporaryDeleteConcept concept)}}
+                  >
+                    Verwijderen
+                  </AuButton>
+                </td>
+              {{/unless}}
             </tr>
           {{/each}}
         {{/if}}
         {{#unless this.isPrivateConceptScheme}}
-          <tr class="au-u-flex au-u-flex--center">
+          <tr>
             <td class="au-u-visible-medium-up">
               <AuButton
                 @skin="secondary"
@@ -98,6 +115,7 @@
                 Voeg een concept toe aan de lijst
               </AuButton>
             </td>
+            <td></td>
           </tr>
         {{/unless}}
       </:body>
