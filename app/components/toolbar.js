@@ -2,6 +2,10 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import {
+  DESCRIPTION_NOT_USED_PLACEHOLDER,
+  NAME_INPUT_CHAR_LIMIT,
+} from '../utils/constants';
 
 export default class ToolbarComponent extends Component {
   @service store;
@@ -11,19 +15,8 @@ export default class ToolbarComponent extends Component {
 
   @tracked showDeleteModal = false;
 
-  @tracked showEditModal = false;
+  @tracked isEditingName = false;
   @tracked formLabel = this.args.model.label;
-  @tracked formComment = this.args.model.comment;
-
-  @action
-  handleLabelChange(event) {
-    this.formLabel = event.target.value;
-  }
-
-  @action
-  handleCommentChange(event) {
-    this.formComment = event.target.value;
-  }
 
   @action
   saveLocally() {
@@ -38,7 +31,12 @@ export default class ToolbarComponent extends Component {
     // Click file to download then destroy link
     downloadLink.click();
     downloadLink.remove();
-    this.showEditModal = false;
+    this.isEditingName = false;
+  }
+
+  @action
+  handleFormNameChange(event) {
+    this.formLabel = event.target.value;
   }
 
   @action
@@ -52,6 +50,7 @@ export default class ToolbarComponent extends Component {
 
   @action
   async updateForm() {
+    this.isEditingName = false;
     const form = await this.store.findRecord(
       'generated-form',
       this.args.model.id
@@ -59,7 +58,7 @@ export default class ToolbarComponent extends Component {
     form.modified = new Date();
     form.ttlCode = this.formCodeManager.getTtlOfLatestVersion();
     form.label = this.formLabel;
-    form.comment = this.formComment;
+    form.comment = this.args.model.comment ?? DESCRIPTION_NOT_USED_PLACEHOLDER;
 
     try {
       await form.save();
@@ -67,7 +66,7 @@ export default class ToolbarComponent extends Component {
         timeOut: 5000,
       });
       this.formCodeManager.pinLatestVersionAsReference();
-      this.showEditModal = false;
+      this.isEditingName = false;
     } catch (err) {
       this.toaster.error('Oeps, er is iets mis gegaan', 'Error', {
         timeOut: 5000,
@@ -80,8 +79,47 @@ export default class ToolbarComponent extends Component {
 
   @action
   closeEditNameModal() {
-    this.showEditModal = false;
+    this.isEditingName = false;
     this.formLabel = this.args.model.label;
-    this.formComment = this.args.model.comment;
+  }
+
+  @action
+  async updateFormName() {
+    this.formLabel = this.formLabel.trim();
+
+    if (this.formLabel.length > NAME_INPUT_CHAR_LIMIT) {
+      this.toaster.warning(
+        `The max character limit is ${NAME_INPUT_CHAR_LIMIT}`,
+        'Characters',
+        {
+          timeOut: 5000,
+        }
+      );
+      return;
+    }
+
+    const formsWithDuplicateName = await this.store.query('generated-form', {
+      filter: {
+        ':exact:label': this.formLabel,
+      },
+    });
+
+    if (this.formLabel == this.args.model.label) {
+      this.isEditingName = false;
+
+      return;
+    }
+
+    if (formsWithDuplicateName.length >= 1) {
+      this.toaster.error('This name already exists', 'Error', {
+        timeOut: 5000,
+      });
+      return;
+    }
+
+    this.isEditingName = false;
+    await this.updateForm();
+
+    return;
   }
 }

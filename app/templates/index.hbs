@@ -31,9 +31,6 @@
           <c.header>
             <AuDataTableThSortable @label='Naam' @field='label' @currentSorting={{this.sort}}
               class="au-u-visible-medium-up" />
-            <AuDataTableThSortable @label='Beschrijving' @field='comment' @currentSorting={{this.sort}}
-              class="au-u-visible-medium-up" />
-
             <AuDataTableThSortable @label='Aangemaakt op' @field='created' @currentSorting={{this.sort}}
               class="au-u-visible-small-up" />
             <AuDataTableThSortable @label='Aangepast op' @field='modified' @currentSorting={{this.sort}}
@@ -44,7 +41,6 @@
             <td class="au-u-visible-medium-up">
               <AuLink @route="formbuilder.edit" @model={{generatedForm.id}} @ariaHidden={{true}}>{{generatedForm.label}}</AuLink>
             </td>
-            <td class="au-u-visible-medium-up">{{generatedForm.comment}}</td>
             <td class="au-u-visible-medium-up">{{format-date generatedForm.created}}</td>
             <td class="au-u-visible-medium-up">{{format-date-time generatedForm.modified}}</td>
             <td class="au-u-visible-medium-up">

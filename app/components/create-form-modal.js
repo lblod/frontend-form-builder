@@ -2,6 +2,11 @@ import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import {
+  DESCRIPTION_NOT_USED_PLACEHOLDER,
+  NAME_INPUT_CHAR_LIMIT,
+} from '../utils/constants';
+import { restartableTask } from 'ember-concurrency';
 
 export default class CreateFormModal extends Component {
   @service store;
@@ -9,7 +14,6 @@ export default class CreateFormModal extends Component {
   @service toaster;
 
   @tracked name = '';
-  @tracked description = ``;
   @tracked duplicateNames = [];
   @tracked hasBeenFocused = false;
 
@@ -18,21 +22,15 @@ export default class CreateFormModal extends Component {
     this.args.closeModal();
   }
 
-  @action
-  async handleNameChange(event) {
-    this.name = event.target.value;
+  handleNameChange = restartableTask(async (event) => {
+    this.name = event.target.value.trim();
     this.duplicateNames = await this.store.query('generated-form', {
       filter: {
-        ':exact:label': this.name.trim(),
+        ':exact:label': this.name,
       },
     });
     this.hasBeenFocused = true;
-  }
-
-  @action
-  handleDescriptionChange(event) {
-    this.description = event.target.value;
-  }
+  });
 
   @action
   async initiateForm() {
@@ -42,11 +40,12 @@ export default class CreateFormModal extends Component {
       created: now,
       modified: now,
       label: this.name,
-      comment: this.description,
+      comment: DESCRIPTION_NOT_USED_PLACEHOLDER,
       ttlCode: '',
     });
 
     try {
+      await newForm.save();
       await newForm.save();
       this.router.transitionTo('formbuilder.edit', newForm.id);
       this.toaster.success('Formulier succesvol aangemaakt', 'Success', {
@@ -68,14 +67,24 @@ export default class CreateFormModal extends Component {
     if (this.duplicateNames.length > 0) {
       return 'Deze naam is al eens gebruikt';
     }
+
+    if (this.name.length > NAME_INPUT_CHAR_LIMIT) {
+      return `Maximum characters exceeded`;
+    }
+
     return false;
+  }
+
+  get getCharacters() {
+    return `Remaing characters: ${NAME_INPUT_CHAR_LIMIT - this.name.length}`;
   }
 
   get disableSubmit() {
     return (
       (this.name.trim() == '' && this.hasBeenFocused) ||
       this.duplicateNames.length > 0 ||
-      !this.hasBeenFocused
+      !this.hasBeenFocused ||
+      this.name.length > NAME_INPUT_CHAR_LIMIT
     );
   }
 }
