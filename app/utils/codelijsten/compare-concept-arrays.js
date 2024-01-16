@@ -1,4 +1,4 @@
-export function isConceptListChanged(dbConcepts, concepts) {
+export function isConceptArrayChanged(dbConcepts, concepts) {
   if (concepts.length == 0 && dbConcepts.length >= 1) return true;
   if (dbConcepts.length == 0 && concepts.length >= 1) return true;
 
