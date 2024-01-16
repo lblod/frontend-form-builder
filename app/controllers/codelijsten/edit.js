@@ -5,6 +5,7 @@ import { A } from '@ember/array';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { NAME_INPUT_CHAR_LIMIT } from '../../utils/constants';
+import { showErrorToasterMessage } from '../../utils/toaster-message-helper';
 
 export default class CodelijstenEditController extends Controller {
   @service toaster;
@@ -72,14 +73,10 @@ export default class CodelijstenEditController extends Controller {
   @action
   handleConceptChange(concept, event) {
     if (event.target && event.target.value.trim() == '') {
-      this.toaster.error(
-        `Optie mag niet leeg zijn (${concept.label})`,
-        'Error',
-        {
-          timeOut: 5000,
-        }
+      showErrorToasterMessage(
+        this.toaster,
+        `Optie mag niet leeg zijn (${concept.label})`
       );
-
       return;
     }
 
@@ -115,9 +112,7 @@ export default class CodelijstenEditController extends Controller {
           timeOut: 5000,
         });
       } catch (error) {
-        this.toaster.error('Oeps, er is iets mis gegaan', 'Error', {
-          timeOut: 5000,
-        });
+        showErrorToasterMessage(this.toaster, 'Oeps, er is iets mis gegaan');
         console.error(error);
       }
     }
@@ -149,12 +144,9 @@ export default class CodelijstenEditController extends Controller {
           timeOut: 5000,
         });
       } catch (error) {
-        this.toaster.error(
-          `Kon concept met id: ${concept.id} niet updaten`,
-          'Error',
-          {
-            timeOut: 5000,
-          }
+        showErrorToasterMessage(
+          this.toaster,
+          `Kon concept met id: ${concept.id} niet updaten`
         );
         console.error(error);
       }
@@ -205,12 +197,9 @@ export default class CodelijstenEditController extends Controller {
         );
       } catch (error) {
         allConceptsRemoved = false;
-        this.toaster.error(
-          `Kon concept met id ${conceptToDelete.id} niet verwijderen `,
-          'Error',
-          {
-            timeOut: 5000,
-          }
+        showErrorToasterMessage(
+          this.toaster,
+          `Kon concept met id ${conceptToDelete.id} niet verwijderen `
         );
         console.error(error);
         continue;
@@ -248,9 +237,7 @@ export default class CodelijstenEditController extends Controller {
 
       this.isDeleteModalOpen = false;
     } catch (err) {
-      this.toaster.error('Oeps, er is iets mis gegaan', 'Error', {
-        timeOut: 5000,
-      });
+      showErrorToasterMessage(this.toaster, 'Oeps, er is iets mis gegaan');
       console.error(err);
     }
   }
