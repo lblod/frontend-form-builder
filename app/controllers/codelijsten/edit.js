@@ -11,6 +11,7 @@ import {
   showWarningToasterMessage,
 } from '../../utils/toaster-message-helper';
 import { deleteConcept } from '../../utils/codelijsten/delete-concept';
+import { deleteConceptScheme } from '../../utils/codelijsten/delete-concept-scheme';
 
 export default class CodelijstenEditController extends Controller {
   @service toaster;
@@ -188,26 +189,14 @@ export default class CodelijstenEditController extends Controller {
 
   @action
   async deleteCodelist() {
-    try {
-      await this.deleteConcepts(this.concepts);
-
-      await this.model.conceptScheme.destroyRecord();
-      showSuccessToasterMessage(
-        this.toaster,
-        'Codelijst: ' + this.name + ' verwijderd',
-        'Codelijst verwijderd'
-      );
-      this.isDeleteModalOpen = false;
-
-      this.router.transitionTo('codelijsten');
-    } catch (err) {
-      showErrorToasterMessage(
-        this.toaster,
-        'Oeps, er is iets mis gegaan bij het verwijderen van de codelijst',
-        'Codelijst'
-      );
-      console.error(err);
-    }
+    await this.deleteConcepts(this.concepts);
+    await deleteConceptScheme(
+      this.model.conceptScheme.id,
+      this.store,
+      this.toaster
+    );
+    this.isDeleteModalOpen = false;
+    this.router.transitionTo('codelijsten.index');
   }
 
   isConceptListChanged() {
