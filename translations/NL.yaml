@@ -61,6 +61,7 @@ codelists:
 confirmation:
   deleteTitle: "Formulier verwijderen?"
   deleteQuestion: "Bent u zeker dat u dit formulier wilt verwijderen? Deze actie is permanent."
+  goWithoutSaving: "Ben je zeker dat je de voortgang verloren wil laten gaan?"
 
 constraints:
   mandatoryField: "Dit is een verplicht veld"

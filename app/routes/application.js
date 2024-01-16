@@ -16,7 +16,7 @@ export default class FormsPlaygroundRoute extends Route {
     // TODO: replace this with a better setup
     if (
       this.controller.userHasEnteredData &&
-      !confirm('Are you sure you want to abandon progress?')
+      !confirm(this.intl.t('confirmation.goWithoutSaving'))
     ) {
       transition.abort();
     } else {
