@@ -57,8 +57,8 @@ export default class FormbuilderConfigurationController extends Controller {
     if (!this.selectedSection) {
       return;
     }
-    this.fieldsForSection = [];
 
+    const storedFieldsForSection = [];
     for (const child of this.selectedSection.childs) {
       const nodeInfo = getMinimalNodeInfo(
         child,
@@ -73,7 +73,7 @@ export default class FormbuilderConfigurationController extends Controller {
           this.model.graphs.sourceGraph
         );
 
-      this.fieldsForSection.push({
+      storedFieldsForSection.push({
         name: nodeInfo.name,
         order: nodeInfo.order,
         subject: child,
@@ -81,6 +81,8 @@ export default class FormbuilderConfigurationController extends Controller {
         displayType: nodeInfo.displayType,
       });
     }
+
+    this.fieldsForSection = storedFieldsForSection;
   }
 
   initialise = restartableTask(async () => {
@@ -95,11 +97,15 @@ export default class FormbuilderConfigurationController extends Controller {
       this.builderStore,
       this.model.graphs.sourceGraph
     );
+
+    if (this.sections.length >= 1) {
+      await this.setSelectedSection(this.sortedSections[0]);
+    }
   });
 
   setup() {
-    this.fieldsForSection = [];
-    this.setSelectedSection(undefined);
+    this.fieldsForSection = null;
+    this.setSelectedSection(null);
 
     this.initialise.perform();
   }

@@ -39,7 +39,7 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
     if (uri) {
       const conceptScheme = await this.getconceptSchemeByUri(uri);
 
-      this.setSelected({
+      await this.setSelected({
         uri: uri,
         label: conceptScheme ? conceptScheme.label : uri,
       });
@@ -53,7 +53,7 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
     this.options = this.getSortedOptions(conceptSchemes);
 
     if (this.args.forField) {
-      this.loadSelected();
+      await this.loadSelected();
     }
   }
 
@@ -73,9 +73,9 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
   }
 
   @action
-  setSelected(value) {
+  async setSelected(value) {
     this.selected = value;
-    this.update();
+    await this.update();
   }
 
   getSortedOptions(conceptSchemeModels) {
