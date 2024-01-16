@@ -59,6 +59,17 @@ export function getOrderOfNode(node, store, graph) {
   return Number(order);
 }
 
+export function getConceptSchemeUriFromNodeOption(node, store, graph) {
+  const option = store.any(node, FORM('options'), undefined, graph);
+
+  if (!option) {
+    console.error(`Could not get form:options of node ${node.value ?? ''}`);
+    return option;
+  }
+
+  return JSON.parse(option.value).conceptScheme ?? null;
+}
+
 export function getMinimalNodeInfo(node, store, graph) {
   return {
     subject: node,

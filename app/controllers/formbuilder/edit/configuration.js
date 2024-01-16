@@ -6,7 +6,10 @@ import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { restartableTask } from 'ember-concurrency';
 import { getPropertyGroupFields } from '../../../utils/get-property-group-items';
 import { tracked } from '@glimmer/tracking';
-import { getMinimalNodeInfo } from '../../../utils/forking-store-helpers';
+import {
+  getConceptSchemeUriFromNodeOption,
+  getMinimalNodeInfo,
+} from '../../../utils/forking-store-helpers';
 import { Literal, Statement } from 'rdflib';
 import { FORM } from '../../../utils/rdflib';
 import { sortObjectsOnProperty } from '../../../utils/sort-object-on-property';
@@ -49,7 +52,7 @@ export default class FormbuilderConfigurationController extends Controller {
   }
 
   @action
-  setSelectedSection(selectedOption) {
+  async setSelectedSection(selectedOption) {
     this.selectedSection = selectedOption;
     if (!this.selectedSection) {
       return;
@@ -63,10 +66,18 @@ export default class FormbuilderConfigurationController extends Controller {
         this.model.graphs.sourceGraph
       );
 
+      const nodeConceptSchemeUriOption =
+        await getConceptSchemeUriFromNodeOption(
+          child,
+          this.builderStore,
+          this.model.graphs.sourceGraph
+        );
+
       this.fieldsForSection.push({
         name: nodeInfo.name,
         order: nodeInfo.order,
         subject: child,
+        conceptSchemeUriOption: nodeConceptSchemeUriOption,
         displayType: nodeInfo.displayType,
       });
     }

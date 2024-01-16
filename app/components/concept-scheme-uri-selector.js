@@ -11,7 +11,39 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
 
   constructor() {
     super(...arguments);
+
     this.loadOptions();
+  }
+
+  async getconceptSchemeByUri(uri) {
+    const conceptSchemes = await this.store.query('concept-scheme', {
+      filter: {
+        ':uri:': uri,
+      },
+    });
+    if (conceptSchemes && conceptSchemes.length >= 1) {
+      return conceptSchemes[0];
+    }
+
+    return null;
+  }
+
+  @action
+  async loadSelected() {
+    if (!this.args.forField.conceptSchemeUriOption) {
+      return;
+    }
+
+    const uri = this.args.forField.conceptSchemeUriOption;
+
+    if (uri) {
+      const conceptScheme = await this.getconceptSchemeByUri(uri);
+
+      this.setSelected({
+        uri: uri,
+        label: conceptScheme ? conceptScheme.label : uri,
+      });
+    }
   }
 
   @action
@@ -19,6 +51,10 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
     const conceptSchemes = await this.store.query('concept-scheme', {});
 
     this.options = this.getSortedOptions(conceptSchemes);
+
+    if (this.args.forField) {
+      this.loadSelected();
+    }
   }
 
   async update() {
@@ -42,8 +78,8 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
     this.update();
   }
 
-  getSortedOptions(conceptSchememodels) {
-    return [...conceptSchememodels].sort(function (a, b) {
+  getSortedOptions(conceptSchemeModels) {
+    return [...conceptSchemeModels].sort(function (a, b) {
       if (a.label < b.label) {
         return -1;
       }
