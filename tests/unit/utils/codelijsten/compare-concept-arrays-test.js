@@ -1,4 +1,4 @@
-import { isConceptListChanged } from 'frontend-form-builder/utils/codelijsten/compare-concepts';
+import { isConceptArrayChanged } from 'frontend-form-builder/utils/codelijsten/compare-concept-arrays';
 import { module, test } from 'qunit';
 
 module('Unit | Utility | Codelijsten', function () {
@@ -7,7 +7,7 @@ module('Unit | Utility | Codelijsten', function () {
       const dbConcepts = [];
       const concepts = [];
 
-      assert.false(isConceptListChanged(dbConcepts, concepts));
+      assert.false(isConceptArrayChanged(dbConcepts, concepts));
     });
     test('db array has more items than the current', function (assert) {
       const dbConcepts = [
@@ -18,7 +18,7 @@ module('Unit | Utility | Codelijsten', function () {
       ];
       const concepts = [];
 
-      assert.true(isConceptListChanged(dbConcepts, concepts));
+      assert.true(isConceptArrayChanged(dbConcepts, concepts));
     });
     test('current array has more items than the db array', function (assert) {
       const dbConcepts = [];
@@ -29,7 +29,7 @@ module('Unit | Utility | Codelijsten', function () {
         },
       ];
 
-      assert.true(isConceptListChanged(dbConcepts, concepts));
+      assert.true(isConceptArrayChanged(dbConcepts, concepts));
     });
   });
   module('compare to arrays with items', function () {
@@ -41,7 +41,7 @@ module('Unit | Utility | Codelijsten', function () {
         },
       ];
 
-      assert.false(isConceptListChanged(dbConcepts, dbConcepts));
+      assert.false(isConceptArrayChanged(dbConcepts, dbConcepts));
     });
     test('label of concept is updated results in change', function (assert) {
       const dbConcepts = [
@@ -57,7 +57,7 @@ module('Unit | Utility | Codelijsten', function () {
         },
       ];
 
-      assert.true(isConceptListChanged(dbConcepts, concepts));
+      assert.true(isConceptArrayChanged(dbConcepts, concepts));
     });
   });
 });

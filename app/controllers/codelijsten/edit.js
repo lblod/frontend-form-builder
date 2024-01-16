@@ -13,7 +13,7 @@ import { deleteConcept } from '../../utils/codelijsten/delete-concept';
 import { deleteConceptScheme } from '../../utils/codelijsten/delete-concept-scheme';
 import { isDuplicateConceptSchemeName } from '../../utils/codelijsten/is-duplicate-concept-scheme-name';
 import { updateConcept } from '../../utils/codelijsten/update-concept';
-import { isConceptListChanged } from '../../utils/codelijsten/compare-concepts';
+import { isConceptArrayChanged } from '../../utils/codelijsten/compare-concept-arrays';
 
 export default class CodelijstenEditController extends Controller {
   @service toaster;
@@ -97,7 +97,7 @@ export default class CodelijstenEditController extends Controller {
     this.concepts[this.concepts.indexOf(foundConcept)].label =
       event.target.value.trim();
 
-    this.isConceptListUnchanged = !isConceptListChanged(
+    this.isConceptListUnchanged = !isConceptArrayChanged(
       this.model.concepts,
       this.concepts
     );
