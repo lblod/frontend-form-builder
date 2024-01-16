@@ -16,6 +16,7 @@ Router.map(function () {
       this.route('code');
       this.route('builder');
       this.route('validations');
+      this.route('configuration');
     });
   });
   this.route('user-tests', function () {

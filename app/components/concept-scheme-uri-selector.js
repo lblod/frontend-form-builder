@@ -11,7 +11,39 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
 
   constructor() {
     super(...arguments);
+
     this.loadOptions();
+  }
+
+  async getconceptSchemeByUri(uri) {
+    const conceptSchemes = await this.store.query('concept-scheme', {
+      filter: {
+        ':uri:': uri,
+      },
+    });
+    if (conceptSchemes && conceptSchemes.length >= 1) {
+      return conceptSchemes[0];
+    }
+
+    return null;
+  }
+
+  @action
+  async loadSelected() {
+    if (!this.args.forField.conceptSchemeUriOption) {
+      return;
+    }
+
+    const uri = this.args.forField.conceptSchemeUriOption;
+
+    if (uri) {
+      const conceptScheme = await this.getconceptSchemeByUri(uri);
+
+      await this.setSelected({
+        uri: uri,
+        label: conceptScheme ? conceptScheme.label : uri,
+      });
+    }
   }
 
   @action
@@ -19,6 +51,10 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
     const conceptSchemes = await this.store.query('concept-scheme', {});
 
     this.options = this.getSortedOptions(conceptSchemes);
+
+    if (this.args.forField) {
+      await this.loadSelected();
+    }
   }
 
   async update() {
@@ -29,21 +65,21 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
         },
       },
     });
-
     this.args.update({
       uri: this.selected.uri,
       concepts: [...concepts].map((concept) => concept.label),
+      field: this.args.forField,
     });
   }
 
   @action
-  setSelected(value) {
+  async setSelected(value) {
     this.selected = value;
-    this.update();
+    await this.update();
   }
 
-  getSortedOptions(conceptSchememodels) {
-    return [...conceptSchememodels].sort(function (a, b) {
+  getSortedOptions(conceptSchemeModels) {
+    return [...conceptSchemeModels].sort(function (a, b) {
       if (a.label < b.label) {
         return -1;
       }

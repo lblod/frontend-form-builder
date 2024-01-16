@@ -1,0 +1,56 @@
+<div class="formBuilderEdit__configuration au-u-padding-small">
+  {{#if this.initialise.isRunning}}
+    <AuLoader />
+  {{else}}
+    <PowerSelect
+      @searchField="name"
+      @searchEnabled={{true}}
+      @selected={{this.selectedSection}}
+      @options={{this.sortedSections}}
+      @onChange={{this.setSelectedSection}}
+      @allowClear={{true}}
+      @loadingMessage="Aan het laden..."
+      @noMatchesMessage="Geen resultaten gevonden"
+      as |section|
+    >
+      <span>
+        {{section.name}}
+      </span>
+    </PowerSelect>
+
+    <AuHr />
+
+    <div class="fieldsOfSection">
+      {{#if (and this.selectedSection this.fieldsForSection)}}
+        {{#each this.sortedFieldsForSection as |field|}}
+          <AuCard @expandable={{false}} as |c|>
+            <c.header>
+              <AuHeading @level="2" @skin="4">
+                {{field.name}}
+              </AuHeading>
+              <p>
+                {{field.displayType}}
+              </p>
+            </c.header>
+            <c.content>
+              {{#if (is-display-type-with-options field.displayType)}}
+                <ConceptSchemeUriSelector
+                  @forField={{field}}
+                  @update={{this.updateFieldOptions}}
+                />
+              {{else}}
+                <p
+                  class="au-u-muted au-u-h-functional au-u-medium au-u-italic"
+                >Geen verdere configuratie mogelijk</p>
+              {{/if}}
+            </c.content>
+          </AuCard>
+        {{/each}}
+      {{else}}
+        <span class="formBuilderEdit__noFields">
+          <p class="au-u-h3">No section selected</p>
+        </span>
+      {{/if}}
+    </div>
+  {{/if}}
+</div>

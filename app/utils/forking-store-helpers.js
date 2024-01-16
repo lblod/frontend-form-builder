@@ -39,3 +39,42 @@ export function getFirstPathOfNode(node, store, graph) {
 export function getPrefLabelOfNode(node, store, graph) {
   return store.any(node, SKOS('prefLabel'), undefined, graph);
 }
+
+export function getNameOfNode(node, store, graph) {
+  const name = store.any(node, SH('name'), undefined, graph);
+  if (!name) {
+    console.error(`Could not get 'name' of node ${node.value}`);
+    return null;
+  }
+
+  return name;
+}
+
+export function getOrderOfNode(node, store, graph) {
+  const order = store.any(node, SH('order'), undefined, graph);
+  if (!order) {
+    console.error(`Could not get 'order' of node ${node.value}`);
+  }
+
+  return Number(order);
+}
+
+export function getConceptSchemeUriFromNodeOption(node, store, graph) {
+  const option = store.any(node, FORM('options'), undefined, graph);
+
+  if (!option) {
+    console.error(`Could not get form:options of node ${node.value ?? ''}`);
+    return option;
+  }
+
+  return JSON.parse(option.value).conceptScheme ?? null;
+}
+
+export function getMinimalNodeInfo(node, store, graph) {
+  return {
+    subject: node,
+    name: getNameOfNode(node, store, graph),
+    order: getOrderOfNode(node, store, graph),
+    displayType: getDisplayTypeOfNode(node, store, graph),
+  };
+}
