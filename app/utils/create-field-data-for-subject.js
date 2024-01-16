@@ -22,7 +22,7 @@ export function createFieldDataForSubject(fieldSubject, { store, graph }) {
     fieldTriples.push(...validationTriples);
   }
 
-  let fieldName = 'Field name';
+  let fieldName = 'Veldnaam';
   const fieldNameTriple = fieldTriples.find(
     (triple) => triple.predicate.value == SH('name').value
   );
