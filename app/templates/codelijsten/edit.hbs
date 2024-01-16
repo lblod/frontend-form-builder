@@ -122,3 +122,30 @@
     </AuTable>
   </div>
 </div>
+
+<AuModal @modalOpen={{this.isDeleteModalOpen}} @closeModal={{this.close}}>
+  <:title>Codelijst verwijderen?</:title>
+  <:body>
+    Bent u zeker dat u deze codelijst wilt verwijderen? Deze actie is permanent.
+  </:body>
+  <:footer>
+    <AuButtonGroup>
+      <AuButton
+        @icon="bin"
+        @iconAlignment="left"
+        @alert={{true}}
+        @loadingMessage="Aan het verwijderen"
+        {{on "click" this.deleteCodelist}}
+      >
+        Verwijderen
+      </AuButton>
+      <AuButton
+        @skin="secondary"
+        @disabled={{this.delete.isRunning}}
+        {{on "click" (fn (mut this.isDeleteModalOpen) false)}}
+      >
+        Annuleer
+      </AuButton>
+    </AuButtonGroup>
+  </:footer>
+</AuModal>
