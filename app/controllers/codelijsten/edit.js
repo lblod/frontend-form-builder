@@ -5,7 +5,10 @@ import { A } from '@ember/array';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { NAME_INPUT_CHAR_LIMIT } from '../../utils/constants';
-import { showErrorToasterMessage } from '../../utils/toaster-message-helper';
+import {
+  showErrorToasterMessage,
+  showWarningToasterMessage,
+} from '../../utils/toaster-message-helper';
 
 export default class CodelijstenEditController extends Controller {
   @service toaster;
@@ -188,12 +191,10 @@ export default class CodelijstenEditController extends Controller {
           conceptToDelete.id
         );
         await concept.destroyRecord();
-        this.toaster.warning(
+        showWarningToasterMessage(
+          this.toaster,
           `Concept met id ${concept.id} successvol verwijderd`,
-          'Success',
-          {
-            timeOut: 5000,
-          }
+          'Success'
         );
       } catch (error) {
         allConceptsRemoved = false;
@@ -226,12 +227,9 @@ export default class CodelijstenEditController extends Controller {
         );
         this.router.transitionTo('codelijsten');
       } else {
-        this.toaster.warning(
-          'Codelijst: ' + this.name + ' niet verwijderd',
-          'Opgelet',
-          {
-            timeOut: 5000,
-          }
+        showWarningToasterMessage(
+          this.toaster,
+          'Codelijst: ' + this.name + ' niet verwijderd'
         );
       }
 
