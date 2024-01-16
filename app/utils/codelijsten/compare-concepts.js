@@ -1,5 +1,6 @@
 export function isConceptListChanged(dbConcepts, concepts) {
-  if (concepts.length == 0) return false;
+  if (concepts.length == 0 && dbConcepts.length >= 1) return true;
+  if (dbConcepts.length == 0 && concepts.length >= 1) return true;
 
   const existingConceptIdsOnScheme = dbConcepts.map((concept) => concept.id);
   const existingConceptLabelsOnScheme = dbConcepts.map(
