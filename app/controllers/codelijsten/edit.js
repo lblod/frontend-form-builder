@@ -8,10 +8,10 @@ import { NAME_INPUT_CHAR_LIMIT } from '../../utils/constants';
 import {
   showErrorToasterMessage,
   showSuccessToasterMessage,
-  showWarningToasterMessage,
 } from '../../utils/toaster-message-helper';
 import { deleteConcept } from '../../utils/codelijsten/delete-concept';
 import { deleteConceptScheme } from '../../utils/codelijsten/delete-concept-scheme';
+import { isDuplicateConceptSchemeName } from '../../utils/codelijsten/is-duplicate-concept-scheme-name';
 
 export default class CodelijstenEditController extends Controller {
   @service toaster;
@@ -66,7 +66,12 @@ export default class CodelijstenEditController extends Controller {
     }
 
     this.name = newName.trim();
-    this.isDuplicateName = await this.isNameDuplicate();
+    this.isDuplicateName = await isDuplicateConceptSchemeName(
+      this.model.conceptScheme,
+      this.name,
+      this.store
+    );
+
     if (this.name !== '' && this.isDuplicateName) {
       this.nameErrorMessage = `Naam is duplicaat`;
     }
@@ -223,21 +228,5 @@ export default class CodelijstenEditController extends Controller {
     }
 
     return false;
-  }
-  async isNameDuplicate() {
-    const duplicates = await this.store.query('concept-scheme', {
-      filter: {
-        ':exact:preflabel': this.name,
-      },
-    });
-
-    if (
-      duplicates.length == 1 &&
-      duplicates[0].id == this.model.conceptScheme.id
-    ) {
-      return false;
-    }
-
-    return duplicates.length !== 0;
   }
 }
