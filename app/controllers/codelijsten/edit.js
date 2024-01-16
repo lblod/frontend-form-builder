@@ -7,6 +7,7 @@ import { service } from '@ember/service';
 import { NAME_INPUT_CHAR_LIMIT } from '../../utils/constants';
 import {
   showErrorToasterMessage,
+  showSuccessToasterMessage,
   showWarningToasterMessage,
 } from '../../utils/toaster-message-helper';
 
@@ -111,9 +112,7 @@ export default class CodelijstenEditController extends Controller {
       try {
         this.model.conceptScheme.save();
         this.model.conceptScheme.reload();
-        this.toaster.success('Codelijst naam bijgewerkt', 'Success', {
-          timeOut: 5000,
-        });
+        showSuccessToasterMessage(this.toaster, 'Codelijst naam bijgewerkt');
       } catch (error) {
         showErrorToasterMessage(this.toaster, 'Oeps, er is iets mis gegaan');
         console.error(error);
@@ -143,9 +142,7 @@ export default class CodelijstenEditController extends Controller {
       try {
         conceptToUpdate.save();
         conceptToUpdate.reload();
-        this.toaster.success('Concepten bijgewerkt', 'Success', {
-          timeOut: 5000,
-        });
+        showSuccessToasterMessage(this.toaster, 'Concepten bijgewerkt');
       } catch (error) {
         showErrorToasterMessage(
           this.toaster,
@@ -217,13 +214,9 @@ export default class CodelijstenEditController extends Controller {
 
       if (deletedAllConcepts) {
         await this.model.conceptScheme.destroyRecord();
-
-        this.toaster.success(
-          'Codelijst: ' + this.name + ' verwijderd',
-          'Success',
-          {
-            timeOut: 5000,
-          }
+        showSuccessToasterMessage(
+          this.toaster,
+          'Codelijst: ' + this.name + ' verwijderd'
         );
         this.router.transitionTo('codelijsten');
       } else {

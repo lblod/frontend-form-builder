@@ -19,3 +19,14 @@ export function showWarningToasterMessage(
     timeOut: timeInMs,
   });
 }
+
+export function showSuccessToasterMessage(
+  toasterService,
+  message,
+  title = 'Success',
+  timeInMs = 5000
+) {
+  toasterService.success(message, title, {
+    timeOut: timeInMs,
+  });
+}
