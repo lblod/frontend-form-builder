@@ -19,8 +19,7 @@ module.exports = function (environment) {
       // when it is created
     },
     featureFlags: {
-      HIDE_CODELIST_BUTTON_IN_TOOLBAR: true,
-      SHOW_ORIGNAL_CODELIST_PAGE: true,
+      SHOW_ORIGNAL_CODELIST_PAGE: false,
     },
   };
 
