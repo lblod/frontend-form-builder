@@ -10,6 +10,7 @@ import {
   showSuccessToasterMessage,
   showWarningToasterMessage,
 } from '../../utils/toaster-message-helper';
+import { deleteConcept } from '../../utils/codelijsten/delete-concept';
 
 export default class CodelijstenEditController extends Controller {
   @service toaster;
@@ -180,55 +181,31 @@ export default class CodelijstenEditController extends Controller {
       return true;
     }
 
-    let allConceptsRemoved = true;
     for (const conceptToDelete of concepts) {
-      try {
-        const concept = await this.store.findRecord(
-          'concept',
-          conceptToDelete.id
-        );
-        await concept.destroyRecord();
-        showWarningToasterMessage(
-          this.toaster,
-          `Concept met id ${concept.id} successvol verwijderd`,
-          'Success'
-        );
-      } catch (error) {
-        allConceptsRemoved = false;
-        showErrorToasterMessage(
-          this.toaster,
-          `Kon concept met id ${conceptToDelete.id} niet verwijderen `
-        );
-        console.error(error);
-        continue;
-      }
+      await deleteConcept(conceptToDelete.id, this.store, this.toaster);
     }
-
-    return allConceptsRemoved;
   }
 
   @action
   async deleteCodelist() {
     try {
-      const deletedAllConcepts = await this.deleteConcepts(this.concepts);
+      await this.deleteConcepts(this.concepts);
 
-      if (deletedAllConcepts) {
-        await this.model.conceptScheme.destroyRecord();
-        showSuccessToasterMessage(
-          this.toaster,
-          'Codelijst: ' + this.name + ' verwijderd'
-        );
-        this.router.transitionTo('codelijsten');
-      } else {
-        showWarningToasterMessage(
-          this.toaster,
-          'Codelijst: ' + this.name + ' niet verwijderd'
-        );
-      }
-
+      await this.model.conceptScheme.destroyRecord();
+      showSuccessToasterMessage(
+        this.toaster,
+        'Codelijst: ' + this.name + ' verwijderd',
+        'Codelijst verwijderd'
+      );
       this.isDeleteModalOpen = false;
+
+      this.router.transitionTo('codelijsten');
     } catch (err) {
-      showErrorToasterMessage(this.toaster, 'Oeps, er is iets mis gegaan');
+      showErrorToasterMessage(
+        this.toaster,
+        'Oeps, er is iets mis gegaan bij het verwijderen van de codelijst',
+        'Codelijst'
+      );
       console.error(err);
     }
   }
