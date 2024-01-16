@@ -1,7 +1,8 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
+import { PAGE_SIZE_TO_GET_ALL } from '../utils/constants';
 
 export default class ConceptSchemeUriSelectorComponent extends Component {
   @service store;
@@ -48,7 +49,11 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
 
   @action
   async loadOptions() {
-    const conceptSchemes = await this.store.query('concept-scheme', {});
+    const conceptSchemes = await this.store.query('concept-scheme', {
+      page: {
+        size: PAGE_SIZE_TO_GET_ALL,
+      },
+    });
 
     this.options = this.getSortedOptions(conceptSchemes);
 
