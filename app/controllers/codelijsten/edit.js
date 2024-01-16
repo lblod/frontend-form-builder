@@ -12,6 +12,7 @@ import {
 import { deleteConcept } from '../../utils/codelijsten/delete-concept';
 import { deleteConceptScheme } from '../../utils/codelijsten/delete-concept-scheme';
 import { isDuplicateConceptSchemeName } from '../../utils/codelijsten/is-duplicate-concept-scheme-name';
+import { updateConcept } from '../../utils/codelijsten/update-concept';
 
 export default class CodelijstenEditController extends Controller {
   @service toaster;
@@ -134,29 +135,7 @@ export default class CodelijstenEditController extends Controller {
 
   async updateConcepts() {
     for (const concept of this.concepts) {
-      let conceptToUpdate = await this.store.findRecord('concept', concept.id);
-      if (concept.label.trim() == '') {
-        conceptToUpdate.destroyRecord();
-      }
-      if (
-        concept.label.trim() == conceptToUpdate.label ||
-        concept.label.trim() == ''
-      ) {
-        continue;
-      }
-
-      conceptToUpdate.preflabel = concept.label;
-      try {
-        conceptToUpdate.save();
-        conceptToUpdate.reload();
-        showSuccessToasterMessage(this.toaster, 'Concepten bijgewerkt');
-      } catch (error) {
-        showErrorToasterMessage(
-          this.toaster,
-          `Kon concept met id: ${concept.id} niet updaten`
-        );
-        console.error(error);
-      }
+      await updateConcept(concept, this.store, this.toaster);
     }
   }
 
