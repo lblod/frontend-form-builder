@@ -13,6 +13,7 @@ import { deleteConcept } from '../../utils/codelijsten/delete-concept';
 import { deleteConceptScheme } from '../../utils/codelijsten/delete-concept-scheme';
 import { isDuplicateConceptSchemeName } from '../../utils/codelijsten/is-duplicate-concept-scheme-name';
 import { updateConcept } from '../../utils/codelijsten/update-concept';
+import { isConceptListChanged } from '../../utils/codelijsten/compare-concepts';
 
 export default class CodelijstenEditController extends Controller {
   @service toaster;
@@ -96,7 +97,10 @@ export default class CodelijstenEditController extends Controller {
     this.concepts[this.concepts.indexOf(foundConcept)].label =
       event.target.value.trim();
 
-    this.isConceptListUnchanged = !this.isConceptListChanged();
+    this.isConceptListUnchanged = !isConceptListChanged(
+      this.model.concepts,
+      this.concepts
+    );
   }
 
   @action
@@ -181,31 +185,5 @@ export default class CodelijstenEditController extends Controller {
     );
     this.isDeleteModalOpen = false;
     this.router.transitionTo('codelijsten.index');
-  }
-
-  isConceptListChanged() {
-    if (this.concepts.length == 0) return false;
-
-    const existingConceptIdsOnScheme = this.model.concepts.map(
-      (concept) => concept.id
-    );
-    const existingConceptLabelsOnScheme = this.model.concepts.map(
-      (concept) => concept.label
-    );
-
-    for (const concept of this.concepts) {
-      if (concept.label.trim() == '') {
-        return false;
-      }
-
-      if (!existingConceptIdsOnScheme.includes(concept.id)) {
-        return true;
-      }
-      if (!existingConceptLabelsOnScheme.includes(concept.label)) {
-        return true;
-      }
-    }
-
-    return false;
   }
 }
