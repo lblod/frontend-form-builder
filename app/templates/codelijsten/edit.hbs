@@ -25,27 +25,42 @@
       >
         Bewaar
       </AuButton>
-      <AuDropdown
-        id="saveSplitButton_dropdown"
-        @title=""
-        @hideText={{true}}
-        @alignment="left"
-        role="menu"
-        @skin="primary"
-      >
-        <AuButton
-          @skin="link"
-          @icon="bin"
-          @iconAlignment="left"
-          @alert={{true}}
-          role="menuitem"
-          @disabled={{this.isPrivateConceptScheme}}
-          @loadingMessage="Aan het verwijderen"
-          {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
+
+      {{#if this.isPrivateConceptScheme}}
+        <span id="saveSplitButton_dropdown">
+          <AuButton
+            @disabled={{true}}
+            @hideText={{true}}
+            @icon="nav-down"
+            @alignment="left"
+            @skin="primary"
+          >
+            Bewaar
+          </AuButton>
+        </span>
+      {{else}}
+        <AuDropdown
+          id="saveSplitButton_dropdown"
+          @title=""
+          @hideText={{true}}
+          @alignment="left"
+          role="menu"
+          @skin="primary"
         >
-          Verwijderen
-        </AuButton>
-      </AuDropdown>
+          <AuButton
+            @skin="link"
+            @icon="bin"
+            @iconAlignment="left"
+            @alert={{true}}
+            role="menuitem"
+            @disabled={{this.isPrivateConceptScheme}}
+            @loadingMessage="Aan het verwijderen"
+            {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
+          >
+            Verwijderen
+          </AuButton>
+        </AuDropdown>
+      {{/if}}
     </div>
   </Group>
 </AuToolbar>
