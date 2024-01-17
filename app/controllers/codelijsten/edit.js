@@ -23,10 +23,10 @@ export default class CodelijstenEditController extends Controller {
   @tracked name;
   @tracked concepts;
   @tracked conceptsToDelete;
-  @tracked isConceptListUnchanged;
   @tracked isDeleteModalOpen;
   @tracked isDuplicateName;
   @tracked nameErrorMessage;
+  @tracked isSaveDisabled;
 
   @action
   setup(model) {
@@ -40,18 +40,8 @@ export default class CodelijstenEditController extends Controller {
         };
       })
     );
-    this.isConceptListUnchanged = true;
-    this.isDuplicateName = false;
-  }
 
-  get isSaveDisabled() {
-    return (
-      this.isPrivateConceptScheme ||
-      this.isDuplicateName ||
-      this.name.length > NAME_INPUT_CHAR_LIMIT ||
-      (this.model.conceptScheme.label.trim() == this.name.trim() &&
-        this.isConceptListUnchanged)
-    );
+    this.setIsSaveButtonDisabled();
   }
 
   get isPrivateConceptScheme() {
@@ -81,6 +71,8 @@ export default class CodelijstenEditController extends Controller {
     if (this.name.length > NAME_INPUT_CHAR_LIMIT) {
       this.nameErrorMessage = 'Maximum characters exceeded';
     }
+
+    this.setIsSaveButtonDisabled();
   }
 
   @action
@@ -90,17 +82,13 @@ export default class CodelijstenEditController extends Controller {
         this.toaster,
         `Optie mag niet leeg zijn (${concept.label})`
       );
-      return;
     }
 
     const foundConcept = this.concepts.find((c) => c.id == concept.id);
     this.concepts[this.concepts.indexOf(foundConcept)].label =
       event.target.value.trim();
 
-    this.isConceptListUnchanged = !isConceptArrayChanged(
-      this.model.concepts,
-      this.concepts
-    );
+    this.setIsSaveButtonDisabled();
   }
 
   @action
@@ -115,6 +103,8 @@ export default class CodelijstenEditController extends Controller {
       id: concept.id,
       label: concept.label,
     });
+
+    this.setIsSaveButtonDisabled();
   }
 
   @action
@@ -132,9 +122,9 @@ export default class CodelijstenEditController extends Controller {
     }
 
     await this.deleteConcepts(this.conceptsToDelete);
+    this.conceptsToDelete = [];
 
     await this.updateConcepts();
-    this.isConceptListUnchanged = true;
     this.router.transitionTo('codelijsten.index');
   }
 
@@ -152,8 +142,8 @@ export default class CodelijstenEditController extends Controller {
     if (conceptToDelete) {
       this.concepts.removeObject(conceptToDelete);
       this.conceptsToDelete.push(conceptToDelete);
-      this.isConceptListUnchanged = false;
     }
+    this.setIsSaveButtonDisabled();
   }
 
   async removeEmptyConceptsAndScheme() {
@@ -197,5 +187,36 @@ export default class CodelijstenEditController extends Controller {
     );
     this.isDeleteModalOpen = false;
     this.router.transitionTo('codelijsten.index');
+  }
+
+  setIsSaveButtonDisabled() {
+    if (this.model.conceptScheme.isPublic) {
+      if (
+        this.isValidConceptSchemeName() &&
+        this.isConceptListIncludingEmptyValues()
+      ) {
+        if (
+          this.model.conceptScheme.label.trim() !== this.name ||
+          isConceptArrayChanged(this.model.concepts, this.concepts) ||
+          this.conceptsToDelete.length >= 1
+        ) {
+          this.isSaveDisabled = false;
+        } else {
+          this.isSaveDisabled = true;
+        }
+      } else {
+        this.isSaveDisabled = true;
+      }
+    } else {
+      this.isSaveDisabled = true;
+    }
+  }
+
+  isConceptListIncludingEmptyValues() {
+    return this.concepts.every((concept) => concept.label.trim() !== '');
+  }
+
+  isValidConceptSchemeName() {
+    return this.name.trim() !== '' && !this.isDuplicateName;
   }
 }
