@@ -19,16 +19,12 @@ export async function updateConcept(concept, store, toasterService) {
   try {
     conceptInDatabase.save();
     conceptInDatabase.reload();
-    showSuccessToasterMessage(
-      toasterService,
-      `Concept ${concept.id} bijgewerkt`,
-      'Concept bijgewerkt'
-    );
+    showSuccessToasterMessage(toasterService, concept.id, 'Concept bijgewerkt');
   } catch (error) {
     showErrorToasterMessage(
       toasterService,
-      `Kon concept met id: ${concept.id} niet updaten`,
-      'Concept'
+      concept.id,
+      'Concept niet aangepast'
     );
     console.error(error);
   }

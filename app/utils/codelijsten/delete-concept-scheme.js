@@ -17,14 +17,14 @@ export async function deleteConceptScheme(
 
     showSuccessToasterMessage(
       toasterService,
-      `Conceptscheme met id ${conceptSchemeId} successvol verwijderd`,
+      conceptSchemeId,
       'Conceptscheme verwijderd'
     );
   } catch (error) {
     showErrorToasterMessage(
       toasterService,
-      `Kon conceptscheme met id ${conceptSchemeId} niet verwijderen `,
-      'Conceptscheme'
+      conceptSchemeId,
+      'Conceptscheme niet verwijderd'
     );
   }
 }

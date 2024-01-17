@@ -3,21 +3,37 @@ import {
   showSuccessToasterMessage,
 } from '../toaster-message-helper';
 
-export async function deleteConcept(conceptId, store, toasterService) {
+export async function deleteConcept(
+  conceptId,
+  store,
+  toasterService,
+  silentDelete = false
+) {
   try {
-    const concept = await store.findRecord('concept', conceptId);
-    await concept.destroyRecord();
+    const conceptMatches = await store.query('concept', {
+      filter: { ':id:': conceptId },
+    });
 
-    showSuccessToasterMessage(
-      toasterService,
-      `Concept met id ${conceptId} successvol verwijderd`,
-      'Concept verwijderd'
-    );
+    if (conceptMatches.length == 0) {
+      return;
+    }
+    conceptMatches.map(async (concept) => await concept.destroyRecord());
+
+    if (silentDelete) {
+      return;
+    }
+
+    showSuccessToasterMessage(toasterService, conceptId, 'Concept verwijderd');
   } catch (error) {
+    if (silentDelete) {
+      console.error(`Kon concept met id ${conceptId} niet verwijderen`);
+      return;
+    }
+
     showErrorToasterMessage(
       toasterService,
-      `Kon concept met id ${conceptId} niet verwijderen `,
-      'Concept'
+      conceptId,
+      'Concept niet verwijderd'
     );
   }
 }
