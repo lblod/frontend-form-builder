@@ -137,7 +137,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
   }
 
   @action
-  updateValidationTypeAndGrouping(validationTypeOption) {
+  updateValidationDefaultStatements(validationTypeOption) {
     this.selectedValidationType = validationTypeOption;
 
     if (this.isSelectedValidationAlreadyOnField(this.selectedValidationType)) {
@@ -153,6 +153,12 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     }
 
     this.removeValidationTypeAndGroupingFromGraph(
+      this.storeOptions.sourceNode,
+      this.storeOptions.store,
+      this.storeOptions.sourceGraph
+    );
+
+    this.removeDefaultErrorMessage(
       this.storeOptions.sourceNode,
       this.storeOptions.store,
       this.storeOptions.sourceGraph
@@ -188,15 +194,18 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
       const defaultErrorMessageStatement =
         this.createStatementForDefaultErrorMessage(
           this.storeOptions.sourceNode,
-          defaultErrorMessage.value,
+          defaultErrorMessage,
           this.storeOptions.sourceGraph
         );
 
-      this.storeOptions.store.addAll([
+      const commonStatements = [
         validationPathStatement,
         ...rdfTypeAndGroupingStatements,
-        defaultErrorMessageStatement,
-      ]);
+      ];
+      if (defaultErrorMessageStatement) {
+        commonStatements.push(defaultErrorMessageStatement);
+      }
+      this.storeOptions.store.addAll(commonStatements);
     }
 
     this.hasBeenFocused = true;
@@ -224,6 +233,22 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     }
   }
 
+  removeDefaultErrorMessage(sourceNode, store, graph) {
+    const defaultErrorMessage = getDefaultErrorMessageForValidation(
+      sourceNode,
+      store,
+      graph
+    );
+    if (defaultErrorMessage) {
+      const statement = this.createStatementForDefaultErrorMessage(
+        sourceNode,
+        defaultErrorMessage,
+        graph
+      );
+      store.removeStatements([statement]);
+    }
+  }
+
   createStatementForRdfTypeAndGrouping(
     sourceNode,
     rdfType,
@@ -241,12 +266,14 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     defaultErrorMessage,
     graph
   ) {
-    return new Statement(
-      sourceNode,
-      SH('resultMessage'),
-      defaultErrorMessage,
-      graph
-    );
+    if (defaultErrorMessage) {
+      return new Statement(
+        sourceNode,
+        SH('resultMessage'),
+        defaultErrorMessage,
+        graph
+      );
+    }
   }
 
   getStatementToAddFieldPathToValidationPath(validationSubject, store, graph) {
