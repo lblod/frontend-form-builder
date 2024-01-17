@@ -6,11 +6,10 @@ import ValidationConceptSchemeSelectorComponent from '../../components/rdf-form-
 import { getLocalFileContentAsText } from '../../utils/get-local-file-content';
 import CountryCodeConceptSchemeSelectorComponent from '../../components/rdf-form-fields/country-code-concept-scheme-selector';
 import { GRAPHS } from '../../controllers/formbuilder/edit';
-import { getConceptSchemesWithConceptsStatements } from '../../utils/get-statements-for-concept-scheme-with-concepts';
-import { getTurtleTextForStatements } from '../../utils/viewmodels/statements-to-turtle-text';
 
 export default class FormbuilderEditRoute extends Route {
   @service store;
+  @service('codelists') codelistsService;
 
   constructor() {
     super(...arguments);
@@ -23,9 +22,12 @@ export default class FormbuilderEditRoute extends Route {
         this.getGeneratedFormById(params.id),
         getLocalFileContentAsText('/forms/builder/form.ttl'),
         getLocalFileContentAsText('/forms/builder/meta.ttl'),
-        this.getConceptSchemeTurtleText() ??
-          getLocalFileContentAsText('/forms/preview/concept-schemes.ttl'),
+        getLocalFileContentAsText('/forms/preview/concept-schemes.ttl'),
       ]);
+
+    if (!this.codelistsService.findTurtleText()) {
+      console.log(`Gebruik van lokale codelijsten`);
+    }
 
     return {
       generatedForm,
@@ -44,14 +46,6 @@ export default class FormbuilderEditRoute extends Route {
 
   resetController(controller) {
     controller.reset();
-  }
-
-  async getConceptSchemeTurtleText() {
-    const statements = await getConceptSchemesWithConceptsStatements(
-      this.store
-    );
-
-    return await getTurtleTextForStatements(statements);
   }
 
   async getGeneratedFormById(generatedFormId) {
