@@ -40,7 +40,7 @@
 
 <div class="codelijsten__edit">
   <span class="au-u-padding">
-    {{#if this.isGenericConceptScheme}}
+    {{#if this.isPrivateConceptScheme}}
       <AuAlert @title={{"Opgelet"}} @skin={{"warning"}} @icon={{"login"}}>
         <p>Generieke codelijsten kunnen niet aangepast worden.</p>
       </AuAlert>
@@ -52,7 +52,7 @@
       <AuInput
         id="input-codelist-name"
         @width="block"
-        @disabled={{this.isGenericConceptScheme}}
+        @disabled={{this.isPrivateConceptScheme}}
         value={{this.name}}
         {{on "blur" this.handleNameChange}}
       />
