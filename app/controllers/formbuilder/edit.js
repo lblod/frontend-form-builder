@@ -56,11 +56,13 @@ export default class FormbuilderEditController extends Controller {
 
     this.previewStore = new ForkingStore();
     // todo: could cause some lag(modifier: editor.js)
-    this.previewStore.parse(
-      this.model.conceptSchemesTtl,
-      this.model.graphs.metaGraph,
-      'text/turtle'
-    );
+    if (this.model.conceptSchemesTtl) {
+      this.previewStore.parse(
+        this.model.conceptSchemesTtl,
+        this.model.graphs.metaGraph,
+        'text/turtle'
+      );
+    }
 
     this.previewStore.parse(
       ttlCode,
