@@ -16,26 +16,38 @@
       </li>
     </ul>
   </Group>
-  <AuButtonGroup>
-    <AuButton
-      @skin="primary"
-      @disabled={{this.isSaveDisabled}}
-      {{on "click" this.save}}
-    >
-      Bewaar
-    </AuButton>
-    <AuButton
-      @skin="secondary"
-      @icon="bin"
-      @iconAlignment="left"
-      @alert={{true}}
-      @disabled={{this.isPrivateConceptScheme}}
-      @loadingMessage="Aan het verwijderen"
-      {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
-    >
-      Verwijderen
-    </AuButton>
-  </AuButtonGroup>
+  <Group class="au-c-toolbar__group--actions">
+    <div class="saveSplitButton">
+      <AuButton
+        id="saveSplitButton_save"
+        @disabled={{this.isSaveDisabled}}
+        {{on "click" this.save}}
+      >
+        Bewaar
+      </AuButton>
+      <AuDropdown
+        id="saveSplitButton_dropdown"
+        @title=""
+        @hideText={{true}}
+        @alignment="left"
+        role="menu"
+        @skin="primary"
+      >
+        <AuButton
+          @skin="link"
+          @icon="bin"
+          @iconAlignment="left"
+          @alert={{true}}
+          role="menuitem"
+          @disabled={{this.isPrivateConceptScheme}}
+          @loadingMessage="Aan het verwijderen"
+          {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
+        >
+          Verwijderen
+        </AuButton>
+      </AuDropdown>
+    </div>
+  </Group>
 </AuToolbar>
 
 <div class="codelijsten__edit">
