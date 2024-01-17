@@ -2,7 +2,7 @@ import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { GRAPHS } from '../../controllers/formbuilder/edit';
 import { Namespace } from 'rdflib';
 
-const BASE_SUBJECTS = [
+const BASE_SUBJECTS_ARRAY = [
   new Namespace('http://ember-submission-form-fields/')('source-node').value,
 ];
 
@@ -43,7 +43,7 @@ export function getAllUniqueSubjectsInStore(store) {
 }
 
 export function isSubjectReferenced(subject, store) {
-  if (BASE_SUBJECTS.includes(subject.value)) {
+  if (BASE_SUBJECTS_ARRAY.includes(subject.value)) {
     return true;
   }
 
