@@ -135,6 +135,12 @@ export default class CodelijstenEditController extends Controller {
     for (const concept of this.concepts) {
       await updateConcept(concept, this.store, this.toaster);
     }
+
+    showSuccessToasterMessage(
+      this.toaster,
+      'Up-to-date',
+      'Concepten bijgewerkt'
+    );
   }
 
   @action

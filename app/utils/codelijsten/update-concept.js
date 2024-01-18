@@ -1,7 +1,4 @@
-import {
-  showErrorToasterMessage,
-  showSuccessToasterMessage,
-} from '../toaster-message-helper';
+import { showErrorToasterMessage } from '../toaster-message-helper';
 
 export async function updateConcept(concept, store, toasterService) {
   let conceptInDatabase = await store.findRecord('concept', concept.id);
@@ -19,7 +16,6 @@ export async function updateConcept(concept, store, toasterService) {
   try {
     conceptInDatabase.save();
     conceptInDatabase.reload();
-    showSuccessToasterMessage(toasterService, concept.id, 'Concept bijgewerkt');
   } catch (error) {
     showErrorToasterMessage(
       toasterService,
