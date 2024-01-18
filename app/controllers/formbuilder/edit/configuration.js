@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { restartableTask } from 'ember-concurrency';
+import { getSectionFields } from '../../../utils/get-section-items';
 import { tracked } from '@glimmer/tracking';
 import {
   getMinimalNodeInfo,
@@ -92,7 +93,7 @@ export default class FormbuilderConfigurationController extends Controller {
       'text/turtle'
     );
 
-    this.sections = this.getPropertyGroupFields(
+    this.sections = this.getSectionFields(
       this.builderStore,
       this.model.graphs.sourceGraph
     );
