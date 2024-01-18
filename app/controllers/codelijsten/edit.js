@@ -28,21 +28,18 @@ export default class CodelijstenEditController extends Controller {
   @tracked nameErrorMessage;
   @tracked isSaveDisabled;
 
-  savedConcepts;
-
   @action
-  async setup(model) {
+  setup(model) {
     this.name = model.conceptScheme.label;
     this.conceptsToDelete = [];
-    this.savedConcepts = A(
-      new Array(...(await model.conceptScheme.concepts)).map((concept) => {
+    this.concepts = A(
+      new Array(...model.concepts).map((concept) => {
         return {
           id: concept.id,
           label: concept.label,
         };
       })
     );
-    this.concepts = [...this.savedConcepts];
 
     this.setIsSaveButtonDisabled();
   }
@@ -128,7 +125,6 @@ export default class CodelijstenEditController extends Controller {
     this.conceptsToDelete = [];
 
     await this.updateConcepts();
-    this.setIsSaveButtonDisabled();
   }
 
   async updateConcepts() {
@@ -206,7 +202,7 @@ export default class CodelijstenEditController extends Controller {
       ) {
         if (
           this.model.conceptScheme.label.trim() !== this.name ||
-          isConceptArrayChanged(this.savedConcepts, this.concepts) ||
+          isConceptArrayChanged(this.model.concepts, this.concepts) ||
           this.conceptsToDelete.length >= 1
         ) {
           this.isSaveDisabled = false;
@@ -232,7 +228,7 @@ export default class CodelijstenEditController extends Controller {
   isBackTheSavedVersion() {
     return (
       this.model.conceptScheme.label == this.name &&
-      !isConceptArrayChanged(this.savedConcepts, this.concepts)
+      !isConceptArrayChanged(this.model.concepts, this.concepts)
     );
   }
 }

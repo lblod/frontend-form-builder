@@ -13,13 +13,14 @@ export default class CodelijstenEditRoute extends Route {
 
     return {
       conceptScheme: conceptScheme,
+      concepts: await conceptScheme.concepts,
     };
   }
 
-  async setupController(controller, model) {
+  setupController(controller, model) {
     super.setupController(...arguments);
 
-    await controller.setup(model);
+    controller.setup(model);
   }
 
   async resetController(controller) {
