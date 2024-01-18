@@ -191,6 +191,10 @@ export default class CodelijstenEditController extends Controller {
 
   setIsSaveButtonDisabled() {
     if (this.model.conceptScheme.isPublic) {
+      if (this.isBackTheSavedVersion()) {
+        this.isSaveDisabled = true;
+        return;
+      }
       if (
         this.isValidConceptSchemeName() &&
         this.isConceptListIncludingEmptyValues()
@@ -218,5 +222,12 @@ export default class CodelijstenEditController extends Controller {
 
   isValidConceptSchemeName() {
     return this.name.trim() !== '' && !this.isDuplicateName;
+  }
+
+  isBackTheSavedVersion() {
+    return (
+      this.model.conceptScheme.label == this.name &&
+      !isConceptArrayChanged(this.model.concepts, this.concepts)
+    );
   }
 }
