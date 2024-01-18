@@ -135,7 +135,9 @@ export default class CodelijstenEditController extends Controller {
     await this.deleteConcepts(this.conceptsToDelete);
     this.conceptsToDelete = [];
 
-    await this.updateConcepts();
+    if (this.isConceptListChanged()) {
+      await this.updateConcepts();
+    }
 
     await this.setup.perform(this.conceptScheme.id);
 
@@ -221,7 +223,7 @@ export default class CodelijstenEditController extends Controller {
       ) {
         if (
           this.conceptScheme.label.trim() !== this.codelistName ||
-          isConceptArrayChanged(this.conceptsInDatabase, this.concepts) ||
+          this.isConceptListChanged() ||
           this.conceptsToDelete.length >= 1
         ) {
           this.isSaveDisabled = false;
@@ -247,9 +249,13 @@ export default class CodelijstenEditController extends Controller {
   isBackTheSavedVersion() {
     return (
       this.conceptScheme.label == this.codelistName &&
-      !isConceptArrayChanged(this.conceptsInDatabase, this.concepts) &&
+      !this.isConceptListChanged() &&
       this.conceptsToDelete.length == 0
     );
+  }
+
+  isConceptListChanged() {
+    return isConceptArrayChanged(this.conceptsInDatabase, this.concepts);
   }
 
   emberArrayToArray(emberArray) {
