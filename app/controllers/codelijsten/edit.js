@@ -199,12 +199,13 @@ export default class CodelijstenEditController extends Controller {
         this.toaster,
         deleteSilently
       );
+      this.concepts.removeObject(conceptToDelete);
     }
   }
 
   @action
   async deleteCodelist() {
-    await this.deleteConcepts(this.concepts);
+    await this.deleteConcepts(this.concepts, true);
     await deleteConceptScheme(this.conceptScheme.id, this.store, this.toaster);
     this.isDeleteModalOpen = false;
     this.router.transitionTo('codelijsten.index');
