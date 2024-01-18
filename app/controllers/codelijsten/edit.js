@@ -135,6 +135,8 @@ export default class CodelijstenEditController extends Controller {
 
     await this.updateConcepts();
 
+    await this.setup.perform(this.conceptScheme.id);
+
     this.setIsSaveButtonDisabled();
   }
 
@@ -150,7 +152,6 @@ export default class CodelijstenEditController extends Controller {
       'Up-to-date',
       'Concepten bijgewerkt'
     );
-    await this.setup.perform(this.conceptScheme.id);
   }
 
   @action
