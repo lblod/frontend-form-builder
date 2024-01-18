@@ -25,7 +25,13 @@ export function getDisplayTypeOfNode(node, store, graph) {
 }
 
 export function getRdfTypeOfNode(node, store, graph) {
-  return store.any(node, RDF('type'), undefined, graph);
+  const type = store.any(node, RDF('type'), undefined, graph);
+
+  if (!type) {
+    console.error(`Could not find RDF type for node`, node);
+  }
+
+  return type;
 }
 
 export function getGroupingTypeOfNode(node, store, graph) {
