@@ -192,6 +192,8 @@ export default class CodelijstenEditController extends Controller {
     if (this.model.conceptScheme.isPublic) {
       if (this.isBackTheSavedVersion()) {
         this.isSaveDisabled = true;
+        this.conceptsToDelete = [];
+
         return;
       }
       if (
