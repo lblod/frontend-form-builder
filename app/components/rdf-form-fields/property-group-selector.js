@@ -32,7 +32,7 @@ export default class PropertyGroupSelector extends InputFieldComponent {
   loadOptions() {
     const sourceGraph = this.args.graphs.sourceGraph;
     const propertyGroup = new namedNode(
-      'http://lblod.data.gift/vocabularies/forms/PropertyGroup'
+      'http://lblod.data.gift/vocabularies/forms/Section' //V2 
     );
 
     const allRawOptions = this.args.formStore
