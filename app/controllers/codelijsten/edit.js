@@ -14,38 +14,48 @@ import { deleteConceptScheme } from '../../utils/codelijsten/delete-concept-sche
 import { isDuplicateConceptSchemeName } from '../../utils/codelijsten/is-duplicate-concept-scheme-name';
 import { updateConcept } from '../../utils/codelijsten/update-concept';
 import { isConceptArrayChanged } from '../../utils/codelijsten/compare-concept-arrays';
+import { restartableTask } from 'ember-concurrency';
 
 export default class CodelijstenEditController extends Controller {
   @service toaster;
   @service store;
   @service router;
 
-  @tracked name;
+  @tracked codelistName;
+  @tracked conceptScheme;
+
   @tracked concepts;
   @tracked conceptsToDelete;
   @tracked isDeleteModalOpen;
   @tracked isDuplicateName;
   @tracked nameErrorMessage;
   @tracked isSaveDisabled;
+  @tracked isPrivateConceptScheme;
 
-  @action
-  setup(model) {
-    this.name = model.conceptScheme.label;
-    this.conceptsToDelete = [];
-    this.concepts = A(
-      new Array(...model.concepts).map((concept) => {
-        return {
-          id: concept.id,
-          label: concept.label,
-        };
-      })
+  conceptsInDatabase;
+
+  setup = restartableTask(async (conceptSchemeId) => {
+    this.conceptScheme = await this.getConceptSchemeById(conceptSchemeId);
+    this.setValuesFromConceptscheme();
+
+    const conceptArray = this.emberArrayToArray(
+      await this.conceptScheme.concepts
     );
+    this.setValuesFromConcepts(conceptArray);
 
     this.setIsSaveButtonDisabled();
+  });
+
+  setValuesFromConceptscheme() {
+    this.isPrivateConceptScheme = !this.conceptScheme.isPublic;
+    this.codelistName = this.conceptScheme.label;
   }
 
-  get isPrivateConceptScheme() {
-    return !this.model.conceptScheme.isPublic;
+  setValuesFromConcepts(conceptArray) {
+    this.conceptsInDatabase = this.mapConceptModels(conceptArray);
+    this.concepts = this.mapConceptModels(conceptArray);
+
+    this.conceptsToDelete = [];
   }
 
   @action
@@ -57,18 +67,18 @@ export default class CodelijstenEditController extends Controller {
       this.nameErrorMessage = 'Dit veld is verplicht';
     }
 
-    this.name = newName.trim();
+    this.codelistName = newName.trim();
     this.isDuplicateName = await isDuplicateConceptSchemeName(
-      this.model.conceptScheme,
-      this.name,
+      this.conceptScheme,
+      this.codelistName,
       this.store
     );
 
-    if (this.name !== '' && this.isDuplicateName) {
+    if (this.codelistName !== '' && this.isDuplicateName) {
       this.nameErrorMessage = `Naam is duplicaat`;
     }
 
-    if (this.name.length > NAME_INPUT_CHAR_LIMIT) {
+    if (this.codelistName.length > NAME_INPUT_CHAR_LIMIT) {
       this.nameErrorMessage = 'Maximum characters exceeded';
     }
 
@@ -95,7 +105,7 @@ export default class CodelijstenEditController extends Controller {
   async addNewConcept() {
     const concept = this.store.createRecord('concept', {
       preflabel: '',
-      conceptSchemes: [this.model.conceptScheme],
+      conceptSchemes: [this.conceptScheme],
     });
     await concept.save();
     await concept.reload();
@@ -109,11 +119,11 @@ export default class CodelijstenEditController extends Controller {
 
   @action
   async save() {
-    if (this.model.conceptScheme.label.trim() !== this.name) {
-      this.model.conceptScheme.preflabel = this.name;
+    if (this.conceptScheme.label.trim() !== this.codelistName) {
+      this.conceptScheme.preflabel = this.codelistName;
       try {
-        this.model.conceptScheme.save();
-        this.model.conceptScheme.reload();
+        this.conceptScheme.save();
+        this.conceptScheme.reload();
         showSuccessToasterMessage(this.toaster, 'Codelijst naam bijgewerkt');
       } catch (error) {
         showErrorToasterMessage(this.toaster, 'Oeps, er is iets mis gegaan');
@@ -141,6 +151,7 @@ export default class CodelijstenEditController extends Controller {
       'Up-to-date',
       'Concepten bijgewerkt'
     );
+    await this.setup.perform(this.conceptScheme.id);
   }
 
   @action
@@ -155,18 +166,14 @@ export default class CodelijstenEditController extends Controller {
 
   async removeEmptyConceptsAndScheme() {
     const emptyConcepts = this.concepts.filter(
-      (concept) => concept.label.trim() == ''
+      (concept) => !concept.label || concept.label.trim() == ''
     );
 
     await this.deleteConcepts(emptyConcepts, true);
 
-    if (this.model.conceptScheme.label.trim() == '') {
+    if (this.conceptScheme.label.trim() == '') {
       await this.deleteCodelist();
     }
-
-    this.concepts = this.concepts.filter(
-      (concept) => concept.label.trim() !== ''
-    );
   }
 
   async deleteConcepts(concepts, deleteSilently) {
@@ -187,17 +194,13 @@ export default class CodelijstenEditController extends Controller {
   @action
   async deleteCodelist() {
     await this.deleteConcepts(this.concepts);
-    await deleteConceptScheme(
-      this.model.conceptScheme.id,
-      this.store,
-      this.toaster
-    );
+    await deleteConceptScheme(this.conceptScheme.id, this.store, this.toaster);
     this.isDeleteModalOpen = false;
     this.router.transitionTo('codelijsten.index');
   }
 
   setIsSaveButtonDisabled() {
-    if (this.model.conceptScheme.isPublic) {
+    if (this.conceptScheme.isPublic) {
       if (this.isBackTheSavedVersion()) {
         this.isSaveDisabled = true;
         this.conceptsToDelete = [];
@@ -209,8 +212,8 @@ export default class CodelijstenEditController extends Controller {
         this.isConceptListIncludingEmptyValues()
       ) {
         if (
-          this.model.conceptScheme.label.trim() !== this.name ||
-          isConceptArrayChanged(this.model.concepts, this.concepts) ||
+          this.conceptScheme.label.trim() !== this.codelistName ||
+          isConceptArrayChanged(this.conceptsInDatabase, this.concepts) ||
           this.conceptsToDelete.length >= 1
         ) {
           this.isSaveDisabled = false;
@@ -230,13 +233,43 @@ export default class CodelijstenEditController extends Controller {
   }
 
   isValidConceptSchemeName() {
-    return this.name.trim() !== '' && !this.isDuplicateName;
+    return this.codelistName.trim() !== '' && !this.isDuplicateName;
   }
 
   isBackTheSavedVersion() {
     return (
-      this.model.conceptScheme.label == this.name &&
-      !isConceptArrayChanged(this.model.concepts, this.concepts)
+      this.conceptScheme.label == this.codelistName &&
+      !isConceptArrayChanged(this.conceptsInDatabase, this.concepts)
     );
+  }
+
+  emberArrayToArray(emberArray) {
+    return new Array(...emberArray);
+  }
+
+  mapConceptModels(concepts) {
+    return concepts.map((concept) => {
+      return {
+        id: concept.id,
+        label: concept.label,
+      };
+    });
+  }
+
+  async getConceptSchemeById(conceptSchemeId) {
+    try {
+      const conceptScheme = await this.store.findRecord(
+        'concept-scheme',
+        conceptSchemeId,
+        {
+          include: 'concepts',
+        }
+      );
+      await conceptScheme.reload();
+
+      return conceptScheme;
+    } catch (error) {
+      throw `Could not fetch concept-scheme with id: ${conceptSchemeId}`;
+    }
   }
 }

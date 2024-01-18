@@ -80,7 +80,7 @@
         id="input-codelist-name"
         @width="block"
         @disabled={{this.isPrivateConceptScheme}}
-        value={{this.name}}
+        value={{this.codelistName}}
         {{on "blur" this.handleNameChange}}
       />
       {{#if this.nameErrorMessage}}

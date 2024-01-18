@@ -9,38 +9,18 @@ export default class CodelijstenEditRoute extends Route {
   }
 
   async model(params) {
-    const conceptScheme = await this.getConceptSchemeById(params.id);
-
     return {
-      conceptScheme: conceptScheme,
-      concepts: await conceptScheme.concepts,
+      conceptSchemeId: params.id,
     };
   }
 
-  setupController(controller, model) {
+  async setupController(controller, model) {
     super.setupController(...arguments);
 
-    controller.setup(model);
+    controller.setup.perform(model.conceptSchemeId);
   }
 
   async resetController(controller) {
     await controller.removeEmptyConceptsAndScheme();
-  }
-
-  async getConceptSchemeById(conceptSchemeId) {
-    try {
-      const conceptScheme = await this.store.findRecord(
-        'concept-scheme',
-        conceptSchemeId,
-        {
-          include: 'concepts',
-        }
-      );
-      await conceptScheme.reload();
-
-      return conceptScheme;
-    } catch (error) {
-      throw `Could not fetch concept-scheme with id: ${conceptSchemeId}`;
-    }
   }
 }
