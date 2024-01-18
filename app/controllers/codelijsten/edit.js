@@ -1,7 +1,6 @@
 import Controller from '@ember/controller';
 
 import { action } from '@ember/object';
-import { A } from '@ember/array';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { NAME_INPUT_CHAR_LIMIT } from '../../utils/constants';
