@@ -155,12 +155,19 @@ export default class CodelijstenEditController extends Controller {
   }
 
   @action
-  temporaryDeleteConcept(concept) {
+  async temporaryDeleteConcept(concept) {
     const conceptToDelete = this.concepts.find((con) => con.id == concept.id);
+
     if (conceptToDelete) {
       this.concepts.removeObject(conceptToDelete);
-      this.conceptsToDelete.push(conceptToDelete);
+
+      if (!this.conceptsInDatabase.find((con) => con.id == concept.id)) {
+        await deleteConcept(concept.id, this.store, this.toaster, true);
+      } else {
+        this.conceptsToDelete.push(conceptToDelete);
+      }
     }
+
     this.setIsSaveButtonDisabled();
   }
 
@@ -203,7 +210,6 @@ export default class CodelijstenEditController extends Controller {
     if (this.conceptScheme.isPublic) {
       if (this.isBackTheSavedVersion()) {
         this.isSaveDisabled = true;
-        this.conceptsToDelete = [];
 
         return;
       }
@@ -239,7 +245,8 @@ export default class CodelijstenEditController extends Controller {
   isBackTheSavedVersion() {
     return (
       this.conceptScheme.label == this.codelistName &&
-      !isConceptArrayChanged(this.conceptsInDatabase, this.concepts)
+      !isConceptArrayChanged(this.conceptsInDatabase, this.concepts) &&
+      this.conceptsToDelete.length == 0
     );
   }
 
