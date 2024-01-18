@@ -14,6 +14,7 @@ import { isDuplicateConceptSchemeName } from '../../utils/codelijsten/is-duplica
 import { updateConcept } from '../../utils/codelijsten/update-concept';
 import { isConceptArrayChanged } from '../../utils/codelijsten/compare-concept-arrays';
 import { restartableTask } from 'ember-concurrency';
+import { sortObjectsOnProperty } from '../../utils/sort-object-on-property';
 
 export default class CodelijstenEditController extends Controller {
   @service toaster;
@@ -52,7 +53,8 @@ export default class CodelijstenEditController extends Controller {
 
   setValuesFromConcepts(conceptArray) {
     this.conceptsInDatabase = this.mapConceptModels(conceptArray);
-    this.concepts = this.mapConceptModels(conceptArray);
+    const mappedConcepts = this.mapConceptModels(conceptArray);
+    this.concepts = sortObjectsOnProperty(mappedConcepts, 'label');
 
     this.conceptsToDelete = [];
   }
