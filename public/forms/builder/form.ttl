@@ -128,7 +128,7 @@ ext:formNodesFormItem a form:SubForm;
   form:includes ext:formNodesTypeF;
   form:includes ext:formNodeHelpTextF;
   form:includes ext:formNodeOptionsF;
-  form:includes ext:formNodesectionF;
+  form:includes ext:formNodeSectionF;
   form:hasFieldGroup ext:formFieldPg.
 
 ext:formNodesNameF a form:Field ;
@@ -166,7 +166,7 @@ ext:formNodeOptionsF a form:Field;
   form:displayType displayTypes:textArea;
   form:partOf ext:formFieldPg .
 
-ext:formNodesectionF a form:Field;
+ext:formNodeSectionF a form:Field;
   sh:name "Link to section" ;
   form:help """
    This is required. If you dont specify a section, the field will not be visible.
