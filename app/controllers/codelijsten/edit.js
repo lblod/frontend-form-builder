@@ -125,7 +125,6 @@ export default class CodelijstenEditController extends Controller {
     this.conceptsToDelete = [];
 
     await this.updateConcepts();
-    this.router.transitionTo('codelijsten.index');
   }
 
   async updateConcepts() {
