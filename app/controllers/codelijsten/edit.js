@@ -125,6 +125,8 @@ export default class CodelijstenEditController extends Controller {
     this.conceptsToDelete = [];
 
     await this.updateConcepts();
+
+    this.setIsSaveButtonDisabled();
   }
 
   async updateConcepts() {
