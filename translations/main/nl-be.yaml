@@ -27,3 +27,17 @@ navigation:
     build: "Bouwer"
     validations: "Validaties"
     configuration: "Configuratie"
+
+# Components #
+toolbar:
+  savedOn: "Bewaard op"
+  exportCode: "Exporteer code"
+  unSavedChanges: "Aanpassingen nog niet bewaard"
+  formUpToDate: "Formulier up-to-date"
+  codelists: "Codelijsten"
+
+editNameModal:
+  title: "Geef een naam en beschrijving"
+  name: "Naam"
+  description: "Beschrijving"
+  createForm: "Bouw formulier"
