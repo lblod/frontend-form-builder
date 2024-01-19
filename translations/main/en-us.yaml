@@ -27,6 +27,14 @@ navigation:
     build: "Builder"
     validations: "Validations"
     configuration: "Configuration"
+    codelists: "Codelists"
+
+table:
+  columns:
+    name: "Name"
+    id: "Id"
+    label: "Label"
+    actions: "Actions"
 
 # Components #
 toolbar:

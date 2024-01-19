@@ -1,0 +1,178 @@
+{{page-title "Edit"}}
+
+<AuToolbar @size="medium" @skin="tint" @border="bottom" as |Group|>
+  <Group>
+    <ul class="au-c-list-horizontal au-c-list-horizontal--small">
+      <li class="au-c-list-horizontal__item">
+        <AuLink
+          @route="codelijsten"
+          @skin="primary"
+          @icon="arrow-left"
+          @iconAlignment="left"
+        >{{t "navigation.backToCodelists"}}</AuLink>
+      </li>
+      <li class="au-c-list-horizontal__item au-u-bold">
+        {{t "codelists.detailTitle"}}
+      </li>
+    </ul>
+  </Group>
+  <Group class="au-c-toolbar__group--actions">
+    <div class="saveSplitButton">
+      <AuButton
+        id="saveSplitButton_save"
+        @disabled={{this.isSaveDisabled}}
+        {{on "click" this.save}}
+      >
+        {{t "crud.save"}}
+      </AuButton>
+
+      {{#if this.isPrivateConceptScheme}}
+        <span id="saveSplitButton_dropdown">
+          <AuButton
+            @disabled={{true}}
+            @hideText={{true}}
+            @icon="nav-down"
+            @alignment="left"
+            @skin="primary"
+          >
+            {{t "crud.save"}}
+          </AuButton>
+        </span>
+      {{else}}
+        <AuDropdown
+          id="saveSplitButton_dropdown"
+          @title=""
+          @hideText={{true}}
+          @alignment="left"
+          role="menu"
+          @skin="primary"
+        >
+          <AuButton
+            @skin="link"
+            @icon="bin"
+            @iconAlignment="left"
+            @alert={{true}}
+            role="menuitem"
+            @disabled={{this.isPrivateConceptScheme}}
+            @loadingMessage={{t "messages.loading.isDeleting"}}
+            {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
+          >
+            {{t "crud.delete"}}
+          </AuButton>
+        </AuDropdown>
+      {{/if}}
+    </div>
+  </Group>
+</AuToolbar>
+
+<div class="codelijsten__scroll">
+  <span class="au-u-padding">
+    {{#if this.isPrivateConceptScheme}}
+      <AuAlert @title={{"Opgelet"}} @skin={{"warning"}} @icon={{"login"}}>
+        <p>{{t "codelists.alert.genericCodelist"}}</p>
+      </AuAlert>
+    {{/if}}
+    <div class="au-u-3-5 au-u-margin-bottom-large">
+      <AuLabel for="input-codelist-name" @required={{true}}>
+        {{t "codelists.nameOfCodelist"}}
+      </AuLabel>
+      <AuInput
+        id="input-codelist-name"
+        @width="block"
+        @disabled={{this.isPrivateConceptScheme}}
+        value={{this.codelistName}}
+        {{on "blur" this.handleNameChange}}
+      />
+      {{#if this.nameErrorMessage}}
+        <AuHelpText @error={{true}}>{{this.nameErrorMessage}}</AuHelpText>
+      {{/if}}
+    </div>
+  </span>
+  <div>
+    <AuTable class="au-u-margin-bottom-small">
+      <:header>
+        <tr>
+          <th>{{t "table.columns.label"}}</th>
+          {{#unless this.isPrivateConceptScheme}}
+            <th>{{t "table.columns.actions"}}</th>
+          {{/unless}}
+        </tr>
+      </:header>
+      <:body>
+        {{#if this.concepts}}
+          {{#each this.concepts as |concept|}}
+            <tr>
+              {{#if this.isPrivateConceptScheme}}
+                <td class="au-u-visible-medium-up">
+                  {{concept.label}}</td>
+              {{else}}
+                <td class="au-u-visible-medium-up">
+                  <AuInput
+                    id={{concept.id}}
+                    value={{concept.label}}
+                    {{on "blur" (fn this.handleConceptChange concept)}}
+                  /></td>
+              {{/if}}
+              {{#unless this.isPrivateConceptScheme}}
+                <td class="au-u-visible-medium-up">
+                  <AuButton
+                    @icon="bin"
+                    @hideText={{true}}
+                    @iconAlignment="left"
+                    @alert={{true}}
+                    @loadingMessage={{t "messages.loading.isDeleting"}}
+                    {{on "click" (fn this.temporaryDeleteConcept concept)}}
+                  >
+                    {{t "crud.delete"}}
+                  </AuButton>
+                </td>
+              {{/unless}}
+            </tr>
+          {{/each}}
+        {{/if}}
+        {{#unless this.isPrivateConceptScheme}}
+          <tr>
+            <td class="au-u-visible-medium-up">
+              <AuButton
+                @skin="secondary"
+                @icon="plus"
+                @iconAlignment="left"
+                {{on "click" this.addNewConcept}}
+              >
+                {{t "codelists.addConcept"}}
+              </AuButton>
+            </td>
+            <td></td>
+          </tr>
+        {{/unless}}
+      </:body>
+    </AuTable>
+  </div>
+</div>
+
+<AuModal @modalOpen={{this.isDeleteModalOpen}} @closeModal={{this.close}}>
+  <:title>{{t "confirmation.deleteCodelistTitle"}}</:title>
+  <:body>
+    {{t "confirmation.deleteCodelistQuestion"}}
+  </:body>
+  <:footer>
+    <AuButtonGroup>
+      <AuButton
+        @icon="bin"
+        @iconAlignment="left"
+        @alert={{true}}
+        @loadingMessage="Aan het verwijderen"
+        {{on "click" this.deleteCodelist}}
+      >
+        {{t "crud.delete"}}
+      </AuButton>
+      <AuButton
+        @skin="secondary"
+        @disabled={{this.delete.isRunning}}
+        {{on "click" (fn (mut this.isDeleteModalOpen) false)}}
+      >
+        {{t "crud.cancel"}}
+      </AuButton>
+    </AuButtonGroup>
+  </:footer>
+</AuModal>

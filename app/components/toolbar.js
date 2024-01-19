@@ -13,7 +13,6 @@ export default class ToolbarComponent extends Component {
   @service toaster;
   @service intl;
   @service('form-code-manager') formCodeManager;
-  @service features;
 
   @tracked showDeleteModal = false;
 

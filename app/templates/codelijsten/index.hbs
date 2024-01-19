@@ -1,25 +1,44 @@
 {{page-title "Concept schemes"}}
+
+<AuToolbar @size="medium" @skin="tint" @border="bottom" as |Group|>
+  <Group>
+    <ul class="au-c-list-horizontal au-c-list-horizontal--small">
+      <li class="au-c-list-horizontal__item">
+        <AuLink
+          @route="index"
+          @skin="primary"
+          @icon="arrow-left"
+          @iconAlignment="left"
+        >{{t "navigation.backToFormBuilder"}}</AuLink>
+      </li>
+      <li class="au-c-list-horizontal__item au-u-bold">
+        {{t "navigation.tabs.codelists"}}
+      </li>
+    </ul>
+  </Group>
+</AuToolbar>
+
 <div class="au-c-toolbar au-c-toolbar--bottom au-c-toolbar--large">
   <div class="au-c-toolbar__group">
     <AuHeading @level="1" @skin="2">
-      {{t "main.formsTitle"}}
+      {{t "navigation.tabs.codelists"}}
     </AuHeading>
   </div>
   <div class="au-c-toolbar__group">
     <AuButtonGroup>
-      <AuButton
-        @skin="secondary"
-        @icon="arrow-left"
+      <AuLink
+        @route="codelijsten.new"
+        @skin="button"
+        @icon="plus"
         @iconAlignment="left"
-        {{on "click" this.previousRoute}}
-      >{{t "navigation.backToFormBuilder"}}</AuButton>
+      >{{t "codelists.createCodelist"}}</AuLink>
     </AuButtonGroup>
   </div>
 </div>
 
-<main id="main" class="au-c-main-container">
-
-  <div class="au-c-main-container__content">
+<div class="au-c-main-container__content codelijsten__scroll">
+  {{! Code below is the original codelist page }}
+  {{#if this.features.SHOW_ORIGNAL_CODELIST_PAGE}}
     <div class="playground">
       <div class="playground__codelist">
         {{!
@@ -87,7 +106,6 @@
 
       </div>
       <div class="playground__show">
-
         <AuContent class="au-u-margin-bottom">
           <AuLabel>{{t "codelists.contentOfList"}}</AuLabel>
           {{#if this.scheme.uri}}
@@ -106,8 +124,49 @@
         </AuContent>
       </div>
     </div>
-  </div>
-
-</main>
+  {{else}}
+    {{! Start new codelist page }}
+    <AuTable class="au-u-margin-bottom-small">
+      <:header>
+        <tr>
+          <th>{{t "table.columns.name"}}</th>
+          <th>{{t "table.columns.id"}}</th>
+          <th></th>
+        </tr>
+      </:header>
+      <:body>
+        {{#each this.model as |conceptScheme|}}
+          <tr>
+            <td class="au-u-visible-medium-up">
+              <AuLink
+                @route="codelijsten.edit"
+                @model={{conceptScheme.id}}
+                @ariaHidden={{true}}
+              >{{conceptScheme.label}}</AuLink>
+            </td>
+            <td class="au-u-visible-medium-up">{{conceptScheme.id}}</td>
+            <td>
+              {{#if conceptScheme.isPublic}}
+                <AuPill
+                  @skin="success"
+                  @icon="info-circle"
+                  @iconAlignment="left"
+                >{{t "codelists.types.isPublic"}}
+                </AuPill>
+              {{else}}
+                <AuPill
+                  @skin="warning"
+                  @icon="info-circle"
+                  @iconAlignment="left"
+                >{{t "codelists.types.isPrivate"}}
+                </AuPill>
+              {{/if}}
+            </td>
+          </tr>
+        {{/each}}
+      </:body>
+    </AuTable>
+  {{/if}}
+</div>
 
 {{outlet}}

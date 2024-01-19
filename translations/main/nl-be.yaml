@@ -27,6 +27,14 @@ navigation:
     build: "Bouwer"
     validations: "Validaties"
     configuration: "Configuratie"
+    codelists: "Codelijsten"
+
+table:
+  columns:
+    name: "Naam"
+    id: "Id"
+    label: "Label"
+    actions: "Acties"
 
 # Components #
 toolbar:
