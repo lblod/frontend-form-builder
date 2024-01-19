@@ -7,7 +7,7 @@ export default class FormsPlaygroundRoute extends Route {
 
   beforeModel() {
     // Set the locale before the model is loaded (you can adjust the locale as needed)
-    this.intl.setLocale(['NL']);
+    this.intl.setLocale(['nl-be']);
   }
 
   @action
