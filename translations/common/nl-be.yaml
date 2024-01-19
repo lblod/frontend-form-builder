@@ -5,11 +5,6 @@ main:
   createNewForm: "Maak nieuw semantisch formulier"
   testForm: "Test semantisch formulier"
 
-navigation:
-  backToFormOverview: "Terug naar formulieren" # also used "Terug naar overzicht formulieren"
-  backToFormBuilder: "Terug naar formulierenbouwer"
-  toOverviewTestForms: "Naar overzicht testbare formulieren"
-
 formBuilder:
   edit:
     tabs:
