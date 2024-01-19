@@ -11,6 +11,7 @@ export default class ToolbarComponent extends Component {
   @service store;
   @service router;
   @service toaster;
+  @service intl;
   @service('form-code-manager') formCodeManager;
   @service features;
 
@@ -63,15 +64,23 @@ export default class ToolbarComponent extends Component {
 
     try {
       await form.save();
-      this.toaster.success('Formulier bijgewerkt', 'Success', {
-        timeOut: 5000,
-      });
+      this.toaster.success(
+        this.intl.t('messages.success.formUpdated'),
+        this.intl.t('messages.subjects.success'),
+        {
+          timeOut: 5000,
+        }
+      );
       this.formCodeManager.pinLatestVersionAsReference();
       this.isEditingName = false;
     } catch (err) {
-      this.toaster.error('Oeps, er is iets mis gegaan', 'Error', {
-        timeOut: 5000,
-      });
+      this.toaster.error(
+        this.intl.t('messages.error.somethingWentWrong'),
+        this.intl.t('messages.subjects.error'),
+        {
+          timeOut: 5000,
+        }
+      );
       console.error(err);
     }
 
@@ -90,8 +99,10 @@ export default class ToolbarComponent extends Component {
 
     if (this.formLabel.length > NAME_INPUT_CHAR_LIMIT) {
       this.toaster.warning(
-        `The max character limit is ${NAME_INPUT_CHAR_LIMIT}`,
-        'Characters',
+        this.intl.t('constraints.maxCharactersReachedWithCount', {
+          count: NAME_INPUT_CHAR_LIMIT,
+        }),
+        this.intl.t('messages.subjects.characters'),
         {
           timeOut: 5000,
         }
@@ -112,9 +123,13 @@ export default class ToolbarComponent extends Component {
     }
 
     if (formsWithDuplicateName.length >= 1) {
-      this.toaster.error('This name already exists', 'Error', {
-        timeOut: 5000,
-      });
+      this.toaster.error(
+        this.intl.t('constraints.duplicateName'),
+        this.intl.t('messages.subjects.error'),
+        {
+          timeOut: 5000,
+        }
+      );
       return;
     }
 

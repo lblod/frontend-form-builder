@@ -9,8 +9,8 @@
       @options={{this.sortedSections}}
       @onChange={{this.setSelectedSection}}
       @allowClear={{true}}
-      @loadingMessage="Aan het laden..."
-      @noMatchesMessage="Geen resultaten gevonden"
+      @loadingMessage={{t "messages.loading.isLoading"}}
+      @noMatchesMessage={{t "messages.feedback.noResults"}}
       as |section|
     >
       <span>
@@ -41,14 +41,14 @@
               {{else}}
                 <p
                   class="au-u-muted au-u-h-functional au-u-medium au-u-italic"
-                >Geen verdere configuratie mogelijk</p>
+                >{{t "messages.feedback.noConfigPossible"}}</p>
               {{/if}}
             </c.content>
           </AuCard>
         {{/each}}
       {{else}}
         <span class="formBuilderEdit__noFields">
-          <p class="au-u-h3">No section selected</p>
+          <p class="au-u-h3">{{t "messages.feedback.noSectionSelected"}}</p>
         </span>
       {{/if}}
     </div>

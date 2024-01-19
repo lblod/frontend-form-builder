@@ -4,14 +4,14 @@
       <div class="au-c-toolbar au-c-toolbar--bottom au-c-toolbar--large">
         <div class="au-c-toolbar__group">
           <AuHeading @level="1" @skin="2">
-            Test semantisch formulier
+            {{t "main.testFormsTitle"}}
           </AuHeading>
         </div>
 
 
         <div class="au-c-toolbar__group">
           <AuButtonGroup>
-            <AuLink @route="user-tests.index" @icon="arrow-left" @skin="button-secondary">Naar overzicht testbare formulieren</AuLink>
+            <AuLink @route="user-tests.index" @icon="arrow-left" @skin="button-secondary">{{t "navigation.toOverviewTestForms"}}</AuLink>
           </AuButtonGroup>
         </div>
       </div>
@@ -39,9 +39,9 @@
                   @icon={{if this.recentlySaved "check"}}
                   @iconAlignment={{if this.recentlySaved "left"}}
           {{on "click" (perform this.save)}}>
-          Bewaar
+          {{t "crud.save"}}
         </AuButton>
-        <AuLink @route="user-tests.index" @skin="secondary">Annuleer</AuLink>
+        <AuLink @route="user-tests.index" @skin="secondary">{{t "crud.cancel"}}</AuLink>
       </Group>
 
       {{#unless this.model.submitted}}
@@ -52,7 +52,7 @@
                     @alert={{"true"}}
                     @icon="renew"
             {{on "click" (perform this.reset)}}>
-            Reset
+            {{t "crud.reset"}}
           </AuButton>
           <AuButton @disabled={{if (or this.save.isRunning this.submit.isRunning this.delete.isRunning) "true"}}
                     @loading={{if this.delete.isRunning "true"}}
@@ -60,7 +60,7 @@
                     @alert={{"true"}}
                     @icon="bin"
             {{on "click" (perform this.delete)}}>
-            Verwijder
+            {{t "crud.delete"}}
           </AuButton>
         </Group>
       {{/unless}}

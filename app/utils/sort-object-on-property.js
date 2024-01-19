@@ -1,10 +1,10 @@
 export function sortObjectsOnProperty(arrayOfObjects, property) {
   return arrayOfObjects.sort((a, b) => {
     if (!a[property]) {
-      console.error(`Object has no property '${property}'`, a);
+      console.error(`Object heeft geen attribuut '${property}'`, a);
     }
     if (!b[property]) {
-      console.error(`Object has no property '${property}'`, b);
+      console.error(`Object heeft geen attribuut '${property}'`, b);
       return -1;
     }
 

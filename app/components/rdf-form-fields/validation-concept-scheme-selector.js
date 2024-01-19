@@ -35,6 +35,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
   @tracked searchEnabled = true;
 
   @service toaster;
+  @service intl;
 
   fieldSubject;
 
@@ -139,7 +140,9 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     if (this.isSelectedValidationAlreadyOnField(this.selectedValidationType)) {
       showErrorToasterMessage(
         this.toaster,
-        `Validatie "${this.selectedValidationType.label}" is duplicaat.`
+        this.intl.t('messages.error.duplicateValidationType', {
+          type: this.selectedValidationType.label,
+        })
       );
       this.selectedValidationType = null;
 

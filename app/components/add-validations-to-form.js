@@ -21,6 +21,7 @@ import { getTtlWithDuplicateValidationsRemoved } from '../utils/clean-up-ttl/rem
 export default class AddValidationsToFormComponent extends Component {
   @tracked fields;
 
+  @service intl;
   @service toaster;
   @tracked selectedField;
   @service('form-code-manager') formCodeManager;
@@ -34,7 +35,9 @@ export default class AddValidationsToFormComponent extends Component {
     super(...arguments);
 
     if (!this.args.builderTtlCode || this.args.builderTtlCode == '') {
-      const errorMessage = `Cannot add validations to an empty form.`;
+      const errorMessage = this.intl.t(
+        'messages.error.cannotAddValidationsToEmptyForm'
+      );
       showErrorToasterMessage(this.toaster, errorMessage);
 
       throw errorMessage;

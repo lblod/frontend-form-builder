@@ -7,7 +7,7 @@ export function getFieldsInStore(store, graph) {
     .map((triple) => triple.subject);
 
   if (possibleFieldSubjects.length == 0) {
-    const errorMessage = `No fields found in form.`;
+    const errorMessage = `Geen velden gevonden in het formulier`;
 
     throw errorMessage;
   }

@@ -9,6 +9,7 @@ import { GRAPHS } from '../../controllers/formbuilder/edit';
 
 export default class FormbuilderEditRoute extends Route {
   @service store;
+  @service intl;
 
   constructor() {
     super(...arguments);
@@ -52,7 +53,9 @@ export default class FormbuilderEditRoute extends Route {
 
       return form;
     } catch (error) {
-      throw `Could not fetch generated-form with id: ${generatedFormId}`;
+      throw this.intl.t('messages.error.couldNotFetchFormWithId', {
+        id: generatedFormId,
+      });
     }
   }
 

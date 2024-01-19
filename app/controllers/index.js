@@ -6,6 +6,7 @@ import { service } from '@ember/service';
 export default class IndexController extends Controller {
   @service store;
   @service toaster;
+  @service intl;
 
   sort = '-created';
   page = 0;
@@ -27,17 +28,23 @@ export default class IndexController extends Controller {
     try {
       await this.formToDelete.destroyRecord();
       this.toaster.success(
-        'Formulier: ' + this.formToDelete.label + ' verwijderd',
-        'Success',
+        this.intl.t('messages.success.formDeleted', {
+          name: this.formToDelete.label,
+        }),
+        this.intl.t('messages.subjects.success'),
         {
           timeOut: 5000,
         }
       );
       this.showDeleteModal = false;
     } catch (err) {
-      this.toaster.error('Oeps, er is iets mis gegaan', 'Error', {
-        timeOut: 5000,
-      });
+      this.toaster.error(
+        this.intl.t('messages.error.somethingWentWrong'),
+        this.intl.t('messages.subjects.error'),
+        {
+          timeOut: 5000,
+        }
+      );
       console.error(err);
     }
   }

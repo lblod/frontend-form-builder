@@ -2,7 +2,7 @@
 <div class="au-c-toolbar au-c-toolbar--bottom au-c-toolbar--large">
   <div class="au-c-toolbar__group">
     <AuHeading @level="1" @skin="2">
-      Semantische Formulierenbouwer Loket
+      {{t "main.formsTitle"}}
     </AuHeading>
   </div>
   <div class="au-c-toolbar__group">
@@ -12,7 +12,7 @@
         @icon="arrow-left"
         @iconAlignment="left"
         {{on "click" this.previousRoute}}
-      >Terug naar formulierenbouwer</AuButton>
+      >{{t "navigation.backToFormBuilder"}}</AuButton>
     </AuButtonGroup>
   </div>
 </div>
@@ -28,15 +28,16 @@
         }}
         {{this.updateSelectedSchemeTo undefined}}
 
-        <AuHeading @level="2" @skin="3" class="au-u-light">Kies een concept
-          scheme waarvan u de inhoud wil bekijken</AuHeading>
+        <AuHeading @level="2" @skin="3" class="au-u-light">{{t
+            "codelists.chooseList"
+          }}</AuHeading>
 
         <div class="au-u-margin-top au-u-margin-bottom">
           <ConceptSchemeUriSelector @update={{this.updateSelectedSchemeTo}} />
         </div>
 
         <div class="au-u-margin-bottom">
-          <AuLabel>URI: geeft meer informatie en activeert de concept scheme</AuLabel>
+          <AuLabel>{{t "codelists.uri"}}</AuLabel>
           <AuContent class="au-u-margin-bottom">
             {{#if this.scheme.uri}}
               <AuPanel as |Section|>
@@ -55,22 +56,24 @@
                 </Section>
               </AuPanel>
             {{else}}
-              <AuHelpText @skin="tertiary">Kies eerst een concept scheme.</AuHelpText>
+              <AuHelpText @skin="tertiary">{{t
+                  "codelists.chooseConcept"
+                }}</AuHelpText>
             {{/if}}
             <AuAlert
               @icon="info-circle"
-              @title="Hoe de concept scheme gebruiken:"
+              @title={{t "codelists.howToUse"}}
               @skin="info"
               @size="small"
             >
               <ul class="au-u-margin-bottom-small">
-                <li>Kopieer de link en plak ze bij
+                <li>Copy the link and past it at
                   <strong>form:options</strong>
-                  en vervang de link achter
+                  and replace the link behind
                   <strong>conceptScheme</strong>
-                  om de concept scheme te activeren.</li>
-                <li>Sommige links omvatten meer informatie over de concept
-                  scheme zelf. Klik op de link om die informatie te achterhalen.</li>
+                  to activate the concept scheme</li>
+                <li>Some of the links contain more information about the concept
+                  scheme itself. Click the link top get the information</li>
               </ul>
               <img
                 src="/img/example-concept-scheme.png"
@@ -86,7 +89,7 @@
       <div class="playground__show">
 
         <AuContent class="au-u-margin-bottom">
-          <AuLabel>Bekijk inhoud van concept schemes</AuLabel>
+          <AuLabel>{{t "codelists.contentOfList"}}</AuLabel>
           {{#if this.scheme.uri}}
             <ul>
               {{#each this.scheme.concepts as |concept|}}
@@ -96,8 +99,9 @@
               {{/each}}
             </ul>
           {{else}}
-            <AuHelpText @skin="tertiary">Kies eerst een concept scheme in het
-              linkerveld.</AuHelpText>
+            <AuHelpText @skin="tertiary">{{t
+                "codelists.chooseLeftFirst"
+              }}</AuHelpText>
           {{/if}}
         </AuContent>
       </div>

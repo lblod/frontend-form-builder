@@ -12,6 +12,7 @@ export default class CreateFormModal extends Component {
   @service store;
   @service router;
   @service toaster;
+  @service intl;
 
   @tracked name = '';
   @tracked duplicateNames = [];
@@ -48,13 +49,21 @@ export default class CreateFormModal extends Component {
       await newForm.save();
       await newForm.save();
       this.router.transitionTo('formbuilder.edit', newForm.id);
-      this.toaster.success('Formulier succesvol aangemaakt', 'Success', {
-        timeOut: 5000,
-      });
+      this.toaster.success(
+        this.intl.t('messages.success.formCreated'),
+        this.intl.t('messages.subjects.success'),
+        {
+          timeOut: 5000,
+        }
+      );
     } catch (err) {
-      this.toaster.error('Oeps, er is iets mis gegaan', 'Error', {
-        timeOut: 5000,
-      });
+      this.toaster.error(
+        this.intl.t('messages.error.somethingWentWrong'),
+        this.intl.t('messages.subjects.error'),
+        {
+          timeOut: 5000,
+        }
+      );
       console.error(err);
     }
     this.closeModal();
@@ -62,21 +71,23 @@ export default class CreateFormModal extends Component {
 
   get inputErrorMessage() {
     if (this.name.trim() == '' && this.hasBeenFocused) {
-      return 'Een naam geven is verplicht';
+      return this.intl.t('constraints.mandatoryField');
     }
     if (this.duplicateNames.length > 0) {
-      return 'Deze naam is al eens gebruikt';
+      return this.intl.t('constraints.duplicateName');
     }
 
     if (this.name.length > NAME_INPUT_CHAR_LIMIT) {
-      return `Maximum characters exceeded`;
+      return this.intl.t('constraints.maxCharactersReached');
     }
 
     return false;
   }
 
   get getCharacters() {
-    return `Remaing characters: ${NAME_INPUT_CHAR_LIMIT - this.name.length}`;
+    return this.intl.t('messages.feedback.remainingCharacters', {
+      currentCount: NAME_INPUT_CHAR_LIMIT - this.name.length,
+    });
   }
 
   get disableSubmit() {

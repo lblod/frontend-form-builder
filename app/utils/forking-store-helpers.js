@@ -49,7 +49,7 @@ export function getPrefLabelOfNode(node, store, graph) {
 export function getNameOfNode(node, store, graph) {
   const name = store.any(node, SH('name'), undefined, graph);
   if (!name) {
-    console.error(`Could not get 'name' of node ${node.value}`);
+    console.error(`Kon 'naam' niet vinden op node:${node.value}`);
     return null;
   }
 
@@ -59,7 +59,7 @@ export function getNameOfNode(node, store, graph) {
 export function getOrderOfNode(node, store, graph) {
   const order = store.any(node, SH('order'), undefined, graph);
   if (!order) {
-    console.error(`Could not get 'order' of node ${node.value}`);
+    console.error(`Kon 'order' niet vinden op node:${node.value}`);
   }
 
   return Number(order);
@@ -69,7 +69,7 @@ export function getConceptSchemeUriFromNodeOption(node, store, graph) {
   const option = store.any(node, FORM('options'), undefined, graph);
 
   if (!option) {
-    console.error(`Could not get form:options of node ${node.value ?? ''}`);
+    console.error(`Kon 'form:options' niet vinden op node:${node.value ?? ''}`);
     return option;
   }
 

@@ -1,0 +1,39 @@
+messages:
+  subjects:
+    success: "Success"
+    error: "Error"
+    characters: "Characters"
+  error:
+    couldNotFetchFormWithId: "Could not find form with id: {id}"
+    somethingWentWrong: "Oops, something went wrong"
+    cannotAddValidationsToEmptyForm: "Could not add validations to an empty form"
+    duplicateValidationType: "Validation type {type} is duplicate"
+  success:
+    formCreated: "Form created successfully"
+    formUpdated: "Form updated"
+    formDeleted: "Form: {name} deleted"
+  feedback:
+    noFieldSelected: "No field selected"
+    noSectionSelected: "No section selected"
+    noResults: "No results found"
+    noFormsFound: "No forms found"
+    remainingCharacters: "Characters: {currentCount}"
+    noConfigPossible: "No further configuration possible"
+    onlyFieldsAllowedToDisplayUnderSections: "Only fields are supported to be displayed per section"
+  loading:
+    creatingNewUserTest: "Creating new user test"
+    loadingOverview: "Loading Overview"
+    loadingUserTests: "Loading user test"
+    isLoading: "Loading..."
+    isDeleting: "Deleting"
+
+confirmation:
+  deleteTitle: "Delete form?"
+  deleteQuestion: "Are you sure you want to delete this form? This action is permanent."
+  goWithoutSaving: "Are you sure you want to abandon progress?"
+
+constraints:
+  mandatoryField: "This field is required"
+  duplicateName: "This name has already been used once."
+  maxCharactersReached: "Max. characters exceeded"
+  maxCharactersReachedWithCount: "Max. characters {count} reached"
