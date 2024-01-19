@@ -9,6 +9,7 @@ export default class CodelijstenNewRoute extends Route {
     const conceptScheme = this.store.createRecord('concept-scheme', {
       preflabel: '',
       ispublic: true,
+      createdat: new Date(),
     });
     await conceptScheme.save();
 
