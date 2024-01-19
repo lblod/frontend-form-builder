@@ -1,0 +1,6 @@
+crud:
+  save: "Bewaar"
+  delete: "Verwijder"
+  update: "Bijwerken"
+  cancel: "Annuleer"
+  reset: "Reset"

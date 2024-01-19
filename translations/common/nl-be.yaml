@@ -67,10 +67,3 @@ constraints:
   duplicateName: "Deze naam is al eens gebruikt"
   maxCharactersReached: "Max. karakters overschreden"
   maxCharactersReachedWithCount: "Max. karakters van {count} overschreden"
-
-crud:
-  save: "Bewaar"
-  delete: "Verwijder"
-  update: "Bijwerken"
-  cancel: "Annuleer"
-  reset: "Reset"
