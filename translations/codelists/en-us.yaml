@@ -1,0 +1,7 @@
+codelists:
+  howToUse: "How to use the concept scheme:"
+  chooseList: "Choose a concept scheme whose contents you want to view."
+  uri: "URI: gives more information and activates the concept scheme"
+  chooseConcept: "Choose a concept scheme first."
+  contentOfList: "View content of concept schemes"
+  chooseLeftFirst: "Choose a concept scheme in the left field first."

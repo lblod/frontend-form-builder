@@ -1,0 +1,43 @@
+main:
+  appTitle: "Semantic form builder"
+  formsTitle: "Semantische Formulierenbouwer Loket"
+  testFormsTitle: "Test semantisch formulier"
+  createNewForm: "Create new semantic form"
+  brandLink: "https://www.vlaanderen.be/nl"
+
+formBuilder:
+  editCodeForm: "Edit form code"
+
+userTests:
+  createdForms: "Created testable semantic forms"
+
+crud:
+  save: "Save"
+  delete: "Delete"
+  update: "Update"
+  cancel: "Cancel"
+  reset: "Reset"
+
+navigation:
+  backToFormOverview: "Back to forms" # also used "Terug naar overzicht formulieren"
+  backToFormBuilder: "Back to form builder"
+  toOverviewTestForms: "To overview testable forms"
+  tabs:
+    code: "Code"
+    build: "Builder"
+    validations: "Validations"
+    configuration: "Configuration"
+
+# Components #
+toolbar:
+  savedOn: "Saved on"
+  exportCode: "Export code"
+  unSavedChanges: "Unsaved changes"
+  formUpToDate: "Form up-to-date"
+  codelists: "Codelists"
+
+editNameModal:
+  title: "Enter a name and description"
+  name: "Name"
+  description: "Description"
+  createForm: "Build form"
