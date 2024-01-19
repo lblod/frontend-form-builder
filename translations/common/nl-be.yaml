@@ -16,14 +16,3 @@ formBuilder:
 
 userTests:
   createdForms: "Aangemaakte testbare semantische formulieren"
-
-confirmation:
-  deleteTitle: "Formulier verwijderen?"
-  deleteQuestion: "Bent u zeker dat u dit formulier wilt verwijderen? Deze actie is permanent."
-  goWithoutSaving: "Ben je zeker dat je de voortgang verloren wil laten gaan?"
-
-constraints:
-  mandatoryField: "Dit is een verplicht veld"
-  duplicateName: "Deze naam is al eens gebruikt"
-  maxCharactersReached: "Max. karakters overschreden"
-  maxCharactersReachedWithCount: "Max. karakters van {count} overschreden"
