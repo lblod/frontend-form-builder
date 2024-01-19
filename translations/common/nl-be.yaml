@@ -57,14 +57,6 @@ editNameModal:
   description: "Beschrijving"
   createForm: "Bouw formulier"
 
-codelists:
-  howToUse: "Hoe de concept scheme gebruiken:"
-  chooseList: "Kies een concept scheme waarvan u de inhoud wil bekijken"
-  uri: "URI: geeft meer informatie en activeert de concept scheme"
-  chooseConcept: "Kies eerst een concept scheme."
-  contentOfList: "Bekijk inhoud van concept schemes"
-  chooseLeftFirst: "Kies eerst een concept scheme in het linkerveld."
-
 confirmation:
   deleteTitle: "Formulier verwijderen?"
   deleteQuestion: "Bent u zeker dat u dit formulier wilt verwijderen? Deze actie is permanent."
