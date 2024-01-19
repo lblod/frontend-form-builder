@@ -13,7 +13,7 @@ form:RequiredConstraint
 	rdf:type rdfs:Class, skos:Concept ;
 	skos:inScheme	con:possibleValidations ;
 	ext:validationName	"RequiredConstraint"@en ;
-	skos:prefLabel	"Required"@en ;
+	skos:prefLabel	"Verplicht"@en ;
 	form:grouping	form:Bag ;
 	sh:resultMessage	"Dit veld is verplicht."@nl .
 
@@ -21,7 +21,7 @@ form:MaxLength
 	rdf:type rdfs:Class, skos:Concept ;
 	skos:inScheme	con:possibleValidations ;
 	ext:validationName	"MaxLength"@en ;
-	skos:prefLabel	"Max length"@en ;
+	skos:prefLabel	"Max karakters"@en ;
 	form:grouping	form:MatchEvery ;
 	sh:resultMessage	"Max. karakters overschreden."@nl ;
 	form:max	"100" .
@@ -30,15 +30,15 @@ form:PositiveNumber
 	rdf:type rdfs:Class, skos:Concept ;
 	skos:inScheme	con:possibleValidations ;
 	ext:validationName	"PositiveNumber"@en ;
-	skos:prefLabel	"Positive number"@en ;
+	skos:prefLabel	"Positief getal"@en ;
 	form:grouping	form:MatchEvery ;
-	sh:resultMessage	"Geef een positief aantal op."@nl .
+	sh:resultMessage	"Vul een positief getal in."@nl .
 
-form:ExactValueConstraint	
+form:ExactValueConstraint
 	rdf:type rdfs:Class, skos:Concept ;
 	skos:inScheme	con:possibleValidations ;
 	ext:validationName	"ExactValueConstraint"@en ;
-	skos:prefLabel	"Exact value"@en ;
+	skos:prefLabel	"Exacte waarde"@en ;
 	form:grouping	form:MatchSome ;
 	form:customValue	"customValue"@en .
 
@@ -46,7 +46,7 @@ form:ValidInteger
 	rdf:type rdfs:Class, skos:Concept ;
 	skos:inScheme	con:possibleValidations ;
 	ext:validationName	"ValidInteger"@en ;
-	skos:prefLabel	"Valid integer"@en ;
+	skos:prefLabel	"Geheel getal"@en ;
 	form:grouping	form:MatchEvery ;
 	sh:resultMessage	"Aantal moet een een geheel getal zijn."@nl .
 
@@ -57,7 +57,7 @@ form:ValidDateTime
 	rdf:type rdfs:Class, skos:Concept ;
 	skos:inScheme	con:possibleValidations ;
 	ext:validationName	"ValidDateTime"@en ;
-	skos:prefLabel	"Valid date time"@en ;
+	skos:prefLabel	"Datum en tijd"@en ;
 	form:grouping	form:MatchEvery ;
 	sh:resultMessage	"Geef een geldige datum en tijd op."@nl .
 
@@ -65,7 +65,7 @@ form:ValidDate
 	rdf:type rdfs:Class, skos:Concept ;
 	skos:inScheme	con:possibleValidations ;
 	ext:validationName	"ValidDate"@en ;
-	skos:prefLabel	"Valid date"@en ;
+	skos:prefLabel	"Datum"@en ;
 	form:grouping	form:MatchEvery ;
 	sh:resultMessage	"Geef een geldige datum op."@nl .
 
@@ -73,7 +73,7 @@ form:ValidYear
 	rdf:type rdfs:Class, skos:Concept ;
 	skos:inScheme	con:possibleValidations ;
 	ext:validationName	"ValidYear"@en ;
-	skos:prefLabel	"Valid year"@en ;
+	skos:prefLabel	"Jaartal"@en ;
 	form:grouping	form:MatchEvery ;
 	sh:resultMessage	"Geef een geldig jaar op."@nl .
 
@@ -84,15 +84,15 @@ form:ValidEmail
 	rdf:type rdfs:Class, skos:Concept ;
 	skos:inScheme	con:possibleValidations ;
 	ext:validationName	"ValidEmail"@en ;
-	skos:prefLabel	"Valid email"@en ;
+	skos:prefLabel	"Email"@en ;
 	form:grouping	form:MatchEvery ;
 	sh:resultMessage	"Geef een geldig e-mailadres op."@nl .
 
-form:ValidPhoneNumber	
+form:ValidPhoneNumber
 	rdf:type rdfs:Class, skos:Concept ;
 	skos:inScheme	con:possibleValidations ;
 	ext:validationName	"ValidPhoneNumber"@en ;
-	skos:prefLabel	"Valid phone number"@en ;
+	skos:prefLabel	"Telefoonnummer"@en ;
 	form:grouping	form:MatchEvery ;
 	sh:resultMessage	"Geef een geldig telefoonnummer in."@nl ;
 	form:defaultCountry	"BE" .
@@ -101,7 +101,7 @@ form:ValidIBAN
 	rdf:type rdfs:Class, skos:Concept ;
 	skos:inScheme	con:possibleValidations ;
 	ext:validationName	"ValidIBAN"@en ;
-	skos:prefLabel	"Valid IBAN"@en ;
+	skos:prefLabel	"IBAN"@en ;
 	form:grouping	form:MatchEvery ;
 	sh:resultMessage	"Geef een geldig IBAN op."@nl .
 
@@ -117,7 +117,7 @@ form:ConceptSchemeConstraint
 	sh:resultMessage	"Selecteer een waarde uit de lijst."@nl ;
 	ext:customParameter	"conceptScheme"@en .
 
-form:UriConstraint 
+form:UriConstraint
 	rdf:type rdfs:Class, skos:Concept ;
 	skos:inScheme	con:possibleValidations ;
 	ext:validationName	"UriConstraint"@en ;
@@ -125,7 +125,7 @@ form:UriConstraint
 	form:grouping	form:MatchEvery ;
 	sh:resultMessage	"Gelieve een geldige URL op te geven. Zorg dat vooraan in de link altijd http://, https://, ftp:// of sftp:// staat."@nl .
 
-form:Codelist 
+form:Codelist
 	rdf:type rdfs:Class, skos:Concept ;
 	skos:inScheme	con:possibleValidations ;
 	ext:validationName	"Codelist"@en ;
@@ -142,7 +142,7 @@ form:Codelist
 # export type CountryCode = 'AC' | 'AD' | 'AE' | 'AF' | 'AG' | 'AI' | 'AL' | 'AM' | 'AO' | 'AR' | 'AS' | 'AT' | 'AU' | 'AW' | 'AX' | 'AZ' | 'BA' | 'BB' | 'BD' | 'BE' | 'BF' | 'BG' | 'BH' | 'BI' | 'BJ' | 'BL' | 'BM' | 'BN' | 'BO' | 'BQ' | 'BR' | 'BS' | 'BT' | 'BW' | 'BY' | 'BZ' | 'CA' | 'CC' | 'CD' | 'CF' | 'CG' | 'CH' | 'CI' | 'CK' | 'CL' | 'CM' | 'CN' | 'CO' | 'CR' | 'CU' | 'CV' | 'CW' | 'CX' | 'CY' | 'CZ' | 'DE' | 'DJ' | 'DK' | 'DM' | 'DO' | 'DZ' | 'EC' | 'EE' | 'EG' | 'EH' | 'ER' | 'ES' | 'ET' | 'FI' | 'FJ' | 'FK' | 'FM' | 'FO' | 'FR' | 'GA' | 'GB' | 'GD' | 'GE' | 'GF' | 'GG' | 'GH' | 'GI' | 'GL' | 'GM' | 'GN' | 'GP' | 'GQ' | 'GR' | 'GT' | 'GU' | 'GW' | 'GY' | 'HK' | 'HN' | 'HR' | 'HT' | 'HU' | 'ID' | 'IE' | 'IL' | 'IM' | 'IN' | 'IO' | 'IQ' | 'IR' | 'IS' | 'IT' | 'JE' | 'JM' | 'JO' | 'JP' | 'KE' | 'KG' | 'KH' | 'KI' | 'KM' | 'KN' | 'KP' | 'KR' | 'KW' | 'KY' | 'KZ' | 'LA' | 'LB' | 'LC' | 'LI' | 'LK' | 'LR' | 'LS' | 'LT' | 'LU' | 'LV' | 'LY' | 'MA' | 'MC' | 'MD' | 'ME' | 'MF' | 'MG' | 'MH' | 'MK' | 'ML' | 'MM' | 'MN' | 'MO' | 'MP' | 'MQ' | 'MR' | 'MS' | 'MT' | 'MU' | 'MV' | 'MW' | 'MX' | 'MY' | 'MZ' | 'NA' | 'NC' | 'NE' | 'NF' | 'NG' | 'NI' | 'NL' | 'NO' | 'NP' | 'NR' | 'NU' | 'NZ' | 'OM' | 'PA' | 'PE' | 'PF' | 'PG' | 'PH' | 'PK' | 'PL' | 'PM' | 'PR' | 'PS' | 'PT' | 'PW' | 'PY' | 'QA' | 'RE' | 'RO' | 'RS' | 'RU' | 'RW' | 'SA' | 'SB' | 'SC' | 'SD' | 'SE' | 'SG' | 'SH' | 'SI' | 'SJ' | 'SK' | 'SL' | 'SM' | 'SN' | 'SO' | 'SR' | 'SS' | 'ST' | 'SV' | 'SX' | 'SY' | 'SZ' | 'TA' | 'TC' | 'TD' | 'TG' | 'TH' | 'TJ' | 'TK' | 'TL' | 'TM' | 'TN' | 'TO' | 'TR' | 'TT' | 'TV' | 'TW' | 'TZ' | 'UA' | 'UG' | 'US' | 'UY' | 'UZ' | 'VA' | 'VC' | 'VE' | 'VG' | 'VI' | 'VN' | 'VU' | 'WF' | 'WS' | 'XK' | 'YE' | 'YT' | 'ZA' | 'ZM' | 'ZW';
 
 con:countryCodes a skos:ConceptScheme ;
-	skos:prefLabel  "Country code options" .
+	skos:prefLabel  "Landcodes" .
 
 ext:countryCodeBE
   rdf:type  rdfs:Class , skos:Concept ;

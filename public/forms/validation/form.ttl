@@ -40,7 +40,7 @@ ext:formNodesFormItem a form:SubForm ;
   form:hasFieldGroup ext:formFieldPg .
 
 ext:formNodesNameF a form:Field ;
-  sh:name "Field name" ;
+  sh:name "Veldnaam" ;
   sh:order 1 ;
   sh:path sh:name ;
   form:displayType displayTypes:defaultInput ;
@@ -65,9 +65,9 @@ ext:formValidationL a form:Listing ;
   form:each ext:formValidationValueItem ;
   form:scope ext:formValidationsS ;
   form:canAdd true ;
-  form:addLabel "Validation" ;
+  form:addLabel "Validatie" ;
   form:canRemove true ;
-  form:removeLabel "Remove section" ;
+  form:removeLabel "Verwijder sectie" ;
   form:createGenerator ext:addValidationGenerator ;
   sh:group ext:formFieldPg ;
   sh:order 3 .
@@ -83,7 +83,7 @@ ext:validationsFG a form:FieldGroup ;
 #  Validation type selector
 ##########################################################
 fields:validatonSelectorF a form:Field ;
-  sh:name "Validation type" ;
+  sh:name "Validatie type" ;
   sh:order 2 ;
   form:help """
    """;
@@ -161,7 +161,7 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
     #  Error message field
     ##########################################################
     ext:validationResultMessageF a form:Field ;
-      sh:name "Error message" ;
+      sh:name "Fout melding" ;
       sh:order 100 ; # I think we always want to show this below the conditional fields?
       sh:path sh:resultMessage ;
       form:displayType displayTypes:defaultInput ;
@@ -171,7 +171,7 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
     #  Max-lenght field
     ##########################################################
     ext:validationMaxLengthF a form:Field ;
-      sh:name "Max characters" ;
+      sh:name "Max karakters" ;
       sh:order 101 ;
       sh:path form:max ;
       form:validations
@@ -192,7 +192,7 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
     #  Exact value field
     ##########################################################
     ext:exacValueConstraintF a form:Field ;
-      sh:name "Exact value" ;
+      sh:name "Exacte waarde" ;
       sh:order 102 ;
       sh:path form:customValue ;
       form:validations
@@ -208,7 +208,7 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
     #  Phone number: country code field
     ##########################################################
     ext:phoneNumberCountryCodeF a form:Field ;
-      sh:name "CountryCode" ;
+      sh:name "Landcode" ;
       sh:order 103 ;
       sh:path form:defaultCountry ;
       form:validations
