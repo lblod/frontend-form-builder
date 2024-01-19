@@ -163,6 +163,9 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
     ext:validationResultMessageF a form:Field ;
       sh:name "Fout melding" ;
       sh:order 100 ; # I think we always want to show this below the conditional fields?
+      form:help """
+        Click here to see default error message or edit error message.
+      """ ;
       sh:path sh:resultMessage ;
       form:displayType displayTypes:defaultInput ;
       sh:group ext:formFieldPg .
