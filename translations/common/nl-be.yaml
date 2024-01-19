@@ -17,19 +17,6 @@ formBuilder:
 userTests:
   createdForms: "Aangemaakte testbare semantische formulieren"
 
-toolbar:
-  savedOn: "Bewaard op"
-  exportCode: "Exporteer code"
-  unSavedChanges: "Aanpassingen nog niet bewaard"
-  formUpToDate: "Formulier up-to-date"
-  codelists: "Codelijsten"
-
-editNameModal:
-  title: "Geef een naam en beschrijving"
-  name: "Naam"
-  description: "Beschrijving"
-  createForm: "Bouw formulier"
-
 confirmation:
   deleteTitle: "Formulier verwijderen?"
   deleteQuestion: "Bent u zeker dat u dit formulier wilt verwijderen? Deze actie is permanent."
