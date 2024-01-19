@@ -16,3 +16,15 @@ formBuilder:
 
 userTests:
   createdForms: "Aangemaakte testbare semantische formulieren"
+
+crud:
+  save: "Bewaar"
+  delete: "Verwijder"
+  update: "Bijwerken"
+  cancel: "Annuleer"
+  reset: "Reset"
+
+navigation:
+  backToFormOverview: "Terug naar formulieren" # also used "Terug naar overzicht formulieren"
+  backToFormBuilder: "Terug naar formulierenbouwer"
+  toOverviewTestForms: "Naar overzicht testbare formulieren"
