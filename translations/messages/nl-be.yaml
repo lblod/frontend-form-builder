@@ -15,15 +15,16 @@ messages:
   feedback:
     noFieldSelected: "Geen veld geselecteerd"
     noSectionSelected: "Geen sectie geselecteerd"
-    isLoading: "Aan het laden..."
-    isDeleting: "Aan het verwijderen"
     noResults: "Geen resultaten gevonden"
     noFormsFound: "Geen formulieren gevonden"
     remainingCharacters: "Karakters: {currentCount}"
     noConfigPossible: "Geen verdere configuratie mogelijk"
+  loading:
     creatingNewUserTest: "Nieuwe gebruikerstest aan het maken"
     loadingOverview: "Overzicht aan het laden"
     loadingUserTests: "Gebruikerstest aan het laden"
+    isLoading: "Aan het laden..."
+    isDeleting: "Aan het verwijderen"
 
 confirmation:
   deleteTitle: "Formulier verwijderen?"
