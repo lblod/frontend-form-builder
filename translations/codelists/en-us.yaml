@@ -1,7 +1,23 @@
 codelists:
+  addConcept: "Add concept to the list"
+  nameOfCodelist: "Name of codelist"
+  detailTitle: "Codelist detail"
+  createCodelist: "Create a codelist"
   howToUse: "How to use the concept scheme:"
   chooseList: "Choose a concept scheme whose contents you want to view."
   uri: "URI: gives more information and activates the concept scheme"
   chooseConcept: "Choose a concept scheme first."
   contentOfList: "View content of concept schemes"
   chooseLeftFirst: "Choose a concept scheme in the left field first."
+  types:
+    isPublic: "Custom codelist"
+    isPrivate: "Generic"
+  alert:
+    genericCodelist: "Generic codelists cannot be edited."
+
+confirmation:
+  deleteCodelistTitle: "Delete codelist?"
+  deleteCodelistQuestion: "Are you sure you want to delete this codelist? This action is permanent."
+
+navigation:
+  backToCodelists: "Back to codelists"

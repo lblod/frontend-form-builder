@@ -1,7 +1,23 @@
 codelists:
+  addConcept: "Voeg een concept toe aan de lijst"
+  nameOfCodelist: "Naam van de codelijst"
+  detailTitle: "Codelijst detail"
+  createCodelist: "Maak een codelijst"
   howToUse: "Hoe de concept scheme gebruiken:"
   chooseList: "Kies een concept scheme waarvan u de inhoud wil bekijken"
   uri: "URI: geeft meer informatie en activeert de concept scheme"
   chooseConcept: "Kies eerst een concept scheme."
   contentOfList: "Bekijk inhoud van concept schemes"
   chooseLeftFirst: "Kies eerst een concept scheme in het linkerveld."
+  types:
+    isPublic: "Eigen codelijst"
+    isPrivate: "Generiek"
+  alert:
+    genericCodelist: "Generieke codelijsten kunnen niet aangepast worden."
+
+confirmation:
+  deleteCodelistTitle: "Codelijst verwijderen?"
+  deleteCodelistQuestion: "Bent u zeker dat u deze codelijst wilt verwijderen? Deze actie is permanent."
+
+navigation:
+  backToCodelists: "Terug naar codelijsten"

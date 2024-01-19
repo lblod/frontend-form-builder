@@ -9,10 +9,10 @@
           @skin="primary"
           @icon="arrow-left"
           @iconAlignment="left"
-        >Terug naar codelijsten</AuLink>
+        >{{t "navigation.backToCodelists"}}</AuLink>
       </li>
       <li class="au-c-list-horizontal__item au-u-bold">
-        Codelijst detail
+        {{t "codelists.detailTitle"}}
       </li>
     </ul>
   </Group>
@@ -23,7 +23,7 @@
         @disabled={{this.isSaveDisabled}}
         {{on "click" this.save}}
       >
-        Bewaar
+        {{t "crud.save"}}
       </AuButton>
 
       {{#if this.isPrivateConceptScheme}}
@@ -35,7 +35,7 @@
             @alignment="left"
             @skin="primary"
           >
-            Bewaar
+            {{t "crud.save"}}
           </AuButton>
         </span>
       {{else}}
@@ -54,10 +54,10 @@
             @alert={{true}}
             role="menuitem"
             @disabled={{this.isPrivateConceptScheme}}
-            @loadingMessage="Aan het verwijderen"
+            @loadingMessage={{t "messages.loading.isDeleting"}}
             {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
           >
-            Verwijderen
+            {{t "crud.delete"}}
           </AuButton>
         </AuDropdown>
       {{/if}}
@@ -69,12 +69,12 @@
   <span class="au-u-padding">
     {{#if this.isPrivateConceptScheme}}
       <AuAlert @title={{"Opgelet"}} @skin={{"warning"}} @icon={{"login"}}>
-        <p>Generieke codelijsten kunnen niet aangepast worden.</p>
+        <p>{{t "codelists.alert.genericCodelist"}}</p>
       </AuAlert>
     {{/if}}
     <div class="au-u-3-5 au-u-margin-bottom-large">
       <AuLabel for="input-codelist-name" @required={{true}}>
-        Naam van de codelijst
+        {{t "codelists.nameOfCodelist"}}
       </AuLabel>
       <AuInput
         id="input-codelist-name"
@@ -92,9 +92,9 @@
     <AuTable class="au-u-margin-bottom-small">
       <:header>
         <tr>
-          <th>Label</th>
+          <th>{{t "table.columns.label"}}</th>
           {{#unless this.isPrivateConceptScheme}}
-            <th>Acties</th>
+            <th>{{t "table.columns.actions"}}</th>
           {{/unless}}
         </tr>
       </:header>
@@ -120,10 +120,10 @@
                     @hideText={{true}}
                     @iconAlignment="left"
                     @alert={{true}}
-                    @loadingMessage="Aan het verwijderen"
+                    @loadingMessage={{t "messages.loading.isDeleting"}}
                     {{on "click" (fn this.temporaryDeleteConcept concept)}}
                   >
-                    Verwijderen
+                    {{t "crud.delete"}}
                   </AuButton>
                 </td>
               {{/unless}}
@@ -139,7 +139,7 @@
                 @iconAlignment="left"
                 {{on "click" this.addNewConcept}}
               >
-                Voeg een concept toe aan de lijst
+                {{t "codelists.addConcept"}}
               </AuButton>
             </td>
             <td></td>
@@ -151,9 +151,9 @@
 </div>
 
 <AuModal @modalOpen={{this.isDeleteModalOpen}} @closeModal={{this.close}}>
-  <:title>Codelijst verwijderen?</:title>
+  <:title>{{t "confirmation.deleteCodelistTitle"}}</:title>
   <:body>
-    Bent u zeker dat u deze codelijst wilt verwijderen? Deze actie is permanent.
+    {{t "confirmation.deleteCodelistQuestion"}}
   </:body>
   <:footer>
     <AuButtonGroup>
@@ -164,14 +164,14 @@
         @loadingMessage="Aan het verwijderen"
         {{on "click" this.deleteCodelist}}
       >
-        Verwijderen
+        {{t "crud.delete"}}
       </AuButton>
       <AuButton
         @skin="secondary"
         @disabled={{this.delete.isRunning}}
         {{on "click" (fn (mut this.isDeleteModalOpen) false)}}
       >
-        Annuleer
+        {{t "crud.cancel"}}
       </AuButton>
     </AuButtonGroup>
   </:footer>
