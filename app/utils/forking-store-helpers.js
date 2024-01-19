@@ -1,27 +1,18 @@
 import { FORM, RDF, SH } from './rdflib';
 import { SKOS } from '@lblod/submission-form-helpers';
-import { ForkingStore } from '@lblod/ember-submission-form-fields';
-
-export function isForkingStore(store) {
-  return store instanceof ForkingStore;
-}
 
 export function getTriplesWithNodeAsSubject(node, store, graph) {
   return store.match(node, undefined, undefined, graph);
 }
 
-function getNodeValidationTriples(node, store, graph) {
-  return store.match(node, FORM('validations'), undefined, graph);
-}
-
 export function getValidationSubjectsOnNode(node, store, graph) {
-  return getNodeValidationTriples(node, store, graph).map(
-    (triple) => triple.object
+  const nodeValidationTriples = store.match(
+    node,
+    FORM('validations'),
+    undefined,
+    graph
   );
-}
-
-export function getDisplayTypeOfNode(node, store, graph) {
-  return store.any(node, FORM('displayType'), undefined, graph);
+  return nodeValidationTriples.map((triple) => triple.object);
 }
 
 export function getRdfTypeOfNode(node, store, graph) {
@@ -34,53 +25,29 @@ export function getRdfTypeOfNode(node, store, graph) {
   return type;
 }
 
-export function getGroupingTypeOfNode(node, store, graph) {
-  return store.any(node, FORM('grouping'), undefined, graph);
-}
-
-export function getFirstPathOfNode(node, store, graph) {
-  return store.any(node, SH('path'), undefined, graph);
-}
-
 export function getPrefLabelOfNode(node, store, graph) {
   return store.any(node, SKOS('prefLabel'), undefined, graph);
 }
 
-export function getNameOfNode(node, store, graph) {
-  const name = store.any(node, SH('name'), undefined, graph);
-  if (!name) {
-    console.error(`Kon 'naam' niet vinden op node:${node.value}`);
-    return null;
-  }
-
-  return name;
-}
-
-export function getOrderOfNode(node, store, graph) {
-  const order = store.any(node, SH('order'), undefined, graph);
-  if (!order) {
-    console.error(`Kon 'order' niet vinden op node:${node.value}`);
-  }
-
-  return Number(order);
-}
-
-export function getConceptSchemeUriFromNodeOption(node, store, graph) {
-  const option = store.any(node, FORM('options'), undefined, graph);
-
-  if (!option) {
-    console.error(`Kon 'form:options' niet vinden op node:${node.value ?? ''}`);
-    return option;
-  }
-
-  return JSON.parse(option.value).conceptScheme ?? null;
-}
-
 export function getMinimalNodeInfo(node, store, graph) {
+  const nodeDisplayType = store.any(
+    node,
+    FORM('displayType'),
+    undefined,
+    graph
+  );
+
+  const nodeName = store.any(node, SH('name'), undefined, graph);
+  let nodeOrder = store.any(node, SH('order'), undefined, graph);
+
+  if (!nodeOrder) {
+    nodeOrder = 0;
+  }
+
   return {
     subject: node,
-    name: getNameOfNode(node, store, graph),
-    order: getOrderOfNode(node, store, graph),
-    displayType: getDisplayTypeOfNode(node, store, graph),
+    name: nodeName,
+    order: Number(nodeOrder),
+    displayType: nodeDisplayType,
   };
 }

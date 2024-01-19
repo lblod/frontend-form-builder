@@ -6,7 +6,6 @@ import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { restartableTask } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import {
-  getConceptSchemeUriFromNodeOption,
   getMinimalNodeInfo,
   getRdfTypeOfNode,
 } from '../../../utils/forking-store-helpers';
@@ -67,12 +66,11 @@ export default class FormbuilderConfigurationController extends Controller {
         this.model.graphs.sourceGraph
       );
 
-      const nodeConceptSchemeUriOption =
-        await getConceptSchemeUriFromNodeOption(
-          child,
-          this.builderStore,
-          this.model.graphs.sourceGraph
-        );
+      const nodeConceptSchemeUriOption = this.getConceptSchemeUriFromNodeOption(
+        child,
+        this.builderStore,
+        this.model.graphs.sourceGraph
+      );
 
       storedFieldsForSection.push({
         name: nodeInfo.name,
@@ -141,6 +139,17 @@ export default class FormbuilderConfigurationController extends Controller {
     }
 
     return config;
+  }
+
+  getConceptSchemeUriFromNodeOption(node, store, graph) {
+    const option = store.any(node, FORM('options'), undefined, graph);
+
+    if (!option) {
+      console.error(`Could not get form:options of node ${node.value ?? ''}`);
+      return option;
+    }
+
+    return JSON.parse(option.value).conceptScheme ?? null;
   }
 
   setup() {
