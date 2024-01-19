@@ -1,5 +1,5 @@
 <AuModal @modalOpen={{true}} @closeModal={{@onClose}}>
-  <:title>Formulier code bewerken</:title>
+  <:title>{{t "formBuilder.editCodeForm"}}</:title>
   <:body>
     <div
       {{editor this.formCode (perform this.handleCodeChange)}}
@@ -12,12 +12,12 @@
         @skin="secondary"
         @disabled={{this.isButtonsDisabled}}
         {{on "click" this.restoreForm}}
-      >Reset</AuButton>
+      >{{t "crud.reset"}}</AuButton>
       <AuButton
         class="au-u-margin-left-small"
         @disabled={{this.isButtonsDisabled}}
         {{on "click" this.updateForm}}
-      >Bewaar</AuButton>
+      >{{t "crud.save"}}</AuButton>
     </div>
   </:body>
 </AuModal>

@@ -51,7 +51,7 @@ export default class CreateFormModal extends Component {
       this.router.transitionTo('formbuilder.edit', newForm.id);
       this.toaster.success(
         this.intl.t('messages.success.formCreated'),
-        'Success',
+        this.intl.t('messages.subjects.success'),
         {
           timeOut: 5000,
         }
@@ -59,7 +59,7 @@ export default class CreateFormModal extends Component {
     } catch (err) {
       this.toaster.error(
         this.intl.t('messages.error.somethingWentWrong'),
-        'Error',
+        this.intl.t('messages.subjects.error'),
         {
           timeOut: 5000,
         }

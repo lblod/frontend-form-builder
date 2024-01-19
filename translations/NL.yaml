@@ -12,6 +12,7 @@ navigation:
 
 formBuilder:
   edit:
+  editCodeForm: "Formulier code bewerken"
     tabs:
       code: "Code"
       build: "Bouwer"
