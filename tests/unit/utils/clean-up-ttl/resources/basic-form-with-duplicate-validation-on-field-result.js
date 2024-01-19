@@ -8,7 +8,7 @@ export default `@prefix : <#>.
 nodes:24289e48-258f-4919-8c3e-5783a6acb4a4
     a form:Field;
     form:displayType displayTypes:defaultInput;
-    form:validations
+    form:validatedBy
             [
                 a form:RequiredConstraint;
                 form:grouping form:Bag;
