@@ -16,6 +16,7 @@ import { sortObjectsOnProperty } from '../../../utils/sort-object-on-property';
 
 export default class FormbuilderConfigurationController extends Controller {
   @service('form-code-manager') formCodeManager;
+  @service intl;
 
   @tracked sections = [];
   @tracked selectedSection;
@@ -121,7 +122,11 @@ export default class FormbuilderConfigurationController extends Controller {
         const rdfType = getRdfTypeOfNode(subjectInGroup, store, graph);
 
         if (rdfType.value != FORM('Field').value) {
-          console.warn(`Only fields are supported to be displayed per section`);
+          console.warn(
+            this.intl.t(
+              'messages.feedback.onlyFieldsAllowedToDisplayUnderSections'
+            )
+          );
           continue;
         }
         fieldsSubjectsToDisplay.push(subjectInGroup);

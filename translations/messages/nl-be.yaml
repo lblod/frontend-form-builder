@@ -19,6 +19,7 @@ messages:
     noFormsFound: "Geen formulieren gevonden"
     remainingCharacters: "Karakters: {currentCount}"
     noConfigPossible: "Geen verdere configuratie mogelijk"
+    onlyFieldsAllowedToDisplayUnderSections: "Velden zijn enkel toeglaten om te tonen onder de sectie"
   loading:
     creatingNewUserTest: "Nieuwe gebruikerstest aan het maken"
     loadingOverview: "Overzicht aan het laden"

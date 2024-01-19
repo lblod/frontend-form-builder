@@ -19,6 +19,7 @@ messages:
     noFormsFound: "No forms found"
     remainingCharacters: "Characters: {currentCount}"
     noConfigPossible: "No further configuration possible"
+    onlyFieldsAllowedToDisplayUnderSections: "Only fields are supported to be displayed per section"
   loading:
     creatingNewUserTest: "Creating new user test"
     loadingOverview: "Loading Overview"
