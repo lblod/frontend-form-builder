@@ -30,7 +30,7 @@ ext:formNodesS a form:Scope ;
   sh:path form:includes .
 
 ext:formValidationsS a form:Scope ;
-  sh:path form:validations .
+  sh:path form:validatedBy .
 
 ##########################################################
 #  Field with add validation button
@@ -87,7 +87,7 @@ fields:validatonSelectorF a form:Field ;
   sh:order 2 ;
   form:help """
    """;
-  form:validations
+  form:validatedBy
     [ a form:RequiredConstraint ;
         form:grouping form:Bag ;
         sh:path rdf:type ;
@@ -174,7 +174,7 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
       sh:name "Max karakters" ;
       sh:order 101 ;
       sh:path form:max ;
-      form:validations
+      form:validatedBy
         [ a form:RequiredConstraint ;
             form:grouping form:Bag ;
             sh:path form:max ;
@@ -195,7 +195,7 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
       sh:name "Exacte waarde" ;
       sh:order 102 ;
       sh:path form:customValue ;
-      form:validations
+      form:validatedBy
         [ a form:RequiredConstraint ;
             form:grouping form:Bag ;
             sh:path form:customValue ;
@@ -211,7 +211,7 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
       sh:name "Landcode" ;
       sh:order 103 ;
       sh:path form:defaultCountry ;
-      form:validations
+      form:validatedBy
         [ a form:RequiredConstraint ;
             form:grouping form:Bag ;
             sh:path form:defaultCountry ;

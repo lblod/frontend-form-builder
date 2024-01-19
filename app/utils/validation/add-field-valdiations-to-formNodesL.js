@@ -18,7 +18,7 @@ export function addValidationTriplesToFormNodesL(fieldSubject, store, graphs) {
     );
     const formNodesLWithValidation = new Statement(
       EXT('formNodesL'),
-      FORM('validations'),
+      FORM('validatedBy'),
       validation.node,
       graphs.sourceGraph
     );

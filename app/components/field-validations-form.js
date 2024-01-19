@@ -68,7 +68,7 @@ export default class FieldValidationsFormComponent extends Component {
 
       const statement = new Statement(
         this.fieldSubject,
-        FORM('validations'),
+        FORM('validatedBy'),
         validationNode.node,
         this.graphs.sourceGraph
       );
@@ -79,7 +79,7 @@ export default class FieldValidationsFormComponent extends Component {
     for (const validation of validationsOnField) {
       const statement = new Statement(
         this.fieldSubject,
-        FORM('validations'),
+        FORM('validatedBy'),
         validation,
         this.graphs.sourceGraph
       );
@@ -88,7 +88,7 @@ export default class FieldValidationsFormComponent extends Component {
 
     applyStore.removeMatches(
       EXT('formNodesL'),
-      FORM('validations'),
+      FORM('validatedBy'),
       undefined,
       this.graphs.sourceGraph
     );

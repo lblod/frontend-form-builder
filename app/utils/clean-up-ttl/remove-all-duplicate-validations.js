@@ -13,7 +13,7 @@ export function getTtlWithDuplicateValidationsRemoved(ttlCode) {
 
   const validations = store.match(
     undefined,
-    FORM('validations'),
+    FORM('validatedBy'),
     undefined,
     GRAPHS.sourceGraph
   );
@@ -34,7 +34,7 @@ export function getTtlWithDuplicateValidationsRemoved(ttlCode) {
     for (const subjectToRemove of validationSubjectsToRemove) {
       const foundValidationNodeToRemove = store.match(
         subjectWithValidations.subject,
-        FORM('validations'),
+        FORM('validatedBy'),
         subjectToRemove,
         GRAPHS.sourceGraph
       );
