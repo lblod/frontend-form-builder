@@ -10,9 +10,6 @@ import {
   getPossibleValidationsForDisplayType,
 } from '../../utils/validation/helpers';
 import {
-  getDisplayTypeOfNode,
-  getFirstPathOfNode,
-  getGroupingTypeOfNode,
   getPrefLabelOfNode,
   getRdfTypeOfNode,
   getValidationSubjectsOnNode,
@@ -54,9 +51,10 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
   }
 
   loadValidationTypes() {
-    const fieldDisplayType = getDisplayTypeOfNode(
+    const fieldDisplayType = this.args.formStore.any(
       this.getFieldSubject(),
-      this.args.formStore,
+      FORM('displayType'),
+      undefined,
       this.args.graphs.sourceGraph
     );
 
@@ -109,6 +107,10 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
   }
 
   isSelectedValidationAlreadyOnField(selectedOption) {
+    if (!selectedOption) {
+      return false;
+    }
+
     const validationNodes = getValidationSubjectsOnNode(
       this.getFieldSubject(),
       this.args.formStore,
@@ -189,7 +191,12 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
 
   removeValidationTypeAndGroupingFromGraph(sourceNode, store, graph) {
     const rdfType = getRdfTypeOfNode(sourceNode, store, graph);
-    const groupingType = getGroupingTypeOfNode(sourceNode, store, graph);
+    const groupingType = store.any(
+      sourceNode,
+      FORM('grouping'),
+      undefined,
+      graph
+    );
 
     const statements = this.createStatementForRdfTypeAndGrouping(
       sourceNode,
@@ -216,7 +223,12 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
   }
 
   getStatementToAddFieldPathToValidationPath(validationSubject, store, graph) {
-    const fieldPath = getFirstPathOfNode(this.getFieldSubject(), store, graph);
+    const fieldPath = store.any(
+      this.getFieldSubject(),
+      SH('path'),
+      undefined,
+      graph
+    );
 
     return new Statement(validationSubject, SH('path'), fieldPath, graph);
   }
