@@ -71,7 +71,7 @@ export default class CreateFormModal extends Component {
 
   get inputErrorMessage() {
     if (this.name.trim() == '' && this.hasBeenFocused) {
-      return this.intl.t('constraints.mandatoryName');
+      return this.intl.t('constraints.mandatoryField');
     }
     if (this.duplicateNames.length > 0) {
       return this.intl.t('constraints.duplicateName');
