@@ -1,17 +1,11 @@
 main:
   appTitle: "Semantic form builder"
-  brandLink: "https://www.vlaanderen.be/nl"
-  title: "Semantische Formulierenbouwer Loket"
+  formsTitle: "Semantische Formulierenbouwer Loket"
+  testFormsTitle: "Test semantisch formulier"
   createNewForm: "Maak nieuw semantisch formulier"
-  testForm: "Test semantisch formulier"
+  brandLink: "https://www.vlaanderen.be/nl"
 
 formBuilder:
-  edit:
-    tabs:
-      code: "Code"
-      build: "Bouwer"
-      validations: "Validaties"
-      configuration: "Configuratie"
   editCodeForm: "Formulier code bewerken"
 
 userTests:
@@ -28,3 +22,8 @@ navigation:
   backToFormOverview: "Terug naar formulieren" # also used "Terug naar overzicht formulieren"
   backToFormBuilder: "Terug naar formulierenbouwer"
   toOverviewTestForms: "Naar overzicht testbare formulieren"
+  tabs:
+    code: "Code"
+    build: "Bouwer"
+    validations: "Validaties"
+    configuration: "Configuratie"
