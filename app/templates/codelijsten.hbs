@@ -62,7 +62,7 @@
             {{/if}}
             <AuAlert
               @icon="info-circle"
-              @title="Hoe de concept scheme gebruiken:"
+              @title={{t "codelists.howToUse"}}
               @skin="info"
               @size="small"
             >
@@ -99,7 +99,9 @@
               {{/each}}
             </ul>
           {{else}}
-            <AuHelpText @skin="tertiary">{{t "codelists.chooseLeftFirst"}}</AuHelpText>
+            <AuHelpText @skin="tertiary">{{t
+                "codelists.chooseLeftFirst"
+              }}</AuHelpText>
           {{/if}}
         </AuContent>
       </div>

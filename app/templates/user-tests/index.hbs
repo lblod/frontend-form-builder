@@ -2,12 +2,12 @@
   <div class="au-c-toolbar__group">
 
     <AuHeading @level="1" @skin="2">
-      Aangemaakte testbare semantische formulieren
+      {{t "userTests.createdForms"}}
     </AuHeading>
   </div>
   <div class="au-c-toolbar__group">
     <AuLink @route="index" @skin="button-secondary" @icon="arrow-left">
-      Terug naar overzicht formulieren
+      {{t "navigation.backToFormOverview"}}
     </AuLink>
   </div>
 </div>
@@ -15,12 +15,12 @@
 <main id="main" class="au-c-main-container">
   <div class="au-c-main-container__content">
     <div class="au-c-body-container">
-      <AuDataTable 
-        @content={{this.model}} 
-        @isLoading={{this.isLoadingModel}} 
+      <AuDataTable
+        @content={{this.model}}
+        @isLoading={{this.isLoadingModel}}
         @noDataMessage="Geen gebruiker-testen gevonden"
-        @sort={{this.sort}} 
-        @page={{this.page}} 
+        @sort={{this.sort}}
+        @page={{this.page}}
         @size={{this.size}}
         class="container-flex--contain" as |t|
       >

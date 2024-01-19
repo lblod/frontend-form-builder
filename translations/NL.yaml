@@ -1,10 +1,14 @@
 main:
+  appTitle: "Semantic form builder"
+  brandLink: "https://www.vlaanderen.be/nl"
   title: "Semantische Formulierenbouwer Loket"
   createNewForm: "Maak nieuw semantisch formulier"
+  testForm: "Test semantisch formulier"
 
 navigation:
-  backToFormOverview: "Terug naar formulieren"
+  backToFormOverview: "Terug naar formulieren" # also used "Terug naar overzicht formulieren"
   backToFormBuilder: "Terug naar formulierenbouwer"
+  toOverviewTestForms: "Naar overzicht testbare formulieren"
 
 formBuilder:
   edit:
@@ -13,6 +17,9 @@ formBuilder:
       build: "Bouwer"
       validations: "Validaties"
       configuration: "Configuratie"
+
+userTests:
+  createdForms: "Aangemaakte testbare semantische formulieren"
 
 messages:
   subjects:
@@ -37,6 +44,9 @@ messages:
     noFormsFound: "Geen formulieren gevonden"
     remainingCharacters: "Karakters: {currentCount}"
     noConfigPossible: "Geen verdere configuratie mogelijk"
+    creatingNewUserTest: "Nieuwe gebruikerstest aan het maken"
+    loadingOverview: "Overzicht aan het laden"
+    loadingUserTests: "Gebruikerstest aan het laden"
 
 toolbar:
   savedOn: "Bewaard op"
@@ -52,6 +62,7 @@ editNameModal:
   createForm: "Bouw formulier"
 
 codelists:
+  howToUse: "Hoe de concept scheme gebruiken:"
   chooseList: "Kies een concept scheme waarvan u de inhoud wil bekijken"
   uri: "URI: geeft meer informatie en activeert de concept scheme"
   chooseConcept: "Kies eerst een concept scheme."
@@ -74,3 +85,4 @@ crud:
   delete: "Verwijder"
   update: "Bijwerken"
   cancel: "Annuleer"
+  reset: "Reset"
