@@ -11,7 +11,7 @@ import {
   getRdfTypeOfNode,
 } from '../../../utils/forking-store-helpers';
 import { Literal, Statement } from 'rdflib';
-import { FORM, RDF, SH } from '../../../utils/rdflib';
+import { FORM, RDF } from '../../../utils/rdflib';
 import { sortObjectsOnProperty } from '../../../utils/sort-object-on-property';
 
 export default class FormbuilderConfigurationController extends Controller {

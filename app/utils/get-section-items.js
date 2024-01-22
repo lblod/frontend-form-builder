@@ -1,5 +1,5 @@
 import { getMinimalNodeInfo, getRdfTypeOfNode } from './forking-store-helpers';
-import { FORM, RDF, SH } from './rdflib';
+import { FORM, RDF } from './rdflib';
 
 export function getSectionFields(store, graph) {
   const config = [];
