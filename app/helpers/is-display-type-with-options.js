@@ -1,5 +1,5 @@
 import { helper } from '@ember/component/helper';
-import { DISPLAY } from '../utils/rdflib';
+import { canDisplayTypeHaveFormOptions } from '../utils/can-display-type-have-form-options';
 
 export default helper(function isDisplayTypeWithOptions(displayType) {
   const itemDisplayType = [...displayType][0];
@@ -8,16 +8,5 @@ export default helper(function isDisplayTypeWithOptions(displayType) {
     return false;
   }
 
-  const selectorDisplayTypes = [
-    DISPLAY('conceptSchemeMultiSelectCheckboxes').value,
-    DISPLAY('conceptSchemeMultiSelector').value,
-    DISPLAY('conceptSchemeRadioButtons').value,
-    DISPLAY('conceptSchemeSelector').value,
-  ];
-
-  if (selectorDisplayTypes.includes(itemDisplayType.value)) {
-    return true;
-  }
-
-  return false;
+  return canDisplayTypeHaveFormOptions(itemDisplayType);
 });

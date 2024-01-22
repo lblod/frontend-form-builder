@@ -4,7 +4,7 @@ import { inject as service } from '@ember/service';
 import { restartableTask } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { getTtlWithUnReferencedSubjectsRemoved } from '../../../utils/clean-up-ttl/remove-unreferenced-subjects';
+import { cleanupTtlcode } from '../../../utils/clean-up-ttl/clean-up-ttl-code';
 
 export default class FormbuilderEditCodeController extends Controller {
   @service('form-code-manager') formCodeManager;
@@ -14,10 +14,11 @@ export default class FormbuilderEditCodeController extends Controller {
   @tracked formCodeUpdates;
 
   setup() {
-    const updatedFormCode = getTtlWithUnReferencedSubjectsRemoved(
+    const updatedFormCode = cleanupTtlcode(
       this.formCodeManager.getTtlOfLatestVersion(),
       this.toaster
     );
+
     this.formCode = updatedFormCode;
     this.formCodeUpdates = this.formCode;
     this.model.handleCodeChange(this.formCode);
