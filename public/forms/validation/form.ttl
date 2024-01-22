@@ -164,7 +164,7 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
       sh:name "Fout melding" ;
       sh:order 100 ; # I think we always want to show this below the conditional fields?
       form:help """
-        Click here to see default error message or edit error message.
+        Klik hier om het standaardbericht te tonen of aan te passen.
       """ ;
       sh:path sh:resultMessage ;
       form:displayType displayTypes:defaultInput ;
