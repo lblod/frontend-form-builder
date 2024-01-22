@@ -6,5 +6,6 @@ export function cleanupTtlcode(ttlCode, toasterService) {
     ttlCode,
     toasterService
   );
+
   return getTtlWithCleanUpFieldOptions(updatedTtl);
 }

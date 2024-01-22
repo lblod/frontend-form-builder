@@ -37,7 +37,7 @@ function removeConceptschemeFromFieldOptions(ttlCode) {
     );
 
     if (!formOptions) {
-      return;
+      continue;
     }
 
     let formOptionsAsJson = {};
