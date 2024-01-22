@@ -158,7 +158,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
       this.storeOptions.sourceGraph
     );
 
-    const defaultErrorMessage = this.getDefaultErrorMessage(
+    const defaultErrorMessage = this.findDefaultErrorMessage(
       this.storeOptions.sourceNode,
       this.storeOptions.store,
       this.storeOptions.sourceGraph
@@ -227,7 +227,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     }
   }
 
-  getDefaultErrorMessage(sourceNode, store, graph) {
+  findDefaultErrorMessage(sourceNode, store, graph) {
     const currentMessage = store.any(
       sourceNode,
       SH('resultMessage'),
