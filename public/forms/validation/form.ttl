@@ -83,7 +83,7 @@ ext:validationsFG a form:FieldGroup ;
 #  Validation type selector
 ##########################################################
 fields:validatonSelectorF a form:Field ;
-  sh:name "Validatie type" ;
+  sh:name "Validatietype" ;
   sh:order 2 ;
   form:help """
    """;
@@ -161,8 +161,11 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
     #  Error message field
     ##########################################################
     ext:validationResultMessageF a form:Field ;
-      sh:name "Fout melding" ;
+      sh:name "Foutmelding" ;
       sh:order 100 ; # I think we always want to show this below the conditional fields?
+      form:help """
+        Klik hier om het standaardbericht te tonen of aan te passen.
+      """ ;
       sh:path sh:resultMessage ;
       form:displayType displayTypes:defaultInput ;
       sh:group ext:formFieldPg .

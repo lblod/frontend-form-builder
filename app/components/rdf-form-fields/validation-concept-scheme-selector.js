@@ -17,6 +17,7 @@ import {
 import { showErrorToasterMessage } from '../../utils/toaster-message-helper';
 import { FORM, RDF, SH } from '../../utils/rdflib';
 import { getGroupingTypeForValidation } from '../../utils/validation/get-grouping-type-for-validation';
+import { getDefaultErrorMessageForValidation } from '../../utils/validation/get-default-error-message-for-validation';
 
 function byLabel(a, b) {
   const textA = a.label.toUpperCase();
@@ -136,7 +137,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
   }
 
   @action
-  updateValidationTypeAndGrouping(validationTypeOption) {
+  updateValidationDefaultStatements(validationTypeOption) {
     this.selectedValidationType = validationTypeOption;
 
     if (this.isSelectedValidationAlreadyOnField(this.selectedValidationType)) {
@@ -152,6 +153,12 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     }
 
     this.removeValidationTypeAndGroupingFromGraph(
+      this.storeOptions.sourceNode,
+      this.storeOptions.store,
+      this.storeOptions.sourceGraph
+    );
+
+    const defaultErrorMessage = this.findDefaultErrorMessage(
       this.storeOptions.sourceNode,
       this.storeOptions.store,
       this.storeOptions.sourceGraph
@@ -178,11 +185,21 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
           groupingType,
           this.storeOptions.sourceGraph
         );
+      const defaultErrorMessageStatement =
+        this.createStatementForDefaultErrorMessage(
+          this.storeOptions.sourceNode,
+          defaultErrorMessage,
+          this.storeOptions.sourceGraph
+        );
 
-      this.storeOptions.store.addAll([
+      const StatementsToAdd = [
         validationPathStatement,
         ...rdfTypeAndGroupingStatements,
-      ]);
+      ];
+      if (defaultErrorMessageStatement) {
+        StatementsToAdd.push(defaultErrorMessageStatement);
+      }
+      this.storeOptions.store.addAll(StatementsToAdd);
     }
 
     this.hasBeenFocused = true;
@@ -210,6 +227,24 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     }
   }
 
+  findDefaultErrorMessage(sourceNode, store, graph) {
+    const currentMessage = store.any(
+      sourceNode,
+      SH('resultMessage'),
+      undefined,
+      graph
+    );
+    if (currentMessage) {
+      return;
+    }
+
+    return getDefaultErrorMessageForValidation(
+      this.selectedValidationType.subject,
+      this.storeOptions.store,
+      this.storeOptions.metaGraph
+    );
+  }
+
   createStatementForRdfTypeAndGrouping(
     sourceNode,
     rdfType,
@@ -220,6 +255,21 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
       new Statement(sourceNode, RDF('type'), rdfType, graph),
       new Statement(sourceNode, FORM('grouping'), groupingType, graph),
     ];
+  }
+
+  createStatementForDefaultErrorMessage(
+    sourceNode,
+    defaultErrorMessage,
+    graph
+  ) {
+    if (defaultErrorMessage) {
+      return new Statement(
+        sourceNode,
+        SH('resultMessage'),
+        defaultErrorMessage,
+        graph
+      );
+    }
   }
 
   getStatementToAddFieldPathToValidationPath(validationSubject, store, graph) {
