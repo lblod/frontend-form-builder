@@ -25,7 +25,6 @@ export default class FormbuilderConfigurationController extends Controller {
   updateFieldOptions(scheme) {
     const conceptSchemeConfig = {
       conceptScheme: scheme.uri,
-      searchEnabled: true,
     };
     const existingOptionsOnField = this.builderStore.match(
       scheme.field.subject,
