@@ -3,7 +3,7 @@ import { guidFor } from '@ember/object/internals';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
-import { SKOS } from '@lblod/submission-form-helpers';
+import { SKOS, FORM, RDF } from '@lblod/submission-form-helpers';
 import { Statement, namedNode } from 'rdflib';
 import {
   getFirstFieldSubject,
@@ -15,7 +15,7 @@ import {
   getValidationSubjectsOnNode,
 } from '../../utils/forking-store-helpers';
 import { showErrorToasterMessage } from '../../utils/toaster-message-helper';
-import { FORM, RDF, SH } from '../../utils/rdflib';
+import { SH } from '../../utils/rdflib';
 import { getGroupingTypeForValidation } from '../../utils/validation/get-grouping-type-for-validation';
 import { getDefaultErrorMessageForValidation } from '../../utils/validation/get-default-error-message-for-validation';
 

@@ -7,7 +7,7 @@ import { sym as RDFNode } from 'rdflib';
 import basicFormTemplate from '../../utils/basic-form-template';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { FORM, RDF } from '../../utils/rdflib';
+import { FORM, RDF } from '@lblod/submission-form-helpers';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),

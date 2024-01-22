@@ -1,4 +1,4 @@
-import { FORM } from '../rdflib';
+import { FORM } from '@lblod/submission-form-helpers';
 import { isMaxCharacterValueAddedToMaxLengthValidation } from './shape-validators/is-max-character-value-added';
 import { isDefaultCountryCodeAddedToValidPhoneNumber } from './shape-validators/is-country-code-added';
 import { isExactValueAddedToExactValueConstraint } from './shape-validators/is-exact-value-added';

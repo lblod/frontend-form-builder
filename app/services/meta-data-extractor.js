@@ -1,7 +1,7 @@
 import Service from '@ember/service';
 
 import { inject as service } from '@ember/service';
-import { FORM } from '../utils/rdflib';
+import { FORM } from '@lblod/submission-form-helpers';
 
 export default class MetaDataExtractorService extends Service {
   @service database;

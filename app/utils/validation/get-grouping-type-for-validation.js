@@ -1,4 +1,4 @@
-import { FORM } from '../rdflib';
+import { FORM } from '@lblod/submission-form-helpers';
 
 export function getGroupingTypeForValidation(validationType, store, graph) {
   const groupingType = store.any(

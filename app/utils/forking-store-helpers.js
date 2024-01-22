@@ -1,4 +1,5 @@
-import { FORM, RDF, SH } from './rdflib';
+import { SH } from './rdflib';
+import { FORM, RDF } from '@lblod/submission-form-helpers';
 import { SKOS } from '@lblod/submission-form-helpers';
 
 export function getTriplesWithNodeAsSubject(node, store, graph) {

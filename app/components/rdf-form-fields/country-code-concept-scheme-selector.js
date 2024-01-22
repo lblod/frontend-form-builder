@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
 import { SKOS, updateSimpleFormValue } from '@lblod/submission-form-helpers';
 import { Statement, namedNode } from 'rdflib';
-import { FORM } from '../../utils/rdflib';
+import { FORM } from '@lblod/submission-form-helpers';
 import { getPrefLabelOfNode } from '../../utils/forking-store-helpers';
 
 function byLabel(a, b) {

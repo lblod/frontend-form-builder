@@ -1,5 +1,5 @@
 import { createFieldDataForSubject } from './create-field-data-for-subject';
-import { FORM, RDF } from './rdflib';
+import { FORM, RDF } from '@lblod/submission-form-helpers';
 
 export function getFieldsInStore(store, graph) {
   const possibleFieldSubjects = store
