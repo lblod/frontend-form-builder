@@ -4,10 +4,12 @@ import {
 } from 'frontend-form-builder/utils/clean-up-ttl/remove-unreferenced-subjects';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { module, test } from 'qunit';
-import { NODES } from 'frontend-form-builder/utils/rdflib';
 import { GRAPHS } from 'frontend-form-builder/controllers/formbuilder/edit';
 import basicForm from './resources/remove-unreferenced-subjects/basic-form';
 import basicFormWithUnreferencedField from './resources/remove-unreferenced-subjects/basic-form-with-unreferenced-field';
+import { Namespace } from 'rdflib';
+
+const NODES = new Namespace('http://data.lblod.info/form-data/nodes/');
 
 module('Unit | Utility | Clean up ttl | Unreferenced subject', function () {
   module('helper method => getAllUniqueSubjectsInStore', function () {
