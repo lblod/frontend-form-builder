@@ -7,7 +7,8 @@
   </div>
   <div class="au-c-toolbar__group">
     <AuButton
-      @skin="primary" @icon="add"
+      @skin="primary"
+      @icon="add"
       {{on "click" this.openCreateFormModal}}
     >
       {{t "main.createNewForm"}}
@@ -29,30 +30,59 @@
       >
         <t.content as |c|>
           <c.header>
-            <AuDataTableThSortable @label='Naam' @field='label' @currentSorting={{this.sort}}
-              class="au-u-visible-medium-up" />
-            <AuDataTableThSortable @label='Aangemaakt op' @field='created' @currentSorting={{this.sort}}
-              class="au-u-visible-small-up" />
-            <AuDataTableThSortable @label='Aangepast op' @field='modified' @currentSorting={{this.sort}}
-              class="au-u-visible-small-up" />
+            <AuDataTableThSortable
+              @label="Naam"
+              @field="label"
+              @currentSorting={{this.sort}}
+              class="au-u-visible-medium-up"
+            />
+            <AuDataTableThSortable
+              @label="Aangemaakt op"
+              @field="created"
+              @currentSorting={{this.sort}}
+              class="au-u-visible-small-up"
+            />
+            <AuDataTableThSortable
+              @label="Aangepast op"
+              @field="modified"
+              @currentSorting={{this.sort}}
+              class="au-u-visible-small-up"
+            />
             <th colspan="1"></th>
             <th colspan="1"></th>
           </c.header>
           <c.body as |generatedForm|>
             <td class="au-u-visible-medium-up">
-              <AuLink @route="formbuilder.edit" @model={{generatedForm.id}} @ariaHidden={{true}}>{{generatedForm.label}}</AuLink>
+              <AuLink
+                @route="formbuilder.edit"
+                @model={{generatedForm.id}}
+                @ariaHidden={{true}}
+              >{{generatedForm.label}}</AuLink>
             </td>
-            <td class="au-u-visible-medium-up">{{format-date generatedForm.created}}</td>
-            <td class="au-u-visible-medium-up">{{format-date-time generatedForm.modified}}</td>
+            <td class="au-u-visible-medium-up">{{format-date
+                generatedForm.created
+              }}</td>
+            <td class="au-u-visible-medium-up">{{format-date-time
+                generatedForm.modified
+              }}</td>
             <td class="au-u-visible-medium-up">
-              <LinkTo @route="user-tests.new" @query={{hash form=generatedForm.id}} class="au-c-link">
-                <AuIcon @icon="eye" @alignment="left" @size="large" @ariaHidden={{true}} />
+              <LinkTo
+                @route="user-tests.new"
+                @query={{hash form=generatedForm.id}}
+                class="au-c-link"
+              >
+                <AuIcon
+                  @icon="eye"
+                  @alignment="left"
+                  @size="large"
+                  @ariaHidden={{true}}
+                />
                 Voorbeeld
               </LinkTo>
             </td>
             <td class="au-u-visible-medium-up">
               <AuButton
-              @skin="link"
+                @skin="link"
                 @icon="bin"
                 @alert={{true}}
                 {{on "click" (fn this.openDeleteModal generatedForm)}}
@@ -75,7 +105,5 @@
 {{/if}}
 
 {{#if this.showCreateFormModal}}
-  <CreateFormModal
-    @closeModal={{this.closeCreateFormModal}}
-  />
+  <CreateFormModal @closeModal={{this.closeCreateFormModal}} />
 {{/if}}
