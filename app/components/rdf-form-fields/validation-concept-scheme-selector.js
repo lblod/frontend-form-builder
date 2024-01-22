@@ -3,7 +3,7 @@ import { guidFor } from '@ember/object/internals';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import InputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/input-field';
-import { SKOS, FORM, RDF } from '@lblod/submission-form-helpers';
+import { SKOS, FORM, RDF, SHACL } from '@lblod/submission-form-helpers';
 import { Statement, namedNode } from 'rdflib';
 import {
   getFirstFieldSubject,
@@ -15,7 +15,6 @@ import {
   getValidationSubjectsOnNode,
 } from '../../utils/forking-store-helpers';
 import { showErrorToasterMessage } from '../../utils/toaster-message-helper';
-import { SH } from '../../utils/rdflib';
 import { getGroupingTypeForValidation } from '../../utils/validation/get-grouping-type-for-validation';
 import { getDefaultErrorMessageForValidation } from '../../utils/validation/get-default-error-message-for-validation';
 
@@ -230,7 +229,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
   findDefaultErrorMessage(sourceNode, store, graph) {
     const currentMessage = store.any(
       sourceNode,
-      SH('resultMessage'),
+      SHACL('resultMessage'),
       undefined,
       graph
     );
@@ -265,7 +264,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     if (defaultErrorMessage) {
       return new Statement(
         sourceNode,
-        SH('resultMessage'),
+        SHACL('resultMessage'),
         defaultErrorMessage,
         graph
       );
@@ -275,11 +274,11 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
   getStatementToAddFieldPathToValidationPath(validationSubject, store, graph) {
     const fieldPath = store.any(
       this.getFieldSubject(),
-      SH('path'),
+      SHACL('path'),
       undefined,
       graph
     );
 
-    return new Statement(validationSubject, SH('path'), fieldPath, graph);
+    return new Statement(validationSubject, SHACL('path'), fieldPath, graph);
   }
 }
