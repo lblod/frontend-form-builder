@@ -158,7 +158,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
       this.storeOptions.sourceGraph
     );
 
-    this.removeDefaultErrorMessage(
+    const defaultErrorMessage = this.getDefaultErrorMessage(
       this.storeOptions.sourceNode,
       this.storeOptions.store,
       this.storeOptions.sourceGraph
@@ -166,12 +166,6 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
 
     if (validationTypeOption) {
       const groupingType = getGroupingTypeForValidation(
-        this.selectedValidationType.subject,
-        this.storeOptions.store,
-        this.storeOptions.metaGraph
-      );
-
-      const defaultErrorMessage = getDefaultErrorMessageForValidation(
         this.selectedValidationType.subject,
         this.storeOptions.store,
         this.storeOptions.metaGraph
@@ -233,20 +227,22 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     }
   }
 
-  removeDefaultErrorMessage(sourceNode, store, graph) {
-    const defaultErrorMessage = getDefaultErrorMessageForValidation(
+  getDefaultErrorMessage(sourceNode, store, graph) {
+    const currentMessage = store.any(
       sourceNode,
-      store,
+      SH('resultMessage'),
+      undefined,
       graph
     );
-    if (defaultErrorMessage) {
-      const statement = this.createStatementForDefaultErrorMessage(
-        sourceNode,
-        defaultErrorMessage,
-        graph
-      );
-      store.removeStatements([statement]);
+    if (currentMessage) {
+      return;
     }
+
+    return getDefaultErrorMessageForValidation(
+      this.selectedValidationType.subject,
+      this.storeOptions.store,
+      this.storeOptions.metaGraph
+    );
   }
 
   createStatementForRdfTypeAndGrouping(
