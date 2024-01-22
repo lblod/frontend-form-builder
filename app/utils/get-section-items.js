@@ -11,7 +11,7 @@ export function getSectionFields(store, graph) {
   for (const sectionSubject of sectionSubjects) {
     const nodeInfo = getMinimalNodeInfo(sectionSubject, store, graph);
     const subjectsOfGroup = store
-      .match(undefined, SH('group'), sectionSubject, graph)
+      .match(undefined, FORM('partOf'), sectionSubject, graph)
       .map((triple) => triple.subject);
 
     const fieldsSubjectsToDisplay = [];

@@ -8,7 +8,7 @@ export function getTriplesWithNodeAsSubject(node, store, graph) {
 export function getValidationSubjectsOnNode(node, store, graph) {
   const nodeValidationTriples = store.match(
     node,
-    FORM('validations'),
+    FORM('validatedBy'),
     undefined,
     graph
   );

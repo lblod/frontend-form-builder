@@ -93,7 +93,7 @@ export default class FormbuilderConfigurationController extends Controller {
       'text/turtle'
     );
 
-    this.sections = this.getSectionFields(
+    this.sections = getSectionFields(
       this.builderStore,
       this.model.graphs.sourceGraph
     );
@@ -107,13 +107,13 @@ export default class FormbuilderConfigurationController extends Controller {
     const config = [];
 
     const propertyGroupSubjects = store
-      .match(undefined, RDF('type'), FORM('PropertyGroup'), graph)
+      .match(undefined, RDF('type'), FORM('Section'), graph)
       .map((triple) => triple.subject);
 
     for (const propertyGroupSubject of propertyGroupSubjects) {
       const nodeInfo = getMinimalNodeInfo(propertyGroupSubject, store, graph);
       const subjectsOfGroup = store
-        .match(undefined, SH('group'), propertyGroupSubject, graph)
+        .match(undefined, FORM('partOf'), propertyGroupSubject, graph)
         .map((triple) => triple.subject);
 
       const fieldsSubjectsToDisplay = [];
