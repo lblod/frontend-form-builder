@@ -192,14 +192,14 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
           this.storeOptions.sourceGraph
         );
 
-      const commonStatements = [
+      const StatementsToAdd = [
         validationPathStatement,
         ...rdfTypeAndGroupingStatements,
       ];
       if (defaultErrorMessageStatement) {
-        commonStatements.push(defaultErrorMessageStatement);
+        StatementsToAdd.push(defaultErrorMessageStatement);
       }
-      this.storeOptions.store.addAll(commonStatements);
+      this.storeOptions.store.addAll(StatementsToAdd);
     }
 
     this.hasBeenFocused = true;
