@@ -85,7 +85,8 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
     });
     this.validationTypeOptions = sortObjectsOnProperty(
       filteredOptions,
-      'label'
+      'label',
+      false
     );
   }
 
