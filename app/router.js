@@ -11,7 +11,8 @@ Router.map(function () {
     this.route('playground');
   });
   this.route('codelijsten', function () {
-    this.route('new');
+    // commented to prevent users to still create a new codelist by changing the url
+    // this.route('new');
     this.route('edit', { path: '/:id/edit' });
   });
   this.route('formbuilder', function () {
