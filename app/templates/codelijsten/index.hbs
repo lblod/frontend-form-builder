@@ -26,12 +26,14 @@
   </div>
   <div class="au-c-toolbar__group">
     <AuButtonGroup>
-      <AuLink
-        @route="codelijsten.new"
-        @skin="button"
-        @icon="plus"
-        @iconAlignment="left"
-      >{{t "codelists.createCodelist"}}</AuLink>
+      {{#if this.features.CAN_CREATE_OWN_CODELIST}}
+        <AuLink
+          @route="codelijsten.new"
+          @skin="button"
+          @icon="plus"
+          @iconAlignment="left"
+        >{{t "codelists.createCodelist"}}</AuLink>
+      {{/if}}
     </AuButtonGroup>
   </div>
 </div>
