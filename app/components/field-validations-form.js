@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { getFieldAndValidationTriples } from '../utils/get-field-and-validation-triples';
 import { getValidationSubjectsOnNode } from '../utils/forking-store-helpers';
-import { EXT } from '../utils/rdflib';
+import { EXT } from '../utils/namespaces';
 import { FORM } from '@lblod/submission-form-helpers';
 import { Statement } from 'rdflib';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
