@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { sym as RDFNode } from 'rdflib';
-import basicFormTemplate from '../../utils/basic-form-template';
+import basicFormTemplate from '../../utils/ttl-templates/basic-form-template';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { FORM, RDF } from '@lblod/submission-form-helpers';

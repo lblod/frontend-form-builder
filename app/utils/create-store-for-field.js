@@ -1,7 +1,7 @@
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { parseStoreGraphs } from './validation/helpers';
 import { FORM, RDF } from '@lblod/submission-form-helpers';
-import { fieldValidationFormTemplate } from './validation/form-templates/template';
+import { fieldValidationFormTemplate } from './ttl-templates/field-validation-template';
 
 export async function createStoreForFieldData(fieldData, graphs) {
   const fieldStore = new ForkingStore();
