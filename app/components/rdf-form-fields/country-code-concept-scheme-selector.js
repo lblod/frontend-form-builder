@@ -6,12 +6,7 @@ import { SKOS, updateSimpleFormValue } from '@lblod/submission-form-helpers';
 import { Statement, namedNode } from 'rdflib';
 import { FORM } from '@lblod/submission-form-helpers';
 import { getPrefLabelOfNode } from '../../utils/forking-store-helpers';
-
-function byLabel(a, b) {
-  const textA = a.label.toUpperCase();
-  const textB = b.label.toUpperCase();
-  return textA < textB ? -1 : textA > textB ? 1 : 0;
-}
+import { sortObjectsOnProperty } from '../../utils/sort-object-on-property';
 
 export default class CountryCodeConceptSchemeSelectorComponent extends InputFieldComponent {
   inputId = 'select-' + guidFor(this);
@@ -35,7 +30,7 @@ export default class CountryCodeConceptSchemeSelectorComponent extends InputFiel
       this.searchEnabled = fieldOptions.searchEnabled;
     }
 
-    this.countryCodeOptions = this.args.formStore
+    const codeOptions = this.args.formStore
       .match(undefined, SKOS('inScheme'), conceptScheme, metaGraph)
       .map((t) => {
         const label = getPrefLabelOfNode(
@@ -46,7 +41,8 @@ export default class CountryCodeConceptSchemeSelectorComponent extends InputFiel
 
         return { subject: t.subject, label: label && label.value };
       });
-    this.countryCodeOptions.sort(byLabel);
+
+    this.countryCodeOptions = sortObjectsOnProperty(codeOptions, 'label');
   }
 
   loadSelectedCountryCodeOption() {
