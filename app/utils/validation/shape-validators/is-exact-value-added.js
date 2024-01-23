@@ -1,4 +1,4 @@
-import { FORM, RDF } from '../../rdflib';
+import { FORM, RDF } from '@lblod/submission-form-helpers';
 
 export function isExactValueAddedToExactValueConstraint(store, graph) {
   const exactValueConstraint = store.match(

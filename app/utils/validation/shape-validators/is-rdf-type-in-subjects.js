@@ -1,4 +1,4 @@
-import { RDF } from '../../rdflib';
+import { RDF } from '@lblod/submission-form-helpers';
 
 export function isRdfTypeInSubjects(subjects, store, graph) {
   for (const subject of subjects) {

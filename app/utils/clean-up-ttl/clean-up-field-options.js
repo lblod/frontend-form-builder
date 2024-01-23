@@ -1,8 +1,8 @@
 import { GRAPHS } from '../../controllers/formbuilder/edit';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { FORM, RDF } from '../rdflib';
 import { canDisplayTypeHaveFormOptions } from '../can-display-type-have-form-options';
 import { Statement } from 'rdflib';
+import { FORM, RDF } from '@lblod/submission-form-helpers';
 
 export function getTtlWithCleanUpFieldOptions(ttlCode) {
   return removeConceptschemeFromFieldOptions(ttlCode);

@@ -1,5 +1,4 @@
-import { FORM, RDF, SH } from './rdflib';
-import { SKOS } from '@lblod/submission-form-helpers';
+import { SKOS, FORM, RDF, SHACL } from '@lblod/submission-form-helpers';
 
 export function getTriplesWithNodeAsSubject(node, store, graph) {
   return store.match(node, undefined, undefined, graph);
@@ -37,8 +36,8 @@ export function getMinimalNodeInfo(node, store, graph) {
     graph
   );
 
-  const nodeName = store.any(node, SH('name'), undefined, graph);
-  let nodeOrder = store.any(node, SH('order'), undefined, graph);
+  const nodeName = store.any(node, SHACL('name'), undefined, graph);
+  let nodeOrder = store.any(node, SHACL('order'), undefined, graph);
 
   if (!nodeOrder) {
     nodeOrder = 0;

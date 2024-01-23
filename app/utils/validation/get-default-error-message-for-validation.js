@@ -1,4 +1,4 @@
-import { SH } from '../rdflib';
+import { SHACL } from '@lblod/submission-form-helpers';
 
 export function getDefaultErrorMessageForValidation(
   validationType,
@@ -7,7 +7,7 @@ export function getDefaultErrorMessageForValidation(
 ) {
   const errorMessage = store.any(
     validationType,
-    SH('resultMessage'),
+    SHACL('resultMessage'),
     undefined,
     graph
   );

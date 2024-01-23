@@ -1,4 +1,6 @@
-import { DISPLAY } from './rdflib';
+import { Namespace } from 'rdflib';
+
+export const DISPLAY = new Namespace('http://lblod.data.gift/display-types/');
 
 export function canDisplayTypeHaveFormOptions(displayType) {
   if (!displayType) {

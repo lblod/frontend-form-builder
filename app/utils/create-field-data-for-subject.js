@@ -2,7 +2,7 @@ import {
   getTriplesWithNodeAsSubject,
   getValidationSubjectsOnNode,
 } from './forking-store-helpers';
-import { SH } from './rdflib';
+import { SHACL } from '@lblod/submission-form-helpers';
 
 export function createFieldDataForSubject(fieldSubject, { store, graph }) {
   const fieldTriples = getTriplesWithNodeAsSubject(fieldSubject, store, graph);
@@ -24,7 +24,7 @@ export function createFieldDataForSubject(fieldSubject, { store, graph }) {
 
   let fieldName = 'Veldnaam';
   const fieldNameTriple = fieldTriples.find(
-    (triple) => triple.predicate.value == SH('name').value
+    (triple) => triple.predicate.value == SHACL('name').value
   );
   if (fieldNameTriple) {
     fieldName = fieldNameTriple.object.value;

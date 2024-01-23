@@ -1,6 +1,7 @@
 import { Statement } from 'rdflib';
 import { getValidationSubjectsOnNode } from '../forking-store-helpers';
-import { EXT, FORM } from '../rdflib';
+import { EXT } from '../namespaces';
+import { FORM } from '@lblod/submission-form-helpers';
 import { createBlankNodeForValidation } from './create-blankNode-for-validation';
 
 export function addValidationTriplesToFormNodesL(fieldSubject, store, graphs) {

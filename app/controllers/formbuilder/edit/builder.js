@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { FORM, RDF } from '../../../utils/rdflib';
+import { RDF, FORM } from '@lblod/submission-form-helpers';
 import { PREVIEW_SOURCE_NODE } from '../edit';
 
 export default class FormbuilderEditBuilderController extends Controller {

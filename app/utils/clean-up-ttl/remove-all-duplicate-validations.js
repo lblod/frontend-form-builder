@@ -1,5 +1,5 @@
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { FORM } from '../rdflib';
+import { FORM } from '@lblod/submission-form-helpers';
 import { GRAPHS } from '../../controllers/formbuilder/edit';
 import {
   getRdfTypeOfNode,

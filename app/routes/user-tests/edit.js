@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { GRAPHS } from '../../controllers/formbuilder/edit';
-import { FORM, RDF } from '../../utils/rdflib';
+import { FORM, RDF } from '@lblod/submission-form-helpers';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { sym as RDFNode } from 'rdflib';
 import { inject as service } from '@ember/service';
