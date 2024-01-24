@@ -8,7 +8,7 @@ export async function shaclValidateTtlCode(ttlCode) {
   const shapesTtl = await getAllShapesTtl();
 
   const shapeQuads = getAllStatementsForTtlCode(shapesTtl);
-  const dataQuads = getAllStatementsForTtlCode(ttlCode);
+  const dataQuads = getAllStatementsForTtlCode(ttlCode); // PARSING ERROR HERE TODO:
 
   const shapeDataset = new DatasetFactory().dataset(shapeQuads);
   const dataDataset = new DatasetFactory().dataset(dataQuads);
