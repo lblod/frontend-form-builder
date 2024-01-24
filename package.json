@@ -100,8 +100,8 @@
     "edition": "octane"
   },
   "dependencies": {
-    "@rdfjs/data-model": "^2.0.1",
-    "@rdfjs/dataset": "^2.0.1",
+    "rdf-ext": "^2.5.1",
+    "rdf-validate-shacl": "^0.5.3",
     "shacl-engine": "^0.1.3"
   }
 }
