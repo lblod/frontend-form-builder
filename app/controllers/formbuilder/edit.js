@@ -8,6 +8,7 @@ import basicFormTemplate from '../../utils/ttl-templates/basic-form-template';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { FORM, RDF } from '@lblod/submission-form-helpers';
+import { shaclValidateTtlCode } from '../../utils/shacl-validate-ttl-code';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
@@ -39,7 +40,9 @@ export default class FormbuilderEditController extends Controller {
   }
 
   @action
-  handleCodeChange(newCode) {
+  async handleCodeChange(newCode) {
+    await shaclValidateTtlCode(newCode);
+    console.log('done validating');
     if (newCode) {
       this.formCode = newCode;
       this.formCodeManager.addFormCode(this.formCode);
