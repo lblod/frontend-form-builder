@@ -236,7 +236,13 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
       graph
     );
     if (currentMessage) {
-      return;
+      const currentMessages = this.args.formStore.match(
+        this.storeOptions.sourceNode,
+        SHACL('resultMessage'),
+        undefined,
+        this.storeOptions.sourceGraph
+      );
+      this.args.formStore.removeStatements(currentMessages);
     }
 
     return getDefaultErrorMessageForValidation(
