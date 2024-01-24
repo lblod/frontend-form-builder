@@ -98,5 +98,8 @@
   },
   "ember": {
     "edition": "octane"
+  },
+  "dependencies": {
+    "shacl-engine": "^0.1.3"
   }
 }
