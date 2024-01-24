@@ -2,15 +2,6 @@
 # Field shape for V2 forms ##
 #############################
 
-@prefix : <#>.
-@prefix form: <http://lblod.data.gift/vocabularies/forms/>.
-@prefix sh: <http://www.w3.org/ns/shacl#>.
-@prefix displayTypes: <http://lblod.data.gift/display-types/>.
-@prefix nodes: <http://data.lblod.info/form-data/nodes/>.
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix dc: <http://purl.org/dc/terms/> .
-
 form:Field
   a sh:NodeShape ;
   sh:targetClass form:Field ;
