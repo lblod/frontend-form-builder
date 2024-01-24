@@ -10,16 +10,23 @@ export async function shaclValidateTtlCode(ttlCode) {
     '/SHACL/field-validator.ttl'
   );
 
-  const shapeDataset = rdfDataset.dataset();
-  shapeDataset.add(...getAllStatementsForTtlCode(fieldValidatorTtl));
-  const dataset = rdfDataset.dataset();
-  dataset.add(...getAllStatementsForTtlCode(ttlCode));
+  const shapeDataset = createDatasetForTtlCode(fieldValidatorTtl);
+  const dataDataset = createDatasetForTtlCode(ttlCode);
 
   const validator = new Validator(shapeDataset, { factory: rdfDataModel });
-  const report = await validator.validate({ dataset });
+  const report = await validator.validate({ dataset: dataDataset });
 
   console.log('report:', report);
   console.log(`conforms: ${report.conforms}`);
+}
+
+function createDatasetForTtlCode(ttlCode) {
+  const dataset = rdfDataset.dataset();
+  for (const quad of getAllStatementsForTtlCode(ttlCode)) {
+    dataset.add(quad);
+  }
+
+  return dataset;
 }
 
 function getAllStatementsForTtlCode(ttlCode) {
