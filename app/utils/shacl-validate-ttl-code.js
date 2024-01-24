@@ -5,10 +5,14 @@ import SHACLValidator from 'rdf-validate-shacl';
 import { DatasetFactory } from 'rdf-ext';
 
 export async function shaclValidateTtlCode(ttlCode) {
+  if (!ttlCode) {
+    return;
+  }
+
   const shapesTtl = await getAllShapesTtl();
 
   const shapeQuads = getAllStatementsForTtlCode(shapesTtl);
-  const dataQuads = getAllStatementsForTtlCode(ttlCode); // PARSING ERROR HERE TODO:
+  const dataQuads = getAllStatementsForTtlCode(ttlCode);
 
   const shapeDataset = new DatasetFactory().dataset(shapeQuads);
   const dataDataset = new DatasetFactory().dataset(dataQuads);

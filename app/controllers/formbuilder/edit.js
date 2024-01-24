@@ -41,9 +41,9 @@ export default class FormbuilderEditController extends Controller {
 
   @action
   async handleCodeChange(newCode) {
-    await shaclValidateTtlCode(newCode);
-
     if (newCode) {
+      await shaclValidateTtlCode(newCode);
+
       this.formCode = newCode;
       this.formCodeManager.addFormCode(this.formCode);
     }
