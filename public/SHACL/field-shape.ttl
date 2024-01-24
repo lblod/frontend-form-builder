@@ -10,7 +10,7 @@ form:Field
       sh:path sh:group ;
       sh:maxCount 0 ;
       sh:minCount 0 ;
-    ],
+   ],
 	 [ # form:PropertyGroup cannot exist in V2 form
       sh:path form:PropertyGroup ;
       sh:minCount 0 ;

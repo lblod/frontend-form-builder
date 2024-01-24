@@ -5,11 +5,9 @@ import SHACLValidator from 'rdf-validate-shacl';
 import { DatasetFactory } from 'rdf-ext';
 
 export async function shaclValidateTtlCode(ttlCode) {
-  const fieldValidatorTtl = await getLocalFileContentAsText(
-    '/SHACL/field-validator.ttl'
-  );
+  const shapesTtl = await getAllShapesTtl();
 
-  const shapeQuads = getAllStatementsForTtlCode(fieldValidatorTtl);
+  const shapeQuads = getAllStatementsForTtlCode(shapesTtl);
   const dataQuads = getAllStatementsForTtlCode(ttlCode);
 
   const shapeDataset = new DatasetFactory().dataset(shapeQuads);
@@ -32,4 +30,14 @@ function getAllStatementsForTtlCode(ttlCode) {
     undefined,
     GRAPHS.sourceGraph
   );
+}
+
+async function getAllShapesTtl() {
+  const allShapes = await Promise.all([
+    getLocalFileContentAsText('/SHACL/repositories.ttl'),
+    getLocalFileContentAsText('/SHACL/field-shape.ttl'),
+    getLocalFileContentAsText('/SHACL/section-shape.ttl'),
+  ]);
+
+  return allShapes.join('\n');
 }
