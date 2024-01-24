@@ -1,3 +1,7 @@
+#############################
+# Field shape for V2 forms ##
+#############################
+
 @prefix : <#>.
 @prefix form: <http://lblod.data.gift/vocabularies/forms/>.
 @prefix sh: <http://www.w3.org/ns/shacl#>.
@@ -5,23 +9,58 @@
 @prefix nodes: <http://data.lblod.info/form-data/nodes/>.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dc: <http://purl.org/dc/terms/> .
 
 form:Field
   a sh:NodeShape ;
   sh:targetClass form:Field ;
   sh:property
+	 [ # sh:group cannot exist in V2 form
+      sh:path sh:group ;
+      sh:maxCount 0 ;
+      sh:minCount 0 ;
+    ],
+	 [ # form:PropertyGroup cannot exist in V2 form
+      sh:path form:PropertyGroup ;
+      sh:minCount 0 ;
+      sh:maxCount 0 ;
+    ],
+    [
+      sh:path dc:isPartOf ;
+      sh:class form:Section ;
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
+    ],
     [
       sh:path sh:name ;
       sh:datatype xsd:string ;
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
     ],
     [
       sh:path sh:order ;
       sh:datatype xsd:integer ;
       sh:minCount 1 ;
+      sh:maxCount 1 ;
     ],
     [
       sh:path form:displayType ;
-      sh:in (displayTypes:defaultInput) ;
+      sh:in (
+        displayTypes:defaultInput
+        displayTypes:numericalInput
+        displayTypes:textArea
+        displayTypes:switch
+        displayTypes:checkbox
+        displayTypes:date
+        displayTypes:dateTime
+        displayTypes:dateRange
+        displayTypes:conceptSchemeSelector
+        displayTypes:conceptSchemeRadioButtons
+        displayTypes:conceptSchemeMultiSelector
+        displayTypes:files
+        displayTypes:remoteUrls
+        displayTypes:remoteUrls
+      ) ;
       sh:minCount 1 ;
       sh:maxCount 1 ;
     ] .
