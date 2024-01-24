@@ -163,12 +163,12 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
     ext:validationResultMessageF a form:Field ;
       sh:name "Foutmelding" ;
       sh:order 100 ; # I think we always want to show this below the conditional fields?
-      # comment when USE_DEFAULT_ERROE_MESSAGE is false
-      # form:help """
-      #   Klik hier om het standaardbericht te tonen of aan te passen.
-      # """ ;
+      # comment when USE_DEFAULT_ERROR_MESSAGE is false
+      form:help """
+        Klik hier om het standaardbericht te tonen of aan te passen.
+      """ ;
       sh:path sh:resultMessage ;
-      form:displayType displayTypes:defaultInput ;
+      form:displayType displayTypes:errorMessageInputField ;
       form:partOf ext:formFieldS .
 
     ##########################################################
