@@ -33,6 +33,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
 
   @service toaster;
   @service intl;
+  @service features;
 
   fieldSubject;
 
@@ -195,8 +196,10 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
         validationPathStatement,
         ...rdfTypeAndGroupingStatements,
       ];
-      if (defaultErrorMessageStatement) {
-        StatementsToAdd.push(defaultErrorMessageStatement);
+      if (this.features.get('USE_DEFAULT_ERROR_MESSAGE')) {
+        if (defaultErrorMessageStatement) {
+          StatementsToAdd.push(defaultErrorMessageStatement);
+        }
       }
       this.storeOptions.store.addAll(StatementsToAdd);
     }

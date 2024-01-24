@@ -20,6 +20,7 @@ module.exports = function (environment) {
     },
     featureFlags: {
       SHOW_ORIGNAL_CODELIST_PAGE: false,
+      USE_DEFAULT_ERROR_MESSAGE: false, // when switching uncomment help text error message public/forms/validation/form.ttl
     },
   };
 
