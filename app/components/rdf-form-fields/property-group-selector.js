@@ -9,12 +9,7 @@ import {
   updateSimpleFormValue,
 } from '@lblod/submission-form-helpers';
 import { namedNode } from 'rdflib';
-
-function byLabel(a, b) {
-  const textA = a.label?.toUpperCase();
-  const textB = b.label?.toUpperCase();
-  return textA < textB ? -1 : textA > textB ? 1 : 0;
-}
+import { sortObjectsOnProperty } from '../../utils/sort-object-on-property';
 
 export default class PropertyGroupSelector extends InputFieldComponent {
   inputId = 'select-' + guidFor(this);
@@ -52,7 +47,7 @@ export default class PropertyGroupSelector extends InputFieldComponent {
       return option.label;
     });
 
-    this.options = optionsWithALabel.sort(byLabel);
+    this.options = sortObjectsOnProperty(optionsWithALabel, 'label');
   }
 
   loadProvidedValue() {

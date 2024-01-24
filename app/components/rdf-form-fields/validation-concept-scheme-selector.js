@@ -17,12 +17,7 @@ import {
 import { showErrorToasterMessage } from '../../utils/toaster-message-helper';
 import { getGroupingTypeForValidation } from '../../utils/validation/get-grouping-type-for-validation';
 import { getDefaultErrorMessageForValidation } from '../../utils/validation/get-default-error-message-for-validation';
-
-function byLabel(a, b) {
-  const textA = a.label.toUpperCase();
-  const textB = b.label.toUpperCase();
-  return textA < textB ? -1 : textA > textB ? 1 : 0;
-}
+import { sortObjectsOnProperty } from '../../utils/sort-object-on-property';
 
 export default class ValidationConceptSchemeSelectorComponent extends InputFieldComponent {
   inputId = 'select-' + guidFor(this);
@@ -84,12 +79,16 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
         return { subject: t.subject, label: label && label.value };
       });
 
-    this.validationTypeOptions = allOptions.filter((option) => {
+    const filteredOptions = allOptions.filter((option) => {
       return conceptOptions
         .map((concept) => concept.value)
         .includes(option.subject.value);
     });
-    this.validationTypeOptions.sort(byLabel);
+    this.validationTypeOptions = sortObjectsOnProperty(
+      filteredOptions,
+      'label',
+      false
+    );
   }
 
   loadProvidedValidationType() {

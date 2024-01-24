@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { PAGE_SIZE_TO_GET_ALL } from '../utils/constants';
+import { sortObjectsOnProperty } from '../utils/sort-object-on-property';
 
 export default class ConceptSchemeUriSelectorComponent extends Component {
   @service store;
@@ -55,7 +56,7 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
       },
     });
 
-    this.options = this.getSortedOptions(conceptSchemes);
+    this.options = sortObjectsOnProperty([...conceptSchemes], 'label');
 
     if (this.args.forField) {
       await this.loadSelected();
@@ -81,17 +82,5 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
   async setSelected(value) {
     this.selected = value;
     await this.update();
-  }
-
-  getSortedOptions(conceptSchemeModels) {
-    return [...conceptSchemeModels].sort(function (a, b) {
-      if (a.label < b.label) {
-        return -1;
-      }
-      if (a.label > b.label) {
-        return 1;
-      }
-      return 0;
-    });
   }
 }
