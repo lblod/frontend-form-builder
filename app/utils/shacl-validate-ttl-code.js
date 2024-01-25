@@ -8,19 +8,20 @@ export async function shaclValidateTtlCode(ttlCode) {
   if (!ttlCode) {
     return;
   }
+  const rdf = new DatasetFactory();
 
   const shapesTtl = await getAllShapesTtl();
 
   const shapeQuads = getAllStatementsForTtlCode(shapesTtl);
   const dataQuads = getAllStatementsForTtlCode(ttlCode);
 
-  const shapeDataset = new DatasetFactory().dataset(shapeQuads);
-  const dataDataset = new DatasetFactory().dataset(dataQuads);
+  const dataDataset = rdf.dataset(dataQuads);
 
-  const validator = new SHACLValidator(shapeDataset);
+  const validator = new SHACLValidator(shapeQuads, {
+    allowNamedNodeInList: true,
+  });
   const report = validator.validate(dataDataset);
 
-  console.log('report:', report);
   console.log(`conforms: ${report.conforms}`);
 
   return report;
