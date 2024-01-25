@@ -22,6 +22,8 @@ export async function shaclValidateTtlCode(ttlCode) {
 
   console.log('report:', report);
   console.log(`conforms: ${report.conforms}`);
+
+  return report;
 }
 
 function getAllStatementsForTtlCode(ttlCode) {
