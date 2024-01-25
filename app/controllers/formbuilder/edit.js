@@ -46,9 +46,14 @@ export default class FormbuilderEditController extends Controller {
 
       this.formCode = newCode;
       this.formCodeManager.addFormCode(this.formCode);
+
+      this.setFormChanged(
+        this.formCodeManager.isLatestDeviatingFromReference()
+      );
+      this.setupPreviewForm.perform(
+        this.formCodeManager.getTtlOfLatestVersion()
+      );
     }
-    this.setFormChanged(this.formCodeManager.isLatestDeviatingFromReference());
-    this.setupPreviewForm.perform(this.formCodeManager.getTtlOfLatestVersion());
   }
 
   setupPreviewForm = restartableTask(async (ttlCode) => {

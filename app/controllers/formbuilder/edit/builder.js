@@ -60,7 +60,7 @@ export default class FormbuilderEditBuilderController extends Controller {
   });
 
   setup() {
-    this.model.handleCodeChange();
+    this.model.handleCodeChange(this.formCodeManager.getTtlOfLatestVersion());
     this.setupBuilderForm.perform();
     this.setupPreviewForm.perform();
   }
