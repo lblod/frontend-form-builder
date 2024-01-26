@@ -12,8 +12,8 @@ export async function shaclValidateTtlCode(ttlCode) {
   const rdf = new DatasetFactory();
   const shapesTtl = await getAllShapesTtl();
 
-  const shapeQuads = await parse(shapesTtl);
-  const dataQuads = await parse(ttlCode);
+  const shapeQuads = await getQuadsFromTtlCode(shapesTtl);
+  const dataQuads = await getQuadsFromTtlCode(ttlCode);
 
   const dataDataset = rdf.dataset(dataQuads);
 
@@ -35,11 +35,11 @@ async function getAllShapesTtl() {
   return allShapes.join('\n');
 }
 
-async function parse(triples) {
+async function getQuadsFromTtlCode(ttlCode) {
   return new Promise((resolve, reject) => {
     const parser = new ParserN3();
     const dataset = factory.dataset();
-    parser.parse(triples, (error, quad) => {
+    parser.parse(ttlCode, (error, quad) => {
       if (error) {
         console.warn(error);
         reject(error);
