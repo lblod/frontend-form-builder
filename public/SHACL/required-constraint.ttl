@@ -1,0 +1,21 @@
+###########################################
+# Required constraint shape for V2 forms ##
+###########################################
+
+form:RequiredConstraint
+  a sh:NodeShape ;
+  sh:targetClass form:RequiredConstraint ;
+  sh:property
+    [
+      sh:path form:grouping ;
+      sh:hasValue form:Bag ;
+    ],
+    [
+      sh:path sh:path ;
+      sh:minCount 1 ;
+    ],
+    [
+      sh:path sh:resultMessage ;
+      sh:maxCount 1 ;
+      sh:datatype xsd:string ;
+    ].

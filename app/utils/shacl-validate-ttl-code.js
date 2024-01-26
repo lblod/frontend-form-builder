@@ -30,6 +30,7 @@ async function getAllShapesTtl() {
     getLocalFileContentAsText('/SHACL/repositories.ttl'),
     getLocalFileContentAsText('/SHACL/field-shape.ttl'),
     getLocalFileContentAsText('/SHACL/section-shape.ttl'),
+    getLocalFileContentAsText('/SHACL/required-constraint.ttl'),
   ]);
 
   return allShapes.join('\n');
