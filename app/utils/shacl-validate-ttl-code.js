@@ -23,7 +23,7 @@ export async function shaclValidateTtlCode(ttlCode) {
   });
   const report = validator.validate(dataDataset);
   const formattedResult = formatChaclValidationReport(report);
-  console.log(`Formatted result:`, formattedResult);
+  console.warn(`SHACL validation report:`, formattedResult);
 
   return report;
 }

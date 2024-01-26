@@ -14,7 +14,6 @@ export function formatChaclValidationReport(report) {
 }
 
 function formatValidationResult(validationResult) {
-  console.log(validationResult);
   const subject = validationResult.focusNode.id;
   const predicate = validationResult.path.id;
   const errorType = getErrorTypeOutOfSeverity(validationResult.severity);
