@@ -1,19 +1,19 @@
 import { getLocalFileContentAsText } from './get-local-file-content';
-import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { GRAPHS } from '../controllers/formbuilder/edit';
 import SHACLValidator from 'rdf-validate-shacl';
 import { DatasetFactory } from 'rdf-ext';
+import factory from '@rdfjs/dataset';
+import { Parser as ParserN3 } from 'n3';
 
 export async function shaclValidateTtlCode(ttlCode) {
   if (!ttlCode) {
     return;
   }
-  const rdf = new DatasetFactory();
 
+  const rdf = new DatasetFactory();
   const shapesTtl = await getAllShapesTtl();
 
-  const shapeQuads = getAllStatementsForTtlCode(shapesTtl);
-  const dataQuads = getAllStatementsForTtlCode(ttlCode);
+  const shapeQuads = await parse(shapesTtl);
+  const dataQuads = await parse(ttlCode);
 
   const dataDataset = rdf.dataset(dataQuads);
 
@@ -22,21 +22,7 @@ export async function shaclValidateTtlCode(ttlCode) {
   });
   const report = validator.validate(dataDataset);
 
-  console.log(`conforms: ${report.conforms}`);
-
   return report;
-}
-
-function getAllStatementsForTtlCode(ttlCode) {
-  const storeToPrepareDataset = new ForkingStore();
-  storeToPrepareDataset.parse(ttlCode, GRAPHS.sourceGraph, 'text/turtle');
-
-  return storeToPrepareDataset.match(
-    undefined,
-    undefined,
-    undefined,
-    GRAPHS.sourceGraph
-  );
 }
 
 async function getAllShapesTtl() {
@@ -47,4 +33,21 @@ async function getAllShapesTtl() {
   ]);
 
   return allShapes.join('\n');
+}
+
+async function parse(triples) {
+  return new Promise((resolve, reject) => {
+    const parser = new ParserN3();
+    const dataset = factory.dataset();
+    parser.parse(triples, (error, quad) => {
+      if (error) {
+        console.warn(error);
+        reject(error);
+      } else if (quad) {
+        dataset.add(quad);
+      } else {
+        resolve(dataset);
+      }
+    });
+  });
 }
