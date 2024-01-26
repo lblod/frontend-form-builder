@@ -95,4 +95,23 @@ module('Unit | SHACL | Required constraint', function () {
 
     assert.true(report.conforms);
   });
+  test('sh:resultMessage can only have one value', async function (assert) {
+    const ttlCode = `
+        @prefix : <#> .
+        @prefix form: <http://lblod.data.gift/vocabularies/forms/> .
+        @prefix nodes: <http://data.lblod.info/form-data/nodes/> .
+        @prefix sh: <http://www.w3.org/ns/shacl#>.
+
+        nodes:24289e48-258f-4919-8c3e-5783a6acb4a4
+          a form:RequiredConstraint ;
+          form:grouping form:Bag ;
+          sh:order 1 ;
+          sh:path nodes:e61f56db-6346-4a61-a75e-33e091789e40 ;
+          sh:resultMessage "Dit veld is verplicht", "Second error message" .
+      `;
+
+    const report = await shaclValidateTtlCode(ttlCode);
+
+    assert.false(report.conforms);
+  });
 });
