@@ -3,7 +3,7 @@ import { module, test } from 'qunit';
 
 module('Unit | SHACL | Required constraint', function () {
   test('is build up correctly', async function (assert) {
-    const requiredConstraintTtl = `
+    const ttlCode = `
         @prefix : <#> .
         @prefix form: <http://lblod.data.gift/vocabularies/forms/> .
         @prefix nodes: <http://data.lblod.info/form-data/nodes/> .
@@ -17,12 +17,12 @@ module('Unit | SHACL | Required constraint', function () {
           sh:resultMessage "Dit veld is verplicht" .
       `;
 
-    const report = await shaclValidateTtlCode(requiredConstraintTtl);
+    const report = await shaclValidateTtlCode(ttlCode);
 
     assert.true(report.conforms);
   });
-  test('has wrong grouping type', async function (assert) {
-    const requiredConstraintTtl = `
+  test('grouping type must be Bag NOT MatchEvery', async function (assert) {
+    const ttlCode = `
         @prefix : <#> .
         @prefix form: <http://lblod.data.gift/vocabularies/forms/> .
         @prefix nodes: <http://data.lblod.info/form-data/nodes/> .
@@ -36,12 +36,12 @@ module('Unit | SHACL | Required constraint', function () {
           sh:resultMessage "Dit veld is verplicht" .
       `;
 
-    const report = await shaclValidateTtlCode(requiredConstraintTtl);
+    const report = await shaclValidateTtlCode(ttlCode);
 
     assert.false(report.conforms);
   });
   test('sh:resultMessage must be a string not an integer', async function (assert) {
-    const requiredConstraintTtl = `
+    const ttlCode = `
         @prefix : <#> .
         @prefix form: <http://lblod.data.gift/vocabularies/forms/> .
         @prefix nodes: <http://data.lblod.info/form-data/nodes/> .
@@ -55,12 +55,12 @@ module('Unit | SHACL | Required constraint', function () {
           sh:resultMessage 1 .
       `;
 
-    const report = await shaclValidateTtlCode(requiredConstraintTtl);
+    const report = await shaclValidateTtlCode(ttlCode);
 
     assert.false(report.conforms);
   });
   test('sh:path is missing in constraint', async function (assert) {
-    const requiredConstraintTtl = `
+    const ttlCode = `
         @prefix : <#> .
         @prefix form: <http://lblod.data.gift/vocabularies/forms/> .
         @prefix nodes: <http://data.lblod.info/form-data/nodes/> .
@@ -73,12 +73,12 @@ module('Unit | SHACL | Required constraint', function () {
           sh:resultMessage "Dit veld is verplicht" .
       `;
 
-    const report = await shaclValidateTtlCode(requiredConstraintTtl);
+    const report = await shaclValidateTtlCode(ttlCode);
 
     assert.false(report.conforms);
   });
   test('sh:resultMessage is not a required predicate', async function (assert) {
-    const requiredConstraintTtl = `
+    const ttlCode = `
         @prefix : <#> .
         @prefix form: <http://lblod.data.gift/vocabularies/forms/> .
         @prefix nodes: <http://data.lblod.info/form-data/nodes/> .
@@ -91,7 +91,7 @@ module('Unit | SHACL | Required constraint', function () {
           sh:path nodes:e61f56db-6346-4a61-a75e-33e091789e40 .
       `;
 
-    const report = await shaclValidateTtlCode(requiredConstraintTtl);
+    const report = await shaclValidateTtlCode(ttlCode);
 
     assert.true(report.conforms);
   });

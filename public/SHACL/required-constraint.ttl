@@ -9,6 +9,8 @@ form:RequiredConstraint
     [
       sh:path form:grouping ;
       sh:hasValue form:Bag ;
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
     ],
     [
       sh:path sh:path ;
