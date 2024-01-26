@@ -31,6 +31,9 @@ export default class FormbuilderEditController extends Controller {
   @tracked previewStore;
   @tracked previewForm;
 
+  @tracked isSaveModalOpen;
+  @tracked nextRoute;
+
   sourceNode = PREVIEW_SOURCE_NODE;
 
   @action
@@ -94,5 +97,34 @@ export default class FormbuilderEditController extends Controller {
     }
 
     return generatedForm.ttlCode;
+  }
+
+  showSaveModal(nextRoute) {
+    this.isSaveModalOpen = true;
+    this.nextRoute = nextRoute;
+  }
+
+  @action
+  saveUnsavedChanges() {
+    this.formCodeManager.addFormCode(
+      this.formCodeManager.getTtlOfLatestVersion
+    );
+    this.formCodeManager.pinLatestVersionAsReference();
+    this.isSaveModalOpen = false;
+    this.goToNextRoute();
+  }
+
+  @action
+  discardSave() {
+    this.isSaveModalOpen = false;
+    this.formCodeManager.addFormCode(
+      this.formCodeManager.getTtlOfLatestVersion()
+    );
+    this.goToNextRoute();
+  }
+
+  @action
+  goToNextRoute() {
+    this.router.transitionTo(this.nextRoute);
   }
 }

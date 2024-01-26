@@ -59,3 +59,24 @@
     </div>
   </div>
 </AuBodyContainer>
+
+<AuModal @modalOpen={{this.isSaveModalOpen}}>
+  <:title>{{t "confirmation.saveUnsavedChangesTitle"}}</:title>
+  <:body>
+    {{t "confirmation.saveUnsavedChangesQuestion"}}
+  </:body>
+  <:footer>
+    <AuButtonGroup>
+      <AuButton {{on "click" this.saveUnsavedChanges}}>
+        {{t "crud.save"}}
+      </AuButton>
+      <AuButton
+        @alert={{true}}
+        @skin="secondary"
+        {{on "click" this.discardSave}}
+      >
+        {{t "crud.cancel"}}
+      </AuButton>
+    </AuButtonGroup>
+  </:footer>
+</AuModal>
