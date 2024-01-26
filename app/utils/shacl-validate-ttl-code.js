@@ -3,6 +3,7 @@ import SHACLValidator from 'rdf-validate-shacl';
 import { DatasetFactory } from 'rdf-ext';
 import factory from '@rdfjs/dataset';
 import { Parser as ParserN3 } from 'n3';
+import { formatChaclValidationReport } from './format-shacl-validation-report';
 
 export async function shaclValidateTtlCode(ttlCode) {
   if (!ttlCode) {
@@ -21,6 +22,8 @@ export async function shaclValidateTtlCode(ttlCode) {
     allowNamedNodeInList: true,
   });
   const report = validator.validate(dataDataset);
+  const formattedResult = formatChaclValidationReport(report);
+  console.log(`Formatted result:`, formattedResult);
 
   return report;
 }
