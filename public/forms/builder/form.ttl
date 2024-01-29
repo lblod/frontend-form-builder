@@ -17,7 +17,7 @@ ext:form a form:Form, form:TopLevelForm ;
   form:includes ext:formListingTableL.
 
 ##########################################################
-#  properform:partOf
+#  Section
 ##########################################################
 ext:mainPg a form:Section;
     sh:name "Form Builder" ;
@@ -237,7 +237,7 @@ ext:formListingFormItem a form:SubForm;
   form:includes ext:formListingAddF;
   form:includes ext:formListingRemoveF;
   form:includes ext:subformNodesL;
-  form:includes ext:subFormsectionF;
+  form:includes ext:subFormSectionF;
   form:hasFieldGroup ext:listingPg.
 
 ext:formListingAddF a form:Field ;
@@ -260,7 +260,7 @@ ext:formListingRemoveF a form:Field ;
   form:displayType displayTypes:defaultInput;
   form:partOf ext:listingPg .
 
-ext:subFormsectionF a form:Field ;
+ext:subFormSectionF a form:Field ;
   sh:name "Sub-section" ;
   form:help """
   e.g. 'Overview Books', 'Overview Subsidy Measures', etc..
