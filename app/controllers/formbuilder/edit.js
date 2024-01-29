@@ -107,7 +107,7 @@ export default class FormbuilderEditController extends Controller {
   @action
   saveUnsavedChanges() {
     this.formCodeManager.addFormCode(
-      this.formCodeManager.getTtlOfLatestVersion
+      this.formCodeManager.getTtlOfLatestVersion()
     );
     this.formCodeManager.pinLatestVersionAsReference();
     this.isSaveModalOpen = false;
@@ -118,7 +118,7 @@ export default class FormbuilderEditController extends Controller {
   discardSave() {
     this.isSaveModalOpen = false;
     this.formCodeManager.addFormCode(
-      this.formCodeManager.getTtlOfLatestVersion()
+      this.formCodeManager.getTtlOfReferenceVersion()
     );
     this.goToNextRoute();
   }
