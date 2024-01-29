@@ -17,7 +17,7 @@ form:Field
       sh:maxCount 0 ;
     ],
     [
-      sh:path dc:isPartOf ;
+      sh:path form:partOf ;
       sh:class form:Section ;
       sh:minCount 1 ;
       sh:maxCount 1 ;
