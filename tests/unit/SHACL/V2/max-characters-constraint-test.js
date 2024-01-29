@@ -1,4 +1,4 @@
-import { shaclValidateTtlCode } from 'frontend-form-builder/utils/shacl-validate-ttl-code';
+import { shaclValidateTtlCode } from 'frontend-form-builder/utils/SHACL/shacl-validate-ttl-code';
 import { module, test } from 'qunit';
 
 module('Unit | SHACL | V2 | Max characters constraint', function () {

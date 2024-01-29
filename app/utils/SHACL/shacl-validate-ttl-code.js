@@ -1,4 +1,4 @@
-import { getLocalFileContentAsText } from './get-local-file-content';
+import { getLocalFileContentAsText } from '../get-local-file-content';
 import SHACLValidator from 'rdf-validate-shacl';
 import { DatasetFactory } from 'rdf-ext';
 import factory from '@rdfjs/dataset';
