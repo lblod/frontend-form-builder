@@ -1,0 +1,57 @@
+#############################
+# Field shape for V2 forms ##
+#############################
+
+form:Field
+  a sh:NodeShape ;
+  sh:targetClass form:Field ;
+  sh:property
+	 [ # sh:group cannot exist in V2 form
+      sh:path sh:group ;
+      sh:maxCount 0 ;
+      sh:minCount 0 ;
+   ],
+	 [ # form:PropertyGroup cannot exist in V2 form
+      sh:path form:PropertyGroup ;
+      sh:minCount 0 ;
+      sh:maxCount 0 ;
+    ],
+    [
+      sh:path dc:isPartOf ;
+      sh:class form:Section ;
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
+    ],
+    [
+      sh:path sh:name ;
+      sh:datatype xsd:string ;
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
+    ],
+    [
+      sh:path sh:order ;
+      sh:datatype xsd:integer ;
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
+    ],
+    [
+      sh:path form:displayType ;
+      sh:in (
+        displayTypes:defaultInput
+        displayTypes:numericalInput
+        displayTypes:textArea
+        displayTypes:switch
+        displayTypes:checkbox
+        displayTypes:date
+        displayTypes:dateTime
+        displayTypes:dateRange
+        displayTypes:conceptSchemeSelector
+        displayTypes:conceptSchemeRadioButtons
+        displayTypes:conceptSchemeMultiSelector
+        displayTypes:files
+        displayTypes:remoteUrls
+        displayTypes:remoteUrls
+      ) ;
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
+    ] .

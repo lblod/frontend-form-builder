@@ -1,0 +1,29 @@
+#################################################
+# Max characters constraint shape for V2 forms ##
+#################################################
+
+form:MaxLength
+  a sh:NodeShape ;
+  sh:targetClass form:MaxLength ;
+  sh:property
+    [
+      sh:path form:grouping ;
+      sh:hasValue form:MatchEvery ;
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
+    ],
+    [
+      sh:path sh:path ;
+      sh:minCount 1 ;
+    ],
+    [
+      sh:path form:max ;
+      sh:datatype xsd:string ;
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
+    ],
+    [
+      sh:path sh:resultMessage ;
+      sh:maxCount 1 ;
+      sh:datatype xsd:string ;
+    ].
