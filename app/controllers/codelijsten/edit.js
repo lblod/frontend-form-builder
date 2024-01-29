@@ -78,7 +78,11 @@ export default class CodelijstenEditController extends Controller {
 
     if (this.codelistDescription.length > DESCRIPTION_INPUT_CHAR_LIMIT) {
       this.descriptionErrorMessage = this.intl.t(
-        'constraints.maxCharactersReachedWithCount'
+        'constraints.maxCharactersReachedWithCount',
+        {
+          count: this.codelistDescription.length,
+          maxCount: DESCRIPTION_INPUT_CHAR_LIMIT,
+        }
       );
     }
 

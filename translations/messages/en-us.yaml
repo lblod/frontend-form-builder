@@ -46,4 +46,4 @@ constraints:
   mandatoryField: "This field is required"
   duplicateName: "This name has already been used once."
   maxCharactersReached: "Max. characters exceeded"
-  maxCharactersReachedWithCount: "Max. characters {count} reached"
+  maxCharactersReachedWithCount: "Max. characters {maxCount} reached. Currrent: {count}"

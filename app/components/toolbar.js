@@ -109,7 +109,8 @@ export default class ToolbarComponent extends Component {
     if (this.formLabel.length > NAME_INPUT_CHAR_LIMIT) {
       this.toaster.warning(
         this.intl.t('constraints.maxCharactersReachedWithCount', {
-          count: NAME_INPUT_CHAR_LIMIT,
+          count: this.formLabel.length,
+          maxCount: NAME_INPUT_CHAR_LIMIT,
         }),
         this.intl.t('messages.subjects.characters'),
         {

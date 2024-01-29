@@ -46,4 +46,4 @@ constraints:
   mandatoryField: "Dit is een verplicht veld"
   duplicateName: "Deze naam is al eens gebruikt"
   maxCharactersReached: "Max. karakters overschreden"
-  maxCharactersReachedWithCount: "Max. karakters van {count} overschreden"
+  maxCharactersReachedWithCount: "Max. karakters van {maxCount} overschreden. Huidig aantal: {count}"
