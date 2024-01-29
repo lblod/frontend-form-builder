@@ -18,9 +18,9 @@ export const fieldValidationFormTemplate = `
     form:includes ext:formNodesL .
 
   ##########################################################
-  #  Property-groups
+  #  Sections
   ##########################################################
-  ext:formFieldPg a form:PropertyGroup;
+  ext:formFieldPg a form:Section;
     sh:name "" ;
     sh:order 1 .
 `;
