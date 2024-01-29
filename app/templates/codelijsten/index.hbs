@@ -39,136 +39,46 @@
 </div>
 
 <div class="au-c-main-container__content codelijsten__scroll">
-  {{! Code below is the original codelist page }}
-  {{#if this.features.SHOW_ORIGNAL_CODELIST_PAGE}}
-    <div class="playground">
-      <div class="playground__codelist">
-        {{!
-          Glimmer components only have two lifecycle hooks
-          This method will set the view to start without a scheme selected
-        }}
-        {{this.updateSelectedSchemeTo undefined}}
-
-        <AuHeading @level="2" @skin="3" class="au-u-light">{{t
-            "codelists.chooseList"
-          }}</AuHeading>
-
-        <div class="au-u-margin-top au-u-margin-bottom">
-          <ConceptSchemeUriSelector @update={{this.updateSelectedSchemeTo}} />
-        </div>
-
-        <div class="au-u-margin-bottom">
-          <AuLabel>{{t "codelists.uri"}}</AuLabel>
-          <AuContent class="au-u-margin-bottom">
-            {{#if this.scheme.uri}}
-              <AuPanel as |Section|>
-                <Section class="playground__codelist_code">
-                  <a
-                    class="au-c-link"
-                    href={{this.scheme.uri}}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >{{this.scheme.uri}}</a>
-                </Section>
-              </AuPanel>
-              <AuPanel as |Section|>
-                <Section class="playground__codelist_code">
-                  <pre>{{this.configurationCode}}</pre>
-                </Section>
-              </AuPanel>
-            {{else}}
-              <AuHelpText @skin="tertiary">{{t
-                  "codelists.chooseConcept"
-                }}</AuHelpText>
-            {{/if}}
-            <AuAlert
-              @icon="info-circle"
-              @title={{t "codelists.howToUse"}}
-              @skin="info"
-              @size="small"
-            >
-              <ul class="au-u-margin-bottom-small">
-                <li>Copy the link and past it at
-                  <strong>form:options</strong>
-                  and replace the link behind
-                  <strong>conceptScheme</strong>
-                  to activate the concept scheme</li>
-                <li>Some of the links contain more information about the concept
-                  scheme itself. Click the link top get the information</li>
-              </ul>
-              <img
-                src="/img/example-concept-scheme.png"
-                style="border: 1px solid lightgray;"
-                alt="concept scheme"
-                {{! template-lint-disable no-inline-styles}}
-              />
-            </AuAlert>
-          </AuContent>
-        </div>
-
-      </div>
-      <div class="playground__show">
-        <AuContent class="au-u-margin-bottom">
-          <AuLabel>{{t "codelists.contentOfList"}}</AuLabel>
-          {{#if this.scheme.uri}}
-            <ul>
-              {{#each this.scheme.concepts as |concept|}}
-                <li>
-                  {{concept}}
-                </li>
-              {{/each}}
-            </ul>
-          {{else}}
-            <AuHelpText @skin="tertiary">{{t
-                "codelists.chooseLeftFirst"
-              }}</AuHelpText>
-          {{/if}}
-        </AuContent>
-      </div>
-    </div>
-  {{else}}
-    {{! Start new codelist page }}
-    <AuTable class="au-u-margin-bottom-small">
-      <:header>
+  <AuTable class="au-u-margin-bottom-small">
+    <:header>
+      <tr>
+        <th>{{t "table.columns.name"}}</th>
+        <th>{{t "table.columns.id"}}</th>
+        <th></th>
+      </tr>
+    </:header>
+    <:body>
+      {{#each this.model as |conceptScheme|}}
         <tr>
-          <th>{{t "table.columns.name"}}</th>
-          <th>{{t "table.columns.id"}}</th>
-          <th></th>
+          <td class="au-u-visible-medium-up">
+            <AuLink
+              @route="codelijsten.edit"
+              @model={{conceptScheme.id}}
+              @ariaHidden={{true}}
+            >{{conceptScheme.label}}</AuLink>
+          </td>
+          <td class="au-u-visible-medium-up">{{conceptScheme.id}}</td>
+          <td>
+            {{#if conceptScheme.isPublic}}
+              <AuPill
+                @skin="success"
+                @icon="info-circle"
+                @iconAlignment="left"
+              >{{t "codelists.types.isPublic"}}
+              </AuPill>
+            {{else}}
+              <AuPill
+                @skin="warning"
+                @icon="info-circle"
+                @iconAlignment="left"
+              >{{t "codelists.types.isPrivate"}}
+              </AuPill>
+            {{/if}}
+          </td>
         </tr>
-      </:header>
-      <:body>
-        {{#each this.model as |conceptScheme|}}
-          <tr>
-            <td class="au-u-visible-medium-up">
-              <AuLink
-                @route="codelijsten.edit"
-                @model={{conceptScheme.id}}
-                @ariaHidden={{true}}
-              >{{conceptScheme.label}}</AuLink>
-            </td>
-            <td class="au-u-visible-medium-up">{{conceptScheme.id}}</td>
-            <td>
-              {{#if conceptScheme.isPublic}}
-                <AuPill
-                  @skin="success"
-                  @icon="info-circle"
-                  @iconAlignment="left"
-                >{{t "codelists.types.isPublic"}}
-                </AuPill>
-              {{else}}
-                <AuPill
-                  @skin="warning"
-                  @icon="info-circle"
-                  @iconAlignment="left"
-                >{{t "codelists.types.isPrivate"}}
-                </AuPill>
-              {{/if}}
-            </td>
-          </tr>
-        {{/each}}
-      </:body>
-    </AuTable>
-  {{/if}}
+      {{/each}}
+    </:body>
+  </AuTable>
 </div>
 
 {{outlet}}

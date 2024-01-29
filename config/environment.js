@@ -19,7 +19,6 @@ module.exports = function (environment) {
       // when it is created
     },
     featureFlags: {
-      SHOW_ORIGNAL_CODELIST_PAGE: false,
       USE_DEFAULT_ERROR_MESSAGE: false, // when switching uncomment help text error message public/forms/validation/form.ttl
       CAN_CREATE_OWN_CODELIST: false, // when switching to true also uncomment the `codelijsten/new` route in `router.js`
     },
