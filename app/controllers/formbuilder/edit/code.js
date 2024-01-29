@@ -1,10 +1,13 @@
 import Controller from '@ember/controller';
 
 import { inject as service } from '@ember/service';
-import { restartableTask } from 'ember-concurrency';
+import { restartableTask, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { cleanupTtlcode } from '../../../utils/clean-up-ttl/clean-up-ttl-code';
+import { shaclValidateTtlCode } from '../../../utils/SHACL/shacl-validate-ttl-code';
+import { formatShaclValidationReport } from '../../../utils/SHACL/format-shacl-validation-report';
+import { INPUT_DEBOUNCE_MS } from '../../../utils/constants';
 
 export default class FormbuilderEditCodeController extends Controller {
   @service('form-code-manager') formCodeManager;
@@ -25,9 +28,18 @@ export default class FormbuilderEditCodeController extends Controller {
   }
 
   handleCodeChange = restartableTask(async (newCode) => {
+    await timeout(INPUT_DEBOUNCE_MS);
+
     if (this.formCodeManager.isTtlTheSameAsLatest(newCode)) {
       return;
     }
+
+    const shaclReport = await shaclValidateTtlCode(newCode);
+    console.warn(
+      'Formatted SHACL report: ',
+      formatShaclValidationReport(shaclReport)
+    );
+
     const builderStore = new ForkingStore();
     try {
       builderStore.parse(
