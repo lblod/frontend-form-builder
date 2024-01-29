@@ -48,7 +48,7 @@ export default class FormbuilderEditRoute extends Route {
   willTransition(transition) {
     const nextRoute = transition.targetName;
 
-    if (transition.to.parent.name == 'formbuilder') {
+    if (transition.to.parent.name == 'formbuilder.edit') {
       return;
     }
 
