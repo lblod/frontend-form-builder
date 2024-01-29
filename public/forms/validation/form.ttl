@@ -30,7 +30,7 @@ ext:formNodesS a form:Scope ;
   sh:path form:includes .
 
 ext:formValidationsS a form:Scope ;
-  sh:path form:validations .
+  sh:path form:validatedBy .
 
 ##########################################################
 #  Field with add validation button
@@ -83,11 +83,11 @@ ext:validationsFG a form:FieldGroup ;
 #  Validation type selector
 ##########################################################
 fields:validatonSelectorF a form:Field ;
-  sh:name "Validatietype" ;
+  sh:name "Validatie type" ;
   sh:order 2 ;
   form:help """
    """;
-  form:validations
+  form:validatedBy
     [ a form:RequiredConstraint ;
         form:grouping form:Bag ;
         sh:path rdf:type ;
@@ -161,12 +161,8 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
     #  Error message field
     ##########################################################
     ext:validationResultMessageF a form:Field ;
-      sh:name "Foutmelding" ;
+      sh:name "Fout melding" ;
       sh:order 100 ; # I think we always want to show this below the conditional fields?
-      # comment when USE_DEFAULT_ERROE_MESSAGE is false
-      # form:help """
-      #   Klik hier om het standaardbericht te tonen of aan te passen.
-      # """ ;
       sh:path sh:resultMessage ;
       form:displayType displayTypes:defaultInput ;
       sh:group ext:formFieldPg .
@@ -178,7 +174,7 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
       sh:name "Max karakters" ;
       sh:order 101 ;
       sh:path form:max ;
-      form:validations
+      form:validatedBy
         [ a form:RequiredConstraint ;
             form:grouping form:Bag ;
             sh:path form:max ;
@@ -199,7 +195,7 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
       sh:name "Exacte waarde" ;
       sh:order 102 ;
       sh:path form:customValue ;
-      form:validations
+      form:validatedBy
         [ a form:RequiredConstraint ;
             form:grouping form:Bag ;
             sh:path form:customValue ;
@@ -215,7 +211,7 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
       sh:name "Landcode" ;
       sh:order 103 ;
       sh:path form:defaultCountry ;
-      form:validations
+      form:validatedBy
         [ a form:RequiredConstraint ;
             form:grouping form:Bag ;
             sh:path form:defaultCountry ;

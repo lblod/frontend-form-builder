@@ -18,7 +18,7 @@ export function areValidationsInGraphValidated(store, graph) {
 function getAllValidationNodesInGraph(store, graph) {
   const subjectThatHaveValidations = store.match(
     undefined,
-    FORM('validations'),
+    FORM('validatedBy'),
     undefined,
     graph
   );
