@@ -7,6 +7,8 @@ export default class FormCodeManagerService extends Service {
   latestVersion = this.startVersion; // -1 so start version is 0
   referenceVersion = this.startVersion;
 
+  formId = null;
+
   getTtlOfLatestVersion() {
     return this.#getTtlOfVersion(this.latestVersion);
   }
@@ -58,5 +60,18 @@ export default class FormCodeManagerService extends Service {
     }
 
     return this.formCodeHistory[version];
+  }
+
+  getFormId() {
+    if (!this.formId) {
+      throw `Could not get form id. Id is never set.`;
+    }
+
+    return this.formId;
+  }
+
+  setFormId(generatedFormId) {
+    // Should we check if the ID exists?
+    this.formId = generatedFormId;
   }
 }

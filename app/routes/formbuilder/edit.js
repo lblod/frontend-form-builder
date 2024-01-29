@@ -1,4 +1,5 @@
 import Route from '@ember/routing/route';
+
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { registerFormFields } from '@lblod/ember-submission-form-fields';
@@ -19,6 +20,7 @@ export default class FormbuilderEditRoute extends Route {
   }
 
   async model(params) {
+    this.formCodeManager.setFormId(params.id);
     const [generatedForm, formTtl, metaTtl, conceptSchemesTtl] =
       await Promise.all([
         this.getGeneratedFormById(params.id),
@@ -46,13 +48,11 @@ export default class FormbuilderEditRoute extends Route {
   willTransition(transition) {
     const nextRoute = transition.targetName;
 
-    console.log(`transition.to.parent.name`, transition.to.parent.name);
     if (transition.to.parent.name == 'formbuilder') {
       return;
     }
 
     if (this.formCodeManager.isLatestDeviatingFromReference()) {
-      console.log(`ABORT`);
       transition.abort();
       /* eslint ember/no-controller-access-in-routes: "warn" */
       const editController = this.controllerFor('formbuilder.edit');
@@ -61,7 +61,6 @@ export default class FormbuilderEditRoute extends Route {
   }
 
   resetController(controller) {
-    console.log(`RESET`);
     controller.reset();
   }
 

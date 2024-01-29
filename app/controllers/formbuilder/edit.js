@@ -106,6 +106,7 @@ export default class FormbuilderEditController extends Controller {
 
   @action
   saveUnsavedChanges() {
+    console.log(`formId:`, this.formCodeManager.getFormId());
     this.formCodeManager.addFormCode(
       this.formCodeManager.getTtlOfLatestVersion()
     );
