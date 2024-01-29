@@ -1,4 +1,6 @@
 import Route from '@ember/routing/route';
+
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { registerFormFields } from '@lblod/ember-submission-form-fields';
 import PropertyGroupSelector from '../../components/rdf-form-fields/property-group-selector';
@@ -10,6 +12,7 @@ import { GRAPHS } from '../../controllers/formbuilder/edit';
 export default class FormbuilderEditRoute extends Route {
   @service store;
   @service intl;
+  @service('form-code-manager') formCodeManager;
 
   constructor() {
     super(...arguments);
@@ -17,6 +20,7 @@ export default class FormbuilderEditRoute extends Route {
   }
 
   async model(params) {
+    this.formCodeManager.setFormId(params.id);
     const [generatedForm, formTtl, metaTtl, conceptSchemesTtl] =
       await Promise.all([
         this.getGeneratedFormById(params.id),
@@ -38,6 +42,22 @@ export default class FormbuilderEditRoute extends Route {
     super.setupController(...arguments);
 
     controller.setup(model);
+  }
+
+  @action
+  willTransition(transition) {
+    const nextRoute = transition.targetName;
+
+    if (transition.to.parent.name == 'formbuilder.edit') {
+      return;
+    }
+
+    if (this.formCodeManager.isLatestDeviatingFromReference()) {
+      transition.abort();
+      /* eslint ember/no-controller-access-in-routes: "warn" */
+      const editController = this.controllerFor('formbuilder.edit');
+      editController.showSaveModal(nextRoute);
+    }
   }
 
   resetController(controller) {

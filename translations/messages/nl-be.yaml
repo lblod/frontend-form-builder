@@ -8,6 +8,7 @@ messages:
     somethingWentWrong: "Oeps, er is iets mis gegaan"
     cannotAddValidationsToEmptyForm: "Kan geen validaties toevoegen aan een leeg formulier"
     duplicateValidationType: "Validatietype {type} is duplicaat"
+    couldNotGetFormIdIsNotSet: "Kan form id niet vinden. Id niet ingesteld."
   success:
     formCreated: "Formulier succesvol aangemaakt"
     formUpdated: "Formulier bijgewerkt"
@@ -20,10 +21,13 @@ messages:
     remainingCharacters: "Karakters: {currentCount}"
     noConfigPossible: "Geen verdere configuratie mogelijk"
     onlyFieldsAllowedToDisplayUnderSections: "Velden zijn enkel toeglaten om te tonen onder de sectie"
+    lowestVersionAvailable: "The lowest version available is version: 0"
+    highestversionAvailable: "The highest version available is v{version}"
   loading:
     creatingNewUserTest: "Nieuwe gebruikerstest aan het maken"
     loadingOverview: "Overzicht aan het laden"
     loadingUserTests: "Gebruikerstest aan het laden"
+    isSaving: "Bewaren"
     isLoading: "Aan het laden..."
     isDeleting: "Aan het verwijderen"
 
@@ -31,6 +35,10 @@ confirmation:
   deleteTitle: "Formulier verwijderen?"
   deleteQuestion: "Bent u zeker dat u dit formulier wilt verwijderen? Deze actie is permanent."
   goWithoutSaving: "Ben je zeker dat je de voortgang verloren wil laten gaan?"
+  saveUnsavedChangesTitle: "Wil je de wijzigingen opslagen?"
+  saveUnsavedChangesQuestion: "Je huidige aanpassingen gaan verloren. Wil je deze toch opslagen?"
+  saveChanges: "Aanpassingen bewaren"
+  discardChanges: "Doorgaan zonder opslaan"
 
 constraints:
   mandatoryField: "Dit is een verplicht veld"

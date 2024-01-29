@@ -8,6 +8,7 @@ messages:
     somethingWentWrong: "Oops, something went wrong"
     cannotAddValidationsToEmptyForm: "Could not add validations to an empty form"
     duplicateValidationType: "Validation type {type} is duplicate"
+    couldNotGetFormIdIsNotSet: "Could not get form id. Id is never set."
   success:
     formCreated: "Form created successfully"
     formUpdated: "Form updated"
@@ -20,10 +21,13 @@ messages:
     remainingCharacters: "Characters: {currentCount}"
     noConfigPossible: "No further configuration possible"
     onlyFieldsAllowedToDisplayUnderSections: "Only fields are supported to be displayed per section"
+    lowestVersionAvailable: "De laagste beschikbare versie: 0"
+    highestversionAvailable: "De laatste versie is v{version}"
   loading:
     creatingNewUserTest: "Creating new user test"
     loadingOverview: "Loading Overview"
     loadingUserTests: "Loading user test"
+    isSaving: "Saving"
     isLoading: "Loading..."
     isDeleting: "Deleting"
 
@@ -31,6 +35,10 @@ confirmation:
   deleteTitle: "Delete form?"
   deleteQuestion: "Are you sure you want to delete this form? This action is permanent."
   goWithoutSaving: "Are you sure you want to abandon progress?"
+  saveUnsavedChangesTitle: "Unsaved changes"
+  saveUnsavedChangesQuestion: "You have unsaved changes. Do you want to save them?"
+  saveChanges: "Save changes"
+  discardChanges: "Discard changes"
 
 constraints:
   mandatoryField: "This field is required"
