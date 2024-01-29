@@ -1,6 +1,7 @@
 codelists:
   addConcept: "Add concept to the list"
   nameOfCodelist: "Name of codelist"
+  descriptionOfCodelist: "Description"
   detailTitle: "Codelist detail"
   createCodelist: "Create a codelist"
   howToUse: "How to use the concept scheme:"
