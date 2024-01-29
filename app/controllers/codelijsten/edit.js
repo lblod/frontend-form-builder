@@ -3,7 +3,10 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
-import { NAME_INPUT_CHAR_LIMIT } from '../../utils/constants';
+import {
+  DESCRIPTION_INPUT_CHAR_LIMIT,
+  NAME_INPUT_CHAR_LIMIT,
+} from '../../utils/constants';
 import {
   showErrorToasterMessage,
   showSuccessToasterMessage,
@@ -22,13 +25,16 @@ export default class CodelijstenEditController extends Controller {
   @service router;
 
   @tracked codelistName;
+  @tracked codelistDescription;
   @tracked conceptScheme;
-
   @tracked concepts;
   @tracked conceptsToDelete;
+
+  @tracked nameErrorMessage;
+  @tracked descriptionErrorMessage;
+
   @tracked isDeleteModalOpen;
   @tracked isDuplicateName;
-  @tracked nameErrorMessage;
   @tracked isSaveDisabled;
   @tracked isPrivateConceptScheme;
 
@@ -38,9 +44,7 @@ export default class CodelijstenEditController extends Controller {
     this.conceptScheme = await this.getConceptSchemeById(conceptSchemeId);
     this.setValuesFromConceptscheme();
 
-    const conceptArray = this.emberArrayToArray(
-      await this.conceptScheme.concepts
-    );
+    const conceptArray = new Array(...(await this.conceptScheme.concepts));
     this.setValuesFromConcepts(conceptArray);
 
     this.setIsSaveButtonDisabled();
@@ -49,6 +53,7 @@ export default class CodelijstenEditController extends Controller {
   setValuesFromConceptscheme() {
     this.isPrivateConceptScheme = !this.conceptScheme.isPublic;
     this.codelistName = this.conceptScheme.label;
+    this.codelistDescription = this.conceptScheme.description;
   }
 
   setValuesFromConcepts(conceptArray) {
@@ -57,6 +62,24 @@ export default class CodelijstenEditController extends Controller {
     this.concepts = sortObjectsOnProperty(mappedConcepts, 'label');
 
     this.conceptsToDelete = [];
+  }
+
+  @action
+  handleDescriptionChange(event) {
+    const newDescription = event.target.value;
+    this.descriptionErrorMessage = null;
+
+    if (!newDescription || newDescription.trim() == '') {
+      this.descriptionErrorMessage = 'Dit veld is verplicht';
+    }
+
+    this.codelistDescription = newDescription.trim();
+
+    if (this.codelistDescription.length > DESCRIPTION_INPUT_CHAR_LIMIT) {
+      this.descriptionErrorMessage = 'Maximum karakters overschreden';
+    }
+
+    this.setIsSaveButtonDisabled();
   }
 
   @action
@@ -120,8 +143,13 @@ export default class CodelijstenEditController extends Controller {
 
   @action
   async save() {
-    if (this.conceptScheme.label.trim() !== this.codelistName) {
+    if (
+      this.isCodelistNameDeviating() ||
+      this.isCodelistDescriptionDeviating()
+    ) {
       this.conceptScheme.preflabel = this.codelistName;
+      this.conceptScheme.description = this.codelistDescription;
+
       try {
         this.conceptScheme.save();
         this.conceptScheme.reload();
@@ -220,10 +248,12 @@ export default class CodelijstenEditController extends Controller {
       }
       if (
         this.isValidConceptSchemeName() &&
+        this.isValidConceptSchemeDescription() &&
         this.isConceptListIncludingEmptyValues()
       ) {
         if (
-          this.conceptScheme.label.trim() !== this.codelistName ||
+          this.isCodelistDescriptionDeviating() ||
+          this.isCodelistNameDeviating() ||
           this.isConceptListChanged() ||
           this.conceptsToDelete.length >= 1
         ) {
@@ -247,8 +277,21 @@ export default class CodelijstenEditController extends Controller {
     return this.codelistName.trim() !== '' && !this.isDuplicateName;
   }
 
+  isValidConceptSchemeDescription() {
+    return this.codelistDescription.trim() !== '';
+  }
+
+  isCodelistNameDeviating() {
+    return this.conceptScheme.label.trim() !== this.codelistName;
+  }
+
+  isCodelistDescriptionDeviating() {
+    return this.conceptScheme.description.trim() !== this.codelistDescription;
+  }
+
   isBackTheSavedVersion() {
     return (
+      this.conceptScheme.description == this.codelistDescription &&
       this.conceptScheme.label == this.codelistName &&
       !this.isConceptListChanged() &&
       this.conceptsToDelete.length == 0
@@ -257,10 +300,6 @@ export default class CodelijstenEditController extends Controller {
 
   isConceptListChanged() {
     return isConceptArrayChanged(this.conceptsInDatabase, this.concepts);
-  }
-
-  emberArrayToArray(emberArray) {
-    return new Array(...emberArray);
   }
 
   mapConceptModels(concepts) {

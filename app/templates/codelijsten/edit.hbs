@@ -79,12 +79,35 @@
       <AuInput
         id="input-codelist-name"
         @width="block"
+        @error={{this.nameErrorMessage}}
         @disabled={{this.isPrivateConceptScheme}}
         value={{this.codelistName}}
         {{on "blur" this.handleNameChange}}
       />
       {{#if this.nameErrorMessage}}
         <AuHelpText @error={{true}}>{{this.nameErrorMessage}}</AuHelpText>
+      {{/if}}
+    </div>
+    <div class="au-u-3-5 au-u-margin-bottom-large">
+      {{#if this.isPrivateConceptScheme}}
+        <p>{{this.codelistDescription}}</p>
+      {{else}}
+        <AuLabel for="input-codelist-description">
+          {{t "codelists.descriptionOfCodelist"}}
+        </AuLabel>
+        <AuTextarea
+          id="input-codelist-description"
+          @width="block"
+          @error={{this.descriptionErrorMessage}}
+          @disabled={{this.isPrivateConceptScheme}}
+          value={{this.codelistDescription}}
+          {{on "blur" this.handleDescriptionChange}}
+        />
+        {{#if this.descriptionErrorMessage}}
+          <AuHelpText
+            @error={{true}}
+          >{{this.descriptionErrorMessage}}</AuHelpText>
+        {{/if}}
       {{/if}}
     </div>
   </span>
