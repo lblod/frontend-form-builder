@@ -10,7 +10,7 @@ import {
   getRdfTypeOfNode,
 } from '../../../utils/forking-store-helpers';
 import { Literal, Statement } from 'rdflib';
-import { FORM, RDF, SHACL } from '@lblod/submission-form-helpers';
+import { FORM, RDF } from '@lblod/submission-form-helpers';
 import { sortObjectsOnProperty } from '../../../utils/sort-object-on-property';
 
 export default class FormbuilderConfigurationController extends Controller {
@@ -105,13 +105,13 @@ export default class FormbuilderConfigurationController extends Controller {
     const config = [];
 
     const propertyGroupSubjects = store
-      .match(undefined, RDF('type'), FORM('PropertyGroup'), graph)
+      .match(undefined, RDF('type'), FORM('Section'), graph)
       .map((triple) => triple.subject);
 
     for (const propertyGroupSubject of propertyGroupSubjects) {
       const nodeInfo = getMinimalNodeInfo(propertyGroupSubject, store, graph);
       const subjectsOfGroup = store
-        .match(undefined, SHACL('group'), propertyGroupSubject, graph)
+        .match(undefined, FORM('partOf'), propertyGroupSubject, graph)
         .map((triple) => triple.subject);
 
       const fieldsSubjectsToDisplay = [];
