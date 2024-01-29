@@ -1,6 +1,9 @@
 import Service from '@ember/service';
+import { service } from '@ember/service';
 
 export default class FormCodeManagerService extends Service {
+  @service intl;
+
   startVersion = -1;
 
   formCodeHistory = [];
@@ -53,10 +56,12 @@ export default class FormCodeManagerService extends Service {
 
   #getTtlOfVersion(version) {
     if (version <= this.startVersion) {
-      throw `The lowest version available is version: 0`;
+      throw this.intl.t('messages.feedback.lowestVersionAvailable');
     }
     if (version > this.latestVersion) {
-      throw `The highest version available is version: ${this.latestVersion}`;
+      throw this.intl.t('messages.feedback.highestversionAvailable', {
+        version: this.latestVersion,
+      });
     }
 
     return this.formCodeHistory[version];
@@ -64,7 +69,7 @@ export default class FormCodeManagerService extends Service {
 
   getFormId() {
     if (!this.formId) {
-      throw `Could not get form id. Id is never set.`;
+      throw this.intl.t('messages.error.couldNotGetFormIdIsNotSet');
     }
 
     return this.formId;
