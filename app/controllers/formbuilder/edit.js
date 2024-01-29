@@ -2,7 +2,7 @@ import Controller from '@ember/controller';
 
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { sym as RDFNode } from 'rdflib';
 import basicFormTemplate from '../../utils/ttl-templates/basic-form-template';
 import { restartableTask, timeout } from 'ember-concurrency';
@@ -22,6 +22,8 @@ export const PREVIEW_SOURCE_NODE = new RDFNode(
 export default class FormbuilderEditController extends Controller {
   @service store;
   @service router;
+  @service toaster;
+  @service intl;
   @service('form-code-manager') formCodeManager;
 
   @tracked formCode;
@@ -104,16 +106,15 @@ export default class FormbuilderEditController extends Controller {
     this.nextRoute = nextRoute;
   }
 
-  @action
-  saveUnsavedChanges() {
-    console.log(`formId:`, this.formCodeManager.getFormId());
+  saveUnsavedChanges = restartableTask(async () => {
     this.formCodeManager.addFormCode(
       this.formCodeManager.getTtlOfLatestVersion()
     );
     this.formCodeManager.pinLatestVersionAsReference();
+    await this.updateTtlCodeOfForm();
     this.isSaveModalOpen = false;
     this.goToNextRoute();
-  }
+  });
 
   @action
   discardSave() {
@@ -127,5 +128,33 @@ export default class FormbuilderEditController extends Controller {
   @action
   goToNextRoute() {
     this.router.transitionTo(this.nextRoute);
+  }
+
+  async updateTtlCodeOfForm() {
+    const form = await this.store.findRecord(
+      'generated-form',
+      this.formCodeManager.getFormId()
+    );
+    form.ttlCode = this.formCodeManager.getTtlOfReferenceVersion();
+
+    try {
+      await form.save();
+      this.toaster.success(
+        this.intl.t('messages.success.formUpdated'),
+        this.intl.t('messages.subjects.success'),
+        {
+          timeOut: 5000,
+        }
+      );
+    } catch (error) {
+      this.toaster.error(
+        this.intl.t('messages.error.somethingWentWrong'),
+        this.intl.t('messages.subjects.error'),
+        {
+          timeOut: 5000,
+        }
+      );
+      console.error(`Caught:`, error);
+    }
   }
 }

@@ -24,6 +24,7 @@ messages:
     creatingNewUserTest: "Nieuwe gebruikerstest aan het maken"
     loadingOverview: "Overzicht aan het laden"
     loadingUserTests: "Gebruikerstest aan het laden"
+    isSaving: "Bewaren"
     isLoading: "Aan het laden..."
     isDeleting: "Aan het verwijderen"
 

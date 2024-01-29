@@ -24,6 +24,7 @@ messages:
     creatingNewUserTest: "Creating new user test"
     loadingOverview: "Loading Overview"
     loadingUserTests: "Loading user test"
+    isSaving: "Saving"
     isLoading: "Loading..."
     isDeleting: "Deleting"
 

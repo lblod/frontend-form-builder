@@ -67,7 +67,11 @@
   </:body>
   <:footer>
     <AuButtonGroup>
-      <AuButton {{on "click" this.saveUnsavedChanges}}>
+      <AuButton
+        @loading={{this.saveUnsavedChanges.isRunning}}
+        @loadingMessage={{t "messages.loading.isSaving"}}
+        {{on "click" (perform this.saveUnsavedChanges)}}
+      >
         {{t "crud.save"}}
       </AuButton>
       <AuButton
