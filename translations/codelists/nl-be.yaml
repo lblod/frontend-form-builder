@@ -22,3 +22,12 @@ confirmation:
 
 navigation:
   backToCodelists: "Terug naar codelijsten"
+
+constraints:
+  optionCannotBeEmpty: "Optie mag niet leeg zijn ({label})"
+  couldNotGetConceptSchemeWithId: "Kon concept-scheme met id {id} niet vinden"
+
+messages:
+  success:
+    conceptsUpdated: "Concepten bijgewerkt"
+    codelistUpdated: "Codelijst bijgewerkt"

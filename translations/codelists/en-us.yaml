@@ -22,3 +22,12 @@ confirmation:
 
 navigation:
   backToCodelists: "Back to codelists"
+
+constraints:
+  optionCannotBeEmpty: "Option cannot be empty ({label})"
+  couldNotGetConceptSchemeWithId: "Could not get concept-scheme with id: {id}"
+
+messages:
+  success:
+    conceptsUpdated: "Updated concepts"
+    codelistUpdated: "Updated codelist"

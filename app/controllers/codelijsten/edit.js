@@ -23,6 +23,7 @@ export default class CodelijstenEditController extends Controller {
   @service toaster;
   @service store;
   @service router;
+  @service intl;
 
   @tracked codelistName;
   @tracked codelistDescription;
@@ -70,13 +71,15 @@ export default class CodelijstenEditController extends Controller {
     this.descriptionErrorMessage = null;
 
     if (!newDescription || newDescription.trim() == '') {
-      this.descriptionErrorMessage = 'Dit veld is verplicht';
+      this.descriptionErrorMessage = this.intl.t('constraints.mandatoryField');
     }
 
     this.codelistDescription = newDescription.trim();
 
     if (this.codelistDescription.length > DESCRIPTION_INPUT_CHAR_LIMIT) {
-      this.descriptionErrorMessage = 'Maximum karakters overschreden';
+      this.descriptionErrorMessage = this.intl.t(
+        'constraints.maxCharactersReachedWithCount'
+      );
     }
 
     this.setIsSaveButtonDisabled();
@@ -88,7 +91,7 @@ export default class CodelijstenEditController extends Controller {
     this.nameErrorMessage = null;
 
     if (!newName || newName.trim() == '') {
-      this.nameErrorMessage = 'Dit veld is verplicht';
+      this.nameErrorMessage = this.intl.t('constraints.mandatoryField');
     }
 
     this.codelistName = newName.trim();
@@ -99,11 +102,13 @@ export default class CodelijstenEditController extends Controller {
     );
 
     if (this.codelistName !== '' && this.isDuplicateName) {
-      this.nameErrorMessage = `Naam is duplicaat`;
+      this.nameErrorMessage = this.intl.t('constraints.duplicateName');
     }
 
     if (this.codelistName.length > NAME_INPUT_CHAR_LIMIT) {
-      this.nameErrorMessage = 'Maximum characters exceeded';
+      this.nameErrorMessage = this.descriptionErrorMessage = this.intl.t(
+        'constraints.maconstraints.maxCharactersReached'
+      );
     }
 
     this.setIsSaveButtonDisabled();
@@ -114,7 +119,7 @@ export default class CodelijstenEditController extends Controller {
     if (event.target && event.target.value.trim() == '') {
       showErrorToasterMessage(
         this.toaster,
-        `Optie mag niet leeg zijn (${concept.label})`
+        this.intl.t('constraints.optionCannotBeEmpty', { label: concept.label })
       );
     }
 
@@ -153,9 +158,15 @@ export default class CodelijstenEditController extends Controller {
       try {
         this.conceptScheme.save();
         this.conceptScheme.reload();
-        showSuccessToasterMessage(this.toaster, 'Codelijst naam bijgewerkt');
+        showSuccessToasterMessage(
+          this.toaster,
+          this.intl.t('messages.success.codelistUpdated')
+        );
       } catch (error) {
-        showErrorToasterMessage(this.toaster, 'Oeps, er is iets mis gegaan');
+        showErrorToasterMessage(
+          this.toaster,
+          this.intl.t('messages.error.somethingWentWrong')
+        );
         console.error(error);
       }
     }
@@ -181,8 +192,8 @@ export default class CodelijstenEditController extends Controller {
 
     showSuccessToasterMessage(
       this.toaster,
-      'Up-to-date',
-      'Concepten bijgewerkt'
+      this.intl.t('messages.subjects.upToDate'),
+      this.intl.t('messages.success.conceptsUpdated')
     );
   }
 
@@ -324,7 +335,9 @@ export default class CodelijstenEditController extends Controller {
 
       return conceptScheme;
     } catch (error) {
-      throw `Could not fetch concept-scheme with id: ${conceptSchemeId}`;
+      throw this.intl.t('constraints.couldNotGetConceptSchemeWithId', {
+        id: conceptSchemeId,
+      });
     }
   }
 }
