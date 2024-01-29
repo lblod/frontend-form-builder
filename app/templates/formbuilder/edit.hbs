@@ -60,7 +60,10 @@
   </div>
 </AuBodyContainer>
 
-<AuModal @modalOpen={{this.isSaveModalOpen}}>
+<AuModal 
+  @modalOpen={{this.isSaveModalOpen}} 
+  @closeModal={{fn (mut this.isSaveModalOpen) false}}
+  >
   <:title>{{t "confirmation.saveUnsavedChangesTitle"}}</:title>
   <:body>
     {{t "confirmation.saveUnsavedChangesQuestion"}}
