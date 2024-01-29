@@ -34,6 +34,8 @@ confirmation:
   goWithoutSaving: "Ben je zeker dat je de voortgang verloren wil laten gaan?"
   saveUnsavedChangesTitle: "Wil je de wijzigingen opslagen?"
   saveUnsavedChangesQuestion: "Je huidige aanpassingen gaan verloren. Wil je deze toch opslagen?"
+  saveChanges: "Aanpassingen bewaren"
+  discardChanges: "Doorgaan zonder opslaan"
 
 constraints:
   mandatoryField: "Dit is een verplicht veld"
