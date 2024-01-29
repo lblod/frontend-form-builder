@@ -18,8 +18,6 @@ codelists:
 confirmation:
   deleteCodelistTitle: "Codelijst verwijderen?"
   deleteCodelistQuestion: "Bent u zeker dat u deze codelijst wilt verwijderen? Deze actie is permanent."
-  saveUnsavedChangesTitle: "Wil je de wijzigning opslagen?"
-  saveUnsavedChangesQuestion: "Je huidige aanpassingen gaan verloren. Wil je deze toch opslagen?"
 
 navigation:
   backToCodelists: "Terug naar codelijsten"

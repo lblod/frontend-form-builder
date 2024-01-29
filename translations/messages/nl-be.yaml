@@ -32,6 +32,8 @@ confirmation:
   deleteTitle: "Formulier verwijderen?"
   deleteQuestion: "Bent u zeker dat u dit formulier wilt verwijderen? Deze actie is permanent."
   goWithoutSaving: "Ben je zeker dat je de voortgang verloren wil laten gaan?"
+  saveUnsavedChangesTitle: "Wil je de wijzigingen opslagen?"
+  saveUnsavedChangesQuestion: "Je huidige aanpassingen gaan verloren. Wil je deze toch opslagen?"
 
 constraints:
   mandatoryField: "Dit is een verplicht veld"

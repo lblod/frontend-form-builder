@@ -32,6 +32,8 @@ confirmation:
   deleteTitle: "Delete form?"
   deleteQuestion: "Are you sure you want to delete this form? This action is permanent."
   goWithoutSaving: "Are you sure you want to abandon progress?"
+  saveUnsavedChangesTitle: "Unsaved changes"
+  saveUnsavedChangesQuestion: "You have unsaved changes. Do you want to save them?"
 
 constraints:
   mandatoryField: "This field is required"
