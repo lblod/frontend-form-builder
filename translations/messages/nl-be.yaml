@@ -3,6 +3,7 @@ messages:
     success: "Success"
     error: "Error"
     characters: "Karakters"
+    deleted: "Verwijderd"
   error:
     couldNotFetchFormWithId: "Kon formulier met id: {id} niet vinden"
     somethingWentWrong: "Oeps, er is iets mis gegaan"
