@@ -10,7 +10,7 @@ export function getFormTypeCompletions() {
     },
     [
       `form:Field`,
-      `form:PropertyGroup`,
+      `form:Section`,
       `form:Listing`,
       `form:SubForm`,
       `form:Scope`,

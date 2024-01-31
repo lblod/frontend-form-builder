@@ -3,7 +3,7 @@ export async function getDocWithFormattedValidations(doc) {
     let newDoc = [];
     let inValidationBlankNode = false;
     for (let line = 0; line < doc.length; line++) {
-      if (doc[line].localeCompare('form:validations') == 0) {
+      if (doc[line].localeCompare('form:validatedBy') == 0) {
         doc[line] = '\t' + doc[line];
       }
       if (doc[line].slice(-1) == '[') {
