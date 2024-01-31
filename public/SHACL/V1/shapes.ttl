@@ -1,0 +1,68 @@
+@prefix : <#>.
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix form: <http://lblod.data.gift/vocabularies/forms/>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix displayTypes: <http://lblod.data.gift/display-types/>.
+@prefix nodes: <http://data.lblod.info/form-data/nodes/>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+form:PropertyGroup
+  a sh:NodeShape ;
+  sh:targetClass form:PropertyGroup ;
+  sh:property  
+    [
+      sh:path sh:name ;
+      sh:datatype xsd:string ;
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
+    ], 
+    [
+      sh:path sh:order ;
+      sh:datatype xsd:integer ;
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
+    ].
+
+form:Field
+  a sh:NodeShape ;
+  sh:targetClass form:Field ;
+  sh:property
+     [
+      sh:path sh:name ;
+      sh:datatype xsd:string ;
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
+    ],
+    [
+      sh:path form:displayType ;
+      sh:in (
+        displayTypes:defaultInput
+        displayTypes:numericalInput
+        displayTypes:date
+        displayTypes:dateTime
+        displayTypes:dateRange
+        displayTypes:textArea
+        displayTypes:conceptSchemeSelector
+        displayTypes:files
+        displayTypes:remoteUrls
+        displayTypes:switch
+        displayTypes:checkbox
+        displayTypes:conceptSchemeRadioButtons
+        displayTypes:conceptSchemeMultiSelector
+      ) ;
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
+    ],
+    [
+      sh:path sh:order ;
+      sh:datatype xsd:integer ;
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
+    ],
+    [
+      sh:path sh:group ;
+      sh:class form:PropertyGroup ;
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
+    ].
