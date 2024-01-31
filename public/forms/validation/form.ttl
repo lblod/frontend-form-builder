@@ -29,7 +29,7 @@ ext:formFieldS a form:Section;
 ext:formNodesScope a form:Scope ;
   sh:path form:includes .
 
-ext:formValidationsS a form:Scope ;
+ext:formValidationsScope a form:Scope ;
   sh:path form:validatedBy .
 
 ##########################################################
@@ -63,7 +63,7 @@ ext:formValidationItem a form:SubForm;
 ##########################################################
 ext:formValidationL a form:Listing ;
   form:each ext:formValidationValueItem ;
-  form:scope ext:formValidationsS ;
+  form:scope ext:formValidationsScope ;
   form:canAdd true ;
   form:addLabel "Validatie" ;
   form:canRemove true ;
