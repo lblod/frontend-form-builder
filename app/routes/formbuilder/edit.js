@@ -46,6 +46,10 @@ export default class FormbuilderEditRoute extends Route {
 
   @action
   willTransition(transition) {
+    if (!this.formCodeManager.isFormIdSet()) {
+      return;
+    }
+
     const nextRoute = transition.targetName;
 
     if (transition.to.parent.name == 'formbuilder.edit') {

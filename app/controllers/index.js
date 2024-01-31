@@ -31,7 +31,7 @@ export default class IndexController extends Controller {
         this.intl.t('messages.success.formDeleted', {
           name: this.formToDelete.label,
         }),
-        this.intl.t('messages.subjects.success'),
+        this.intl.t('messages.subjects.deleted'),
         {
           timeOut: 5000,
         }
