@@ -7,6 +7,9 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+##########################################################
+#  Property group
+##########################################################
 form:PropertyGroup
   a sh:NodeShape ;
   sh:targetClass form:PropertyGroup ;
@@ -24,6 +27,9 @@ form:PropertyGroup
       sh:maxCount 1 ;
     ].
 
+##########################################################
+#  Field
+##########################################################
 form:Field
   a sh:NodeShape ;
   sh:targetClass form:Field ;
