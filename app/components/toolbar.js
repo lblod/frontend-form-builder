@@ -45,6 +45,7 @@ export default class ToolbarComponent extends Component {
     const generatedForm = this.args.model;
     const isDeleted = await generatedForm.destroyRecord();
     if (isDeleted) {
+      this.formCodeManager.reset();
       this.router.transitionTo('index');
     }
   }

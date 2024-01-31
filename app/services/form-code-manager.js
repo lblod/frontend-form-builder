@@ -54,6 +54,11 @@ export default class FormCodeManagerService extends Service {
     this.latestVersion = this.startVersion;
   }
 
+  reset() {
+    this.clearHistory();
+    this.formId = null;
+  }
+
   #getTtlOfVersion(version) {
     if (version <= this.startVersion) {
       throw this.intl.t('messages.feedback.lowestVersionAvailable');
@@ -78,5 +83,9 @@ export default class FormCodeManagerService extends Service {
   setFormId(generatedFormId) {
     // Should we check if the ID exists?
     this.formId = generatedFormId;
+  }
+
+  isFormIdSet() {
+    return this.formId;
   }
 }
