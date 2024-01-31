@@ -127,7 +127,6 @@ ext:formNodesFormItem a form:SubForm;
   form:includes ext:formNodesNameF;
   form:includes ext:formNodesTypeF;
   form:includes ext:formNodeHelpTextF;
-  form:includes ext:formNodeOptionsF;
   form:includes ext:formNodeSectionF;
   form:hasFieldGroup ext:formFieldS.
 
