@@ -11,81 +11,81 @@
 # form
 ##########################################################
 ext:form a form:Form, form:TopLevelForm ;
-  form:includes ext:propertyGroupL;
+  form:includes ext:sectionL;
   form:includes ext:formNodesL;
   form:includes ext:formListingL;
   form:includes ext:formListingTableL.
 
 ##########################################################
-#  property-group
+#  Section
 ##########################################################
-ext:mainPg a form:PropertyGroup;
+ext:mainS a form:Section;
     sh:name "Form Builder" ;
     sh:order 0 .
 
-ext:propertyGroupPg a form:PropertyGroup;
+ext:sectionS a form:Section;
     sh:name "Section" ;
     sh:order 1 .
 
-ext:listingPg a form:PropertyGroup;
+ext:listingS a form:Section;
     sh:name "Listing" ;
     sh:order 2 .
 
-ext:formFieldPg a form:PropertyGroup;
+ext:formFieldS a form:Section;
     sh:name "Field" ;
     sh:order 3 .
 
 ##########################################################
-#  PropertyGroup Scope
+#  section Scope
 #  TODO: allow finding triples for a "form:Scope"
 #    with no "sh:path" provided.
-#    We now revert to attaching the propertyGroups to
+#    We now revert to attaching the sections to
 #    the "form:Form" directly.
 #    Which is suboptimal, cause not really in the defined
 #    model. (It's not forbidden though)
 ##########################################################
-ext:propertyGroupS a form:Scope;
-  sh:path sh:group ;
+ext:sectionScope a form:Scope;
+  sh:path form:partOf ;
   form:constraint [
      a sh:NodeShape ;
-     sh:targetNode form:PropertyGroup
+     sh:targetNode form:Section
   ].
 
 ##########################################################
-#  PropertyGroup Listing
+#  section Listing
 ##########################################################
-ext:propertyGroupL a form:Listing;
-  form:each ext:propertyGroupItem;
-  form:scope ext:propertyGroupS;
-  form:createGenerator ext:propertyGroupGenerator;
+ext:sectionL a form:Listing;
+  form:each ext:sectionItem;
+  form:scope ext:sectionScope;
+  form:createGenerator ext:sectionGenerator;
   form:canAdd true;
   form:addLabel "New section";
   form:canRemove true;
   form:removeLabel "Remove section";
   form:canChangeOrder true;
-  sh:group ext:mainPg;
+  form:partOf ext:mainS;
   sh:order 1 .
 
 ##########################################################
-#  Generator: propertyGroup
+#  Generator: section
 ##########################################################
-ext:propertyGroupGenerator a form:Generator;
+ext:sectionGenerator a form:Generator;
   form:prototype [
     form:shape [
-      a form:PropertyGroup ;
+      a form:Section ;
       sh:name "Title"
     ]
   ].
 
 ##########################################################
-#  Subform: propertyGroup
+#  Subform: section
 ##########################################################
-ext:propertyGroupItem a form:SubForm;
-  form:includes ext:propertyGroupNameF;
-  form:includes ext:propertyGroupDescriptionF;
-  form:hasFieldGroup ext:propertyGroupPg.
+ext:sectionItem a form:SubForm;
+  form:includes ext:sectionNameF;
+  form:includes ext:sectionDescriptionF;
+  form:hasFieldGroup ext:sectionS.
 
-ext:propertyGroupNameF a form:Field ;
+ext:sectionNameF a form:Field ;
   sh:name "Section title" ;
   form:help """
     E.g. Contact informatie, Aanvraag ...,
@@ -93,31 +93,31 @@ ext:propertyGroupNameF a form:Field ;
   sh:order 1 ;
   sh:path sh:name ;
   form:displayType displayTypes:textArea  ;
-  sh:group ext:propertyGroupPg .
+  form:partOf ext:sectionS .
 
-ext:propertyGroupDescriptionF a form:Field ;
+ext:sectionDescriptionF a form:Field ;
   sh:name "Section description" ;
   sh:order 1 ;
   sh:path form:help ;
   form:displayType displayTypes:textArea  ;
-  sh:group ext:propertyGroupPg .
+  form:partOf ext:sectionS .
 
 ##########################################################
 #  listing-scope:
 ##########################################################
-ext:formNodesS a form:Scope;
+ext:formNodesScope a form:Scope;
   sh:path form:includes.
 
 ext:formNodesL a form:Listing;
   form:each ext:formNodesFormItem;
-  form:scope ext:formNodesS;
+  form:scope ext:formNodesScope;
   form:createGenerator ext:formNodesGenerator;
   form:canAdd true;
   form:addLabel "Add field";
   form:canRemove true;
   form:removeLabel "Remove field";
   form:canChangeOrder true;
-  sh:group ext:mainPg;
+  form:partOf ext:mainS;
   sh:order 2 .
 
 ##########################################################
@@ -127,15 +127,15 @@ ext:formNodesFormItem a form:SubForm;
   form:includes ext:formNodesNameF;
   form:includes ext:formNodesTypeF;
   form:includes ext:formNodeHelpTextF;
-  form:includes ext:formNodePropertyGroupF;
-  form:hasFieldGroup ext:formFieldPg.
+  form:includes ext:formNodeSectionF;
+  form:hasFieldGroup ext:formFieldS.
 
 ext:formNodesNameF a form:Field ;
   sh:name "Field name" ;
   sh:order 1 ;
   sh:path sh:name ;
   form:displayType displayTypes:defaultInput;
-  sh:group ext:formFieldPg .
+  form:partOf ext:formFieldS .
 
 ext:formNodesTypeF a form:Field ;
   sh:name "Field type" ;
@@ -146,7 +146,7 @@ ext:formNodesTypeF a form:Field ;
    """;
   form:displayType displayTypes:conceptSchemeSelector ;
   form:options """{"conceptScheme":"http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6","searchEnabled":true}""" ;
-  sh:group ext:formFieldPg .
+  form:partOf ext:formFieldS .
 
 ext:formNodeHelpTextF a form:Field;
   sh:name "Helptext" ;
@@ -156,17 +156,17 @@ ext:formNodeHelpTextF a form:Field;
    """;
   sh:path form:help ;
   form:displayType displayTypes:textArea;
-  sh:group ext:formFieldPg .
+  form:partOf ext:formFieldS .
 
-ext:formNodePropertyGroupF a form:Field;
+ext:formNodeSectionF a form:Field;
   sh:name "Link to section" ;
   form:help """
    This is required. If you dont specify a section, the field will not be visible.
    """;
   sh:order 6 ;
-  sh:path sh:group ;
+  sh:path form:partOf ;
   form:displayType displayTypes:propertyGroupSelector;
-  sh:group ext:formFieldPg .
+  form:partOf ext:formFieldS .
 
 ##########################################################
 #  Generator: formNodesForm
@@ -184,7 +184,7 @@ ext:formNodesGenerator a form:Generator;
 ##########################################################
 #  listing-scope:
 ##########################################################
-ext:formListingS a form:Scope;
+ext:formListingScope a form:Scope;
   sh:path form:includes;
   form:constraint [
      a sh:NodeShape ;
@@ -199,13 +199,13 @@ ext:formListingS a form:Scope;
 ##########################################################
 ext:formListingL a form:Listing;
   form:each ext:formListingFormItem;
-  form:scope ext:formListingS;
+  form:scope ext:formListingScope;
   form:createGenerator ext:formListingGenerator;
   form:canAdd true;
   form:addLabel "Add new Listing";
   form:canRemove true;
   form:canChangeOrder true;
-  sh:group ext:mainPg;
+  form:partOf ext:mainS;
   sh:order 3 .
 
 ##########################################################
@@ -213,13 +213,13 @@ ext:formListingL a form:Listing;
 ##########################################################
 ext:formListingTableL a form:Listing;
   form:each ext:formListingFormItem;
-  form:scope ext:formListingS;
+  form:scope ext:formListingScope;
   form:createGenerator ext:formListingTableGenerator;
   form:canAdd true;
   form:addLabel "Add new table listing";
   form:canRemove true;
   form:canChangeOrder true;
-  sh:group ext:mainPg;
+  form:partOf ext:mainS;
   sh:order 4 .
 
 ##########################################################
@@ -229,8 +229,8 @@ ext:formListingFormItem a form:SubForm;
   form:includes ext:formListingAddF;
   form:includes ext:formListingRemoveF;
   form:includes ext:subformNodesL;
-  form:includes ext:subFormPropertyGroupF;
-  form:hasFieldGroup ext:listingPg.
+  form:includes ext:subFormSectionF;
+  form:hasFieldGroup ext:listingS.
 
 ext:formListingAddF a form:Field ;
   sh:name "Edit label" ;
@@ -240,7 +240,7 @@ ext:formListingAddF a form:Field ;
   sh:order 10 ;
   sh:path form:addLabel ;
   form:displayType displayTypes:defaultInput;
-  sh:group ext:listingPg .
+  form:partOf ext:listingS .
 
 ext:formListingRemoveF a form:Field ;
   sh:name "Remove label" ;
@@ -250,17 +250,17 @@ ext:formListingRemoveF a form:Field ;
   sh:order 20 ;
   sh:path ( form:each form:removeLabel ) ;
   form:displayType displayTypes:defaultInput;
-  sh:group ext:listingPg .
+  form:partOf ext:listingS .
 
-ext:subFormPropertyGroupF a form:Field ;
+ext:subFormSectionF a form:Field ;
   sh:name "Sub-section" ;
   form:help """
   e.g. 'Overview Books', 'Overview Subsidy Measures', etc..
   """;
   sh:order 50 ;
-  sh:path sh:group ;
+  sh:path form:partOf ;
   form:displayType displayTypes:propertyGroupSelector;
-  sh:group ext:listingPg .
+  form:partOf ext:listingS .
 
 ##########################################################
 #  Generators for listing (both table and non-table)
@@ -337,17 +337,17 @@ ext:formListingTableGenerator a form:Generator;
 ##########################################################
 #  listing-scope:
 ##########################################################
-ext:subformNodesLS a form:Scope;
+ext:subformNodesLScope a form:Scope;
   sh:path ( form:each form:includes ).
 
 ext:subformNodesL a form:Listing;
   form:each ext:formNodesFormItem;
-  form:scope ext:subformNodesLS;
+  form:scope ext:subformNodesLScope;
   form:createGenerator ext:formNodesGenerator;
   form:canAdd true;
   form:addLabel "Add new field";
   form:canRemove true;
   form:removeLabel "Remove Field";
   form:canChangeOrder true;
-  sh:group ext:listingPg;
+  form:partOf ext:listingS;
   sh:order 60 .

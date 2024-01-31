@@ -11,7 +11,7 @@ export function getFormPredicateCompletions() {
     [
       `form:displayType`,
       `form:grouping`,
-      `form:validations`,
+      `form:validatedBy`,
       `form:help """"""`,
       `form:includes`,
     ]

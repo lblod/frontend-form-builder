@@ -10,7 +10,7 @@ export function getShaclPredicateCompletions() {
     },
     [
       `sh:name`,
-      `sh:group`,
+      `form:partOf`,
       `sh:order`,
       `sh:path`,
       `sh:description """"""`,
