@@ -92,7 +92,7 @@
       {{#if this.isPrivateConceptScheme}}
         <p>{{this.codelistDescription}}</p>
       {{else}}
-        <AuLabel for="input-codelist-description">
+        <AuLabel for="input-codelist-description" @required={{true}}>
           {{t "codelists.descriptionOfCodelist"}}
         </AuLabel>
         <AuTextarea
