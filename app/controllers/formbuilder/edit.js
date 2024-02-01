@@ -73,6 +73,11 @@ export default class FormbuilderEditController extends Controller {
       'text/turtle'
     );
 
+    const conceptSchemesTtl = this.getConceptSchemesAsTtlInTtlCode(
+      this.previewStore
+    );
+    console.log({ conceptSchemesTtl });
+
     this.previewForm = this.previewStore.any(
       undefined,
       RDF('type'),
@@ -156,5 +161,31 @@ export default class FormbuilderEditController extends Controller {
       );
       console.error(`Caught:`, error);
     }
+  }
+
+  getConceptSchemesAsTtlInTtlCode(ttlCode) {
+    const uris = this.getConceptSchemeUrisInTtl(ttlCode);
+    console.log('uris:', uris);
+  }
+
+  getConceptSchemeUrisInTtl(store) {
+    const formOptions = store.match(
+      undefined,
+      FORM('options'),
+      undefined,
+      this.model.graphs.formGraph
+    );
+
+    const conceptSchemeUris = [];
+    for (const triple of formOptions) {
+      const optionsAsString = triple.object;
+      try {
+        const jsonOptions = JSON.parse(optionsAsString);
+        conceptSchemeUris.push(jsonOptions.conceptScheme);
+      } catch (error) {
+        return;
+      }
+    }
+    return conceptSchemeUris;
   }
 }
