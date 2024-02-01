@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import { SHACL } from '@lblod/submission-form-helpers';
 import { Statement } from 'rdflib';
 
-
 export default class ErrorMessageInputFieldComponent extends SimpleInputFieldComponent {
   inputId = 'select-' + guidFor(this);
 
@@ -17,17 +16,17 @@ export default class ErrorMessageInputFieldComponent extends SimpleInputFieldCom
   }
 
   loadValue() {
-    const test = this.args.formStore.any(
+    const defaultMessage = this.args.formStore.any(
       this.storeOptions.sourceNode,
       SHACL('resultMessage'),
       undefined,
       this.storeOptions.sourceGraph
     );
-    if (test) {
-      this.value = test;
+    if (defaultMessage) {
+      this.value = defaultMessage;
     }
   }
-  
+
   @action
   updateValue(e) {
     this.loadValue();
@@ -41,12 +40,12 @@ export default class ErrorMessageInputFieldComponent extends SimpleInputFieldCom
       this.storeOptions.sourceGraph
     );
 
-    if (this.value.length>0) {
-    this.args.formStore.removeStatements(oldValue);
-    super.updateValidations();
+    if (this.value.length > 0) {
+      this.args.formStore.removeStatements(oldValue);
+      super.updateValidations();
     }
 
-    if(this.value) {
+    if (this.value) {
       const statement = new Statement(
         this.storeOptions.sourceNode,
         SHACL('resultMessage'),
