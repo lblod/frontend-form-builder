@@ -10,33 +10,43 @@ form:Field
       sh:path sh:group ;
       sh:maxCount 0 ;
       sh:minCount 0 ;
+      sh:message "Predicate sh:group wordt enkel gebruikt in V1 formulieren."@nl ;
+      sh:severity sh:Warning;
     ],
     [
       sh:path sh:name ;
       sh:datatype xsd:string ;
-      sh:minCount 1 ;
+      sh:minCount 0 ;
       sh:maxCount 1 ;
+      sh:message "Een veld kan maar 1 naam hebben."@nl ;
+      sh:severity sh:Warning;
     ],
     [
       sh:path form:partOf ;
       sh:minCount 0 ;
       sh:maxCount 1 ;
+      sh:message "Een veld kan maar aan 1 sectie worden toegewezen."@nl ;
+      sh:severity sh:Warning;
     ],
     [
       sh:path form:validations ;
       sh:minCount 0 ;
       sh:maxCount 0 ;
+      sh:message "Predicate form:validations wordt enkel gebruikt in V1 formulieren."@nl ;
+      sh:severity sh:Warning;
     ],
     [
       sh:path form:validatedBy ;
       sh:minCount 0 ;
       sh:nodeKind sh:BlankNode ;
+      sh:message "Validaties moeten de vorm van een blankNode hebben."@nl ;
     ],
     [
       sh:path sh:order ;
       sh:datatype xsd:integer ;
       sh:minCount 1 ;
       sh:maxCount 1 ;
+      sh:message "Order moet een getal zijn."@nl ;
     ],
     [
       sh:path form:displayType ;
@@ -57,4 +67,5 @@ form:Field
       ) ;
       sh:minCount 1 ;
       sh:maxCount 1 ;
+      sh:message "Het gegeven input type bestaat niet."@nl ;
     ] .

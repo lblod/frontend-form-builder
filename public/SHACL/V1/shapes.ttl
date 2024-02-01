@@ -17,14 +17,17 @@ form:PropertyGroup
     [
       sh:path sh:name ;
       sh:datatype xsd:string ;
-      sh:minCount 1 ;
+      sh:minCount 0 ;
       sh:maxCount 1 ;
+      sh:message "Een property-group kan maar 1 naam hebben."@nl ;
+      sh:severity sh:Warning;
     ],
     [
       sh:path sh:order ;
       sh:datatype xsd:integer ;
       sh:minCount 1 ;
       sh:maxCount 1 ;
+      sh:message "Order moet een getal zijn."@nl ;
     ].
 
 ##########################################################
@@ -37,8 +40,10 @@ form:Field
      [
       sh:path sh:name ;
       sh:datatype xsd:string ;
-      sh:minCount 1 ;
+      sh:minCount 0 ;
       sh:maxCount 1 ;
+      sh:message "Een veld kan maar 1 naam hebben."@nl ;
+      sh:severity sh:Warning;
     ],
     [
       sh:path form:displayType ;
@@ -59,10 +64,18 @@ form:Field
       ) ;
       sh:minCount 1 ;
       sh:maxCount 1 ;
+      sh:message "Het gegeven input type bestaat niet."@nl ;
     ],
     [
       sh:path sh:order ;
       sh:datatype xsd:integer ;
       sh:minCount 1 ;
       sh:maxCount 1 ;
+      sh:message "Order moet een getal zijn."@nl ;
+    ],
+    [
+      sh:path sh:group ;
+      sh:minCount 0 ;
+      sh:maxCount 1 ;
+      sh:message "Een veld kan maar aan 1 property-group worden toegewezen."@nl ;
     ].
