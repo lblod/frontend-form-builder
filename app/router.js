@@ -13,7 +13,7 @@ Router.map(function () {
   this.route('codelijsten', function () {
     // commented to prevent users to still create a new codelist by changing the url
     // feature flag: CAN_CREATE_OWN_CODELIST
-    // this.route('new');
+    this.route('new');
     this.route('edit', { path: '/:id/edit' });
   });
   this.route('formbuilder', function () {

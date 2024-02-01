@@ -1,6 +1,7 @@
 codelists:
   addConcept: "Add concept to the list"
   nameOfCodelist: "Name of codelist"
+  descriptionOfCodelist: "Description"
   detailTitle: "Codelist detail"
   createCodelist: "Create a codelist"
   howToUse: "How to use the concept scheme:"
@@ -21,3 +22,12 @@ confirmation:
 
 navigation:
   backToCodelists: "Back to codelists"
+
+constraints:
+  optionCannotBeEmpty: "Option cannot be empty ({label})"
+  couldNotGetConceptSchemeWithId: "Could not get concept-scheme with id: {id}"
+
+messages:
+  success:
+    conceptsUpdated: "Updated concepts"
+    codelistUpdated: "Updated codelist"

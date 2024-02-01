@@ -1,6 +1,7 @@
 codelists:
   addConcept: "Voeg een concept toe aan de lijst"
   nameOfCodelist: "Naam van de codelijst"
+  descriptionOfCodelist: "Beschrijving"
   detailTitle: "Codelijst detail"
   createCodelist: "Maak een codelijst"
   howToUse: "Hoe de concept scheme gebruiken:"
@@ -21,3 +22,12 @@ confirmation:
 
 navigation:
   backToCodelists: "Terug naar codelijsten"
+
+constraints:
+  optionCannotBeEmpty: "Optie mag niet leeg zijn ({label})"
+  couldNotGetConceptSchemeWithId: "Kon concept-scheme met id {id} niet vinden"
+
+messages:
+  success:
+    conceptsUpdated: "Concepten bijgewerkt"
+    codelistUpdated: "Codelijst bijgewerkt"

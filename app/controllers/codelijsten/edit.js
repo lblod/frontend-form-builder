@@ -3,7 +3,10 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
-import { NAME_INPUT_CHAR_LIMIT } from '../../utils/constants';
+import {
+  DESCRIPTION_INPUT_CHAR_LIMIT,
+  NAME_INPUT_CHAR_LIMIT,
+} from '../../utils/constants';
 import {
   showErrorToasterMessage,
   showSuccessToasterMessage,
@@ -20,15 +23,19 @@ export default class CodelijstenEditController extends Controller {
   @service toaster;
   @service store;
   @service router;
+  @service intl;
 
   @tracked codelistName;
+  @tracked codelistDescription;
   @tracked conceptScheme;
-
   @tracked concepts;
   @tracked conceptsToDelete;
+
+  @tracked nameErrorMessage;
+  @tracked descriptionErrorMessage;
+
   @tracked isDeleteModalOpen;
   @tracked isDuplicateName;
-  @tracked nameErrorMessage;
   @tracked isSaveDisabled;
   @tracked isPrivateConceptScheme;
 
@@ -38,9 +45,7 @@ export default class CodelijstenEditController extends Controller {
     this.conceptScheme = await this.getConceptSchemeById(conceptSchemeId);
     this.setValuesFromConceptscheme();
 
-    const conceptArray = this.emberArrayToArray(
-      await this.conceptScheme.concepts
-    );
+    const conceptArray = new Array(...(await this.conceptScheme.concepts));
     this.setValuesFromConcepts(conceptArray);
 
     this.setIsSaveButtonDisabled();
@@ -49,6 +54,7 @@ export default class CodelijstenEditController extends Controller {
   setValuesFromConceptscheme() {
     this.isPrivateConceptScheme = !this.conceptScheme.isPublic;
     this.codelistName = this.conceptScheme.label;
+    this.codelistDescription = this.conceptScheme.description;
   }
 
   setValuesFromConcepts(conceptArray) {
@@ -60,12 +66,36 @@ export default class CodelijstenEditController extends Controller {
   }
 
   @action
+  handleDescriptionChange(event) {
+    const newDescription = event.target.value;
+    this.descriptionErrorMessage = null;
+
+    if (!newDescription || newDescription.trim() == '') {
+      this.descriptionErrorMessage = this.intl.t('constraints.mandatoryField');
+    }
+
+    this.codelistDescription = newDescription.trim();
+
+    if (this.codelistDescription.length > DESCRIPTION_INPUT_CHAR_LIMIT) {
+      this.descriptionErrorMessage = this.intl.t(
+        'constraints.maxCharactersReachedWithCount',
+        {
+          count: this.codelistDescription.length,
+          maxCount: DESCRIPTION_INPUT_CHAR_LIMIT,
+        }
+      );
+    }
+
+    this.setIsSaveButtonDisabled();
+  }
+
+  @action
   async handleNameChange(event) {
     const newName = event.target.value;
     this.nameErrorMessage = null;
 
     if (!newName || newName.trim() == '') {
-      this.nameErrorMessage = 'Dit veld is verplicht';
+      this.nameErrorMessage = this.intl.t('constraints.mandatoryField');
     }
 
     this.codelistName = newName.trim();
@@ -76,11 +106,13 @@ export default class CodelijstenEditController extends Controller {
     );
 
     if (this.codelistName !== '' && this.isDuplicateName) {
-      this.nameErrorMessage = `Naam is duplicaat`;
+      this.nameErrorMessage = this.intl.t('constraints.duplicateName');
     }
 
     if (this.codelistName.length > NAME_INPUT_CHAR_LIMIT) {
-      this.nameErrorMessage = 'Maximum characters exceeded';
+      this.nameErrorMessage = this.descriptionErrorMessage = this.intl.t(
+        'constraints.maconstraints.maxCharactersReached'
+      );
     }
 
     this.setIsSaveButtonDisabled();
@@ -91,7 +123,7 @@ export default class CodelijstenEditController extends Controller {
     if (event.target && event.target.value.trim() == '') {
       showErrorToasterMessage(
         this.toaster,
-        `Optie mag niet leeg zijn (${concept.label})`
+        this.intl.t('constraints.optionCannotBeEmpty', { label: concept.label })
       );
     }
 
@@ -120,14 +152,25 @@ export default class CodelijstenEditController extends Controller {
 
   @action
   async save() {
-    if (this.conceptScheme.label.trim() !== this.codelistName) {
+    if (
+      this.isCodelistNameDeviating() ||
+      this.isCodelistDescriptionDeviating()
+    ) {
       this.conceptScheme.preflabel = this.codelistName;
+      this.conceptScheme.description = this.codelistDescription;
+
       try {
         this.conceptScheme.save();
         this.conceptScheme.reload();
-        showSuccessToasterMessage(this.toaster, 'Codelijst naam bijgewerkt');
+        showSuccessToasterMessage(
+          this.toaster,
+          this.intl.t('messages.success.codelistUpdated')
+        );
       } catch (error) {
-        showErrorToasterMessage(this.toaster, 'Oeps, er is iets mis gegaan');
+        showErrorToasterMessage(
+          this.toaster,
+          this.intl.t('messages.error.somethingWentWrong')
+        );
         console.error(error);
       }
     }
@@ -153,8 +196,8 @@ export default class CodelijstenEditController extends Controller {
 
     showSuccessToasterMessage(
       this.toaster,
-      'Up-to-date',
-      'Concepten bijgewerkt'
+      this.intl.t('messages.subjects.upToDate'),
+      this.intl.t('messages.success.conceptsUpdated')
     );
   }
 
@@ -220,10 +263,12 @@ export default class CodelijstenEditController extends Controller {
       }
       if (
         this.isValidConceptSchemeName() &&
+        this.isValidConceptSchemeDescription() &&
         this.isConceptListIncludingEmptyValues()
       ) {
         if (
-          this.conceptScheme.label.trim() !== this.codelistName ||
+          this.isCodelistDescriptionDeviating() ||
+          this.isCodelistNameDeviating() ||
           this.isConceptListChanged() ||
           this.conceptsToDelete.length >= 1
         ) {
@@ -247,8 +292,21 @@ export default class CodelijstenEditController extends Controller {
     return this.codelistName.trim() !== '' && !this.isDuplicateName;
   }
 
+  isValidConceptSchemeDescription() {
+    return this.codelistDescription.trim() !== '';
+  }
+
+  isCodelistNameDeviating() {
+    return this.conceptScheme.label.trim() !== this.codelistName;
+  }
+
+  isCodelistDescriptionDeviating() {
+    return this.conceptScheme.description.trim() !== this.codelistDescription;
+  }
+
   isBackTheSavedVersion() {
     return (
+      this.conceptScheme.description == this.codelistDescription &&
       this.conceptScheme.label == this.codelistName &&
       !this.isConceptListChanged() &&
       this.conceptsToDelete.length == 0
@@ -257,10 +315,6 @@ export default class CodelijstenEditController extends Controller {
 
   isConceptListChanged() {
     return isConceptArrayChanged(this.conceptsInDatabase, this.concepts);
-  }
-
-  emberArrayToArray(emberArray) {
-    return new Array(...emberArray);
   }
 
   mapConceptModels(concepts) {
@@ -285,7 +339,9 @@ export default class CodelijstenEditController extends Controller {
 
       return conceptScheme;
     } catch (error) {
-      throw `Could not fetch concept-scheme with id: ${conceptSchemeId}`;
+      throw this.intl.t('constraints.couldNotGetConceptSchemeWithId', {
+        id: conceptSchemeId,
+      });
     }
   }
 }

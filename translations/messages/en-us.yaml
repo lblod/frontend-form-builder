@@ -4,6 +4,7 @@ messages:
     error: "Error"
     characters: "Characters"
     deleted: "Verwijderd"
+    upToDate: "Up-to-date"
   error:
     couldNotFetchFormWithId: "Could not find form with id: {id}"
     somethingWentWrong: "Oops, something went wrong"
@@ -45,4 +46,4 @@ constraints:
   mandatoryField: "This field is required"
   duplicateName: "This name has already been used once."
   maxCharactersReached: "Max. characters exceeded"
-  maxCharactersReachedWithCount: "Max. characters {count} reached"
+  maxCharactersReachedWithCount: "Max. characters {maxCount} reached. Currrent: {count}"
