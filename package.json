@@ -98,5 +98,11 @@
   },
   "ember": {
     "edition": "octane"
+  },
+  "dependencies": {
+    "@rdfjs/dataset": "^2.0.1",
+    "n3": "^1.17.2",
+    "rdf-ext": "^2.5.1",
+    "rdf-validate-shacl": "^0.5.3"
   }
 }
