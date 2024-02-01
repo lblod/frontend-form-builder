@@ -15,6 +15,7 @@ export function getFormTypeCompletions() {
       `form:SubForm`,
       `form:Scope`,
       `form:Generator`,
+      `form:partOf`,
     ]
   );
 }
