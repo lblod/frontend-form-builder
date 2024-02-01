@@ -13,13 +13,13 @@
 form:PropertyGroup
   a sh:NodeShape ;
   sh:targetClass form:PropertyGroup ;
-  sh:property  
+  sh:property
     [
       sh:path sh:name ;
       sh:datatype xsd:string ;
       sh:minCount 1 ;
       sh:maxCount 1 ;
-    ], 
+    ],
     [
       sh:path sh:order ;
       sh:datatype xsd:integer ;
@@ -63,12 +63,6 @@ form:Field
     [
       sh:path sh:order ;
       sh:datatype xsd:integer ;
-      sh:minCount 1 ;
-      sh:maxCount 1 ;
-    ],
-    [
-      sh:path sh:group ;
-      sh:class form:PropertyGroup ;
       sh:minCount 1 ;
       sh:maxCount 1 ;
     ].

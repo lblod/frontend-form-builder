@@ -6,27 +6,31 @@ form:Field
   a sh:NodeShape ;
   sh:targetClass form:Field ;
   sh:property
-	 [ # sh:group cannot exist in V2 form
+    [ # sh:group cannot exist in V2 form
       sh:path sh:group ;
       sh:maxCount 0 ;
       sh:minCount 0 ;
-   ],
-	 [ # form:PropertyGroup cannot exist in V2 form
-      sh:path form:PropertyGroup ;
-      sh:minCount 0 ;
-      sh:maxCount 0 ;
-    ],
-    [
-      sh:path form:partOf ;
-      sh:class form:Section ;
-      sh:minCount 1 ;
-      sh:maxCount 1 ;
     ],
     [
       sh:path sh:name ;
       sh:datatype xsd:string ;
       sh:minCount 1 ;
       sh:maxCount 1 ;
+    ],
+    [
+      sh:path form:partOf ;
+      sh:minCount 0 ;
+      sh:maxCount 1 ;
+    ],
+    [
+      sh:path form:validations ;
+      sh:minCount 0 ;
+      sh:maxCount 0 ;
+    ],
+    [
+      sh:path form:validatedBy ;
+      sh:minCount 0 ;
+      sh:nodeKind sh:BlankNode ;
     ],
     [
       sh:path sh:order ;
@@ -49,7 +53,6 @@ form:Field
         displayTypes:conceptSchemeRadioButtons
         displayTypes:conceptSchemeMultiSelector
         displayTypes:files
-        displayTypes:remoteUrls
         displayTypes:remoteUrls
       ) ;
       sh:minCount 1 ;
