@@ -21,7 +21,6 @@ messages:
     noResults: "Geen resultaten gevonden"
     noFormsFound: "Geen formulieren gevonden"
     remainingCharacters: "Karakters: {currentCount}"
-    noConfigPossible: "Geen verdere configuratie mogelijk"
     onlyFieldsAllowedToDisplayUnderSections: "Velden zijn enkel toeglaten om te tonen onder de sectie"
     lowestVersionAvailable: "The lowest version available is version: 0"
     highestversionAvailable: "The highest version available is v{version}"

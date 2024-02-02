@@ -21,7 +21,6 @@ messages:
     noResults: "No results found"
     noFormsFound: "No forms found"
     remainingCharacters: "Characters: {currentCount}"
-    noConfigPossible: "No further configuration possible"
     onlyFieldsAllowedToDisplayUnderSections: "Only fields are supported to be displayed per section"
     lowestVersionAvailable: "De laagste beschikbare versie: 0"
     highestversionAvailable: "De laatste versie is v{version}"
