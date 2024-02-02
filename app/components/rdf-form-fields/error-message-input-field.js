@@ -12,48 +12,44 @@ export default class ErrorMessageInputFieldComponent extends SimpleInputFieldCom
 
   constructor() {
     super(...arguments);
-    this.loadValue();
-  }
-
-  loadValue() {
-    const defaultMessage = this.args.formStore.any(
-      this.storeOptions.sourceNode,
-      SHACL('resultMessage'),
-      undefined,
-      this.storeOptions.sourceGraph
-    );
-    if (defaultMessage) {
-      this.value = defaultMessage;
-    }
   }
 
   @action
   updateValue(e) {
-    this.loadValue();
-
-    this.value = e.target.value.trim();
-
-    const oldValue = this.args.formStore.match(
+    let newErrorMessage = e.target.value.trim();
+    const oldErrorMessage = this.args.formStore.match(
       this.storeOptions.sourceNode,
       SHACL('resultMessage'),
       undefined,
       this.storeOptions.sourceGraph
     );
+    
+    if (newErrorMessage.length > 0) {
+      this.value = newErrorMessage;
 
-    if (this.value.length > 0) {
-      this.args.formStore.removeStatements(oldValue);
-      super.updateValidations();
+      if (oldErrorMessage) {
+        this.args.formStore.removeStatements(oldErrorMessage);
+      }
+    } else {
+      const errorMessageInForm = this.args.formStore.any(
+        this.storeOptions.sourceNode,
+        SHACL('resultMessage'),
+        undefined,
+        this.storeOptions.sourceGraph
+      );
+      if (errorMessageInForm){
+      this.value = errorMessageInForm;
+      }
     }
 
     if (this.value) {
-      const statement = new Statement(
+      const messageToForm = new Statement(
         this.storeOptions.sourceNode,
         SHACL('resultMessage'),
         this.value,
         this.storeOptions.sourceGraph
       );
-      this.args.formStore.addAll([statement]);
-      super.updateValue(this.value);
+      this.args.formStore.addAll([messageToForm]);
     }
   }
 }
