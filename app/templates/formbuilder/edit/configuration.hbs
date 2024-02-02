@@ -33,6 +33,13 @@
               </p>
             </c.header>
             <c.content>
+              <AuLabel for="input-field-path">Path</AuLabel>
+              <AuInput
+                @width="block"
+                value={{field.path}}
+                @disabled={{true}}
+                id="input-field-path"
+              />
               {{#if (is-display-type-with-options field.displayType)}}
                 <ConceptSchemeUriSelector
                   @forField={{field}}
