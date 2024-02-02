@@ -23,7 +23,6 @@ export default class ErrorMessageInputFieldComponent extends SimpleInputFieldCom
       undefined,
       this.storeOptions.sourceGraph
     );
-    
     if (newErrorMessage.length > 0) {
       this.value = newErrorMessage;
 
@@ -37,8 +36,8 @@ export default class ErrorMessageInputFieldComponent extends SimpleInputFieldCom
         undefined,
         this.storeOptions.sourceGraph
       );
-      if (errorMessageInForm){
-      this.value = errorMessageInForm;
+      if (errorMessageInForm) {
+        this.value = errorMessageInForm;
       }
     }
 
