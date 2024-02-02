@@ -38,13 +38,13 @@ async function getAllShapesTtl() {
 }
 
 async function getQuadsFromTtlCode(ttlCode) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const parser = new ParserN3();
     const dataset = factory.dataset();
     parser.parse(ttlCode, (error, quad) => {
       if (error) {
         console.warn(error);
-        reject(error);
+        resolve(factory.dataset());
       } else if (quad) {
         dataset.add(quad);
       } else {
