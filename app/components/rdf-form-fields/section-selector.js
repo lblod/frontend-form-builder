@@ -11,7 +11,7 @@ import {
 import { namedNode } from 'rdflib';
 import { sortObjectsOnProperty } from '../../utils/sort-object-on-property';
 
-export default class PropertyGroupSelector extends InputFieldComponent {
+export default class SectionSelector extends InputFieldComponent {
   inputId = 'select-' + guidFor(this);
 
   @tracked selected = null;
@@ -26,12 +26,12 @@ export default class PropertyGroupSelector extends InputFieldComponent {
   @action
   loadOptions() {
     const sourceGraph = this.args.graphs.sourceGraph;
-    const propertyGroup = new namedNode(
+    const section = new namedNode(
       'http://lblod.data.gift/vocabularies/forms/Section'
     );
 
     const allRawOptions = this.args.formStore
-      .match(undefined, RDF('type'), propertyGroup, sourceGraph)
+      .match(undefined, RDF('type'), section, sourceGraph)
       .map((t) => {
         const label = this.args.formStore.any(
           t.subject,

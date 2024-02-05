@@ -165,7 +165,7 @@ ext:formNodeSectionF a form:Field;
    """;
   sh:order 6 ;
   sh:path form:partOf ;
-  form:displayType displayTypes:propertyGroupSelector;
+  form:displayType displayTypes:sectionSelector;
   form:partOf ext:formFieldS .
 
 ##########################################################
@@ -259,7 +259,7 @@ ext:subFormSectionF a form:Field ;
   """;
   sh:order 50 ;
   sh:path form:partOf ;
-  form:displayType displayTypes:propertyGroupSelector;
+  form:displayType displayTypes:sectionSelector;
   form:partOf ext:listingS .
 
 ##########################################################

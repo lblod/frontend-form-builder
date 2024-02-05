@@ -3,7 +3,7 @@ import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { registerFormFields } from '@lblod/ember-submission-form-fields';
-import PropertyGroupSelector from '../../components/rdf-form-fields/property-group-selector';
+import SectionSelector from '../../components/rdf-form-fields/section-selector';
 import ValidationConceptSchemeSelectorComponent from '../../components/rdf-form-fields/validation-concept-scheme-selector';
 import { getLocalFileContentAsText } from '../../utils/get-local-file-content';
 import CountryCodeConceptSchemeSelectorComponent from '../../components/rdf-form-fields/country-code-concept-scheme-selector';
@@ -86,9 +86,8 @@ export default class FormbuilderEditRoute extends Route {
   registerCustomFields() {
     registerFormFields([
       {
-        displayType:
-          'http://lblod.data.gift/display-types/propertyGroupSelector',
-        edit: PropertyGroupSelector,
+        displayType: 'http://lblod.data.gift/display-types/sectionSelector',
+        edit: SectionSelector,
       },
       {
         displayType:
