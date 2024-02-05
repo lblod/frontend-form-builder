@@ -67,24 +67,26 @@ export default class FieldValidationsFormComponent extends Component {
         this.graphs.sourceGraph
       );
 
-      const statement = new Statement(
+      const validationSubject = new Statement(
         this.fieldSubject,
         FORM('validatedBy'),
         validationNode.node,
         this.graphs.sourceGraph
       );
-      validationsToApply.push(...[statement, ...validationNode.statements]);
+      validationsToApply.push(
+        ...[validationSubject, ...validationNode.statements]
+      );
     }
 
     const validationsToRemove = [];
     for (const validation of validationsOnField) {
-      const statement = new Statement(
+      const validationSubject = new Statement(
         this.fieldSubject,
         FORM('validatedBy'),
         validation,
         this.graphs.sourceGraph
       );
-      validationsToRemove.push(statement);
+      validationsToRemove.push(validationSubject);
     }
 
     applyStore.removeMatches(
