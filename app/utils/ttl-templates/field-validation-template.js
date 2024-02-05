@@ -20,7 +20,7 @@ export const fieldValidationFormTemplate = `
   ##########################################################
   #  Sections
   ##########################################################
-  ext:formFieldPg a form:Section;
+  ext:formFieldS a form:Section;
     sh:name "" ;
     sh:order 1 .
 `;
