@@ -91,7 +91,7 @@ export default class FormbuilderConfigurationController extends Controller {
       'text/turtle'
     );
 
-    this.sections = this.getPropertyGroupFields(
+    this.sections = this.getSections(
       this.builderStore,
       this.model.graphs.sourceGraph
     );
@@ -101,22 +101,22 @@ export default class FormbuilderConfigurationController extends Controller {
     }
   });
 
-  getPropertyGroupFields(store, graph) {
+  getSections(store, graph) {
     const config = [];
 
-    const propertyGroupSubjects = store
+    const sectionSubjects = store
       .match(undefined, RDF('type'), FORM('Section'), graph)
       .map((triple) => triple.subject);
 
-    for (const propertyGroupSubject of propertyGroupSubjects) {
-      const nodeInfo = getMinimalNodeInfo(propertyGroupSubject, store, graph);
-      const subjectsOfGroup = store
-        .match(undefined, FORM('partOf'), propertyGroupSubject, graph)
+    for (const section of sectionSubjects) {
+      const nodeInfo = getMinimalNodeInfo(section, store, graph);
+      const sectionChildren = store
+        .match(undefined, FORM('partOf'), section, graph)
         .map((triple) => triple.subject);
 
       const fieldsSubjectsToDisplay = [];
-      for (const subjectInGroup of subjectsOfGroup) {
-        const rdfType = getRdfTypeOfNode(subjectInGroup, store, graph);
+      for (const child of sectionChildren) {
+        const rdfType = getRdfTypeOfNode(child, store, graph);
 
         if (rdfType.value != FORM('Field').value) {
           console.warn(
@@ -126,11 +126,11 @@ export default class FormbuilderConfigurationController extends Controller {
           );
           continue;
         }
-        fieldsSubjectsToDisplay.push(subjectInGroup);
+        fieldsSubjectsToDisplay.push(child);
       }
 
       config.push({
-        parent: propertyGroupSubject,
+        parent: section,
         name: nodeInfo.name,
         order: nodeInfo.order,
         childs: fieldsSubjectsToDisplay,
