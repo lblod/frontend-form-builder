@@ -71,11 +71,13 @@ export default class FormbuilderEditController extends Controller {
       this.previewStore
     );
 
-    this.previewStore.parse(
-      conceptSchemesTtl,
-      this.model.graphs.metaGraph,
-      'text/turtle'
-    );
+    if (conceptSchemesTtl) {
+      this.previewStore.parse(
+        conceptSchemesTtl,
+        this.model.graphs.metaGraph,
+        'text/turtle'
+      );
+    }
 
     this.previewForm = this.previewStore.any(
       undefined,
