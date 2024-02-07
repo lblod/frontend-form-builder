@@ -9,6 +9,7 @@
 />
 {{#if (is-equal this.formVersion this.formVersionManager.VERSION_ONE)}}
   <AuAlert
+    class="au-u-margin-bottom-none"
     @title=""
     @skin="warning"
     @icon="alert-triangle"
@@ -32,21 +33,58 @@
         "navigation.tabs.code"
       }}</AuLink>
   </Tab>
-  <Tab>
-    <AuLink @route="formbuilder.edit.builder" @icon="sitemap">{{t
-        "navigation.tabs.build"
-      }}</AuLink>
-  </Tab>
-  <Tab>
-    <AuLink @route="formbuilder.edit.validations" @icon="decided">{{t
-        "navigation.tabs.validations"
-      }}</AuLink>
-  </Tab>
-  <Tab>
-    <AuLink @route="formbuilder.edit.configuration" @icon="settings">{{t
-        "navigation.tabs.configuration"
-      }}</AuLink>
-  </Tab>
+  {{#if (is-equal this.formVersion this.formVersionManager.VERSION_ONE)}}
+    <AuButtonGroup class="au-u-margin-left">
+      <Tab>
+        <AuButton
+          @skin="link-secondary"
+          @icon="sitemap"
+          @iconAlignment="left"
+          @disabled={{true}}
+        >
+          {{t "navigation.tabs.build"}}
+        </AuButton>
+      </Tab>
+      <Tab>
+        <AuButton
+          @skin="link-secondary"
+          @icon="decided"
+          @iconAlignment="left"
+          @disabled={{true}}
+        >
+          {{t "navigation.tabs.validations"}}
+        </AuButton>
+      </Tab>
+      <Tab>
+        <AuButton
+          @skin="link-secondary"
+          @icon="settings"
+          @iconAlignment="left"
+          @disabled={{true}}
+        >
+          {{t "navigation.tabs.configuration"}}
+        </AuButton>
+      </Tab>
+    </AuButtonGroup>
+
+  {{else}}
+    <Tab>
+      <AuLink @route="formbuilder.edit.builder" @icon="sitemap">{{t
+          "navigation.tabs.build"
+        }}</AuLink>
+    </Tab>
+    <Tab>
+      <AuLink @route="formbuilder.edit.validations" @icon="decided">{{t
+          "navigation.tabs.validations"
+        }}</AuLink>
+    </Tab>
+    <Tab>
+      <AuLink @route="formbuilder.edit.configuration" @icon="settings">{{t
+          "navigation.tabs.configuration"
+        }}</AuLink>
+    </Tab>
+  {{/if}}
+
 </AuTabs>
 
 <AuBodyContainer>
