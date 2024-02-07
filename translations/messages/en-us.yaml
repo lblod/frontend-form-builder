@@ -23,8 +23,8 @@ messages:
     remainingCharacters: "Characters: {currentCount}"
     noConfigPossible: "No further configuration possible"
     onlyFieldsAllowedToDisplayUnderSections: "Only fields are supported to be displayed per section"
-    lowestVersionAvailable: "De laagste beschikbare versie: 0"
-    highestversionAvailable: "De laatste versie is v{version}"
+    lowestVersionAvailable: "The lowest version available is version: 0"
+    highestversionAvailable: "The highest version available is v{version}"
   loading:
     creatingNewUserTest: "Creating new user test"
     loadingOverview: "Loading Overview"
