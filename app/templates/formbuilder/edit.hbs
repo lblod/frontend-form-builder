@@ -7,6 +7,20 @@
   @onCodeChange={{this.handleCodeChange}}
   @setFormChanged={{this.setFormChanged}}
 />
+{{#if (is-equal this.formVersion this.formVersionManager.VERSION_ONE)}}
+  <AuAlert
+    @title=""
+    @skin="warning"
+    @icon="alert-triangle"
+    @size="small"
+    @closable={{false}}
+  >
+    <p>{{t
+        "messages.feedback.warnV1Form"
+        version=this.formVersionManager.VERSION_ONE
+      }}</p>
+  </AuAlert>
+{{/if}}
 
 <AuTabs
   class="au-u-padding-left-small au-u-padding-right-small"
@@ -60,10 +74,10 @@
   </div>
 </AuBodyContainer>
 
-<AuModal 
-    @modalOpen={{this.isSaveModalOpen}} 
-    @closeModal={{fn (mut this.isSaveModalOpen) false}}
-  >
+<AuModal
+  @modalOpen={{this.isSaveModalOpen}}
+  @closeModal={{fn (mut this.isSaveModalOpen) false}}
+>
   <:title>{{t "confirmation.saveUnsavedChangesTitle"}}</:title>
   <:body>
     {{t "confirmation.saveUnsavedChangesQuestion"}}
@@ -84,7 +98,7 @@
       >
         {{t "confirmation.saveChanges"}}
       </AuButton>
-      
+
     </AuButtonGroup>
   </:footer>
 </AuModal>
