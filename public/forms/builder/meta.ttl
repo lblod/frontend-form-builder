@@ -24,6 +24,14 @@ display:defaultInput
   core:uuid "68ccebe5-84fb-4976-a9b1-28b1d3ef3687" ;
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Input"@en .
+display:currencyInput
+  rdf:type  rdfs:Class , skos:Concept ;
+  ext:displayType "currencyInput" ;
+  ext:usesConceptScheme "false"^^xsd:boolean ;
+  ext:canHaveValidation
+      form:RequiredConstraint;
+  skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
+  skos:prefLabel  "Euro input"@en .
 display:numericalInput
   rdf:type  rdfs:Class , skos:Concept ;
   ext:displayType "numericalInput" ;
