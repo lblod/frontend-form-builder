@@ -1,4 +1,5 @@
 import Model, { attr, hasMany } from '@ember-data/model';
+import { RDF, SKOS } from '@lblod/submission-form-helpers';
 
 export default class ConceptSchemeModel extends Model {
   @attr uri;
@@ -18,5 +19,30 @@ export default class ConceptSchemeModel extends Model {
 
   get createdAt() {
     return this.createdat ?? null;
+  }
+
+  asTtlCode() {
+    return `
+      <${this.uri}>
+      ${RDF('type')} ${SKOS('ConceptScheme')} ;
+      ${SKOS('prefLabel')} "${this.label}" .
+    `;
+  }
+
+  async modelWithConceptsAsTtlCode() {
+    const schemeTtlCode = this.asTtlCode();
+    const ttlCodeArray = [];
+
+    for (const concept of await this.getConceptModels()) {
+      ttlCodeArray.push(concept.asTtlCode(this.uri));
+    }
+
+    return [...ttlCodeArray, schemeTtlCode].join(' ');
+  }
+
+  async getConceptModels() {
+    const concepts = await this.concepts;
+
+    return [...concepts];
   }
 }
