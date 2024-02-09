@@ -66,18 +66,24 @@ export default class FormbuilderEditController extends Controller {
     await timeout(1);
 
     this.previewStore = new ForkingStore();
-    // todo: could cause some lag(modifier: editor.js)
-    this.previewStore.parse(
-      this.model.conceptSchemesTtl,
-      this.model.graphs.metaGraph,
-      'text/turtle'
-    );
 
     this.previewStore.parse(
       ttlCode,
       this.model.graphs.formGraph,
       'text/turtle'
     );
+
+    const conceptSchemesTtl = await this.getConceptSchemesAsTtlInTtlCode(
+      this.previewStore
+    );
+
+    if (conceptSchemesTtl) {
+      this.previewStore.parse(
+        conceptSchemesTtl,
+        this.model.graphs.metaGraph,
+        'text/turtle'
+      );
+    }
 
     this.previewForm = this.previewStore.any(
       undefined,
@@ -162,5 +168,60 @@ export default class FormbuilderEditController extends Controller {
       );
       console.error(`Caught:`, error);
     }
+  }
+
+  async getConceptSchemesAsTtlInTtlCode(ttlCode) {
+    const ttlCodeArray = [];
+    const uris = this.getConceptSchemeUrisInTtl(ttlCode);
+
+    if (uris.length == 0) {
+      return;
+    }
+
+    for (const conceptSchemeUri of uris) {
+      const conceptSchemes = await this.store.query('concept-scheme', {
+        include: 'concepts',
+        filter: {
+          ':uri:': conceptSchemeUri,
+        },
+      });
+      const conceptSchemesAsArray = [...conceptSchemes];
+      const ttl = await this.conceptSchemesWithConceptsToTtl(
+        conceptSchemesAsArray
+      );
+      ttlCodeArray.push(ttl);
+    }
+
+    return ttlCodeArray.join('\n');
+  }
+
+  async conceptSchemesWithConceptsToTtl(conceptSchemes) {
+    const ttlArray = [];
+    for (const conceptScheme of conceptSchemes) {
+      ttlArray.push(await conceptScheme.modelWithConceptsAsTtlCode());
+    }
+
+    return ttlArray.join(' ');
+  }
+
+  getConceptSchemeUrisInTtl(store) {
+    const formOptions = store.match(
+      undefined,
+      FORM('options'),
+      undefined,
+      this.model.graphs.formGraph
+    );
+
+    const conceptSchemeUris = [];
+    for (const triple of formOptions) {
+      const optionsAsString = triple.object;
+      try {
+        const jsonOptions = JSON.parse(optionsAsString);
+        conceptSchemeUris.push(jsonOptions.conceptScheme);
+      } catch (error) {
+        return;
+      }
+    }
+    return conceptSchemeUris;
   }
 }

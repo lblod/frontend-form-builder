@@ -21,19 +21,16 @@ export default class FormbuilderEditRoute extends Route {
 
   async model(params) {
     this.formCodeManager.setFormId(params.id);
-    const [generatedForm, formTtl, metaTtl, conceptSchemesTtl] =
-      await Promise.all([
-        this.getGeneratedFormById(params.id),
-        getLocalFileContentAsText('/forms/builder/form.ttl'),
-        getLocalFileContentAsText('/forms/builder/meta.ttl'),
-        getLocalFileContentAsText('/forms/preview/concept-schemes.ttl'),
-      ]);
+    const [generatedForm, formTtl, metaTtl] = await Promise.all([
+      this.getGeneratedFormById(params.id),
+      getLocalFileContentAsText('/forms/builder/form.ttl'),
+      getLocalFileContentAsText('/forms/builder/meta.ttl'),
+    ]);
 
     return {
       generatedForm,
       formTtl,
       metaTtl,
-      conceptSchemesTtl,
       graphs: GRAPHS,
     };
   }
