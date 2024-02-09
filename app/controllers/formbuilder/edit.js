@@ -25,8 +25,10 @@ export default class FormbuilderEditController extends Controller {
   @service toaster;
   @service intl;
   @service('form-code-manager') formCodeManager;
+  @service('form-version') formVersionManager;
 
   @tracked formCode;
+  @tracked formVersion;
 
   @tracked formChanged;
 
@@ -48,6 +50,10 @@ export default class FormbuilderEditController extends Controller {
     if (newCode) {
       this.formCode = newCode;
       this.formCodeManager.addFormCode(this.formCode);
+      this.formVersion = this.formVersionManager.getVersionForTtl(
+        this.formCode
+      );
+      console.info(`Current version of form:`, this.formVersion);
     }
     this.setFormChanged(this.formCodeManager.isLatestDeviatingFromReference());
     this.setupPreviewForm.perform(this.formCodeManager.getTtlOfLatestVersion());

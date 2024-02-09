@@ -23,6 +23,7 @@ messages:
     remainingCharacters: "Characters: {currentCount}"
     noConfigPossible: "No further configuration possible"
     onlyFieldsAllowedToDisplayUnderSections: "Only fields are supported to be displayed per section"
+    warnV1Form: "We noticed that you are editing a {version} form. Functionality will be limited."
     lowestVersionAvailable: "The lowest version available is version: 0"
     highestversionAvailable: "The highest version available is v{version}"
   loading:
