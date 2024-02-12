@@ -6,6 +6,7 @@ import {
   DESCRIPTION_NOT_USED_PLACEHOLDER,
   NAME_INPUT_CHAR_LIMIT,
 } from '../utils/constants';
+import { downloadTextAsFile } from '../utils/download-text-as-file';
 
 export default class ToolbarComponent extends Component {
   @service store;
@@ -21,17 +22,14 @@ export default class ToolbarComponent extends Component {
 
   @action
   saveLocally() {
-    // Create a link
-    let downloadLink = document.createElement('a');
-    downloadLink.download = this.formLabel;
-
-    // generate Blob where file content will exists
-    let blob = new Blob([this.args.code], { type: 'text/plain' });
-    downloadLink.href = window.URL.createObjectURL(blob);
-
-    // Click file to download then destroy link
-    downloadLink.click();
-    downloadLink.remove();
+    downloadTextAsFile(
+      {
+        filename: this.formLabel,
+        contentAsText: this.args.code,
+      },
+      document,
+      window
+    );
     this.isEditingName = false;
   }
 
