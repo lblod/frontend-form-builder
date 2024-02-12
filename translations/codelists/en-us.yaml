@@ -31,6 +31,8 @@ messages:
   success:
     conceptsUpdated: "Updated concepts"
     codelistUpdated: "Updated codelist"
+  loading:
+    downloading: "Downloading"
 
 actions:
   exportCodelist: "Export"
