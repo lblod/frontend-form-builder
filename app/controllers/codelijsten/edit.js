@@ -18,6 +18,7 @@ import { updateConcept } from '../../utils/codelijsten/update-concept';
 import { isConceptArrayChanged } from '../../utils/codelijsten/compare-concept-arrays';
 import { restartableTask } from 'ember-concurrency';
 import { sortObjectsOnProperty } from '../../utils/sort-object-on-property';
+import { downloadTextAsFile } from '../../utils/download-text-as-file';
 
 export default class CodelijstenEditController extends Controller {
   @service toaster;
@@ -291,8 +292,25 @@ export default class CodelijstenEditController extends Controller {
     );
     const codelistTtlCode =
       await latestConceptScheme.modelWithConceptsAsTtlCode();
-    console.log('latestConceptScheme:', latestConceptScheme);
-    console.log('ttl', codelistTtlCode);
+
+    downloadTextAsFile(
+      {
+        filename: this.getExportFileName(),
+        contentAsText: codelistTtlCode,
+      },
+      document,
+      window
+    );
+  }
+
+  getExportFileName() {
+    return `codelijst-${this.conceptScheme.id}-${this.getIsoDate()}.ttl`;
+  }
+
+  getIsoDate() {
+    const isoDate = new Date().toISOString();
+
+    return isoDate.slice(0, 10);
   }
 
   isConceptListIncludingEmptyValues() {
