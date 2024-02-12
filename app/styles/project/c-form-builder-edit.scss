@@ -41,3 +41,25 @@
     gap: 1rem;
   }
 }
+
+.formBuilderEdit__template-preview {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin: 3rem 2rem;
+  background-color: $au-white;
+}
+
+.formBuilderEdit__template-create {
+  height: 100%;
+  padding: 2rem 1rem;
+}
+
+.formBuilderEdit__template-preview--preview {
+  background-color: $au-gray-100;
+  height: 100%;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

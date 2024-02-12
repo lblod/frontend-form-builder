@@ -6,6 +6,7 @@ messages:
     deleted: "Verwijderd"
     upToDate: "Up-to-date"
   error:
+    invalidTemplatePath: "De geselecteerde template ({templateLabel}) heeft geen correct path."
     couldNotFetchFormWithId: "Kon formulier met id: {id} niet vinden"
     somethingWentWrong: "Oeps, er is iets mis gegaan"
     cannotAddValidationsToEmptyForm: "Kan geen validaties toevoegen aan een leeg formulier"

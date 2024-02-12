@@ -1,2 +1,67 @@
 {{page-title "Create new form"}}
-{{outlet}}
+
+<div class="au-c-toolbar au-c-toolbar--bottom au-c-toolbar--large">
+  <div class="au-c-toolbar__group">
+    <AuHeading @level="1" @skin="2">
+      {{t "createForm.title"}}
+    </AuHeading>
+  </div>
+  <div class="au-c-toolbar__group">
+    <AuButtonGroup>
+      <AuButton
+        @disabled={{this.disableSubmit}}
+        @route={{this.route}}
+        @skin="button"
+        @icon="pencil"
+        @iconAlignment="left"
+        {{on "click" this.routeToForm}}
+      >{{t "createForm.build"}}</AuButton>
+    </AuButtonGroup>
+  </div>
+</div>
+
+<div class="formBuilderEdit">
+  <div class="formBuilderEdit__template-create">
+    <AuLabel for="input-form-name" @required={{true}}>
+      {{t "createForm.name"}}
+    </AuLabel>
+    <AuInput
+      id="input-form-name"
+      @width="block"
+      @error={{this.inputErrorMessage}}
+      @warning={{this.hasReachedMaxCharaters}}
+      value={{this.name}}
+      {{on "blur" this.handleNameChange.perform}}
+    />
+    <div class="input__helpTextAndCharacterCount">
+      {{#if this.inputErrorMessage}}
+        <AuHelpText @error={{true}}>{{this.inputErrorMessage}}</AuHelpText>
+      {{else}}
+        <span></span>
+      {{/if}}
+      <AuPill @size={{"small"}} class="au-u-margin-small">
+        {{this.getCharacters}}
+      </AuPill>
+    </div>
+    <div>
+      <AuLabel>{{t "createForm.selectTemplate"}}</AuLabel>
+      <PowerSelect
+        @options={{this.model.templates}}
+        @selected={{this.selectedTemplate}}
+        @onChange={{this.setTemplate}}
+        as |template|
+      >
+        {{template.label}}
+      </PowerSelect>
+    </div>
+  </div>
+  <div class="formBuilderEdit__template-preview">
+    <div class="formBuilderEdit__template-preview--preview">
+      {{#if this.selectedTemplateTtlCode}}
+        <code>{{this.selectedTemplateTtlCode}}</code>
+      {{else}}
+        <p><strong>No template selected</strong></p>
+      {{/if}}
+    </div>
+  </div>
+</div>

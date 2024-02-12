@@ -6,6 +6,7 @@ messages:
     deleted: "Verwijderd"
     upToDate: "Up-to-date"
   error:
+    invalidTemplatePath: "The selected template ({templateLabel}) has an invalid path configured"
     couldNotFetchFormWithId: "Could not find form with id: {id}"
     somethingWentWrong: "Oops, something went wrong"
     cannotAddValidationsToEmptyForm: "Could not add validations to an empty form"
