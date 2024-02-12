@@ -31,3 +31,6 @@ messages:
   success:
     conceptsUpdated: "Updated concepts"
     codelistUpdated: "Updated codelist"
+
+actions:
+  exportCodelist: "Export"

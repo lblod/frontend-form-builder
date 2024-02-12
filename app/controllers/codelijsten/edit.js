@@ -284,6 +284,11 @@ export default class CodelijstenEditController extends Controller {
     }
   }
 
+  @action
+  exportCodelist() {
+    console.log(`export codelist`);
+  }
+
   isConceptListIncludingEmptyValues() {
     return this.concepts.every((concept) => concept.label.trim() !== '');
   }
