@@ -45,7 +45,6 @@ toolbar:
   codelists: "Codelists"
 
 editNameModal:
-  title: "Enter a name and description"
+  title: "Enter a name for your form"
   name: "Name"
-  description: "Description"
   createForm: "Build form"
