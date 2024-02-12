@@ -285,8 +285,14 @@ export default class CodelijstenEditController extends Controller {
   }
 
   @action
-  exportCodelist() {
-    console.log(`export codelist`);
+  async exportCodelist() {
+    const latestConceptScheme = await this.getConceptSchemeById(
+      this.conceptScheme.id
+    );
+    const codelistTtlCode =
+      await latestConceptScheme.modelWithConceptsAsTtlCode();
+    console.log('latestConceptScheme:', latestConceptScheme);
+    console.log('ttl', codelistTtlCode);
   }
 
   isConceptListIncludingEmptyValues() {
