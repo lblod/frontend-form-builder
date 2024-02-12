@@ -18,6 +18,10 @@ export default class AgregateFieldComponent extends Component {
     }, this.id);
   }
 
+  get fieldName() {
+    return this.args.field.label;
+  }
+
   get formattedTotal() {
     let amount = this.totals;
     if (!this.totals) {
@@ -52,7 +56,6 @@ export default class AgregateFieldComponent extends Component {
 
       let total = 0;
       amounts.forEach((item) => {
-        console.log(item.object.value);
         total += Number(item.object.value) ?? 0;
       });
       this.totals = total;
