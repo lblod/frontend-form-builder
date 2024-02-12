@@ -11,6 +11,7 @@ import { GRAPHS } from '../../controllers/formbuilder/edit';
 import ErrorMessageInputFieldComponent from '../../components/rdf-form-fields/error-message-input-field';
 import { showErrorToasterMessage } from '../../utils/toaster-message-helper';
 import ListingCalculationTableComponent from '../../components/listing-calculation-table';
+import AgregateField from '../../components/agregate-field';
 
 export default class FormbuilderEditRoute extends Route {
   @service store;
@@ -114,6 +115,10 @@ export default class FormbuilderEditRoute extends Route {
         displayType:
           'http://lblod.data.gift/display-types/ListingCalculationTable',
         edit: ListingCalculationTableComponent,
+      },
+      {
+        displayType: 'http://lblod.data.gift/display-types/AgregateField',
+        edit: AgregateField,
       },
     ]);
   }
