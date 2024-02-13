@@ -164,6 +164,9 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
       sh:name "Foutmelding" ;
       sh:order 100 ; # I think we always want to show this below the conditional fields?
       # comment when USE_DEFAULT_ERROR_MESSAGE is false
+      form:help """
+        Wanneer je van validatie type veranderd, toggle dan foutmelding aan en uit om de standaard foutmedling te updaten.
+      """ ; 
       sh:path sh:resultMessage ;
       form:displayType displayTypes:errorMessageInputField ;
       form:partOf ext:formFieldS .

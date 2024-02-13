@@ -6,7 +6,6 @@ import { SHACL, RDF } from '@lblod/submission-form-helpers';
 import { Statement } from 'rdflib';
 import { getDefaultErrorMessageForValidation } from '../../utils/validation/get-default-error-message-for-validation';
 
-
 export default class ErrorMessageInputFieldComponent extends SimpleInputFieldComponent {
   inputId = 'select-' + guidFor(this);
 
@@ -20,7 +19,6 @@ export default class ErrorMessageInputFieldComponent extends SimpleInputFieldCom
   @action
   updateValue(e) {
     this.value = e.target.value.trim();
-   
     if (this.value) {
       const messageToForm = new Statement(
         this.storeOptions.sourceNode,
@@ -38,28 +36,28 @@ export default class ErrorMessageInputFieldComponent extends SimpleInputFieldCom
     this.useDefaultMessage = !this.useDefaultMessage;
     this.removeOldMessage();
     if (this.useDefaultMessage) {
-      const selectedValidationType= this.args.formStore.any(
+      const selectedValidationType = this.args.formStore.any(
         this.storeOptions.sourceNode,
         RDF('type'),
         undefined,
         this.storeOptions.sourceGraph
       );
+      if (selectedValidationType) {
+        const defaultErrorMessage = getDefaultErrorMessageForValidation(
+          selectedValidationType,
+          this.storeOptions.store,
+          this.storeOptions.metaGraph
+        );
 
-      const defaultErrorMessage = getDefaultErrorMessageForValidation(
-        selectedValidationType,
-        this.storeOptions.store,
-        this.storeOptions.metaGraph
-      );
-
-      if (defaultErrorMessage) {
-        this.value = defaultErrorMessage;
-        const statement =
-          this.createStatementForDefaultErrorMessage(
+        if (defaultErrorMessage) {
+          this.value = defaultErrorMessage;
+          const statement = this.createStatementForDefaultErrorMessage(
             this.storeOptions.sourceNode,
             defaultErrorMessage,
             this.storeOptions.sourceGraph
           );
           this.storeOptions.store.addAll([statement]);
+        }
       }
     } else {
       this.value = '';
@@ -95,9 +93,9 @@ export default class ErrorMessageInputFieldComponent extends SimpleInputFieldCom
 
   get toggleMessage() {
     if (this.useDefaultMessage) {
-      return 'Toggle om een aangepaste foutmelding te gebruiken.'
+      return 'Toggle om een aangepaste foutmelding te gebruiken.';
     } else {
-      return 'Toggle om een standaard foutmelding te gebruiken.'
+      return 'Toggle om een standaard foutmelding te gebruiken.';
     }
   }
 }
