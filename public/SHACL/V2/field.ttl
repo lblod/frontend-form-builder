@@ -64,7 +64,7 @@ form:Field
         displayTypes:conceptSchemeMultiSelector
         displayTypes:files
         displayTypes:remoteUrls
-        displayTypes:AgregateField
+        displayTypes:aggregateField
       ) ;
       sh:minCount 1 ;
       sh:maxCount 1 ;
