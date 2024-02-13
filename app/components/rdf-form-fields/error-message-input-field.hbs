@@ -3,11 +3,13 @@
   >
     {{@field.label}}
 </AuLabel>
+
 <AuInput
   @error={{this.hasErrors}}
-  @disabled={{@show}}
+  @disabled={{this.useDefaultMessage}}
   @width={{if @inTable "block"}}
   id={{this.inputId}}
   value={{this.value}}
   {{on "blur" this.updateValue}}
 />
+<AuToggleSwitch @onChange={{this.toggle}}>{{this.toggleMessage}}</AuToggleSwitch>

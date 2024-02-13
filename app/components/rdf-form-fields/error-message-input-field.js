@@ -2,13 +2,16 @@ import SimpleInputFieldComponent from '@lblod/ember-submission-form-fields/compo
 import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
 import { tracked } from '@glimmer/tracking';
-import { SHACL } from '@lblod/submission-form-helpers';
+import { SHACL, RDF } from '@lblod/submission-form-helpers';
 import { Statement } from 'rdflib';
+import { getDefaultErrorMessageForValidation } from '../../utils/validation/get-default-error-message-for-validation';
+
 
 export default class ErrorMessageInputFieldComponent extends SimpleInputFieldComponent {
   inputId = 'select-' + guidFor(this);
 
   @tracked value;
+  @tracked useDefaultMessage = false;
 
   constructor() {
     super(...arguments);
@@ -16,31 +19,8 @@ export default class ErrorMessageInputFieldComponent extends SimpleInputFieldCom
 
   @action
   updateValue(e) {
-    let newErrorMessage = e.target.value.trim();
-    const oldErrorMessage = this.args.formStore.match(
-      this.storeOptions.sourceNode,
-      SHACL('resultMessage'),
-      undefined,
-      this.storeOptions.sourceGraph
-    );
-    if (newErrorMessage.length > 0) {
-      this.value = newErrorMessage;
-
-      if (oldErrorMessage) {
-        this.args.formStore.removeStatements(oldErrorMessage);
-      }
-    } else {
-      const errorMessageInForm = this.args.formStore.any(
-        this.storeOptions.sourceNode,
-        SHACL('resultMessage'),
-        undefined,
-        this.storeOptions.sourceGraph
-      );
-      if (errorMessageInForm) {
-        this.value = errorMessageInForm;
-      }
-    }
-
+    this.value = e.target.value.trim();
+   
     if (this.value) {
       const messageToForm = new Statement(
         this.storeOptions.sourceNode,
@@ -48,7 +28,76 @@ export default class ErrorMessageInputFieldComponent extends SimpleInputFieldCom
         this.value,
         this.storeOptions.sourceGraph
       );
+      this.removeOldMessage();
       this.args.formStore.addAll([messageToForm]);
+    }
+  }
+
+  @action
+  toggle() {
+    this.useDefaultMessage = !this.useDefaultMessage;
+    this.removeOldMessage();
+    if (this.useDefaultMessage) {
+      const selectedValidationType= this.args.formStore.any(
+        this.storeOptions.sourceNode,
+        RDF('type'),
+        undefined,
+        this.storeOptions.sourceGraph
+      );
+
+      const defaultErrorMessage = getDefaultErrorMessageForValidation(
+        selectedValidationType,
+        this.storeOptions.store,
+        this.storeOptions.metaGraph
+      );
+
+      if (defaultErrorMessage) {
+        this.value = defaultErrorMessage;
+        const statement =
+          this.createStatementForDefaultErrorMessage(
+            this.storeOptions.sourceNode,
+            defaultErrorMessage,
+            this.storeOptions.sourceGraph
+          );
+          this.storeOptions.store.addAll([statement]);
+      }
+    } else {
+      this.value = '';
+    }
+  }
+
+  removeOldMessage() {
+    const oldErrorMessage = this.args.formStore.match(
+      this.storeOptions.sourceNode,
+      SHACL('resultMessage'),
+      undefined,
+      this.storeOptions.sourceGraph
+    );
+    if (oldErrorMessage) {
+      this.args.formStore.removeStatements(oldErrorMessage);
+    }
+  }
+
+  createStatementForDefaultErrorMessage(
+    sourceNode,
+    defaultErrorMessage,
+    graph
+  ) {
+    if (defaultErrorMessage) {
+      return new Statement(
+        sourceNode,
+        SHACL('resultMessage'),
+        defaultErrorMessage,
+        graph
+      );
+    }
+  }
+
+  get toggleMessage() {
+    if (this.useDefaultMessage) {
+      return 'Toggle om een aangepaste foutmelding te gebruiken.'
+    } else {
+      return 'Toggle om een standaard foutmelding te gebruiken.'
     }
   }
 }
