@@ -34,41 +34,28 @@ export default class AgregateFieldComponent extends Component {
     }).format(amount);
   }
 
-  calculateTotals = restartableTask(
-    async () => {
-      const target = this.args.formStore.any(
-        this.args.field.uri,
-        XSD('target'),
-        undefined,
-        this.args.graphs.formGraph
-      );
+  calculateTotals = restartableTask(async () => {
+    const target = this.args.formStore.any(
+      this.args.field.uri,
+      XSD('target'),
+      undefined,
+      this.args.graphs.formGraph
+    );
 
-      const options = {
-        path: target,
-        store: this.args.formStore,
-        formGraph: this.args.graphs.formGraph,
-        sourceGraph: this.args.graphs.sourceGraph,
-        sourceNode: this.args.sourceNode,
-      };
-      const triplesforPathOutput = triplesForPath(options);
+    const options = {
+      path: target,
+      store: this.args.formStore,
+      formGraph: this.args.graphs.formGraph,
+      sourceGraph: this.args.graphs.sourceGraph,
+      sourceNode: this.args.sourceNode,
+    };
+    const { values } = triplesForPath(options);
 
-      console.log('triplesforPathOutput ', triplesforPathOutput);
+    this.totals = 0;
+    for (const literal of values) {
+      this.totals += Number(literal.value) ?? 0;
     }
-
-    // const amounts = formStore.match(
-    //   undefined,
-    //   mappedTarget.targetValue,
-    //   undefined,
-    //   graphs.sourceGraph
-    // );
-    // console.log(`amounts`, amounts);
-
-    // let total = 0;
-    // amounts.forEach((item) => {
-    //   total += Number(item.object.value) ?? 0;
-    // });
-    // this.totals = total;
-  );
+  });
 
   willDestroy() {
     super.willDestroy(...arguments);
