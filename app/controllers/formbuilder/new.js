@@ -4,7 +4,10 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { restartableTask, timeout } from 'ember-concurrency';
-import { NAME_INPUT_CHAR_LIMIT } from '../../utils/constants';
+import {
+  DESCRIPTION_NOT_USED_PLACEHOLDER,
+  NAME_INPUT_CHAR_LIMIT,
+} from '../../utils/constants';
 import { getLocalFileContentAsText } from '../../utils/get-local-file-content';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { FORM, RDF } from '@lblod/submission-form-helpers';
@@ -30,6 +33,41 @@ export default class FormbuilderNewController extends Controller {
 
   async setup(model) {
     await this.setTemplate(model.templates[0]);
+  }
+
+  @action
+  async createFormFromTemplate() {
+    const now = new Date();
+
+    const createdForm = await this.store.createRecord('generated-form', {
+      created: now,
+      modified: now,
+      label: this.name,
+      comment: DESCRIPTION_NOT_USED_PLACEHOLDER,
+      ttlCode: this.selectedTemplateTtlCode,
+    });
+
+    try {
+      await createdForm.save();
+      await createdForm.save();
+      this.router.transitionTo('formbuilder.edit', createdForm.id);
+      this.toaster.success(
+        this.intl.t('messages.success.formCreated'),
+        this.intl.t('messages.subjects.success'),
+        {
+          timeOut: 5000,
+        }
+      );
+    } catch (err) {
+      this.toaster.error(
+        this.intl.t('messages.error.somethingWentWrong'),
+        this.intl.t('messages.subjects.error'),
+        {
+          timeOut: 5000,
+        }
+      );
+      console.error(err);
+    }
   }
 
   @action
@@ -79,15 +117,6 @@ export default class FormbuilderNewController extends Controller {
       this.model.graphs.formGraph
     );
   });
-
-  @action
-  routeToForm() {
-    if (!this.createdFormId) {
-      return;
-    }
-
-    this.router.transitionTo('formbuilder.edit', { id: this.createdFormId });
-  }
 
   handleNameChange = restartableTask(async (event) => {
     this.name = event.target.value.trim();
