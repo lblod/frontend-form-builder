@@ -3,9 +3,12 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
-import { restartableTask } from 'ember-concurrency';
+import { restartableTask, timeout } from 'ember-concurrency';
 import { NAME_INPUT_CHAR_LIMIT } from '../../utils/constants';
 import { getLocalFileContentAsText } from '../../utils/get-local-file-content';
+import { ForkingStore } from '@lblod/ember-submission-form-fields';
+import { FORM, RDF } from '@lblod/submission-form-helpers';
+import { PREVIEW_SOURCE_NODE } from './edit';
 
 export default class FormbuilderNewController extends Controller {
   @service store;
@@ -16,10 +19,14 @@ export default class FormbuilderNewController extends Controller {
   @tracked name = '';
   @tracked duplicateNames = [];
   @tracked hasBeenFocused = false;
+  sourceNode = PREVIEW_SOURCE_NODE;
+
   @tracked selectedTemplate;
   @tracked selectedTemplateTtlCode;
 
   @tracked createdFormId;
+  @tracked previewStore;
+  @tracked previewForm;
 
   async setup(model) {
     await this.setTemplate(model.templates[0]);
@@ -48,7 +55,30 @@ export default class FormbuilderNewController extends Controller {
       template.path
     );
     this.selectedTemplate = template;
+    this.setupPreviewForm.perform(this.selectedTemplateTtlCode);
   }
+
+  setupPreviewForm = restartableTask(async (ttlCode) => {
+    // force a component recreation by unrendering it very briefly
+    // Ideally the RdfForm component would do the right thing when the formStore
+    // and form arguments change, but we're not there yet.
+    await timeout(1);
+
+    this.previewStore = new ForkingStore();
+
+    this.previewStore.parse(
+      ttlCode,
+      this.model.graphs.formGraph,
+      'text/turtle'
+    );
+
+    this.previewForm = this.previewStore.any(
+      undefined,
+      RDF('type'),
+      FORM('Form'),
+      this.model.graphs.formGraph
+    );
+  });
 
   @action
   routeToForm() {
