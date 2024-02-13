@@ -1,5 +1,6 @@
 import SimpleInputFieldComponent from '@lblod/ember-submission-form-fields/components/rdf-input-fields/simple-value-input-field';
 import { action } from '@ember/object';
+import { service } from '@ember/service';
 import { guidFor } from '@ember/object/internals';
 import { tracked } from '@glimmer/tracking';
 import { SHACL, RDF } from '@lblod/submission-form-helpers';
@@ -11,6 +12,7 @@ export default class ErrorMessageInputFieldComponent extends SimpleInputFieldCom
 
   @tracked value;
   @tracked useDefaultMessage = false;
+  @service features;
 
   constructor() {
     super(...arguments);

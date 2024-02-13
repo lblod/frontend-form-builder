@@ -27,7 +27,6 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
 
   @service toaster;
   @service intl;
-  @service features;
 
   fieldSubject;
 
