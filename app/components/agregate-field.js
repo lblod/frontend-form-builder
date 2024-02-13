@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { guidFor } from '@ember/object/internals';
-import { EXT } from '../utils/namespaces';
+import { XSD, triplesForPath } from '@lblod/submission-form-helpers';
 import { restartableTask } from 'ember-concurrency';
 
 export default class AgregateFieldComponent extends Component {
@@ -34,34 +34,41 @@ export default class AgregateFieldComponent extends Component {
     }).format(amount);
   }
 
-  calculateTotals = restartableTask(async () => {
-    const { formStore, graphs } = this.args;
-
-    const pathToField = this.args.formStore.any(
-      this.args.field.uri,
-      EXT('pathToField'),
-      undefined,
-      this.args.graphs.formGraph
-    );
-    if (pathToField) {
-      const pathNodes = pathToField.elements;
-      const pathPredicate = pathNodes[1];
-
-      const amounts = formStore.match(
+  calculateTotals = restartableTask(
+    async () => {
+      const target = this.args.formStore.any(
+        this.args.field.uri,
+        XSD('target'),
         undefined,
-        pathPredicate,
-        undefined,
-        graphs.sourceGraph
+        this.args.graphs.formGraph
       );
 
-      let total = 0;
-      amounts.forEach((item) => {
-        total += Number(item.object.value) ?? 0;
-      });
-      this.totals = total;
-      console.log(`totals`, this.totals);
+      const options = {
+        path: target,
+        store: this.args.formStore,
+        formGraph: this.args.graphs.formGraph,
+        sourceGraph: this.args.graphs.sourceGraph,
+        sourceNode: this.args.sourceNode,
+      };
+      const triplesforPathOutput = triplesForPath(options);
+
+      console.log('triplesforPathOutput ', triplesforPathOutput);
     }
-  });
+
+    // const amounts = formStore.match(
+    //   undefined,
+    //   mappedTarget.targetValue,
+    //   undefined,
+    //   graphs.sourceGraph
+    // );
+    // console.log(`amounts`, amounts);
+
+    // let total = 0;
+    // amounts.forEach((item) => {
+    //   total += Number(item.object.value) ?? 0;
+    // });
+    // this.totals = total;
+  );
 
   willDestroy() {
     super.willDestroy(...arguments);
