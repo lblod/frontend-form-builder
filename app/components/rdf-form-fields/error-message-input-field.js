@@ -28,9 +28,9 @@ export default class ErrorMessageInputFieldComponent extends SimpleInputFieldCom
         this.value,
         this.storeOptions.sourceGraph
       );
-      this.removeOldMessage();
       this.args.formStore.addAll([messageToForm]);
     }
+    this.removeOldMessage();
   }
 
   @action

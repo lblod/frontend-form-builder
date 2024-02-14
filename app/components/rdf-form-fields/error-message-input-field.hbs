@@ -13,5 +13,5 @@
   {{on "blur" this.updateValue}}
 />
 {{#if this.features.USE_DEFAULT_ERROR_MESSAGE}}
-  <AuToggleSwitch @onChange={{this.toggle}}>{{this.toggleMessage}}</AuToggleSwitch>
+  <AuToggleSwitch @onChange={{this.toggle}} @checked={{this.useDefaultMessage}}>{{this.toggleMessage}}</AuToggleSwitch>
 {{/if}}
