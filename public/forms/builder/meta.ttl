@@ -32,6 +32,12 @@ display:currencyInput
       form:RequiredConstraint;
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Euro input"@en .
+display:aggregateField
+  rdf:type  rdfs:Class , skos:Concept ;
+  ext:displayType "aggregateField" ;
+  ext:usesConceptScheme "false"^^xsd:boolean ;
+  skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
+  skos:prefLabel  "Som van een tabel kolom"@nl .
 display:numericalInput
   rdf:type  rdfs:Class , skos:Concept ;
   ext:displayType "numericalInput" ;
