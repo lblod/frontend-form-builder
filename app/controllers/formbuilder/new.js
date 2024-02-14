@@ -30,9 +30,11 @@ export default class FormbuilderNewController extends Controller {
   @tracked createdFormId;
   @tracked previewStore;
   @tracked previewForm;
+  @tracked isPreviewVisible;
 
   async setup(model) {
     await this.setTemplate(model.templates[0]);
+    this.isPreviewVisible = true;
   }
 
   @action
@@ -156,5 +158,9 @@ export default class FormbuilderNewController extends Controller {
       !this.hasBeenFocused ||
       this.name.length > NAME_INPUT_CHAR_LIMIT
     );
+  }
+
+  get disabledShowCodeButton() {
+    return !this.isPreviewVisible;
   }
 }

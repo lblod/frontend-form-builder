@@ -65,25 +65,39 @@
   <div>
     <span class="au-u-flex au-u-flex--center au-u-padding-tiny">
       <AuButtonGroup @inline={{true}}>
-        <AuButton @hideText={{true}} @icon="archive" />
-        <AuButton @hideText={{true}} @icon="html" />
+        <AuButton
+          @disabled={{this.isPreviewVisible}}
+          @hideText={{true}}
+          @icon="eye"
+          {{on "click" (fn (mut this.isPreviewVisible) true)}}
+        />
+        <AuButton
+          @disabled={{this.disabledShowCodeButton}}
+          @hideText={{true}}
+          @icon="html"
+          {{on "click" (fn (mut this.isPreviewVisible) false)}}
+        />
       </AuButtonGroup>
     </span>
     <div class="formBuilderEdit__template-preview">
       <div class="formBuilderEdit__template-preview--preview">
-        {{#if (and this.selectedTemplateTtlCode this.previewStore)}}
-          {{#if this.setupPreviewForm.isRunning}}
-            <AuLoader />
+        {{#if this.selectedTemplateTtlCode}}
+          {{#if (and this.previewStore this.isPreviewVisible)}}
+            {{#if this.setupPreviewForm.isRunning}}
+              <AuLoader />
+            {{else}}
+              <RdfForm
+                @groupClass="au-u-margin-left-small au-u-margin-top"
+                @form={{this.previewForm}}
+                @graphs={{this.model.graphs}}
+                @formStore={{this.previewStore}}
+                @forceShowErrors={{false}}
+                @useNewListingLayout={{true}}
+                @sourceNode={{this.sourceNode}}
+              />
+            {{/if}}
           {{else}}
-            <RdfForm
-              @groupClass="au-u-margin-left-small au-u-margin-top"
-              @form={{this.previewForm}}
-              @graphs={{this.model.graphs}}
-              @formStore={{this.previewStore}}
-              @forceShowErrors={{false}}
-              @useNewListingLayout={{true}}
-              @sourceNode={{this.sourceNode}}
-            />
+            <p>CODE</p>
           {{/if}}
         {{else}}
           <p><strong>No template selected</strong></p>
