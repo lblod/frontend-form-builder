@@ -62,25 +62,33 @@
       </PowerSelect>
     </div>
   </div>
-  <div class="formBuilderEdit__template-preview">
-    <div class="formBuilderEdit__template-preview--preview">
-      {{#if (and this.selectedTemplateTtlCode this.previewStore)}}
-        {{#if this.setupPreviewForm.isRunning}}
-          <AuLoader />
+  <div>
+    <span class="au-u-flex au-u-flex--center au-u-padding-tiny">
+      <AuButtonGroup @inline={{true}}>
+        <AuButton @hideText={{true}} @icon="archive" />
+        <AuButton @hideText={{true}} @icon="html" />
+      </AuButtonGroup>
+    </span>
+    <div class="formBuilderEdit__template-preview">
+      <div class="formBuilderEdit__template-preview--preview">
+        {{#if (and this.selectedTemplateTtlCode this.previewStore)}}
+          {{#if this.setupPreviewForm.isRunning}}
+            <AuLoader />
+          {{else}}
+            <RdfForm
+              @groupClass="au-u-margin-left-small au-u-margin-top"
+              @form={{this.previewForm}}
+              @graphs={{this.model.graphs}}
+              @formStore={{this.previewStore}}
+              @forceShowErrors={{false}}
+              @useNewListingLayout={{true}}
+              @sourceNode={{this.sourceNode}}
+            />
+          {{/if}}
         {{else}}
-          <RdfForm
-            @groupClass="au-u-margin-left-small au-u-margin-top"
-            @form={{this.previewForm}}
-            @graphs={{this.model.graphs}}
-            @formStore={{this.previewStore}}
-            @forceShowErrors={{false}}
-            @useNewListingLayout={{true}}
-            @sourceNode={{this.sourceNode}}
-          />
+          <p><strong>No template selected</strong></p>
         {{/if}}
-      {{else}}
-        <p><strong>No template selected</strong></p>
-      {{/if}}
+      </div>
     </div>
   </div>
 </div>
