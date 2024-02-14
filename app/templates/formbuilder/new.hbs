@@ -62,7 +62,7 @@
       </PowerSelect>
     </div>
   </div>
-  <div>
+  <div class="formBuilderEdit__template-preview">
     <span class="au-u-flex au-u-flex--center au-u-padding-tiny">
       <AuButtonGroup @inline={{true}}>
         <AuButton
@@ -79,8 +79,8 @@
         />
       </AuButtonGroup>
     </span>
-    <div class="formBuilderEdit__template-preview">
-      <div class="formBuilderEdit__template-preview--preview">
+    <div class="formBuilderEdit__template-preview--preview">
+      <div class="formBuilderEdit__template-preview--inner-preview">
         {{#if this.selectedTemplateTtlCode}}
           {{#if (and this.previewStore this.isPreviewVisible)}}
             {{#if this.setupPreviewForm.isRunning}}
@@ -105,7 +105,6 @@
           {{/if}}
         {{/if}}
       </div>
-
     </div>
   </div>
 </div>

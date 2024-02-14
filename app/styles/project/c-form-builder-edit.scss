@@ -3,6 +3,7 @@
   height: 100%;
   width: 100%;
   grid-template-columns: repeat(2, 1fr);
+  overflow: hidden;
 }
 
 .formBuilderEdit__preview {
@@ -42,26 +43,34 @@
   }
 }
 
-.formBuilderEdit__template-preview {
-  height: 95%;
-  max-height: 95%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  margin: 0 3rem 2rem 2rem;
-  background-color: $au-white;
-}
-
 .formBuilderEdit__template-create {
   height: 100%;
   padding: 2rem 1rem;
 }
 
+.formBuilderEdit__template-preview {
+  scale: 0.9;
+  padding-bottom: 1rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 .formBuilderEdit__template-preview--preview {
   background-color: $au-gray-100;
-  min-height: 95%;
-  border-radius: 5px;
+  border: 1px solid #e0e2e3;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.4);
+  flex: 1;
+  height: 100%;
+  margin: 0 3rem 6rem 6rem;
+  overflow-y: auto;
+  position: relative;
+}
+
+.formBuilderEdit__template-preview--inner-preview {
+  background-color: $au-gray-100;
   display: flex;
   justify-content: left;
-  padding: 1rem;
-  pointer-events: none;
+  padding: 3rem;
 }
