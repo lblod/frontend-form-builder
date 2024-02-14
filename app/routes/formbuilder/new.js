@@ -13,19 +13,15 @@ export default class FormbuilderNewRoute extends Route {
         },
         {
           label: 'Contactgegevens contactpersoon',
-          path: '',
+          path: '/forms/templates/contact-info-contact-person.ttl',
         },
         {
           label: 'Contactgegevens + bijlage',
-          path: '',
+          path: '/forms/templates/contact-info-contact-person-with-file.ttl',
         },
         {
           label: 'Simpele tabel',
           path: '/forms/templates/basic-table.ttl',
-        },
-        {
-          label: 'Uitgebreide tabel listing',
-          path: '',
         },
       ],
     };
