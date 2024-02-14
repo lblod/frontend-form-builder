@@ -13,6 +13,7 @@ export default class ToolbarComponent extends Component {
   @service toaster;
   @service intl;
   @service('form-code-manager') formCodeManager;
+  @service('formbuilder-id-service') formbuilderIdService;
 
   @tracked showDeleteModal = false;
 
@@ -38,6 +39,11 @@ export default class ToolbarComponent extends Component {
   @action
   handleFormNameChange(event) {
     this.formLabel = event.target.value;
+  }
+
+  @action
+  passFormId() {
+    this.formbuilderIdService.setFormbuilderId(this.args.model.id);
   }
 
   @action

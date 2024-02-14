@@ -65,7 +65,7 @@
         </div>
       </Group>
       <Group class="au-c-toolbar__group--actions">
-        <AuLink @route="codelijsten">{{t "toolbar.codelists"}}</AuLink>
+        <AuLink @route="codelijsten" {{on 'click' this.passFormId}}>{{t "toolbar.codelists"}}</AuLink>
         <div class="saveSplitButton">
           <AuButton
             id="saveSplitButton_save"
