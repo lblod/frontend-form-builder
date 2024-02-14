@@ -97,7 +97,11 @@
               />
             {{/if}}
           {{else}}
-            <p>CODE</p>
+            <div
+              {{editor this.selectedTemplateTtlCode}}
+              {{!template-lint-disable no-inline-styles}}
+              style="overflow: auto; height: 100%; width:100%"
+            ></div>
           {{/if}}
         {{else}}
           <p><strong>No template selected</strong></p>
