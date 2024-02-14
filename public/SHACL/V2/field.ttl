@@ -64,7 +64,7 @@ form:Field
         displayTypes:conceptSchemeMultiSelector
         displayTypes:files
         displayTypes:remoteUrls
-        displayTypes:aggregateField
+        displayTypes:currencyInput
       ) ;
       sh:minCount 1 ;
       sh:maxCount 1 ;
