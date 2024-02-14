@@ -9,7 +9,7 @@ export default class FormbuilderNewRoute extends Route {
       templates: [
         {
           label: 'Basis template',
-          path: '/forms/templates/basic-form-template.ttl',
+          path: '/forms/templates/basic-form.ttl',
         },
         {
           label: 'Contactgegevens contactpersoon',
@@ -21,7 +21,7 @@ export default class FormbuilderNewRoute extends Route {
         },
         {
           label: 'Simpele tabel',
-          path: '',
+          path: '/forms/templates/basic-table.ttl',
         },
         {
           label: 'Uitgebreide tabel listing',
