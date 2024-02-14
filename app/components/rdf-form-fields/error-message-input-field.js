@@ -16,7 +16,7 @@ export default class ErrorMessageInputFieldComponent extends SimpleInputFieldCom
 
   constructor() {
     super(...arguments);
-    this.checkForDefaultMessages();
+    this.checkForDefaultMessage();
   }
 
   @action
@@ -96,13 +96,15 @@ export default class ErrorMessageInputFieldComponent extends SimpleInputFieldCom
     }
   }
 
-  checkForDefaultMessages() {
-    const defaultMessages = this.storeOptions.store.match(
-      undefined,
-      SHACL('resultMessage'),
-      undefined,
-      this.storeOptions.metaGraph
-    ).map(item => item.object.value);
+  checkForDefaultMessage() {
+    const defaultMessages = this.storeOptions.store
+      .match(
+        undefined,
+        SHACL('resultMessage'),
+        undefined,
+        this.storeOptions.metaGraph
+      )
+      .map((item) => item.object.value);
     if (defaultMessages.includes(this.value)) {
       this.useDefaultMessage = true;
     }
