@@ -8,6 +8,13 @@
   </div>
   <div class="au-c-toolbar__group">
     <AuButtonGroup>
+      <AuLink
+        @route="index"
+        @skin="button-secondary"
+        @icon="cross"
+        @iconAlignment="left"
+        @alert={{true}}
+      >{{t "crud.cancel"}}</AuLink>
       <AuButton
         @disabled={{this.disableSubmit}}
         @route={{this.route}}
