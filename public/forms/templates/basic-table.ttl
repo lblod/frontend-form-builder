@@ -1,0 +1,60 @@
+@prefix : <#>.
+@prefix display: <http://lblod.data.gift/display-types/>.
+@prefix form: <http://lblod.data.gift/vocabularies/forms/>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix nodes: <http://data.lblod.info/form-data/nodes/>.
+@prefix emb: <http://ember-submission-form-fields/>.
+
+nodes:5f58d7b4-86f8-4b52-aff1-9591c3bd422c
+    a form:Field;
+    form:displayType display:currencyInput;
+    form:partOf nodes:d7b33768-3723-4291-a7be-3d8a7d7cdbc1;
+    sh:name "Kolom 2";
+    sh:order 2;
+    sh:path nodes:c00cf9d0-8fca-403a-b824-e59fcfe9f535 .
+nodes:8840a994-fd8a-4933-bddd-99b3dcc73efb
+a form:Generator; form:prototype nodes:f2baa43c-9741-49c6-93c9-ce68f8a7ae6f.
+nodes:93942be5-8675-4a06-8e5e-67b394c96e2d
+    a form:Field;
+    form:displayType display:textArea;
+    form:partOf nodes:d7b33768-3723-4291-a7be-3d8a7d7cdbc1;
+    sh:name "Kolom 3";
+    sh:order 3;
+    sh:path nodes:22155db9-ecfb-4972-943b-a5c4e8cd0504 .
+nodes:a8277ebb-38c7-4e41-9388-6642e9a485ec
+a form:Scope; sh:path nodes:065f1d7f-8ddc-482a-96d0-607be9336a06 .
+nodes:b71e037c-7e51-41ea-97f4-e9d34f0b327d
+    a form:Listing, form:ListingTable;
+    form:addLabel "Voeg een rij toe";
+    form:canAdd true;
+    form:canRemove true;
+    form:createGenerator nodes:8840a994-fd8a-4933-bddd-99b3dcc73efb;
+    form:each nodes:c4f530f3-b7d7-41cb-8bae-26ef13f42101;
+    form:partOf nodes:d7b33768-3723-4291-a7be-3d8a7d7cdbc1;
+    form:scope nodes:a8277ebb-38c7-4e41-9388-6642e9a485ec;
+    sh:order 1 .
+nodes:c4f530f3-b7d7-41cb-8bae-26ef13f42101
+    a form:SubForm;
+    form:includes
+        nodes:5f58d7b4-86f8-4b52-aff1-9591c3bd422c,
+        nodes:93942be5-8675-4a06-8e5e-67b394c96e2d,
+        nodes:daf464ab-de1e-4440-8478-b219dc7f10a8;
+    form:removeLabel "Verwijder rij";
+    sh:name "The subform title".
+nodes:c55e8760-8216-4d99-a235-260ea1a75a4d a form:Field.
+
+nodes:d7b33768-3723-4291-a7be-3d8a7d7cdbc1
+a form:Section; sh:name "Table"; sh:order 1 .
+nodes:daf464ab-de1e-4440-8478-b219dc7f10a8
+    a form:Field;
+    form:displayType display:defaultInput;
+    form:partOf nodes:d7b33768-3723-4291-a7be-3d8a7d7cdbc1;
+    sh:name "Kolom 1";
+    sh:order 1;
+    sh:path nodes:6f5b0c21-15e3-4fb9-b3e1-5907062d0ee4 .
+nodes:f2baa43c-9741-49c6-93c9-ce68f8a7ae6f
+form:shape nodes:c55e8760-8216-4d99-a235-260ea1a75a4d.
+emb:source-node
+    a form:Form, form:TopLevelForm;
+    form:includes nodes:b71e037c-7e51-41ea-97f4-e9d34f0b327d;
+    form:partOf nodes:d7b33768-3723-4291-a7be-3d8a7d7cdbc1 .

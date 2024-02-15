@@ -1,0 +1,110 @@
+{{page-title "Create new form"}}
+
+<div class="au-c-toolbar au-c-toolbar--bottom au-c-toolbar--large">
+  <div class="au-c-toolbar__group">
+    <AuHeading @level="1" @skin="2">
+      {{t "createForm.title"}}
+    </AuHeading>
+  </div>
+  <div class="au-c-toolbar__group">
+    <AuButtonGroup>
+      <AuLink
+        @route="index"
+        @skin="button-secondary"
+        @icon="cross"
+        @iconAlignment="left"
+        @alert={{true}}
+      >{{t "crud.cancel"}}</AuLink>
+      <AuButton
+        @disabled={{this.disableSubmit}}
+        @route={{this.route}}
+        @skin="button"
+        @icon="pencil"
+        @iconAlignment="left"
+        {{on "click" this.createFormFromTemplate}}
+      >{{t "createForm.build"}}</AuButton>
+    </AuButtonGroup>
+  </div>
+</div>
+
+<div class="formBuilderEdit">
+  <div class="formBuilderEdit__template-create">
+    <AuLabel for="input-form-name" @required={{true}}>
+      {{t "createForm.name"}}
+    </AuLabel>
+    <AuInput
+      id="input-form-name"
+      @width="block"
+      @error={{this.inputErrorMessage}}
+      @warning={{this.hasReachedMaxCharaters}}
+      value={{this.name}}
+      {{on "blur" this.handleNameChange.perform}}
+    />
+    <div class="input__helpTextAndCharacterCount">
+      {{#if this.inputErrorMessage}}
+        <AuHelpText @error={{true}}>{{this.inputErrorMessage}}</AuHelpText>
+      {{else}}
+        <span></span>
+      {{/if}}
+      <AuPill @size={{"small"}} class="au-u-margin-small">
+        {{this.getCharacters}}
+      </AuPill>
+    </div>
+    <div>
+      <AuLabel>{{t "createForm.selectTemplate"}}</AuLabel>
+      <PowerSelect
+        @options={{this.model.templates}}
+        @selected={{this.selectedTemplate}}
+        @onChange={{this.setTemplate}}
+        as |template|
+      >
+        {{template.label}}
+      </PowerSelect>
+    </div>
+  </div>
+  <div class="formBuilderEdit__template-preview">
+    <span class="au-u-flex au-u-flex--center au-u-padding-tiny">
+      <AuButtonGroup @inline={{true}}>
+        <AuButton
+          @disabled={{this.isPreviewVisible}}
+          @hideText={{true}}
+          @icon="eye"
+          {{on "click" (fn (mut this.isPreviewVisible) true)}}
+        />
+        <AuButton
+          @disabled={{this.disabledShowCodeButton}}
+          @hideText={{true}}
+          @icon="html"
+          {{on "click" (fn (mut this.isPreviewVisible) false)}}
+        />
+      </AuButtonGroup>
+    </span>
+    <div class="formBuilderEdit__template-preview--preview">
+      <div class="formBuilderEdit__template-preview--inner-preview">
+        {{#if this.selectedTemplateTtlCode}}
+          {{#if (and this.previewStore this.isPreviewVisible)}}
+            {{#if this.setupPreviewForm.isRunning}}
+              <AuLoader />
+            {{else}}
+              <RdfForm
+                @groupClass="au-u-margin-left-small au-u-margin-top"
+                @form={{this.previewForm}}
+                @graphs={{this.model.graphs}}
+                @formStore={{this.previewStore}}
+                @forceShowErrors={{false}}
+                @useNewListingLayout={{true}}
+                @sourceNode={{this.sourceNode}}
+              />
+            {{/if}}
+          {{else}}
+            <div
+              {{editor this.selectedTemplateTtlCode}}
+              {{!template-lint-disable no-inline-styles}}
+              style="height: 100%; width:100%"
+            ></div>
+          {{/if}}
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</div>

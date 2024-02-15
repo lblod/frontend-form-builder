@@ -1,0 +1,105 @@
+@prefix : <#>.
+@prefix form: <http://lblod.data.gift/vocabularies/forms/>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix displayTypes: <http://lblod.data.gift/display-types/>.
+@prefix nodes: <http://data.lblod.info/form-data/nodes/>.
+@prefix emb: <http://ember-submission-form-fields/>.
+
+nodes:24289e48-258f-4919-8c3e-5783a6acb4a4
+    a form:Field;
+    form:displayType displayTypes:defaultInput;
+    form:partOf nodes:d7b33768-3723-4291-a7be-3d8a7d7cdbc1;
+    form:validatedBy
+            [
+                a form:RequiredConstraint;
+                form:grouping form:Bag;
+                sh:order 1;
+                sh:path nodes:e61f56db-6346-4a61-a75e-33e091789e40
+            ];
+    sh:name "Voornaam contactpersoon";
+    sh:order 2;
+    sh:path nodes:e61f56db-6346-4a61-a75e-33e091789e40 .
+nodes:6900d536-f867-4e60-af69-285404470538
+    a form:Field;
+    form:displayType displayTypes:defaultInput;
+    form:partOf nodes:d7b33768-3723-4291-a7be-3d8a7d7cdbc1;
+    form:validatedBy
+            [
+                a form:RequiredConstraint;
+                form:grouping form:Bag;
+                sh:order 1;
+                sh:path nodes:63782b4c-2bdc-4470-b56c-89c4f314fa19
+            ],
+            [
+                a form:ValidEmail;
+                form:grouping form:MatchEvery;
+                sh:order 2;
+                sh:path nodes:63782b4c-2bdc-4470-b56c-89c4f314fa19
+            ];
+    sh:name "Mailadres";
+    sh:order 5;
+    sh:path nodes:63782b4c-2bdc-4470-b56c-89c4f314fa19 .
+nodes:752cf059-b334-4413-9b15-46d621e29076
+    a form:Field;
+    form:displayType displayTypes:defaultInput;
+    form:partOf nodes:d7b33768-3723-4291-a7be-3d8a7d7cdbc1;
+    form:validatedBy
+            [
+                a form:RequiredConstraint;
+                form:grouping form:Bag;
+                sh:order 1;
+                sh:path nodes:2c22a80a-9ae1-42d4-ad73-c51cd3ddd678
+            ];
+    sh:name "Familienaam contactpersoon";
+    sh:order 3;
+    sh:path nodes:2c22a80a-9ae1-42d4-ad73-c51cd3ddd678 .
+nodes:9608bfbc-59c8-4b4e-a35e-07ea5107fbc5
+    a form:Field;
+    form:displayType displayTypes:defaultInput;
+    form:partOf nodes:d7b33768-3723-4291-a7be-3d8a7d7cdbc1;
+    form:validatedBy
+            [
+                a form:RequiredConstraint;
+                form:grouping form:Bag;
+                sh:order 1;
+                sh:path nodes:6efbabca-dc48-4391-8e82-22b82a6a1232
+            ];
+    sh:name "Functie contactpersoon";
+    sh:order 6;
+    sh:path nodes:6efbabca-dc48-4391-8e82-22b82a6a1232 .
+nodes:cbc9fea5-8952-41ae-9a6f-e5dca3035bf3
+    a form:Field;
+    form:displayType displayTypes:defaultInput;
+    form:partOf nodes:d7b33768-3723-4291-a7be-3d8a7d7cdbc1;
+    form:validatedBy
+            [
+                a form:ValidPhoneNumber;
+                form:defaultCountry "BE";
+                form:grouping form:MatchEvery;
+                sh:order 1;
+                sh:path nodes:1abdb3bf-f558-4885-9146-2be4cefb0c18
+            ],
+            [
+                a form:RequiredConstraint;
+                form:grouping form:Bag;
+                sh:order 2;
+                sh:path nodes:1abdb3bf-f558-4885-9146-2be4cefb0c18
+            ];
+    sh:name "Telefoonnummer";
+    sh:order 4;
+    sh:path nodes:1abdb3bf-f558-4885-9146-2be4cefb0c18 .
+nodes:d7b33768-3723-4291-a7be-3d8a7d7cdbc1
+    a form:Section;
+    form:help
+        "Dit is de persoon die gecontacteerd wordt bij de opvolging van dit dossier.";
+    sh:name "Contactgegevens contactpersoon";
+    sh:order 1 .
+emb:source-node
+    a form:Form, form:TopLevelForm;
+    form:includes
+        nodes:24289e48-258f-4919-8c3e-5783a6acb4a4,
+        nodes:6900d536-f867-4e60-af69-285404470538,
+        nodes:752cf059-b334-4413-9b15-46d621e29076,
+        nodes:9608bfbc-59c8-4b4e-a35e-07ea5107fbc5,
+        nodes:cbc9fea5-8952-41ae-9a6f-e5dca3035bf3;
+    form:partOf nodes:d7b33768-3723-4291-a7be-3d8a7d7cdbc1 .

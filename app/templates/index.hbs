@@ -6,13 +6,9 @@
     </AuHeading>
   </div>
   <div class="au-c-toolbar__group">
-    <AuButton
-      @skin="primary"
-      @icon="add"
-      {{on "click" this.openCreateFormModal}}
-    >
+    <AuLink @route="formbuilder.new" @skin="button" @icon="pencil">
       {{t "main.createNewForm"}}
-    </AuButton>
+    </AuLink>
   </div>
 </div>
 
@@ -102,8 +98,4 @@
     @onDelete={{this.deleteForm}}
     @onClose={{fn (mut this.showDeleteModal) false}}
   />
-{{/if}}
-
-{{#if this.showCreateFormModal}}
-  <CreateFormModal @closeModal={{this.closeCreateFormModal}} />
 {{/if}}
