@@ -16,7 +16,7 @@ import { deleteConceptScheme } from '../../utils/codelijsten/delete-concept-sche
 import { isDuplicateConceptSchemeName } from '../../utils/codelijsten/is-duplicate-concept-scheme-name';
 import { updateConcept } from '../../utils/codelijsten/update-concept';
 import { isConceptArrayChanged } from '../../utils/codelijsten/compare-concept-arrays';
-import { restartableTask } from 'ember-concurrency';
+import { restartableTask, timeout } from 'ember-concurrency';
 import { sortObjectsOnProperty } from '../../utils/sort-object-on-property';
 import { downloadTextAsFile } from '../../utils/download-text-as-file';
 
@@ -67,6 +67,8 @@ export default class CodelijstenEditController extends Controller {
     this.setValuesFromConcepts(conceptArray);
 
     this.setIsSaveButtonDisabled();
+    // Prevent flickering between laoding and showing content if small lists are shown
+    await timeout(100);
   });
 
   setValuesFromConceptscheme() {
