@@ -49,6 +49,17 @@
         >
           <AuButton
             @skin="link"
+            @icon="export"
+            @iconAlignment="left"
+            role="menuitem"
+            @disabled={{this.isPrivateConceptScheme}}
+            @loadingMessage={{t "messages.loading.downloading"}}
+            {{on "click" this.exportCodelist}}
+          >
+            {{t "actions.exportCodelist"}}
+          </AuButton>
+          <AuButton
+            @skin="link"
             @icon="bin"
             @iconAlignment="left"
             @alert={{true}}

@@ -31,3 +31,8 @@ messages:
   success:
     conceptsUpdated: "Concepten bijgewerkt"
     codelistUpdated: "Codelijst bijgewerkt"
+  loading:
+    downloading: "Downloaden"
+
+actions:
+  exportCodelist: "Exporteer"
