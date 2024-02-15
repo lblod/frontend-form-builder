@@ -1,7 +1,9 @@
 import Service from '@ember/service';
 
+const EMPTY_FORMBUILDER_ID = ''
+
 export default class FormbuilderIdServiceService extends Service {
-  formbuilderId = null;
+  formbuilderId = EMPTY_FORMBUILDER_ID;
 
   setFormbuilderId(id) {
     this.formbuilderId = id;
@@ -9,5 +11,9 @@ export default class FormbuilderIdServiceService extends Service {
 
   getFormbuilderId() {
     return this.formbuilderId;
+  }
+
+  clearFormbuilderId() {
+    this.formbuilderId = EMPTY_FORMBUILDER_ID;
   }
 }

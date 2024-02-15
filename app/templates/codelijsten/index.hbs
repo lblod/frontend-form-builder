@@ -4,12 +4,12 @@
   <Group>
     <ul class="au-c-list-horizontal au-c-list-horizontal--small">
       <li class="au-c-list-horizontal__item">
-        <AuLink
-          @route="index"
-          @skin="primary"
+        <AuButton
+          @skin="link"
           @icon="arrow-left"
           @iconAlignment="left"
-        >{{t "navigation.backToFormBuilder"}}</AuLink>
+          {{on 'click' this.backToFormbuilder}}
+        >{{t "navigation.backToFormBuilder"}}</AuButton>
       </li>
       <li class="au-c-list-horizontal__item au-u-bold">
         {{t "navigation.tabs.codelists"}}
