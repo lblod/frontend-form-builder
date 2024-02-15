@@ -19,7 +19,7 @@ export default class FormbuilderNewController extends Controller {
   @service toaster;
   @service intl;
 
-  @tracked name = '';
+  @tracked name;
   @tracked duplicateNames = [];
   @tracked hasBeenFocused = false;
   sourceNode = PREVIEW_SOURCE_NODE;
@@ -33,6 +33,7 @@ export default class FormbuilderNewController extends Controller {
   @tracked isPreviewVisible;
 
   async setup(model) {
+    this.name = null;
     await this.setTemplate(model.templates[0]);
     this.isPreviewVisible = true;
   }
@@ -131,6 +132,10 @@ export default class FormbuilderNewController extends Controller {
   });
 
   get inputErrorMessage() {
+    if (this.name == null) {
+      return false;
+    }
+
     if (this.name.trim() == '' && this.hasBeenFocused) {
       return this.intl.t('constraints.mandatoryField');
     }
@@ -146,13 +151,20 @@ export default class FormbuilderNewController extends Controller {
   }
 
   get getCharacters() {
+    let charactersOfName = 0;
+
+    if (this.name) {
+      charactersOfName = this.name.length;
+    }
+
     return this.intl.t('messages.feedback.remainingCharacters', {
-      currentCount: NAME_INPUT_CHAR_LIMIT - this.name.length,
+      currentCount: NAME_INPUT_CHAR_LIMIT - charactersOfName,
     });
   }
 
   get disableSubmit() {
     return (
+      !this.name ||
       (this.name.trim() == '' && this.hasBeenFocused) ||
       this.duplicateNames.length > 0 ||
       !this.hasBeenFocused ||
