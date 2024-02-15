@@ -1,6 +1,6 @@
 import Service from '@ember/service';
 
-const EMPTY_FORMBUILDER_ID = ''
+const EMPTY_FORMBUILDER_ID = '';
 
 export default class FormbuilderIdServiceService extends Service {
   formbuilderId = EMPTY_FORMBUILDER_ID;
