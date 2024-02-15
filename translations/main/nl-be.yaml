@@ -14,6 +14,7 @@ userTests:
 crud:
   save: "Bewaar"
   delete: "Verwijder"
+  archive: "Archiveren"
   update: "Bijwerken"
   cancel: "Annuleer"
   reset: "Reset"

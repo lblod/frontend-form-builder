@@ -34,6 +34,7 @@ messages:
     isSaving: "Bewaren"
     isLoading: "Aan het laden..."
     isDeleting: "Aan het verwijderen"
+    isArchiving: "Aan het archiveren"
 
 confirmation:
   deleteTitle: "Formulier verwijderen?"

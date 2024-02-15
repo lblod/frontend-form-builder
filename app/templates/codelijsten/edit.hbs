@@ -59,16 +59,15 @@
             {{t "actions.exportCodelist"}}
           </AuButton>
           <AuButton
-            @skin="link"
-            @icon="bin"
+            @icon="archive"
             @iconAlignment="left"
             @alert={{true}}
             role="menuitem"
             @disabled={{this.isPrivateConceptScheme}}
-            @loadingMessage={{t "messages.loading.isDeleting"}}
+            @loadingMessage={{t "messages.loading.isArchiving"}}
             {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
           >
-            {{t "crud.delete"}}
+            {{t "crud.archive"}}
           </AuButton>
         </AuDropdown>
       {{/if}}
@@ -184,7 +183,10 @@
   </div>
 </div>
 
-<AuModal @modalOpen={{this.isDeleteModalOpen}} @closeModal={{this.close}}>
+<AuModal
+  @modalOpen={{this.isDeleteModalOpen}}
+  @closeModal={{fn (mut this.isDeleteModalOpen) false}}
+>
   <:title>{{t "confirmation.deleteCodelistTitle"}}</:title>
   <:body>
     {{t "confirmation.deleteCodelistQuestion"}}
