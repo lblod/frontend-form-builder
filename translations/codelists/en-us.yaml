@@ -12,6 +12,7 @@ codelists:
   types:
     isPublic: "Custom codelist"
     isPrivate: "Generic"
+    isArchived: "Archived"
   alert:
     genericCodelist: "Generic codelists cannot be edited."
     archivedCodelist: "This codelist is archived."

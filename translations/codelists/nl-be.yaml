@@ -12,6 +12,7 @@ codelists:
   types:
     isPublic: "Eigen codelijst"
     isPrivate: "Generiek"
+    isArchived: "Ge-archiveerd"
   alert:
     genericCodelist: "Generieke codelijsten kunnen niet aangepast worden."
     archivedCodelist: "Deze codelijst is ge-archiveerd."
