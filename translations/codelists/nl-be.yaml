@@ -18,6 +18,8 @@ codelists:
 confirmation:
   deleteCodelistTitle: "Codelijst verwijderen?"
   deleteCodelistQuestion: "Bent u zeker dat u deze codelijst wilt verwijderen? Deze actie is permanent."
+  archiveCodelistTitle: "Codelijst archiveren?"
+  archiveCodelistQuestion: "Bent u zeker dat u deze codelijst wilt archiveren?"
 
 navigation:
   backToCodelists: "Terug naar codelijsten"

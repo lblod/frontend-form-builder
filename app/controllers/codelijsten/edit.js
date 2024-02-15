@@ -35,7 +35,7 @@ export default class CodelijstenEditController extends Controller {
   @tracked nameErrorMessage;
   @tracked descriptionErrorMessage;
 
-  @tracked isDeleteModalOpen;
+  @tracked isArchiveModalOpen;
   @tracked isDuplicateName;
   @tracked isSaveDisabled;
   @tracked isPrivateConceptScheme;
@@ -247,13 +247,21 @@ export default class CodelijstenEditController extends Controller {
     }
   }
 
-  @action
   async deleteCodelist() {
     await this.deleteConcepts(this.concepts, true);
     await deleteConceptScheme(this.conceptScheme.id, this.store, this.toaster);
-    this.isDeleteModalOpen = false;
     this.router.transitionTo('codelijsten.index');
   }
+
+  archiveCodelist = restartableTask(async () => {
+    this.isArchiveModalOpen = false;
+    showSuccessToasterMessage(
+      this.toaster,
+      this.codelistName,
+      this.intl.t('messages.subjects.archived')
+    );
+    this.router.transitionTo('codelijsten.index');
+  });
 
   setIsSaveButtonDisabled() {
     if (this.conceptScheme.isPublic) {

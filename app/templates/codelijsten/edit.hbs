@@ -61,11 +61,10 @@
           <AuButton
             @icon="archive"
             @iconAlignment="left"
-            @alert={{true}}
             role="menuitem"
             @disabled={{this.isPrivateConceptScheme}}
             @loadingMessage={{t "messages.loading.isArchiving"}}
-            {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
+            {{on "click" (fn (mut this.isArchiveModalOpen) true)}}
           >
             {{t "crud.archive"}}
           </AuButton>
@@ -184,28 +183,29 @@
 </div>
 
 <AuModal
-  @modalOpen={{this.isDeleteModalOpen}}
-  @closeModal={{fn (mut this.isDeleteModalOpen) false}}
+  @modalOpen={{this.isArchiveModalOpen}}
+  @closeModal={{fn (mut this.isArchiveModalOpen) false}}
 >
-  <:title>{{t "confirmation.deleteCodelistTitle"}}</:title>
+  <:title>{{t "confirmation.archiveCodelistTitle"}}</:title>
   <:body>
-    {{t "confirmation.deleteCodelistQuestion"}}
+    {{t "confirmation.archiveCodelistQuestion"}}
   </:body>
   <:footer>
     <AuButtonGroup>
       <AuButton
-        @icon="bin"
+        @icon="archive"
         @iconAlignment="left"
-        @alert={{true}}
-        @loadingMessage="Aan het verwijderen"
-        {{on "click" this.deleteCodelist}}
+        @skin="primary"
+        @loadingMessage={{t "messages.loading.isArchiving"}}
+        @loading={{this.archiveCodelist.isRunning}}
+        {{on "click" (perform this.archiveCodelist)}}
       >
-        {{t "crud.delete"}}
+        {{t "crud.archive"}}
       </AuButton>
       <AuButton
         @skin="secondary"
-        @disabled={{this.delete.isRunning}}
-        {{on "click" (fn (mut this.isDeleteModalOpen) false)}}
+        @disabled={{this.archiveCodelist.isRunning}}
+        {{on "click" (fn (mut this.isArchiveModalOpen) false)}}
       >
         {{t "crud.cancel"}}
       </AuButton>

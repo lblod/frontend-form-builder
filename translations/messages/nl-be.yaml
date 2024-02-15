@@ -5,6 +5,7 @@ messages:
     characters: "Karakters"
     deleted: "Verwijderd"
     upToDate: "Up-to-date"
+    archived: "Ge-archiveerd"
   error:
     invalidTemplatePath: "De geselecteerde template ({templateLabel}) heeft geen correct path."
     couldNotFetchFormWithId: "Kon formulier met id: {id} niet vinden"
