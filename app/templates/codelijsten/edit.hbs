@@ -51,16 +51,6 @@
         >
           <AuButton
             @skin="link"
-            @icon="export"
-            @iconAlignment="left"
-            role="menuitem"
-            @disabled={{this.isPrivateConceptScheme}}
-            @loadingMessage={{t "messages.loading.downloading"}}
-            {{on "click" this.exportCodelist}}
-          >
-            {{t "actions.exportCodelist"}}
-          </AuButton>
-          <AuButton
             @icon="archive"
             @iconAlignment="left"
             role="menuitem"
@@ -69,6 +59,17 @@
             {{on "click" (fn (mut this.isArchiveModalOpen) true)}}
           >
             {{t "crud.archive"}}
+          </AuButton>
+          <AuButton
+            @skin="link"
+            @icon="export"
+            @iconAlignment="left"
+            role="menuitem"
+            @disabled={{this.isPrivateConceptScheme}}
+            @loadingMessage={{t "messages.loading.downloading"}}
+            {{on "click" this.exportCodelist}}
+          >
+            {{t "actions.exportCodelist"}}
           </AuButton>
         </AuDropdown>
       {{/if}}
