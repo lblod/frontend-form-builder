@@ -254,12 +254,25 @@ export default class CodelijstenEditController extends Controller {
   }
 
   archiveCodelist = restartableTask(async () => {
+    this.conceptScheme.isarchived = true;
+
+    try {
+      this.conceptScheme.save();
+      this.conceptScheme.reload();
+      showSuccessToasterMessage(
+        this.toaster,
+        this.codelistName,
+        this.intl.t('messages.subjects.archived')
+      );
+    } catch (error) {
+      showErrorToasterMessage(
+        this.toaster,
+        this.intl.t('messages.error.somethingWentWrong'),
+        this.intl.t('crud.archive')
+      );
+    }
+
     this.isArchiveModalOpen = false;
-    showSuccessToasterMessage(
-      this.toaster,
-      this.codelistName,
-      this.intl.t('messages.subjects.archived')
-    );
     this.router.transitionTo('codelijsten.index');
   });
 
