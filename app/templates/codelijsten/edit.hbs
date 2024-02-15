@@ -26,7 +26,7 @@
         {{t "crud.save"}}
       </AuButton>
 
-      {{#if this.isPrivateConceptScheme}}
+      {{#if this.isReadOnly}}
         <span id="saveSplitButton_dropdown">
           <AuButton
             @disabled={{true}}
@@ -80,7 +80,14 @@
       <AuAlert @title={{"Opgelet"}} @skin={{"warning"}} @icon={{"login"}}>
         <p>{{t "codelists.alert.genericCodelist"}}</p>
       </AuAlert>
+    {{else}}
+      {{#if this.isArchivedConceptScheme}}
+        <AuAlert @title={{"Opgelet"}} @skin={{"warning"}} @icon={{"login"}}>
+          <p>{{t "codelists.alert.archivedCodelist"}}</p>
+        </AuAlert>
+      {{/if}}
     {{/if}}
+
     <div class="au-u-3-5 au-u-margin-bottom-large">
       <AuLabel for="input-codelist-name" @required={{true}}>
         {{t "codelists.nameOfCodelist"}}
@@ -89,7 +96,7 @@
         id="input-codelist-name"
         @width="block"
         @error={{this.nameErrorMessage}}
-        @disabled={{this.isPrivateConceptScheme}}
+        @disabled={{this.isReadOnly}}
         value={{this.codelistName}}
         {{on "blur" this.handleNameChange}}
       />
@@ -98,7 +105,7 @@
       {{/if}}
     </div>
     <div class="au-u-3-5 au-u-margin-bottom-large">
-      {{#if this.isPrivateConceptScheme}}
+      {{#if this.isReadOnly}}
         <p>{{this.codelistDescription}}</p>
       {{else}}
         <AuLabel for="input-codelist-description" @required={{true}}>
@@ -108,7 +115,7 @@
           id="input-codelist-description"
           @width="block"
           @error={{this.descriptionErrorMessage}}
-          @disabled={{this.isPrivateConceptScheme}}
+          @disabled={{this.isReadOnly}}
           value={{this.codelistDescription}}
           {{on "blur" this.handleDescriptionChange}}
         />
@@ -125,7 +132,7 @@
       <:header>
         <tr>
           <th>{{t "table.columns.label"}}</th>
-          {{#unless this.isPrivateConceptScheme}}
+          {{#unless this.isReadOnly}}
             <th>{{t "table.columns.actions"}}</th>
           {{/unless}}
         </tr>
@@ -134,7 +141,7 @@
         {{#if this.concepts}}
           {{#each this.concepts as |concept|}}
             <tr>
-              {{#if this.isPrivateConceptScheme}}
+              {{#if this.isReadOnly}}
                 <td class="au-u-visible-medium-up">
                   {{concept.label}}</td>
               {{else}}
@@ -145,7 +152,7 @@
                     {{on "blur" (fn this.handleConceptChange concept)}}
                   /></td>
               {{/if}}
-              {{#unless this.isPrivateConceptScheme}}
+              {{#unless this.isReadOnly}}
                 <td class="au-u-visible-medium-up">
                   <AuButton
                     @icon="bin"
@@ -162,7 +169,7 @@
             </tr>
           {{/each}}
         {{/if}}
-        {{#unless this.isPrivateConceptScheme}}
+        {{#unless this.isReadOnly}}
           <tr>
             <td class="au-u-visible-medium-up">
               <AuButton

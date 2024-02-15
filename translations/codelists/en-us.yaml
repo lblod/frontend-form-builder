@@ -14,6 +14,7 @@ codelists:
     isPrivate: "Generic"
   alert:
     genericCodelist: "Generic codelists cannot be edited."
+    archivedCodelist: "This codelist is archived."
 
 confirmation:
   deleteCodelistTitle: "Delete codelist?"

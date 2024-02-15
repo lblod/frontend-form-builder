@@ -38,9 +38,26 @@ export default class CodelijstenEditController extends Controller {
   @tracked isArchiveModalOpen;
   @tracked isDuplicateName;
   @tracked isSaveDisabled;
-  @tracked isPrivateConceptScheme;
 
   conceptsInDatabase;
+
+  get isReadOnly() {
+    if (!this.conceptScheme) return true;
+
+    return this.isPrivateConceptScheme || this.isArchivedConceptScheme;
+  }
+
+  get isPrivateConceptScheme() {
+    if (!this.conceptScheme) return true;
+
+    return !this.conceptScheme.isPublic;
+  }
+
+  get isArchivedConceptScheme() {
+    if (!this.conceptScheme) return false;
+
+    return this.conceptScheme.isArchived;
+  }
 
   setup = restartableTask(async (conceptSchemeId) => {
     this.conceptScheme = await this.getConceptSchemeById(conceptSchemeId);
@@ -53,7 +70,6 @@ export default class CodelijstenEditController extends Controller {
   });
 
   setValuesFromConceptscheme() {
-    this.isPrivateConceptScheme = !this.conceptScheme.isPublic;
     this.codelistName = this.conceptScheme.label;
     this.codelistDescription = this.conceptScheme.description;
   }
