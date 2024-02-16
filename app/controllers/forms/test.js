@@ -10,7 +10,10 @@ import { FORM, RDF } from '@lblod/submission-form-helpers';
 import { findTtlForUsedConceptSchemesInForm } from '../../utils/find-ttl-for-used-concept-schemes';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
-import { showSuccessToasterMessage } from '../../utils/toaster-message-helper';
+import {
+  showErrorToasterMessage,
+  showSuccessToasterMessage,
+} from '../../utils/toaster-message-helper';
 
 export default class FormsTestController extends Controller {
   @service store;
@@ -72,6 +75,18 @@ export default class FormsTestController extends Controller {
       sourceNode: this.model.sourceNode,
       store: this.formStore,
     });
+
+    if (result) {
+      showSuccessToasterMessage(
+        this.toaster,
+        this.intl.t('messages.feedback.formIsValid')
+      );
+    } else {
+      showErrorToasterMessage(
+        this.toaster,
+        this.intl.t('messages.feedback.formIsInvalid')
+      );
+    }
 
     this.forceShowErrors = !result;
   }

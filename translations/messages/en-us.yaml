@@ -29,6 +29,8 @@ messages:
     warnV1Form: "We noticed that you are editing a {version} form. Functionality will be limited."
     lowestVersionAvailable: "The lowest version available is version: 0"
     highestversionAvailable: "The highest version available is v{version}"
+    formIsValid: "Your form is is valid"
+    formIsInvalid: "Your form is is invalid. Please fill in all the fields."
   loading:
     creatingNewUserTest: "Creating new user test"
     loadingOverview: "Loading Overview"
