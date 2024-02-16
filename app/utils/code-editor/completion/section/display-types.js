@@ -11,6 +11,7 @@ export function getDisplayTypeCompletions() {
     [
       `displayTypes:defaultInput`,
       `displayTypes:numericalInput`,
+      `displayTypes:currencyInput`,
       `displayTypes:date`,
       `displayTypes:dateRange`,
       `displayTypes:textArea`,
