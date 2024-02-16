@@ -2,7 +2,6 @@ codelists:
   addConcept: "Voeg een concept toe aan de lijst"
   nameOfCodelist: "Naam van de codelijst"
   descriptionOfCodelist: "Beschrijving"
-  detailTitle: "Codelijst detail"
   createCodelist: "Maak een codelijst"
   howToUse: "Hoe de concept scheme gebruiken:"
   chooseList: "Kies een concept scheme waarvan u de inhoud wil bekijken"
