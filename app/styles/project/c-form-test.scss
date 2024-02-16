@@ -26,6 +26,14 @@
   margin: 2rem 0;
   overflow: hidden;
   text-align: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  button {
+    margin-top: 4px;
+  }
 }
 
 .formTestPage_center--form {
