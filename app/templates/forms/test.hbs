@@ -1,4 +1,21 @@
 {{page-title "Test"}}
+<AuToolbar @size="medium" @skin="tint" @border="bottom" as |Group|>
+  <Group>
+    <ul class="au-c-list-horizontal au-c-list-horizontal--small">
+      <li class="au-c-list-horizontal__item">
+        <AuLink
+          @route="index"
+          @skin="primary"
+          @icon="arrow-left"
+          @iconAlignment="left"
+        >{{t "navigation.backToFormOverview"}}</AuLink>
+      </li>
+      <li class="au-c-list-horizontal__item">
+        {{this.model.form.title}}
+      </li>
+    </ul>
+  </Group>
+</AuToolbar>
 <div class="formTestPage">
   <div class="formTestPage_form">
     {{#if (and this.formStore this.form)}}

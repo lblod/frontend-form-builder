@@ -13,7 +13,10 @@ export default class FormsTestRoute extends Route {
     const form = await this.store.findRecord('generated-form', params.id);
 
     return {
-      formTtlCode: form.ttlCode,
+      form: {
+        title: form.label,
+        ttlCode: form.ttlCode,
+      },
       graphs: GRAPHS,
       sourceNode: PREVIEW_SOURCE_NODE,
     };

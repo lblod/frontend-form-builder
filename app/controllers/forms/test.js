@@ -17,7 +17,7 @@ export default class FormsTestController extends Controller {
     this.formStore = new ForkingStore();
 
     this.formStore.parse(
-      this.model.formTtlCode,
+      this.model.form.ttlCode,
       this.model.graphs.formGraph,
       'text/turtle'
     );
