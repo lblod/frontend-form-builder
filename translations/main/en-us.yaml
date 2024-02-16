@@ -44,7 +44,6 @@ createForm:
 
 # Components #
 toolbar:
-  savedOn: "Saved on"
   exportCode: "Export code"
   unSavedChanges: "Unsaved changes"
   formUpToDate: "Form up-to-date"

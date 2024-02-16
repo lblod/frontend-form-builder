@@ -44,7 +44,6 @@ createForm:
 
 # Components #
 toolbar:
-  savedOn: "Bewaard op"
   exportCode: "Exporteer code"
   unSavedChanges: "Aanpassingen nog niet bewaard"
   formUpToDate: "Formulier up-to-date"
