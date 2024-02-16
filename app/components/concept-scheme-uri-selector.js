@@ -56,7 +56,11 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
       },
     });
 
-    this.options = sortObjectsOnProperty([...conceptSchemes], 'label');
+    const notArchivedConceptSchemes = [...conceptSchemes].filter(
+      (scheme) => !scheme.isArchived
+    );
+
+    this.options = sortObjectsOnProperty(notArchivedConceptSchemes, 'label');
 
     if (this.args.forField) {
       await this.loadSelected();
