@@ -33,6 +33,10 @@
 
   button {
     margin-top: 4px;
+    cursor: copy;
+    &:hover {
+      scale: 1.05;
+    }
   }
 }
 
