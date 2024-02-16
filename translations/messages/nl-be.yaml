@@ -6,6 +6,7 @@ messages:
     deleted: "Verwijderd"
     upToDate: "Up-to-date"
     archived: "Ge-archiveerd"
+    copiedToClipboard: "Gekopieerd naar klembord"
   error:
     invalidTemplatePath: "De geselecteerde template ({templateLabel}) heeft geen correct path."
     couldNotFetchFormWithId: "Kon formulier met id: {id} niet vinden"

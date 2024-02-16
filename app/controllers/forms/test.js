@@ -6,9 +6,13 @@ import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { FORM, RDF } from '@lblod/submission-form-helpers';
 import { findTtlForUsedConceptSchemesInForm } from '../../utils/find-ttl-for-used-concept-schemes';
 import { service } from '@ember/service';
+import { action } from '@ember/object';
+import { showSuccessToasterMessage } from '../../utils/toaster-message-helper';
 
 export default class FormsTestController extends Controller {
   @service store;
+  @service toaster;
+  @service intl;
 
   @tracked form;
   @tracked formStore;
@@ -43,4 +47,16 @@ export default class FormsTestController extends Controller {
       this.model.graphs.formGraph
     );
   });
+
+  @action
+  copyTestFormUrl() {
+    const currentUrl = window.location.href;
+    navigator.clipboard.writeText(currentUrl);
+    showSuccessToasterMessage(
+      this.toaster,
+      currentUrl,
+      this.intl.t('messages.subjects.copiedToClipboard'),
+      10000
+    );
+  }
 }

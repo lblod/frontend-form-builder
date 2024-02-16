@@ -6,6 +6,7 @@ messages:
     deleted: "Verwijderd"
     upToDate: "Up-to-date"
     archived: "Archived"
+    copiedToClipboard: "Copied to clipboard"
   error:
     invalidTemplatePath: "The selected template ({templateLabel}) has an invalid path configured"
     couldNotFetchFormWithId: "Could not find form with id: {id}"

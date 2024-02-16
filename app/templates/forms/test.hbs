@@ -22,7 +22,12 @@
       <h1 class="au-u-h3">
         {{this.model.form.title}}
       </h1>
-      <AuButton @icon="link" @skin="naked" @hideText={{true}} />
+      <AuButton
+        @icon="link"
+        @skin="naked"
+        @hideText={{true}}
+        {{on "click" this.copyTestFormUrl}}
+      />
     </div>
     <div class="formTestPage_center--form">
       {{#if (and this.formStore this.form)}}
