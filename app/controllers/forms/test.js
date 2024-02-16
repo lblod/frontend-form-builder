@@ -2,7 +2,10 @@ import Controller from '@ember/controller';
 
 import { tracked } from '@glimmer/tracking';
 import { restartableTask } from 'ember-concurrency';
-import { ForkingStore } from '@lblod/ember-submission-form-fields';
+import {
+  ForkingStore,
+  validateForm,
+} from '@lblod/ember-submission-form-fields';
 import { FORM, RDF } from '@lblod/submission-form-helpers';
 import { findTtlForUsedConceptSchemesInForm } from '../../utils/find-ttl-for-used-concept-schemes';
 import { service } from '@ember/service';
@@ -16,6 +19,8 @@ export default class FormsTestController extends Controller {
 
   @tracked form;
   @tracked formStore;
+
+  @tracked forceShowErrors;
 
   setupForm = restartableTask(async () => {
     this.formStore = new ForkingStore();
@@ -58,5 +63,16 @@ export default class FormsTestController extends Controller {
       this.intl.t('messages.subjects.copiedToClipboard'),
       10000
     );
+  }
+
+  @action
+  testForm() {
+    const result = validateForm(this.form, {
+      ...this.model.graphs,
+      sourceNode: this.model.sourceNode,
+      store: this.formStore,
+    });
+
+    this.forceShowErrors = !result;
   }
 }

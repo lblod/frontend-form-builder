@@ -39,7 +39,7 @@
             @form={{this.form}}
             @graphs={{this.model.graphs}}
             @formStore={{this.formStore}}
-            @forceShowErrors={{false}}
+            @forceShowErrors={{this.forceShowErrors}}
             @useNewListingLayout={{true}}
             @sourceNode={{this.model.sourceNode}}
           />
@@ -50,7 +50,11 @@
     </div>
     <div class="formTestPage_center--actions">
       <AuButtonGroup>
-        <AuButton @icon="synchronize" @iconAlignment="left">
+        <AuButton
+          @icon="synchronize"
+          @iconAlignment="left"
+          {{on "click" this.testForm}}
+        >
           Test
         </AuButton>
       </AuButtonGroup>
