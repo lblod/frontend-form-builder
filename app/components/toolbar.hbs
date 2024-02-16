@@ -7,16 +7,6 @@
         </AuLink>
         <span class="au-c-app-chrome__entity">{{@model.label}}</span>
       </Group>
-      <Group>
-        <ul class="au-c-list-horizontal au-u-padding-right-tiny">
-          <li class="au-c-list-horizontal__item">
-            <span class="au-c-app-chrome__status">
-              {{t "toolbar.savedOn"}}
-              {{or @model.modified @model.created}}
-            </span>
-          </li>
-        </ul>
-      </Group>
     </AuToolbar>
     <AuToolbar @size="small" class="au-u-padding-top-none" as |Group|>
       <Group>
