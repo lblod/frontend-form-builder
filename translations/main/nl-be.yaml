@@ -21,7 +21,6 @@ crud:
 
 navigation:
   backToFormOverview: "Terug naar formulieren" # also used "Terug naar overzicht formulieren"
-  backToFormBuilder: "Terug naar formulierenbouwer"
   toOverviewTestForms: "Naar overzicht testbare formulieren"
   tabs:
     code: "Code"
