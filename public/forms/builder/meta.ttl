@@ -52,15 +52,6 @@ display:date
   core:uuid "4f1569e8-6ebc-4c61-9c3a-9affe7c38f28" ;
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Date"@en .
-display:dateTime
-  rdf:type  rdfs:Class , skos:Concept ;
-  ext:displayType "dateTime" ;
-  ext:usesConceptScheme "false"^^xsd:boolean ;
-  ext:canHaveValidation
-      form:RequiredConstraint ;
-  core:uuid "3b2016b4-566e-47ab-83ff-46fe643b08ac" ;
-  skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
-  skos:prefLabel  "Date and time"@en .
 display:dateRange
   rdf:type  rdfs:Class , skos:Concept ;
   ext:displayType "dateRange" ;
