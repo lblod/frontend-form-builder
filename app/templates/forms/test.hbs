@@ -1,2 +1,20 @@
 {{page-title "Test"}}
-<p>Form test</p>
+<div>
+  {{#if (and this.formStore this.form)}}
+    {{#if this.setupForm.isRunning}}
+      <AuLoader />
+    {{else}}
+      <RdfForm
+        @groupClass="au-u-margin-left-small au-u-margin-top"
+        @form={{this.form}}
+        @graphs={{this.model.graphs}}
+        @formStore={{this.formStore}}
+        @forceShowErrors={{false}}
+        @useNewListingLayout={{true}}
+        @sourceNode={{this.model.sourceNode}}
+      />
+    {{/if}}
+  {{else}}
+    <AuLoader />
+  {{/if}}
+</div>
