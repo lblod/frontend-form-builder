@@ -1,26 +1,22 @@
 <nav>
   <div class="au-c-app-chrome">
-    <AuToolbar @size="medium" @skin="tint" @border="bottom" as |Group|>
+    <AuToolbar
+      @size="small"
+      class="au-u-padding-top-none au-u-padding-bottom-none"
+      as |Group|
+    >
       <Group>
-        <ul class="au-c-list-horizontal au-c-list-horizontal--small">
-          <li class="au-c-list-horizontal__item">
-            <AuLink
-              @route="index"
-              @skin="primary"
-              @icon="arrow-left"
-              @iconAlignment="left"
-            >
-              {{t "navigation.backToFormOverview"}}
-            </AuLink>
-          </li>
-          <li class="au-c-list-horizontal__item">
-            {{@model.label}}
-          </li>
-        </ul>
-      </Group>
-    </AuToolbar>
-    <AuToolbar @size="small" class="au-u-padding-top-none" as |Group|>
-      <Group>
+        <div>
+          <AuLink
+            @route="index"
+            @skin="primary"
+            @icon="arrow-left"
+            @iconAlignment="left"
+            @hideText={{true}}
+          >
+            {{t "navigation.backToFormOverview"}}
+          </AuLink>
+        </div>
         <div>
           {{#if @formChanged}}
             <AuPill @skin="warning" @icon="alert-triangle">
@@ -62,7 +58,6 @@
               {{on "click" (fn (mut this.isEditingName) true)}}
             />
           {{/if}}
-
         </div>
       </Group>
       <Group class="au-c-toolbar__group--actions">
