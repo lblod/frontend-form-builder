@@ -53,19 +53,14 @@
                 generatedForm.modified
               }}</td>
             <td class="au-u-visible-medium-up">
-              <LinkTo
-                @route="user-tests.new"
-                @query={{hash form=generatedForm.id}}
-                class="au-c-link"
+              <AuLink
+                @route="forms.test"
+                @model={{generatedForm.id}}
+                @icon="eye"
+                @alignment="left"
               >
-                <AuIcon
-                  @icon="eye"
-                  @alignment="left"
-                  @size="large"
-                  @ariaHidden={{true}}
-                />
                 Voorbeeld
-              </LinkTo>
+              </AuLink>
             </td>
             <td class="au-u-visible-medium-up">
               <AuButton
