@@ -8,6 +8,7 @@ import basicFormTemplate from '../../utils/ttl-templates/basic-form-template';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { FORM, RDF } from '@lblod/submission-form-helpers';
+import { findTtlForUsedConceptSchemesInForm } from '../../utils/find-ttl-for-used-concept-schemes';
 
 export const GRAPHS = {
   formGraph: new RDFNode('http://data.lblod.info/form'),
@@ -73,8 +74,10 @@ export default class FormbuilderEditController extends Controller {
       'text/turtle'
     );
 
-    const conceptSchemesTtl = await this.getConceptSchemesAsTtlInTtlCode(
-      this.previewStore
+    const conceptSchemesTtl = await findTtlForUsedConceptSchemesInForm(
+      this.previewStore,
+      this.store,
+      this.model.graphs.formGraph
     );
 
     if (conceptSchemesTtl) {
@@ -168,60 +171,5 @@ export default class FormbuilderEditController extends Controller {
       );
       console.error(`Caught:`, error);
     }
-  }
-
-  async getConceptSchemesAsTtlInTtlCode(ttlCode) {
-    const ttlCodeArray = [];
-    const uris = this.getConceptSchemeUrisInTtl(ttlCode);
-
-    if (uris.length == 0) {
-      return;
-    }
-
-    for (const conceptSchemeUri of uris) {
-      const conceptSchemes = await this.store.query('concept-scheme', {
-        include: 'concepts',
-        filter: {
-          ':uri:': conceptSchemeUri,
-        },
-      });
-      const conceptSchemesAsArray = [...conceptSchemes];
-      const ttl = await this.conceptSchemesWithConceptsToTtl(
-        conceptSchemesAsArray
-      );
-      ttlCodeArray.push(ttl);
-    }
-
-    return ttlCodeArray.join('\n');
-  }
-
-  async conceptSchemesWithConceptsToTtl(conceptSchemes) {
-    const ttlArray = [];
-    for (const conceptScheme of conceptSchemes) {
-      ttlArray.push(await conceptScheme.modelWithConceptsAsTtlCode());
-    }
-
-    return ttlArray.join(' ');
-  }
-
-  getConceptSchemeUrisInTtl(store) {
-    const formOptions = store.match(
-      undefined,
-      FORM('options'),
-      undefined,
-      this.model.graphs.formGraph
-    );
-
-    const conceptSchemeUris = [];
-    for (const triple of formOptions) {
-      const optionsAsString = triple.object;
-      try {
-        const jsonOptions = JSON.parse(optionsAsString);
-        conceptSchemeUris.push(jsonOptions.conceptScheme);
-      } catch (error) {
-        return;
-      }
-    }
-    return conceptSchemeUris;
   }
 }
