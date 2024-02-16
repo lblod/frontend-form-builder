@@ -18,6 +18,7 @@ crud:
   update: "Update"
   cancel: "Cancel"
   reset: "Reset"
+  testForm: "Test form"
 
 navigation:
   backToFormOverview: "Back to forms" # also used "Terug naar overzicht formulieren"
