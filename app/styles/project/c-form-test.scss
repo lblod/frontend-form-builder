@@ -8,13 +8,28 @@
   grid-template-columns: 50%;
 }
 
-.formTestPage_form {
-  border: 1px solid #e0e2e3;
-  box-shadow: 0 2px 5px rgb(0 0 0 / 0.2);
-  background-color: $au-white;
-  padding: 3rem;
+.formTestPage_center {
   margin: 2rem 0;
   overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
+}
+
+.formTestPage_center--title {
+  border-bottom: 0.5rem solid $au-blue-700 !important;
+  border: 1px solid #e0e2e3;
+  box-shadow: 0 2px 5px rgb(0 0 0 / 0.2);
+  background-color: $au-white;
+  padding: 2rem 3rem;
+  margin: 2rem 0;
+  overflow: hidden;
+  text-align: center;
+}
+
+.formTestPage_center--form {
+  border: 1px solid #e0e2e3;
+  box-shadow: 0 2px 5px rgb(0 0 0 / 0.2);
+  background-color: $au-white;
+  padding: 3rem;
+  overflow: hidden;
 }

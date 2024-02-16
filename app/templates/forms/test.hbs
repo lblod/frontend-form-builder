@@ -17,23 +17,30 @@
   </Group>
 </AuToolbar>
 <div class="formTestPage">
-  <div class="formTestPage_form">
-    {{#if (and this.formStore this.form)}}
-      {{#if this.setupForm.isRunning}}
-        <AuLoader />
+  <div class="formTestPage_center">
+    <div class="formTestPage_center--title">
+      <h1 class="au-u-h3">
+        {{this.model.form.title}}
+      </h1>
+    </div>
+    <div class="formTestPage_center--form">
+      {{#if (and this.formStore this.form)}}
+        {{#if this.setupForm.isRunning}}
+          <AuLoader />
+        {{else}}
+          <RdfForm
+            @groupClass="au-u-margin-small "
+            @form={{this.form}}
+            @graphs={{this.model.graphs}}
+            @formStore={{this.formStore}}
+            @forceShowErrors={{false}}
+            @useNewListingLayout={{true}}
+            @sourceNode={{this.model.sourceNode}}
+          />
+        {{/if}}
       {{else}}
-        <RdfForm
-          @groupClass="au-u-margin-small "
-          @form={{this.form}}
-          @graphs={{this.model.graphs}}
-          @formStore={{this.formStore}}
-          @forceShowErrors={{false}}
-          @useNewListingLayout={{true}}
-          @sourceNode={{this.model.sourceNode}}
-        />
+        <AuLoader />
       {{/if}}
-    {{else}}
-      <AuLoader />
-    {{/if}}
+    </div>
   </div>
 </div>
