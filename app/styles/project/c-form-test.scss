@@ -16,7 +16,9 @@
 }
 
 .formTestPage_center--title {
-  border-bottom: 0.5rem solid $au-blue-700 !important;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom: 3px solid $au-blue-700 !important;
   border: 1px solid #e0e2e3;
   box-shadow: 0 2px 5px rgb(0 0 0 / 0.2);
   background-color: $au-white;
@@ -32,4 +34,6 @@
   background-color: $au-white;
   padding: 3rem;
   overflow: hidden;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
