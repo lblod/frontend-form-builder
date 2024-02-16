@@ -20,7 +20,7 @@ ext:form a form:Form, form:TopLevelForm ;
 #  Section
 ##########################################################
 ext:mainS a form:Section;
-    sh:name "Form Builder" ;
+    sh:name "" ;
     sh:order 0 .
 
 ext:sectionS a form:Section;
