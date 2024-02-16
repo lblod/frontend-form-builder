@@ -1,20 +1,22 @@
 {{page-title "Test"}}
-<div>
-  {{#if (and this.formStore this.form)}}
-    {{#if this.setupForm.isRunning}}
-      <AuLoader />
+<div class="formTestPage">
+  <div class="formTestPage_form">
+    {{#if (and this.formStore this.form)}}
+      {{#if this.setupForm.isRunning}}
+        <AuLoader />
+      {{else}}
+        <RdfForm
+          @groupClass="au-u-margin-small "
+          @form={{this.form}}
+          @graphs={{this.model.graphs}}
+          @formStore={{this.formStore}}
+          @forceShowErrors={{false}}
+          @useNewListingLayout={{true}}
+          @sourceNode={{this.model.sourceNode}}
+        />
+      {{/if}}
     {{else}}
-      <RdfForm
-        @groupClass="au-u-margin-left-small au-u-margin-top"
-        @form={{this.form}}
-        @graphs={{this.model.graphs}}
-        @formStore={{this.formStore}}
-        @forceShowErrors={{false}}
-        @useNewListingLayout={{true}}
-        @sourceNode={{this.model.sourceNode}}
-      />
+      <AuLoader />
     {{/if}}
-  {{else}}
-    <AuLoader />
-  {{/if}}
+  </div>
 </div>
