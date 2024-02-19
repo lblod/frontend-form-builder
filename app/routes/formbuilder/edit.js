@@ -78,9 +78,11 @@ export default class FormbuilderEditRoute extends Route {
       return form;
     } catch (error) {
       this.router.transitionTo('index');
-      this.toaster.error(this.intl.t('messages.error.couldNotFetchFormWithId', {
-        id: generatedFormId
-      }));
+      this.toaster.error(
+        this.intl.t('messages.error.couldNotFetchFormWithId', {
+          id: generatedFormId,
+        })
+      );
     }
   }
 
