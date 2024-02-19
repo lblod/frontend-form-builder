@@ -6,16 +6,13 @@ import { PAGE_SIZE_TO_GET_ALL } from '../../utils/constants';
 export default class CodelijstenIndexRoute extends Route {
   @service store;
 
-  form = null;
-
   queryParams = {
     formId: {
       refreshModel: true,
     },
   };
 
-  async model(params) {
-    this.form = params.formId;
+  async model() {
     const conceptSchemes = await this.store.query('concept-scheme', {
       sort: '-preflabel',
       page: {
