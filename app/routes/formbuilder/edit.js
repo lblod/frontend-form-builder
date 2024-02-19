@@ -14,6 +14,8 @@ export default class FormbuilderEditRoute extends Route {
   @service store;
   @service intl;
   @service('form-code-manager') formCodeManager;
+  @service router;
+  @service toaster;
 
   constructor() {
     super(...arguments);
@@ -75,9 +77,10 @@ export default class FormbuilderEditRoute extends Route {
 
       return form;
     } catch (error) {
-      throw this.intl.t('messages.error.couldNotFetchFormWithId', {
-        id: generatedFormId,
-      });
+      this.router.transitionTo('index');
+      this.toaster.error(this.intl.t('messages.error.couldNotFetchFormWithId', {
+        id: generatedFormId
+      }));
     }
   }
 
