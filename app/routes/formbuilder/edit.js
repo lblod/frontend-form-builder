@@ -9,6 +9,7 @@ import { getLocalFileContentAsText } from '../../utils/get-local-file-content';
 import CountryCodeConceptSchemeSelectorComponent from '../../components/rdf-form-fields/country-code-concept-scheme-selector';
 import { GRAPHS } from '../../controllers/formbuilder/edit';
 import ErrorMessageInputFieldComponent from '../../components/rdf-form-fields/error-message-input-field';
+import { showErrorToasterMessage } from '../../utils/toaster-message-helper';
 
 export default class FormbuilderEditRoute extends Route {
   @service store;
@@ -78,7 +79,8 @@ export default class FormbuilderEditRoute extends Route {
       return form;
     } catch (error) {
       this.router.transitionTo('index');
-      this.toaster.error(
+      showErrorToasterMessage(
+        this.toaster,
         this.intl.t('messages.error.couldNotFetchFormWithId', {
           id: generatedFormId,
         })
