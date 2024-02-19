@@ -12,12 +12,16 @@ codelists:
   types:
     isPublic: "Eigen codelijst"
     isPrivate: "Generiek"
+    isArchived: "Gearchiveerd"
   alert:
     genericCodelist: "Generieke codelijsten kunnen niet aangepast worden."
+    archivedCodelist: "Deze codelijst is ge-archiveerd."
 
 confirmation:
   deleteCodelistTitle: "Codelijst verwijderen?"
   deleteCodelistQuestion: "Bent u zeker dat u deze codelijst wilt verwijderen? Deze actie is permanent."
+  archiveCodelistTitle: "Codelijst archiveren?"
+  archiveCodelistQuestion: "Bent u zeker dat u deze codelijst wilt archiveren?"
 
 navigation:
   backToCodelists: "Terug naar codelijsten"

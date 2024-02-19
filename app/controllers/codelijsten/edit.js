@@ -16,7 +16,7 @@ import { deleteConceptScheme } from '../../utils/codelijsten/delete-concept-sche
 import { isDuplicateConceptSchemeName } from '../../utils/codelijsten/is-duplicate-concept-scheme-name';
 import { updateConcept } from '../../utils/codelijsten/update-concept';
 import { isConceptArrayChanged } from '../../utils/codelijsten/compare-concept-arrays';
-import { restartableTask } from 'ember-concurrency';
+import { restartableTask, timeout } from 'ember-concurrency';
 import { sortObjectsOnProperty } from '../../utils/sort-object-on-property';
 import { downloadTextAsFile } from '../../utils/download-text-as-file';
 
@@ -35,12 +35,29 @@ export default class CodelijstenEditController extends Controller {
   @tracked nameErrorMessage;
   @tracked descriptionErrorMessage;
 
-  @tracked isDeleteModalOpen;
+  @tracked isArchiveModalOpen;
   @tracked isDuplicateName;
   @tracked isSaveDisabled;
-  @tracked isPrivateConceptScheme;
 
   conceptsInDatabase;
+
+  get isReadOnly() {
+    if (!this.conceptScheme) return true;
+
+    return this.isPrivateConceptScheme || this.isArchivedConceptScheme;
+  }
+
+  get isPrivateConceptScheme() {
+    if (!this.conceptScheme) return true;
+
+    return !this.conceptScheme.isPublic;
+  }
+
+  get isArchivedConceptScheme() {
+    if (!this.conceptScheme) return false;
+
+    return this.conceptScheme.isArchived;
+  }
 
   setup = restartableTask(async (conceptSchemeId) => {
     this.conceptScheme = await this.getConceptSchemeById(conceptSchemeId);
@@ -50,10 +67,11 @@ export default class CodelijstenEditController extends Controller {
     this.setValuesFromConcepts(conceptArray);
 
     this.setIsSaveButtonDisabled();
+    // Prevent flickering between laoding and showing content if small lists are shown
+    await timeout(100);
   });
 
   setValuesFromConceptscheme() {
-    this.isPrivateConceptScheme = !this.conceptScheme.isPublic;
     this.codelistName = this.conceptScheme.label;
     this.codelistDescription = this.conceptScheme.description;
   }
@@ -247,13 +265,34 @@ export default class CodelijstenEditController extends Controller {
     }
   }
 
-  @action
   async deleteCodelist() {
     await this.deleteConcepts(this.concepts, true);
     await deleteConceptScheme(this.conceptScheme.id, this.store, this.toaster);
-    this.isDeleteModalOpen = false;
     this.router.transitionTo('codelijsten.index');
   }
+
+  archiveCodelist = restartableTask(async () => {
+    this.conceptScheme.isarchived = true;
+
+    try {
+      this.conceptScheme.save();
+      this.conceptScheme.reload();
+      showSuccessToasterMessage(
+        this.toaster,
+        this.codelistName,
+        this.intl.t('messages.subjects.archived')
+      );
+    } catch (error) {
+      showErrorToasterMessage(
+        this.toaster,
+        this.intl.t('messages.error.somethingWentWrong'),
+        this.intl.t('crud.archive')
+      );
+    }
+
+    this.isArchiveModalOpen = false;
+    this.router.transitionTo('codelijsten.index');
+  });
 
   setIsSaveButtonDisabled() {
     if (this.conceptScheme.isPublic) {

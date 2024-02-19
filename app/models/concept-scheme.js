@@ -7,6 +7,7 @@ export default class ConceptSchemeModel extends Model {
   @attr preflabel;
   @attr description;
   @attr ispublic;
+  @attr isarchived;
   @hasMany('concept', { inverse: null, async: true }) concepts;
 
   get label() {
@@ -15,6 +16,10 @@ export default class ConceptSchemeModel extends Model {
 
   get isPublic() {
     return this.ispublic;
+  }
+
+  get isArchived() {
+    return this.isarchived ?? false;
   }
 
   get createdAt() {

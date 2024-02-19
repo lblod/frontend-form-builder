@@ -12,12 +12,16 @@ codelists:
   types:
     isPublic: "Custom codelist"
     isPrivate: "Generic"
+    isArchived: "Archived"
   alert:
     genericCodelist: "Generic codelists cannot be edited."
+    archivedCodelist: "This codelist is archived."
 
 confirmation:
   deleteCodelistTitle: "Delete codelist?"
   deleteCodelistQuestion: "Are you sure you want to delete this codelist? This action is permanent."
+  archiveCodelistTitle: "Archive codelist?"
+  archiveCodelistQuestion: "Are you sure you want to archive this codelist?"
 
 navigation:
   backToCodelists: "Back to codelists"

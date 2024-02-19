@@ -66,6 +66,14 @@
                 @iconAlignment="left"
               >{{t "codelists.types.isPublic"}}
               </AuPill>
+              {{#if conceptScheme.isArchived}}
+                <AuPill
+                  @skin="default"
+                  @icon="archive"
+                  @iconAlignment="left"
+                >{{t "codelists.types.isArchived"}}
+                </AuPill>
+              {{/if}}
             {{else}}
               <AuPill
                 @skin="warning"

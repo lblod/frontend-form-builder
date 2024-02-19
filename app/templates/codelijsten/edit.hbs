@@ -20,13 +20,15 @@
     <div class="saveSplitButton">
       <AuButton
         id="saveSplitButton_save"
+        @loading={{this.setup.isRunning}}
+        @loadingMessage={{t "messages.loading.isLoading"}}
         @disabled={{this.isSaveDisabled}}
         {{on "click" this.save}}
       >
         {{t "crud.save"}}
       </AuButton>
 
-      {{#if this.isPrivateConceptScheme}}
+      {{#if this.isReadOnly}}
         <span id="saveSplitButton_dropdown">
           <AuButton
             @disabled={{true}}
@@ -49,6 +51,17 @@
         >
           <AuButton
             @skin="link"
+            @icon="archive"
+            @iconAlignment="left"
+            role="menuitem"
+            @disabled={{this.isPrivateConceptScheme}}
+            @loadingMessage={{t "messages.loading.isArchiving"}}
+            {{on "click" (fn (mut this.isArchiveModalOpen) true)}}
+          >
+            {{t "crud.archive"}}
+          </AuButton>
+          <AuButton
+            @skin="link"
             @icon="export"
             @iconAlignment="left"
             role="menuitem"
@@ -58,152 +71,154 @@
           >
             {{t "actions.exportCodelist"}}
           </AuButton>
-          <AuButton
-            @skin="link"
-            @icon="bin"
-            @iconAlignment="left"
-            @alert={{true}}
-            role="menuitem"
-            @disabled={{this.isPrivateConceptScheme}}
-            @loadingMessage={{t "messages.loading.isDeleting"}}
-            {{on "click" (fn (mut this.isDeleteModalOpen) true)}}
-          >
-            {{t "crud.delete"}}
-          </AuButton>
         </AuDropdown>
       {{/if}}
     </div>
   </Group>
 </AuToolbar>
-
-<div class="codelijsten__scroll">
-  <span class="au-u-padding">
-    {{#if this.isPrivateConceptScheme}}
-      <AuAlert @title={{"Opgelet"}} @skin={{"warning"}} @icon={{"login"}}>
-        <p>{{t "codelists.alert.genericCodelist"}}</p>
-      </AuAlert>
-    {{/if}}
-    <div class="au-u-3-5 au-u-margin-bottom-large">
-      <AuLabel for="input-codelist-name" @required={{true}}>
-        {{t "codelists.nameOfCodelist"}}
-      </AuLabel>
-      <AuInput
-        id="input-codelist-name"
-        @width="block"
-        @error={{this.nameErrorMessage}}
-        @disabled={{this.isPrivateConceptScheme}}
-        value={{this.codelistName}}
-        {{on "blur" this.handleNameChange}}
-      />
-      {{#if this.nameErrorMessage}}
-        <AuHelpText @error={{true}}>{{this.nameErrorMessage}}</AuHelpText>
-      {{/if}}
-    </div>
-    <div class="au-u-3-5 au-u-margin-bottom-large">
+{{#if this.setup.isRunning}}
+  <AuLoader />
+{{else}}
+  <div class="codelijsten__scroll">
+    <span class="au-u-padding">
       {{#if this.isPrivateConceptScheme}}
-        <p>{{this.codelistDescription}}</p>
+        <AuAlert @title={{"Opgelet"}} @skin={{"warning"}} @icon={{"login"}}>
+          <p>{{t "codelists.alert.genericCodelist"}}</p>
+        </AuAlert>
       {{else}}
-        <AuLabel for="input-codelist-description" @required={{true}}>
-          {{t "codelists.descriptionOfCodelist"}}
-        </AuLabel>
-        <AuTextarea
-          id="input-codelist-description"
-          @width="block"
-          @error={{this.descriptionErrorMessage}}
-          @disabled={{this.isPrivateConceptScheme}}
-          value={{this.codelistDescription}}
-          {{on "blur" this.handleDescriptionChange}}
-        />
-        {{#if this.descriptionErrorMessage}}
-          <AuHelpText
-            @error={{true}}
-          >{{this.descriptionErrorMessage}}</AuHelpText>
+        {{#if this.isArchivedConceptScheme}}
+          <AuAlert @title={{"Opgelet"}} @skin={{"info"}} @icon={{"archive"}}>
+            <p>{{t "codelists.alert.archivedCodelist"}}</p>
+          </AuAlert>
         {{/if}}
       {{/if}}
-    </div>
-  </span>
-  <div>
-    <AuTable class="au-u-margin-bottom-small">
-      <:header>
-        <tr>
-          <th>{{t "table.columns.label"}}</th>
-          {{#unless this.isPrivateConceptScheme}}
-            <th>{{t "table.columns.actions"}}</th>
-          {{/unless}}
-        </tr>
-      </:header>
-      <:body>
-        {{#if this.concepts}}
-          {{#each this.concepts as |concept|}}
-            <tr>
-              {{#if this.isPrivateConceptScheme}}
-                <td class="au-u-visible-medium-up">
-                  {{concept.label}}</td>
-              {{else}}
-                <td class="au-u-visible-medium-up">
-                  <AuInput
-                    id={{concept.id}}
-                    value={{concept.label}}
-                    {{on "blur" (fn this.handleConceptChange concept)}}
-                  /></td>
-              {{/if}}
-              {{#unless this.isPrivateConceptScheme}}
-                <td class="au-u-visible-medium-up">
-                  <AuButton
-                    @icon="bin"
-                    @hideText={{true}}
-                    @iconAlignment="left"
-                    @alert={{true}}
-                    @loadingMessage={{t "messages.loading.isDeleting"}}
-                    {{on "click" (fn this.temporaryDeleteConcept concept)}}
-                  >
-                    {{t "crud.delete"}}
-                  </AuButton>
-                </td>
-              {{/unless}}
-            </tr>
-          {{/each}}
-        {{/if}}
-        {{#unless this.isPrivateConceptScheme}}
-          <tr>
-            <td class="au-u-visible-medium-up">
-              <AuButton
-                @skin="secondary"
-                @icon="plus"
-                @iconAlignment="left"
-                {{on "click" this.addNewConcept}}
-              >
-                {{t "codelists.addConcept"}}
-              </AuButton>
-            </td>
-            <td></td>
-          </tr>
-        {{/unless}}
-      </:body>
-    </AuTable>
-  </div>
-</div>
 
-<AuModal @modalOpen={{this.isDeleteModalOpen}} @closeModal={{this.close}}>
-  <:title>{{t "confirmation.deleteCodelistTitle"}}</:title>
+      <div class="au-u-3-5 au-u-margin-bottom-large">
+        <AuLabel for="input-codelist-name" @required={{true}}>
+          {{t "codelists.nameOfCodelist"}}
+        </AuLabel>
+        <AuInput
+          id="input-codelist-name"
+          @width="block"
+          @error={{this.nameErrorMessage}}
+          @disabled={{this.isReadOnly}}
+          value={{this.codelistName}}
+          {{on "blur" this.handleNameChange}}
+        />
+        {{#if this.nameErrorMessage}}
+          <AuHelpText @error={{true}}>{{this.nameErrorMessage}}</AuHelpText>
+        {{/if}}
+      </div>
+      <div class="au-u-3-5 au-u-margin-bottom-large">
+        {{#if this.isReadOnly}}
+          <p>{{this.codelistDescription}}</p>
+        {{else}}
+          <AuLabel for="input-codelist-description" @required={{true}}>
+            {{t "codelists.descriptionOfCodelist"}}
+          </AuLabel>
+          <AuTextarea
+            id="input-codelist-description"
+            @width="block"
+            @error={{this.descriptionErrorMessage}}
+            @disabled={{this.isReadOnly}}
+            value={{this.codelistDescription}}
+            {{on "blur" this.handleDescriptionChange}}
+          />
+          {{#if this.descriptionErrorMessage}}
+            <AuHelpText
+              @error={{true}}
+            >{{this.descriptionErrorMessage}}</AuHelpText>
+          {{/if}}
+        {{/if}}
+      </div>
+    </span>
+    <div>
+      <AuTable class="au-u-margin-bottom-small">
+        <:header>
+          <tr>
+            <th>{{t "table.columns.label"}}</th>
+            {{#unless this.isReadOnly}}
+              <th>{{t "table.columns.actions"}}</th>
+            {{/unless}}
+          </tr>
+        </:header>
+        <:body>
+          {{#if this.concepts}}
+            {{#each this.concepts as |concept|}}
+              <tr>
+                {{#if this.isReadOnly}}
+                  <td class="au-u-visible-medium-up">
+                    {{concept.label}}</td>
+                {{else}}
+                  <td class="au-u-visible-medium-up">
+                    <AuInput
+                      id={{concept.id}}
+                      value={{concept.label}}
+                      {{on "blur" (fn this.handleConceptChange concept)}}
+                    /></td>
+                {{/if}}
+                {{#unless this.isReadOnly}}
+                  <td class="au-u-visible-medium-up">
+                    <AuButton
+                      @icon="bin"
+                      @hideText={{true}}
+                      @iconAlignment="left"
+                      @alert={{true}}
+                      @loadingMessage={{t "messages.loading.isDeleting"}}
+                      {{on "click" (fn this.temporaryDeleteConcept concept)}}
+                    >
+                      {{t "crud.delete"}}
+                    </AuButton>
+                  </td>
+                {{/unless}}
+              </tr>
+            {{/each}}
+          {{/if}}
+          {{#unless this.isReadOnly}}
+            <tr>
+              <td class="au-u-visible-medium-up">
+                <AuButton
+                  @skin="secondary"
+                  @icon="plus"
+                  @iconAlignment="left"
+                  {{on "click" this.addNewConcept}}
+                >
+                  {{t "codelists.addConcept"}}
+                </AuButton>
+              </td>
+              <td></td>
+            </tr>
+          {{/unless}}
+        </:body>
+      </AuTable>
+    </div>
+  </div>
+{{/if}}
+
+<AuModal
+  @modalOpen={{this.isArchiveModalOpen}}
+  @closeModal={{fn (mut this.isArchiveModalOpen) false}}
+>
+  <:title>{{t "confirmation.archiveCodelistTitle"}}</:title>
   <:body>
-    {{t "confirmation.deleteCodelistQuestion"}}
+    {{t "confirmation.archiveCodelistQuestion"}}
   </:body>
   <:footer>
     <AuButtonGroup>
       <AuButton
-        @icon="bin"
+        @icon="archive"
         @iconAlignment="left"
-        @alert={{true}}
-        @loadingMessage="Aan het verwijderen"
-        {{on "click" this.deleteCodelist}}
+        @skin="primary"
+        @loadingMessage={{t "messages.loading.isArchiving"}}
+        @loading={{this.archiveCodelist.isRunning}}
+        {{on "click" (perform this.archiveCodelist)}}
       >
-        {{t "crud.delete"}}
+        {{t "crud.archive"}}
       </AuButton>
       <AuButton
         @skin="secondary"
-        @disabled={{this.delete.isRunning}}
-        {{on "click" (fn (mut this.isDeleteModalOpen) false)}}
+        @disabled={{this.archiveCodelist.isRunning}}
+        {{on "click" (fn (mut this.isArchiveModalOpen) false)}}
       >
         {{t "crud.cancel"}}
       </AuButton>

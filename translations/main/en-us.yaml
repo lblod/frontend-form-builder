@@ -14,6 +14,7 @@ userTests:
 crud:
   save: "Save"
   delete: "Delete"
+  archive: "Archive"
   update: "Update"
   cancel: "Cancel"
   reset: "Reset"

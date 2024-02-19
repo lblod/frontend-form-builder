@@ -5,6 +5,7 @@ messages:
     characters: "Characters"
     deleted: "Verwijderd"
     upToDate: "Up-to-date"
+    archived: "Archived"
   error:
     invalidTemplatePath: "The selected template ({templateLabel}) has an invalid path configured"
     couldNotFetchFormWithId: "Could not find form with id: {id}"
@@ -34,6 +35,7 @@ messages:
     isSaving: "Saving"
     isLoading: "Loading..."
     isDeleting: "Deleting"
+    isArchiving: "Archiving"
 
 confirmation:
   deleteTitle: "Delete form?"
