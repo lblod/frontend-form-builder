@@ -10,6 +10,7 @@ import CountryCodeConceptSchemeSelectorComponent from '../../components/rdf-form
 import { GRAPHS } from '../../controllers/formbuilder/edit';
 import ErrorMessageInputFieldComponent from '../../components/rdf-form-fields/error-message-input-field';
 import { showErrorToasterMessage } from '../../utils/toaster-message-helper';
+import RichTextEditorComponent from '../../components/rdf-form-fields/rich-text-editor';
 
 export default class FormbuilderEditRoute extends Route {
   @service store;
@@ -108,6 +109,10 @@ export default class FormbuilderEditRoute extends Route {
         displayType:
           'http://lblod.data.gift/display-types/errorMessageInputField',
         edit: ErrorMessageInputFieldComponent,
+      },
+      {
+        displayType: 'http://lblod.data.gift/display-types/richTextEditor',
+        edit: RichTextEditorComponent,
       },
     ]);
   }
