@@ -6,6 +6,7 @@ messages:
     deleted: "Verwijderd"
     upToDate: "Up-to-date"
     archived: "Ge-archiveerd"
+    copiedToClipboard: "Gekopieerd naar klembord"
   error:
     invalidTemplatePath: "De geselecteerde template ({templateLabel}) heeft geen correct path."
     couldNotFetchFormWithId: "Kon formulier met id: {id} niet vinden"
@@ -28,6 +29,8 @@ messages:
     warnV1Form: "We hebben gemerkt dat je een {version} formulier aan het editeren bent. Sommige functies zijn gelimiteerd."
     lowestVersionAvailable: "De laagste beschikbare versie: 0"
     highestversionAvailable: "De laatste versie is v{version}"
+    formIsValid: "Je formulier is correct"
+    formIsInvalid: "Je formulier is niet correct. Vul al de velden in."
   loading:
     creatingNewUserTest: "Nieuwe gebruikerstest aan het maken"
     loadingOverview: "Overzicht aan het laden"

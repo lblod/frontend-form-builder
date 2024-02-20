@@ -18,10 +18,10 @@ crud:
   update: "Update"
   cancel: "Cancel"
   reset: "Reset"
+  testForm: "Test form"
 
 navigation:
   backToFormOverview: "Back to forms" # also used "Terug naar overzicht formulieren"
-  backToFormBuilder: "Back to form builder"
   toOverviewTestForms: "To overview testable forms"
   tabs:
     code: "Code"
