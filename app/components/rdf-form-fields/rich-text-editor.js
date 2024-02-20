@@ -19,21 +19,11 @@ import {
   em,
   strikethrough,
   strong,
-  subscript,
-  superscript,
   underline,
 } from '@lblod/ember-rdfa-editor/plugins/text-style';
 import { image } from '@lblod/ember-rdfa-editor/plugins/image';
 import { link, linkView } from '@lblod/ember-rdfa-editor/plugins/link';
-import { blockquote } from '@lblod/ember-rdfa-editor/plugins/blockquote';
-import { heading } from '@lblod/ember-rdfa-editor/plugins/heading';
-import { code_block } from '@lblod/ember-rdfa-editor/plugins/code';
-import {
-  bullet_list,
-  list_item,
-  ordered_list,
-} from '@lblod/ember-rdfa-editor/plugins/list';
-import { placeholder } from '@lblod/ember-rdfa-editor/plugins/placeholder';
+import { list_item, ordered_list } from '@lblod/ember-rdfa-editor/plugins/list';
 
 export default class RichTextEditorComponent extends SimpleInputFieldComponent {
   @tracked editorController;
@@ -51,23 +41,12 @@ export default class RichTextEditorComponent extends SimpleInputFieldComponent {
     nodes: {
       doc,
       paragraph,
-
       repaired_block,
-
       list_item,
       ordered_list,
-      bullet_list,
-      placeholder,
-      heading,
-      blockquote,
-
       horizontal_rule,
-      code_block,
-
       text,
-
       image,
-
       hard_break,
       invisible_rdfa,
       block_rdfa,
@@ -79,8 +58,6 @@ export default class RichTextEditorComponent extends SimpleInputFieldComponent {
       strong,
       underline,
       strikethrough,
-      subscript,
-      superscript,
     },
   });
 
