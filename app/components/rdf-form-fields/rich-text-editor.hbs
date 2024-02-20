@@ -1,15 +1,36 @@
-<div>
+<div class="richTextEditor">
   <AuLabel for={{this.inputId}}>
     {{@field.label}}
   </AuLabel>
 
   {{#if (and this.schema this.nodeViews this.plugins)}}
-    <Editor
-      @schema={{this.schema}}
-      @rdfaEditorInit={{this.handleRdfaEditorInit}}
-      @plugins={{this.plugins}}
-      @nodeViews={{this.nodeViews}}
-    />
+    <EditorContainer>
+      <:top>
+        <div class="richTextEditor__toolbar">
+          <Plugins::TextStyle::Bold @controller={{this.editorController}} />
+          <Plugins::TextStyle::Italic @controller={{this.editorController}} />
+          <Plugins::TextStyle::Underline
+            @controller={{this.editorController}}
+          />
+          <Plugins::List::Unordered @controller={{this.editorController}} />
+          <Plugins::List::Ordered @controller={{this.editorController}} />
+          <Plugins::Link::LinkMenu @controller={{this.editorController}} />
+          <Plugins::Heading::HeadingMenu
+            @controller={{this.editorController}}
+          />
+        </div>
+      </:top>
+      <:default>
+        <div class="richTextEditor__textInput">
+          <Editor
+            @schema={{this.schema}}
+            @rdfaEditorInit={{this.handleRdfaEditorInit}}
+            @plugins={{this.plugins}}
+            @nodeViews={{this.nodeViews}}
+          />
+        </div>
+      </:default>
+    </EditorContainer>
   {{else}}
     <p>Could not load the editor</p>
   {{/if}}

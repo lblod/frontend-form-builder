@@ -4,9 +4,23 @@
 @import "project/c-form-builder-edit";
 @import "project/c-form-test";
 @import "project/c-app-toolbar";
+@import "project/c-rich-text-editor";
 @import "project/_c-app-codelijsten";
 
 @import "shame";
+
+// SAY-EDITOR styling: @lblod/ember-rdfa-editor
+@import "ember-rdfa-editor/c-container";
+@import "ember-rdfa-editor/c-dropdown";
+@import "ember-rdfa-editor/c-content";
+@import "ember-rdfa-editor/c-editor";
+@import "ember-rdfa-editor/c-editor-hints";
+@import "ember-rdfa-editor/c-icon";
+@import "ember-rdfa-editor/c-toast";
+@import "ember-rdfa-editor/c-toolbar";
+@import "ember-rdfa-editor/c-table";
+@import "ember-rdfa-editor/c-ember-node";
+@import "ember-rdfa-editor/shame";
 
 // copied from loket
 .au-c-close {
