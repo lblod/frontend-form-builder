@@ -31,7 +31,6 @@ export default class RichTextEditorComponent extends SimpleInputFieldComponent {
   plugins = [];
 
   nodeViews = (controller) => {
-    console.log(`nodeviews`, controller);
     return {
       link: linkView(this.linkOptions)(controller),
     };
