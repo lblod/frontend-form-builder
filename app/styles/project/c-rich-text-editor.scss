@@ -2,7 +2,6 @@
 .richTextEditor {
   width: 100%;
   height: 100%;
-  overflow: hidden;
 }
 
 .richTextEditor__toolbar {
@@ -11,17 +10,30 @@
   gap: 1rem;
   background-color: $au-gray-100;
   flex-wrap: wrap;
-  border-top-right-radius: $au-radius;
-  border-top-left-radius: $au-radius;
+  border-radius: $au-radius;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
   border: 0.1rem solid $au-gray-300;
   border-bottom: none;
   padding: 0 1rem;
 }
 
+.say-editor {
+  padding: 1.5rem 1rem !important;
+}
+
 .say-container__main {
   border: 0.1rem solid $au-gray-300;
   border-top: none;
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 .say-editor__inner {
   padding: 0px !important;
+  min-height: 5rem !important;
+}
+
+.say-editor__paper {
+  min-height: 5rem !important;
 }
