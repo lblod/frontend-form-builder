@@ -21,7 +21,10 @@
         </div>
       </:top>
       <:default>
-        <div class="richTextEditor__textInput">
+        <div
+          class="richTextEditor__textInput"
+          {{on "focusout" this.updateValue}}
+        >
           <Editor
             @schema={{this.schema}}
             @rdfaEditorInit={{this.handleRdfaEditorInit}}

@@ -109,7 +109,6 @@ export default class RichTextEditorComponent extends SimpleInputFieldComponent {
 
     console.log(`Update value`, e);
 
-    //rdfaEditor setup is async, updateValue may be called before it is set
     if (this.editorController) {
       this.hasBeenFocused = true;
       const htmlContent = this.editorController.htmlContent;
@@ -118,8 +117,6 @@ export default class RichTextEditorComponent extends SimpleInputFieldComponent {
       );
       const editorValue = hasTextContent ? stripNbspEntities(htmlContent) : '';
 
-      // Only trigger an update if the value actually changed.
-      // This prevents that the form observer is triggered even though no editor content was changed.
       if (this.value !== editorValue) {
         super.updateValue(editorValue);
       }
@@ -138,12 +135,7 @@ export default class RichTextEditorComponent extends SimpleInputFieldComponent {
   // }
 
   setInitialValue() {
-    console.log(`value`, this.value);
     if (this.value) {
-      // We replicate the behavior of the controller.setHtmlContent method without focussing the field.
-      // Since we use the `focusout` event focusing the field would trigger the `updateValue` action,
-      // which in turn causes the "unsaved changes" modal to appear when it shouldn't.
-      // Source: https://github.com/lblod/ember-rdfa-editor/blob/4dc3fdf14ac3e92567db22811bb76b2079c2280b/addon/core/say-controller.ts#L42-L58
       const { editorController } = this;
       const tr = editorController.mainEditorState.tr;
       const domParser = new DOMParser();
