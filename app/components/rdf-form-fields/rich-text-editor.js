@@ -23,11 +23,6 @@ import {
   superscript,
   underline,
 } from '@lblod/ember-rdfa-editor/plugins/text-style';
-import {
-  tableKeymap,
-  tableNodes,
-  tablePlugin,
-} from '@lblod/ember-rdfa-editor/plugins/table';
 import { image } from '@lblod/ember-rdfa-editor/plugins/image';
 import { link, linkView } from '@lblod/ember-rdfa-editor/plugins/link';
 import { blockquote } from '@lblod/ember-rdfa-editor/plugins/blockquote';
@@ -43,7 +38,7 @@ import { placeholder } from '@lblod/ember-rdfa-editor/plugins/placeholder';
 export default class RichTextEditorComponent extends SimpleInputFieldComponent {
   @tracked editorController;
   inputId = 'richtext-' + guidFor(this);
-  plugins = [tablePlugin, tableKeymap];
+  plugins = [];
 
   nodeViews = (controller) => {
     console.log(`nodeviews`, controller);
@@ -63,7 +58,6 @@ export default class RichTextEditorComponent extends SimpleInputFieldComponent {
       ordered_list,
       bullet_list,
       placeholder,
-      ...tableNodes({ tableGroup: 'block', cellContent: 'block+' }),
       heading,
       blockquote,
 
