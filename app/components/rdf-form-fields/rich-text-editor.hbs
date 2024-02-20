@@ -1,1 +1,16 @@
-<p>RICH TEXT EDITOR COMPONENT</p>
+<div>
+  <AuLabel for={{this.inputId}}>
+    {{@field.label}}
+  </AuLabel>
+
+  {{#if (and this.schema this.nodeViews this.plugins)}}
+    <Editor
+      @schema={{this.schema}}
+      @rdfaEditorInit={{this.handleRdfaEditorInit}}
+      @plugins={{this.plugins}}
+      @nodeViews={{this.nodeViews}}
+    />
+  {{else}}
+    <p>Could not load the editor</p>
+  {{/if}}
+</div>
