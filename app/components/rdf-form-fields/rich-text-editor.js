@@ -98,7 +98,6 @@ export default class RichTextEditorComponent extends SimpleInputFieldComponent {
 
   @action
   handleRdfaEditorInit(editorController) {
-    console.log(`editcontroller`, editorController);
     this.editorController = editorController;
     this.setInitialValue();
   }
@@ -106,8 +105,6 @@ export default class RichTextEditorComponent extends SimpleInputFieldComponent {
   @action
   updateValue(e) {
     if (e && typeof e.preventDefault === 'function') e.preventDefault();
-
-    console.log(`Update value`, e);
 
     if (this.editorController) {
       this.hasBeenFocused = true;
@@ -122,17 +119,6 @@ export default class RichTextEditorComponent extends SimpleInputFieldComponent {
       }
     }
   }
-
-  // loadProvidedValue() {
-  //   console.log(`load provide value`);
-  //   // super.loadProvidedValue();
-  //   this.value = null;
-  //   if (this.value == null) {
-  //     console.log(`here value is null`);
-  //     // The editor returns an empty string if it contains no content, so we default to that to make the value comparison check works as expected.
-  //     this.value = '';
-  //   }
-  // }
 
   setInitialValue() {
     if (this.value) {
