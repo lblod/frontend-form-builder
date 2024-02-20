@@ -11,7 +11,7 @@ export default class CodelijstenController extends Controller {
   size = 20;
 
   @action
-  returnToFormBuilder() {
+  routeToFormWithId() {
     if (this.formId) {
       this.router.transitionTo('formbuilder.edit', this.formId);
     } else {
