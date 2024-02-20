@@ -55,6 +55,7 @@ form:Field
         displayTypes:numericalInput
         displayTypes:currencyInput
         displayTypes:textArea
+        displayTypes:richTextEditor
         displayTypes:switch
         displayTypes:checkbox
         displayTypes:date
