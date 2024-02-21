@@ -53,6 +53,7 @@ form:Field
       sh:in (
         displayTypes:defaultInput
         displayTypes:numericalInput
+        displayTypes:currencyInput
         displayTypes:textArea
         displayTypes:switch
         displayTypes:checkbox
