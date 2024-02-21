@@ -29,13 +29,7 @@ module.exports = function (defaults) {
     // while still having a smaller bundle in production.
     staticEmberSource: isProductionBuild,
     packagerOptions: {
-      webpackConfig: {
-        resolve: {
-          fallback: {
-            crypto: false,
-          },
-        },
-      },
+      webpackConfig: require('@lblod/ember-rdfa-editor/webpack-config'),
     },
   });
 };
