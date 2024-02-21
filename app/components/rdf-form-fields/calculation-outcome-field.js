@@ -11,7 +11,12 @@ export default class CalculationOutcomeFieldComponent extends Component {
 
   constructor() {
     super(...arguments);
-    this.addScopeToTtl();
+
+    // Now the additions to the ttl are only applied when
+    // switching from a tab, we should find a solution for this
+    if (!this.isScopeCreated()) {
+      this.addScopeToTtl();
+    }
   }
 
   addScopeToTtl() {
@@ -39,6 +44,17 @@ export default class CalculationOutcomeFieldComponent extends Component {
     );
 
     return [type, path];
+  }
+
+  isScopeCreated() {
+    return (
+      this.store.match(
+        EXT(this.scopeName),
+        undefined,
+        undefined,
+        this.graphs.formGraph
+      ).length >= 1
+    );
   }
 
   get scopePath() {
