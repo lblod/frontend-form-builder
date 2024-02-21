@@ -27,14 +27,16 @@ export default class FormbuilderConfigurationController extends Controller {
   @tracked sections = [];
   @tracked selectedSection;
   @tracked fieldsForSection = [];
+  @tracked isFieldsFilter = true;
+  @tracked isTablesFilter = false;
 
   @tracked filterPills = A([
     {
-      label: 'Velden',
+      label: this.filterLabels.fields,
       skin: FILTER_STATUS_SKIN.active,
     },
     {
-      label: 'Tabellen',
+      label: this.filterLabels.tables,
       skin: FILTER_STATUS_SKIN.inactive,
     },
   ]);
@@ -42,6 +44,16 @@ export default class FormbuilderConfigurationController extends Controller {
   @action
   applyFilter(activeFilter) {
     this.updateActiveFilterPill(activeFilter);
+
+    switch (activeFilter.label) {
+      case this.filterLabels.tables:
+        this.isFieldsFilter = false;
+        this.isTablesFilter = true;
+        break;
+      default:
+        this.isFieldsFilter = true;
+        this.isTablesFilter = false;
+    }
   }
 
   @action
@@ -187,6 +199,14 @@ export default class FormbuilderConfigurationController extends Controller {
 
   get sortedFieldsForSection() {
     return sortObjectsOnProperty(this.fieldsForSection, 'order');
+  }
+
+  get filterLabels() {
+    // update with translations intl.t()
+    return {
+      fields: 'Velden',
+      tables: 'Tabellen',
+    };
   }
 
   updateActiveFilterPill(activeFilter) {
