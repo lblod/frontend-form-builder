@@ -1,18 +1,26 @@
 import Component from '@glimmer/component';
+
 import { EXT } from '../../utils/namespaces';
 import { RDF, FORM, SHACL } from '@lblod/submission-form-helpers';
 import { Statement } from 'rdflib';
+import { getTtlWithAddedStatements } from '../../utils/forking-store/get-ttl-with-statements-added';
+import { service } from '@ember/service';
 
 export default class CalculationOutcomeFieldComponent extends Component {
+  @service('form-code-manager') formCodeManager;
+
   constructor() {
     super(...arguments);
-    console.log('arguments', this.args);
     this.addScopeToTtl();
   }
 
   addScopeToTtl() {
-    this.store.addAll(this.createScopeStatements());
-    console.log(`ttlCode after adding the scope`, this.ttlCode);
+    const ttlCodeWithAddedScope = getTtlWithAddedStatements(
+      this.formCodeManager.getTtlOfLatestVersion(),
+      this.createScopeStatements()
+    );
+
+    this.formCodeManager.addFormCode(ttlCodeWithAddedScope);
   }
 
   createScopeStatements() {
@@ -31,10 +39,6 @@ export default class CalculationOutcomeFieldComponent extends Component {
     );
 
     return [type, path];
-  }
-
-  get ttlCode() {
-    return this.store.serializeDataMergedGraph(this.graphs.sourceGraph);
   }
 
   get scopePath() {
