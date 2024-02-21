@@ -1,4 +1,12 @@
 <div class="formBuilderEdit__configuration au-u-padding-small">
+  <div class="formBuilderEdit__configuration--filterPills">
+    {{#each this.filterPills as |filter|}}
+      <AuPill @skin={{filter.skin}} {{on "click" (fn this.applyFilter filter)}}>
+        {{filter.label}}
+      </AuPill>
+    {{/each}}
+  </div>
+
   {{#if this.initialise.isRunning}}
     <AuLoader />
   {{else}}

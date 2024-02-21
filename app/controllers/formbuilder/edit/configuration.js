@@ -12,6 +12,13 @@ import {
 import { Literal, Statement } from 'rdflib';
 import { FORM, RDF } from '@lblod/submission-form-helpers';
 import { sortObjectsOnProperty } from '../../../utils/sort-object-on-property';
+import { A } from '@ember/array';
+import { set } from '@ember/object';
+
+const FILTER_STATUS_SKIN = {
+  active: 'link',
+  inactive: 'border',
+};
 
 export default class FormbuilderConfigurationController extends Controller {
   @service('form-code-manager') formCodeManager;
@@ -20,6 +27,22 @@ export default class FormbuilderConfigurationController extends Controller {
   @tracked sections = [];
   @tracked selectedSection;
   @tracked fieldsForSection = [];
+
+  @tracked filterPills = A([
+    {
+      label: 'Velden',
+      skin: FILTER_STATUS_SKIN.active,
+    },
+    {
+      label: 'Tabellen',
+      skin: FILTER_STATUS_SKIN.inactive,
+    },
+  ]);
+
+  @action
+  applyFilter(activeFilter) {
+    this.updateActiveFilterPill(activeFilter);
+  }
 
   @action
   updateFieldOptions(scheme) {
@@ -164,5 +187,15 @@ export default class FormbuilderConfigurationController extends Controller {
 
   get sortedFieldsForSection() {
     return sortObjectsOnProperty(this.fieldsForSection, 'order');
+  }
+
+  updateActiveFilterPill(activeFilter) {
+    this.filterPills.forEach((filter) => {
+      if (activeFilter.label == filter.label) {
+        set(filter, 'skin', FILTER_STATUS_SKIN.active);
+      } else {
+        set(filter, 'skin', FILTER_STATUS_SKIN.inactive);
+      }
+    });
   }
 }

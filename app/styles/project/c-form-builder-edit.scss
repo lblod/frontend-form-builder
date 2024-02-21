@@ -43,6 +43,17 @@
   }
 }
 
+.formBuilderEdit__configuration--filterPills {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 2rem 0;
+  span {
+    cursor: pointer;
+  }
+}
+
 .formBuilderEdit__template-create {
   height: 100%;
   padding: 2rem 1rem;
