@@ -54,6 +54,7 @@ form:Field
         displayTypes:defaultInput
         displayTypes:numericalInput
         displayTypes:currencyInput
+        displayTypes:calculationOutcomeField
         displayTypes:textArea
         displayTypes:richTextEditor
         displayTypes:switch
