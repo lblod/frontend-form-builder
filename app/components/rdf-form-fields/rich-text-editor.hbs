@@ -7,13 +7,24 @@
     <EditorContainer>
       <:top>
         <div class="richTextEditor__toolbar">
+          <Plugins::Heading::HeadingMenu
+            @controller={{this.editorController}}
+          />
           <Plugins::TextStyle::Bold @controller={{this.editorController}} />
+          <Plugins::TextStyle::Italic @controller={{this.editorController}} />
           <Plugins::TextStyle::Underline
             @controller={{this.editorController}}
           />
+          <Plugins::List::Unordered @controller={{this.editorController}} />
           <Plugins::List::Ordered @controller={{this.editorController}} />
-          <Plugins::Link::LinkMenu @controller={{this.editorController}} />
-
+          <Plugins::TextStyle::Highlight
+            @controller={{this.editorController}}
+            @defaultColor={{this.defaults.highlightColor}}
+          />
+          <Plugins::TextStyle::Color
+            @controller={{this.editorController}}
+            @defaultColor={{this.defaults.textColor}}
+          />
         </div>
       </:top>
       <:default>

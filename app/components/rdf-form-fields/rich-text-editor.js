@@ -38,12 +38,23 @@ import {
   list_item,
   ordered_list,
 } from '@lblod/ember-rdfa-editor/plugins/list';
+import {
+  bullet_list_input_rule,
+  ordered_list_input_rule,
+} from '@lblod/ember-rdfa-editor/plugins/list/input_rules';
 import { placeholder } from '@lblod/ember-rdfa-editor/plugins/placeholder';
+import { highlight } from '@lblod/ember-rdfa-editor/plugins/highlight/marks/highlight';
+import { color } from '@lblod/ember-rdfa-editor/plugins/color/marks/color';
+import { inputRules } from '@lblod/ember-rdfa-editor';
 
 export default class RichTextEditorComponent extends SimpleInputFieldComponent {
   @tracked editorController;
   inputId = 'richtext-' + guidFor(this);
-  plugins = [tablePlugin, tableKeymap];
+
+  defaults = {
+    highlightColor: '#FFEA00', // Yellow
+    textColor: '#000000', // Black
+  };
 
   nodeViews = (controller) => {
     return {
@@ -86,8 +97,21 @@ export default class RichTextEditorComponent extends SimpleInputFieldComponent {
       strikethrough,
       subscript,
       superscript,
+      highlight,
+      color,
     },
   });
+
+  plugins = [
+    tablePlugin,
+    tableKeymap,
+    inputRules({
+      rules: [
+        bullet_list_input_rule(this.schema.nodes.bullet_list),
+        ordered_list_input_rule(this.schema.nodes.ordered_list),
+      ],
+    }),
+  ];
 
   get linkOptions() {
     return {
