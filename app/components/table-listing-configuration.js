@@ -101,6 +101,17 @@ export default class TableListingConfigurationComponent extends Component {
       this.selectedColumnAction.label !== this.columnActions[0].label
     ) {
       // add ttl
+      const statements = this.ttlToStatements(
+        this.getTtlCodeForForm(
+          this.selectedColumn.subject,
+          this.selectedTable.tableListing
+        )
+      );
+      const ttl = getTtlWithAddedStatements(
+        getTtlInStore(this.store),
+        statements
+      );
+      this.formCodeManager.addFormCode(ttl);
     }
 
     if (this.selectedColumnAction.label == this.columnActions[0].label) {
@@ -174,6 +185,13 @@ export default class TableListingConfigurationComponent extends Component {
 
     return `${id}-shape-blankNode`;
   }
+  getIdOfuri(columnUri) {
+    const url = columnUri;
+    const parts = url.split('/');
+    const id = parts[parts.length - 1];
+
+    return id;
+  }
 
   get sortedTables() {
     return this.tables; // sort them on order, section and columns TODO:
@@ -219,22 +237,43 @@ export default class TableListingConfigurationComponent extends Component {
 
   getTtlCodeForForm(columnNode, tableListingUri) {
     return `
-    ${columnNode} xsd:target (ext:Expense ext:amount) .
+    @prefix : <#>.
+    @prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+    @prefix display: <http://lblod.data.gift/display-types/>.
+    @prefix form: <http://lblod.data.gift/vocabularies/forms/>.
+    @prefix sh: <http://www.w3.org/ns/shacl#>.
+    @prefix nodes: <http://data.lblod.info/form-data/nodes/>.
+    @prefix ext: <http://mu.semte.ch/vocabularies/ext/>.
 
-    ${tableListingUri}
-      form:createGenerator ${
-        EXT(this.getGeneratorName(columnNode.subject.value)).value
-      } ;
-      form:scope ${EXT(this.getScopeName()).value} .
+    nodes:${this.getIdOfuri(
+      columnNode.value
+    )} xsd:target (ext:Expense ext:amount) .
 
-    ${EXT(this.getGeneratorName(columnNode.subject.value)).value}
+    nodes:${this.getIdOfuri(tableListingUri.value)}
+      form:createGenerator ext:${this.getGeneratorName(columnNode.value)} ;
+      form:scope ext:${this.getScopeName(columnNode.value)} .
+
+    ext:${this.getGeneratorName(columnNode.value)}
     a form:Generator;
     form:dataGenerator form:addMuUuid;
     form:prototype [ form:shape [ a ext:Expense; ext:amount 0 ] ].
 
-    ${
-      EXT(this.getScopeName(columnNode.subject.value)).value
-    } a form:Scope; sh:path ext:Expense.
+    ext:${this.getScopeName(
+      columnNode.value
+    )} a form:Scope; sh:path ext:Expense.
     `;
+  }
+
+  ttlToStatements(ttl) {
+    console.log(`ttl`, ttl);
+    const store = new ForkingStore();
+    store.parse(ttl, this.graphs.sourceGraph, 'text/turtle');
+
+    return store.match(
+      undefined,
+      undefined,
+      undefined,
+      this.graphs.sourceGraph
+    );
   }
 }
