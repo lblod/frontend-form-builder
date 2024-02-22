@@ -60,6 +60,7 @@ export default class TableListingConfigurationComponent extends Component {
         .map((triple) => triple.object);
 
       return {
+        tableListing: tableListing,
         section: getMinimalNodeInfo(
           sectionNode,
           this.store,
@@ -100,6 +101,7 @@ export default class TableListingConfigurationComponent extends Component {
       this.selectedColumnAction.label !== this.columnActions[0].label
     ) {
       this.addScopeToTtl();
+      this.addScopeOfSelectedTableListing();
     }
 
     if (this.selectedColumnAction.label == this.columnActions[0].label) {
@@ -110,9 +112,38 @@ export default class TableListingConfigurationComponent extends Component {
         undefined,
         this.graphs.sourceGraph
       );
-      this.store.removeStatements(scopeStatements);
+      this.store.removeStatements([
+        ...scopeStatements,
+        ...this.getStatementsToRemoveScopeOfSelectedTableListing(),
+      ]);
       this.formCodeManager.addFormCode(getTtlInStore(this.store));
     }
+  }
+
+  addScopeOfSelectedTableListing() {
+    this.store.addAll([
+      new Statement(
+        this.selectedTable.tableListing,
+        FORM('scope'),
+        EXT(this.getScopeName(this.selectedColumn.subject.value)),
+        this.graphs.sourceGraph
+      ),
+    ]);
+
+    const ttlCodeWithAddedScope = getTtlWithAddedStatements(
+      getTtlInStore(this.store),
+      this.createScopeStatements()
+    );
+
+    this.formCodeManager.addFormCode(ttlCodeWithAddedScope);
+  }
+  getStatementsToRemoveScopeOfSelectedTableListing() {
+    return this.store.match(
+      this.selectedTable.tableListing,
+      FORM('scope'),
+      EXT(this.getScopeName(this.selectedColumn.subject.value)),
+      this.graphs.sourceGraph
+    );
   }
 
   isScopeCreated(columnUri) {
@@ -173,6 +204,7 @@ export default class TableListingConfigurationComponent extends Component {
     return sortObjectsOnProperty(
       this.tables.map((table) => {
         return {
+          tableListing: table.tableListing,
           subject: table.section.subject,
           name: table.section.name,
           order: table.section.order,
