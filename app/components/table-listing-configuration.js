@@ -91,6 +91,10 @@ export default class TableListingConfigurationComponent extends Component {
   @action
   setColumnAction(action) {
     this.selectedColumnAction = action;
+    this.updateScopeInStore();
+  }
+
+  updateScopeInStore() {
     if (
       !this.isScopeCreated(this.selectedColumn.subject.value) &&
       this.selectedColumnAction.label !== this.columnActions[0].label
