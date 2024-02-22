@@ -99,7 +99,7 @@ ext:sectionDescriptionF a form:Field ;
   sh:name "Section description" ;
   sh:order 1 ;
   sh:path form:help ;
-  form:displayType displayTypes:richTextEditor  ;
+  form:displayType displayTypes:textArea  ;
   form:partOf ext:sectionS .
 
 ##########################################################
