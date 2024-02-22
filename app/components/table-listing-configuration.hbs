@@ -1,1 +1,36 @@
-<p>table listing configuration</p>
+<div class="tableListingConfiguration">
+  {{#if this.tables}}
+    <PowerSelect
+      @options={{this.tableOptions}}
+      @selected={{this.selectedTable}}
+      @onChange={{this.setTable}}
+      as |table|
+    >
+      {{table.name}}
+    </PowerSelect>
+    {{#if this.selectedTable}}
+      <PowerSelect
+        @options={{this.columnOptions}}
+        @selected={{this.selectedColumn}}
+        @onChange={{this.setColumnForTable}}
+        as |column|
+      >
+        {{column.name}}
+      </PowerSelect>
+    {{/if}}
+    {{#if this.selectedColumn}}
+      <PowerSelect
+        @options={{this.columnActions}}
+        @selected={{this.selectedColumnAction}}
+        @onChange={{this.setColumnAction}}
+        as |action|
+      >
+        {{action.label}}
+      </PowerSelect>
+    {{/if}}
+
+  {{else}}
+    <p class="au-u-muted au-u-h-functional au-u-medium au-u-italic">No tables in
+      the form</p>
+  {{/if}}
+</div>
