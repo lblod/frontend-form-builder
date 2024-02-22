@@ -100,8 +100,7 @@ export default class TableListingConfigurationComponent extends Component {
       !this.isScopeCreated(this.selectedColumn.subject.value) &&
       this.selectedColumnAction.label !== this.columnActions[0].label
     ) {
-      this.addScopeToTtl();
-      this.addScopeOfSelectedTableListing();
+      // add ttl
     }
 
     if (this.selectedColumnAction.label == this.columnActions[0].label) {
@@ -120,59 +119,6 @@ export default class TableListingConfigurationComponent extends Component {
     }
   }
 
-  createGeneratorStatements() {
-    const columnUri = this.selectedColumn.subject.value;
-    const subject = this.getGeneratorName(columnUri);
-    const prototypeBlankNode = new BlankNode(
-      this.getPrototypeBlankNodeName(columnUri)
-    );
-    const shapeBlankNode = new BlankNode(this.getShapeBlankNodeName(columnUri));
-    return [
-      new Statement(
-        subject,
-        RDF('type'),
-        FORM('Generator'),
-        this.graphs.sourceGraph
-      ),
-      new Statement(
-        subject,
-        FORM('prototype'),
-        prototypeBlankNode,
-        this.graphs.sourceGraph
-      ),
-      new Statement(
-        prototypeBlankNode,
-        FORM('shape'),
-        shapeBlankNode,
-        this.graphs.sourceGraph
-      ),
-      new Statement(
-        shapeBlankNode,
-        RDF('type'),
-        EXT('Outcome'),
-        this.graphs.sourceGraph
-      ),
-      new Statement(shapeBlankNode, EXT('amount'), 0, this.graphs.sourceGraph),
-    ];
-  }
-
-  addScopeOfSelectedTableListing() {
-    this.store.addAll([
-      new Statement(
-        this.selectedTable.tableListing,
-        FORM('scope'),
-        EXT(this.getScopeName(this.selectedColumn.subject.value)),
-        this.graphs.sourceGraph
-      ),
-    ]);
-
-    const ttlCodeWithAddedScope = getTtlWithAddedStatements(
-      getTtlInStore(this.store),
-      this.createScopeStatements()
-    );
-
-    this.formCodeManager.addFormCode(ttlCodeWithAddedScope);
-  }
   getStatementsToRemoveScopeOfSelectedTableListing() {
     return this.store.match(
       this.selectedTable.tableListing,
@@ -191,33 +137,6 @@ export default class TableListingConfigurationComponent extends Component {
         this.graphs.formGraph
       ).length >= 1
     );
-  }
-
-  addScopeToTtl() {
-    const ttlCodeWithAddedScope = getTtlWithAddedStatements(
-      getTtlInStore(this.store),
-      this.createScopeStatements()
-    );
-
-    this.formCodeManager.addFormCode(ttlCodeWithAddedScope);
-  }
-
-  createScopeStatements() {
-    const subject = EXT(this.getScopeName(this.selectedColumn.subject.value));
-    const type = new Statement(
-      subject,
-      RDF('type'),
-      FORM('scope'),
-      this.graphs.sourceGraph
-    );
-    const path = new Statement(
-      subject,
-      SHACL('path'),
-      this.scopePath,
-      this.graphs.sourceGraph
-    );
-
-    return [type, path];
   }
 
   get scopePath() {
@@ -296,5 +215,26 @@ export default class TableListingConfigurationComponent extends Component {
 
   get graphs() {
     return GRAPHS;
+  }
+
+  getTtlCodeForForm(columnNode, tableListingUri) {
+    return `
+    ${columnNode} xsd:target (ext:Expense ext:amount) .
+
+    ${tableListingUri}
+      form:createGenerator ${
+        EXT(this.getGeneratorName(columnNode.subject.value)).value
+      } ;
+      form:scope ${EXT(this.getScopeName()).value} .
+
+    ${EXT(this.getGeneratorName(columnNode.subject.value)).value}
+    a form:Generator;
+    form:dataGenerator form:addMuUuid;
+    form:prototype [ form:shape [ a ext:Expense; ext:amount 0 ] ].
+
+    ${
+      EXT(this.getScopeName(columnNode.subject.value)).value
+    } a form:Scope; sh:path ext:Expense.
+    `;
   }
 }
