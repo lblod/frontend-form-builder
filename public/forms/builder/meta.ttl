@@ -75,7 +75,7 @@ display:richTextEditor
   rdf:type  rdfs:Class , skos:Concept ;
   ext:displayType "richTextEditor" ;
   ext:usesConceptScheme "false"^^xsd:boolean ;
-  skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
+  # skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ; This is commented as it is experimental at this moment of time
   skos:prefLabel  "Rich Text Editor"@en .
 display:conceptSchemeSelector
   rdf:type  rdfs:Class , skos:Concept ;
