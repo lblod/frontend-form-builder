@@ -8,7 +8,7 @@ import { RDF, FORM, SHACL } from '@lblod/submission-form-helpers';
 import { getMinimalNodeInfo } from '../utils/forking-store-helpers';
 import { action } from '@ember/object';
 import { sortObjectsOnProperty } from '../utils/sort-object-on-property';
-import { Statement } from 'rdflib';
+import { BlankNode, Statement } from 'rdflib';
 import { EXT } from '../utils/namespaces';
 import { getTtlWithAddedStatements } from '../utils/forking-store/get-ttl-with-statements-added';
 import { getTtlInStore } from '../utils/forking-store/get-ttl-in-store';
@@ -120,6 +120,42 @@ export default class TableListingConfigurationComponent extends Component {
     }
   }
 
+  createGeneratorStatements() {
+    const columnUri = this.selectedColumn.subject.value;
+    const subject = this.getGeneratorName(columnUri);
+    const prototypeBlankNode = new BlankNode(
+      this.getPrototypeBlankNodeName(columnUri)
+    );
+    const shapeBlankNode = new BlankNode(this.getShapeBlankNodeName(columnUri));
+    return [
+      new Statement(
+        subject,
+        RDF('type'),
+        FORM('Generator'),
+        this.graphs.sourceGraph
+      ),
+      new Statement(
+        subject,
+        FORM('prototype'),
+        prototypeBlankNode,
+        this.graphs.sourceGraph
+      ),
+      new Statement(
+        prototypeBlankNode,
+        FORM('shape'),
+        shapeBlankNode,
+        this.graphs.sourceGraph
+      ),
+      new Statement(
+        shapeBlankNode,
+        RDF('type'),
+        EXT('Outcome'),
+        this.graphs.sourceGraph
+      ),
+      new Statement(shapeBlankNode, EXT('amount'), 0, this.graphs.sourceGraph),
+    ];
+  }
+
   addScopeOfSelectedTableListing() {
     this.store.addAll([
       new Statement(
@@ -194,6 +230,30 @@ export default class TableListingConfigurationComponent extends Component {
     const id = parts[parts.length - 1];
 
     return `${id}-outcomeS`;
+  }
+
+  getGeneratorName(columnUri) {
+    const url = columnUri;
+    const parts = url.split('/');
+    const id = parts[parts.length - 1];
+
+    return `${id}-generator`;
+  }
+
+  getPrototypeBlankNodeName(columnUri) {
+    const url = columnUri;
+    const parts = url.split('/');
+    const id = parts[parts.length - 1];
+
+    return `${id}-prototype-blankNode`;
+  }
+
+  getShapeBlankNodeName(columnUri) {
+    const url = columnUri;
+    const parts = url.split('/');
+    const id = parts[parts.length - 1];
+
+    return `${id}-shape-blankNode`;
   }
 
   get sortedTables() {
