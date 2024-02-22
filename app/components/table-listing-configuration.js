@@ -4,10 +4,14 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { GRAPHS } from '../controllers/formbuilder/edit';
-import { RDF, FORM } from '@lblod/submission-form-helpers';
+import { RDF, FORM, SHACL } from '@lblod/submission-form-helpers';
 import { getMinimalNodeInfo } from '../utils/forking-store-helpers';
 import { action } from '@ember/object';
 import { sortObjectsOnProperty } from '../utils/sort-object-on-property';
+import { Statement } from 'rdflib';
+import { EXT } from '../utils/namespaces';
+import { getTtlWithAddedStatements } from '../utils/forking-store/get-ttl-with-statements-added';
+import { getTtlInStore } from '../utils/forking-store/get-ttl-in-store';
 
 export default class TableListingConfigurationComponent extends Component {
   @service('form-code-manager') formCodeManager;
@@ -87,9 +91,74 @@ export default class TableListingConfigurationComponent extends Component {
   @action
   setColumnAction(action) {
     this.selectedColumnAction = action;
-    console.log(
-      `set action '${action.label}' on column '${this.selectedColumn.name}' for table '${this.selectedTable.name}'`
+    if (
+      !this.isScopeCreated(this.selectedColumn.subject.value) &&
+      this.selectedColumnAction.label !== this.columnActions[0].label
+    ) {
+      this.addScopeToTtl();
+    }
+
+    if (this.selectedColumnAction.label == this.columnActions[0].label) {
+      const subject = EXT(this.getScopeName(this.selectedColumn.subject.value));
+      const scopeStatements = this.store.match(
+        subject,
+        undefined,
+        undefined,
+        this.graphs.sourceGraph
+      );
+      this.store.removeStatements(scopeStatements);
+      this.formCodeManager.addFormCode(getTtlInStore(this.store));
+    }
+  }
+
+  isScopeCreated(columnUri) {
+    return (
+      this.store.match(
+        EXT(this.getScopeName(columnUri)),
+        undefined,
+        undefined,
+        this.graphs.formGraph
+      ).length >= 1
     );
+  }
+
+  addScopeToTtl() {
+    const ttlCodeWithAddedScope = getTtlWithAddedStatements(
+      getTtlInStore(this.store),
+      this.createScopeStatements()
+    );
+
+    this.formCodeManager.addFormCode(ttlCodeWithAddedScope);
+  }
+
+  createScopeStatements() {
+    const subject = EXT(this.getScopeName(this.selectedColumn.subject.value));
+    const type = new Statement(
+      subject,
+      RDF('type'),
+      FORM('scope'),
+      this.graphs.sourceGraph
+    );
+    const path = new Statement(
+      subject,
+      SHACL('path'),
+      this.scopePath,
+      this.graphs.sourceGraph
+    );
+
+    return [type, path];
+  }
+
+  get scopePath() {
+    return EXT('outcome');
+  }
+
+  getScopeName(columnUri) {
+    const url = columnUri;
+    const parts = url.split('/');
+    const id = parts[parts.length - 1];
+
+    return `${id}-outcomeS`;
   }
 
   get sortedTables() {
