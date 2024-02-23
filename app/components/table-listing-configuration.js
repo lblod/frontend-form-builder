@@ -193,39 +193,15 @@ export default class TableListingConfigurationComponent extends Component {
   }
 
   getScopeName(columnUri) {
-    const url = columnUri;
-    const parts = url.split('/');
-    const id = parts[parts.length - 1];
-
-    return `${id}-outcomeS`;
+    return `${this.getIdOfuri(columnUri)}-outcomeS`;
   }
 
   getGeneratorName(columnUri) {
-    const url = columnUri;
-    const parts = url.split('/');
-    const id = parts[parts.length - 1];
-
-    return `${id}-generator`;
+    return `${this.getIdOfuri(columnUri)}-generator`;
   }
 
-  getPrototypeBlankNodeName(columnUri) {
-    const url = columnUri;
-    const parts = url.split('/');
-    const id = parts[parts.length - 1];
-
-    return `${id}-prototype-blankNode`;
-  }
-
-  getShapeBlankNodeName(columnUri) {
-    const url = columnUri;
-    const parts = url.split('/');
-    const id = parts[parts.length - 1];
-
-    return `${id}-shape-blankNode`;
-  }
-  getIdOfuri(columnUri) {
-    const url = columnUri;
-    const parts = url.split('/');
+  getIdOfuri(uri) {
+    const parts = uri.split('/');
     const id = parts[parts.length - 1];
 
     return id;
