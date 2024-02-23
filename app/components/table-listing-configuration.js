@@ -4,11 +4,10 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { GRAPHS } from '../controllers/formbuilder/edit';
-import { RDF, FORM, SHACL } from '@lblod/submission-form-helpers';
+import { RDF, FORM } from '@lblod/submission-form-helpers';
 import { getMinimalNodeInfo } from '../utils/forking-store-helpers';
 import { action } from '@ember/object';
 import { sortObjectsOnProperty } from '../utils/sort-object-on-property';
-import { BlankNode, Statement } from 'rdflib';
 import { EXT } from '../utils/namespaces';
 import { getTtlWithAddedStatements } from '../utils/forking-store/get-ttl-with-statements-added';
 import { getTtlInStore } from '../utils/forking-store/get-ttl-in-store';
@@ -100,7 +99,6 @@ export default class TableListingConfigurationComponent extends Component {
       !this.isScopeCreated(this.selectedColumn.subject.value) &&
       this.selectedColumnAction.label !== this.columnActions[0].label
     ) {
-      // add ttl
       const statements = this.ttlToStatements(
         this.getTtlCodeForForm(
           this.selectedColumn.subject,
@@ -245,18 +243,21 @@ export default class TableListingConfigurationComponent extends Component {
     @prefix nodes: <http://data.lblod.info/form-data/nodes/>.
     @prefix ext: <http://mu.semte.ch/vocabularies/ext/>.
 
-    nodes:${this.getIdOfuri(
-      columnNode.value
-    )} xsd:target (ext:Expense ext:amount) .
+    nodes:${this.getIdOfuri(columnNode.value)} sh:path ext:amount .
 
     nodes:${this.getIdOfuri(tableListingUri.value)}
       form:createGenerator ext:${this.getGeneratorName(columnNode.value)} ;
       form:scope ext:${this.getScopeName(columnNode.value)} .
 
     ext:${this.getGeneratorName(columnNode.value)}
-    a form:Generator;
-    form:dataGenerator form:addMuUuid;
-    form:prototype [ form:shape [ a ext:Expense; ext:amount 0 ] ].
+      a form:Generator;
+        form:dataGenerator form:addMuUuid;
+        form:prototype [
+            form:shape [
+              a ext:Expense ;
+                ext:amount 0.0
+            ]
+          ] .
 
     ext:${this.getScopeName(
       columnNode.value
@@ -265,7 +266,6 @@ export default class TableListingConfigurationComponent extends Component {
   }
 
   ttlToStatements(ttl) {
-    console.log(`ttl`, ttl);
     const store = new ForkingStore();
     store.parse(ttl, this.graphs.sourceGraph, 'text/turtle');
 
