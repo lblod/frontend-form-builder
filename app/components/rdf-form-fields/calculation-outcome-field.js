@@ -1,87 +1,65 @@
 import Component from '@glimmer/component';
 
-import { EXT } from '../../utils/namespaces';
-import { RDF, FORM, SHACL } from '@lblod/submission-form-helpers';
-import { Statement } from 'rdflib';
-import { getTtlWithAddedStatements } from '../../utils/forking-store/get-ttl-with-statements-added';
-import { service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
+import { guidFor } from '@ember/object/internals';
+import { XSD, triplesForPath } from '@lblod/submission-form-helpers';
+import { restartableTask } from 'ember-concurrency';
 
 export default class CalculationOutcomeFieldComponent extends Component {
-  @service('form-code-manager') formCodeManager;
+  @tracked totals;
+  id = guidFor(this);
 
   constructor() {
     super(...arguments);
 
-    // Now the additions to the ttl are only applied when
-    // switching from a tab, we should find a solution for this
-    if (!this.isScopeCreated()) {
-      this.addScopeToTtl();
+    this.args.formStore.registerObserver(() => {
+      // This will potentially run a lot of times. We can probably check the delta and see if the change affects this component, but due to time constraints we're skipping that for now.
+      // It's also possible that the delta checking is more intensive than the actual computations, but that would have to be benchmarked.
+      this.calculateTotals.perform();
+    }, this.id);
+  }
+
+  get fieldName() {
+    return this.args.field.label;
+  }
+
+  get formattedTotal() {
+    let amount = this.totals;
+    if (!this.totals) {
+      amount = 0.0;
     }
+
+    return new Intl.NumberFormat('nl-BE', {
+      style: 'currency',
+      currency: 'EUR',
+    }).format(amount);
   }
 
-  addScopeToTtl() {
-    const ttlCodeWithAddedScope = getTtlWithAddedStatements(
-      this.formCodeManager.getTtlOfLatestVersion(),
-      this.createScopeStatements()
+  calculateTotals = restartableTask(async () => {
+    const target = this.args.formStore.any(
+      this.args.field.uri,
+      XSD('target'),
+      undefined,
+      this.args.graphs.formGraph
     );
 
-    this.formCodeManager.addFormCode(ttlCodeWithAddedScope);
-  }
+    const options = {
+      path: target,
+      store: this.args.formStore,
+      formGraph: this.args.graphs.formGraph,
+      sourceGraph: this.args.graphs.sourceGraph,
+      sourceNode: this.args.sourceNode,
+    };
+    const { values } = triplesForPath(options);
 
-  createScopeStatements() {
-    const subject = EXT(this.scopeName);
-    const type = new Statement(
-      subject,
-      RDF('type'),
-      FORM('scope'),
-      this.graphs.sourceGraph
-    );
-    const path = new Statement(
-      subject,
-      SHACL('path'),
-      this.scopePath,
-      this.graphs.sourceGraph
-    );
+    this.totals = 0;
+    for (const literal of values) {
+      this.totals += Number(literal.value) ?? 0;
+    }
+  });
 
-    return [type, path];
-  }
-
-  isScopeCreated() {
-    return (
-      this.store.match(
-        EXT(this.scopeName),
-        undefined,
-        undefined,
-        this.graphs.formGraph
-      ).length >= 1
-    );
-  }
-
-  get scopePath() {
-    return EXT('outcome');
-  }
-
-  get scopeName() {
-    return `${this.fieldId}-outcomeS`;
-  }
-
-  get fieldId() {
-    const url = this.field.uri.value;
-    const parts = url.split('/');
-    const id = parts[parts.length - 1];
-
-    return id;
-  }
-
-  get store() {
-    return this.args.formStore;
-  }
-
-  get graphs() {
-    return this.args.graphs;
-  }
-
-  get field() {
-    return this.args.field;
+  willDestroy() {
+    super.willDestroy(...arguments);
+    this.args.formStore.deregisterObserver(this.id);
   }
 }
