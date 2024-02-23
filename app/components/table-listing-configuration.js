@@ -4,7 +4,7 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { GRAPHS } from '../controllers/formbuilder/edit';
-import { RDF, FORM } from '@lblod/submission-form-helpers';
+import { RDF, FORM, SHACL } from '@lblod/submission-form-helpers';
 import { getMinimalNodeInfo } from '../utils/forking-store-helpers';
 import { action } from '@ember/object';
 import { sortObjectsOnProperty } from '../utils/sort-object-on-property';
@@ -89,16 +89,18 @@ export default class TableListingConfigurationComponent extends Component {
   }
 
   @action
-  setColumnAction(action) {
+  async setColumnAction(action) {
     this.selectedColumnAction = action;
-    this.updateScopeInStore();
+    await this.updateScopeInStore();
   }
 
-  updateScopeInStore() {
+  async updateScopeInStore() {
     if (
       !this.isScopeCreated(this.selectedColumn.subject.value) &&
       this.selectedColumnAction.label !== this.columnActions[0].label
     ) {
+      await this.removeExistingScopeAndGeneratorFromTableListing();
+
       const statements = this.ttlToStatements(
         this.getTtlCodeForForm(
           this.selectedColumn.subject,
@@ -135,6 +137,33 @@ export default class TableListingConfigurationComponent extends Component {
       EXT(this.getScopeName(this.selectedColumn.subject.value)),
       this.graphs.sourceGraph
     );
+  }
+
+  async removeExistingScopeAndGeneratorFromTableListing() {
+    const tableListingSubject = this.selectedTable.tableListing;
+    const columnSubject = this.selectedColumn.subject;
+    return new Promise((resolve) => {
+      const generators = this.store.match(
+        tableListingSubject,
+        FORM('createGenerator'),
+        undefined,
+        this.graphs.sourceGraph
+      );
+      const scopes = this.store.match(
+        tableListingSubject,
+        FORM('scope'),
+        undefined,
+        this.graphs.sourceGraph
+      );
+      const columnPaths = this.store.match(
+        columnSubject,
+        SHACL('path'),
+        undefined,
+        this.graphs.sourceGraph
+      );
+      this.store.removeStatements([...generators, ...scopes, ...columnPaths]);
+      resolve();
+    });
   }
 
   isScopeCreated(columnUri) {
