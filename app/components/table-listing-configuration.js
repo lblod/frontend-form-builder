@@ -241,8 +241,16 @@ export default class TableListingConfigurationComponent extends Component {
     if (!table) {
       return [];
     }
+    const allowedDisplaytypes = [
+      'http://lblod.data.gift/display-types/currencyInput',
+      'http://lblod.data.gift/display-types/numericalInput',
+    ];
 
-    return sortObjectsOnProperty(table.columns, 'order');
+    const columns = table.columns.filter((column) =>
+      allowedDisplaytypes.includes(column.displayType.value)
+    );
+
+    return sortObjectsOnProperty(columns, 'order');
   }
 
   get columnActions() {
