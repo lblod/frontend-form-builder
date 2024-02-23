@@ -21,7 +21,7 @@ crud:
   testForm: "Test form"
 
 navigation:
-  backToFormOverview: "Back to forms" # also used "Terug naar overzicht formulieren"
+  backToFormOverview: "Back to form overview"
   backToForm: "Back to form"
   toOverviewTestForms: "To overview testable forms"
   tabs:
@@ -41,10 +41,10 @@ table:
     modifiedOn: "Modified on"
 
 createForm:
-  title: "Maak je nieuwe formulier"
-  name: "Naam"
-  selectTemplate: "Selecteer een formulier waarvan je wil beginnen"
-  build: "Bouw formulier"
+  title: "Form"
+  name: "Name"
+  selectTemplate: "Select a form to start with"
+  build: "Create form"
 
 # Components #
 toolbar:
@@ -52,8 +52,3 @@ toolbar:
   unSavedChanges: "Unsaved changes"
   formUpToDate: "Form up-to-date"
   codelists: "Codelists"
-
-editNameModal:
-  title: "Enter a name for your form"
-  name: "Name"
-  createForm: "Build form"

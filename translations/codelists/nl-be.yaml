@@ -1,25 +1,18 @@
 codelists:
-  addConcept: "Voeg een concept toe aan de lijst"
+  addConcept: "Voeg een optie toe"
   nameOfCodelist: "Naam van de codelijst"
   descriptionOfCodelist: "Beschrijving"
   createCodelist: "Maak een codelijst"
-  howToUse: "Hoe de concept scheme gebruiken:"
-  chooseList: "Kies een concept scheme waarvan u de inhoud wil bekijken"
-  uri: "URI: geeft meer informatie en activeert de concept scheme"
-  chooseConcept: "Kies eerst een concept scheme."
-  contentOfList: "Bekijk inhoud van concept schemes"
-  chooseLeftFirst: "Kies eerst een concept scheme in het linkerveld."
+  chooseConcept: "Selecteer een codelijst"
   types:
     isPublic: "Eigen codelijst"
     isPrivate: "Generiek"
     isArchived: "Gearchiveerd"
   alert:
     genericCodelist: "Generieke codelijsten kunnen niet aangepast worden."
-    archivedCodelist: "Deze codelijst is ge-archiveerd."
+    archivedCodelist: "Deze codelijst is gearchiveerd."
 
 confirmation:
-  deleteCodelistTitle: "Codelijst verwijderen?"
-  deleteCodelistQuestion: "Bent u zeker dat u deze codelijst wilt verwijderen? Deze actie is permanent."
   archiveCodelistTitle: "Codelijst archiveren?"
   archiveCodelistQuestion: "Bent u zeker dat u deze codelijst wilt archiveren?"
 
@@ -28,11 +21,11 @@ navigation:
 
 constraints:
   optionCannotBeEmpty: "Optie mag niet leeg zijn ({label})"
-  couldNotGetConceptSchemeWithId: "Kon concept-scheme met id {id} niet vinden"
+  couldNotGetConceptSchemeWithId: "Kon codelijst met id {id} niet vinden"
 
 messages:
   success:
-    conceptsUpdated: "Concepten bijgewerkt"
+    conceptsUpdated: "Opties bijgewerkt"
     codelistUpdated: "Codelijst bijgewerkt"
   loading:
     downloading: "Downloaden"

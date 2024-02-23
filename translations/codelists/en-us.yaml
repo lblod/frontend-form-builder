@@ -1,14 +1,9 @@
 codelists:
-  addConcept: "Add concept to the list"
+  addConcept: "Add option to the list"
   nameOfCodelist: "Name of codelist"
   descriptionOfCodelist: "Description"
   createCodelist: "Create a codelist"
-  howToUse: "How to use the concept scheme:"
-  chooseList: "Choose a concept scheme whose contents you want to view."
-  uri: "URI: gives more information and activates the concept scheme"
-  chooseConcept: "Choose a concept scheme first."
-  contentOfList: "View content of concept schemes"
-  chooseLeftFirst: "Choose a concept scheme in the left field first."
+  chooseConcept: "Select codelist"
   types:
     isPublic: "Custom codelist"
     isPrivate: "Generic"
@@ -18,8 +13,6 @@ codelists:
     archivedCodelist: "This codelist is archived."
 
 confirmation:
-  deleteCodelistTitle: "Delete codelist?"
-  deleteCodelistQuestion: "Are you sure you want to delete this codelist? This action is permanent."
   archiveCodelistTitle: "Archive codelist?"
   archiveCodelistQuestion: "Are you sure you want to archive this codelist?"
 
@@ -28,7 +21,7 @@ navigation:
 
 constraints:
   optionCannotBeEmpty: "Option cannot be empty ({label})"
-  couldNotGetConceptSchemeWithId: "Could not get concept-scheme with id: {id}"
+  couldNotGetConceptSchemeWithId: "Could not get codelist with id: {id}"
 
 messages:
   success:

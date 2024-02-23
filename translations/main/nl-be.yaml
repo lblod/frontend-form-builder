@@ -18,10 +18,10 @@ crud:
   update: "Bijwerken"
   cancel: "Annuleer"
   reset: "Reset"
-  testForm: "Test formulier"
+  testForm: "Valideer formulier"
 
 navigation:
-  backToFormOverview: "Terug naar formulieren" # also used "Terug naar overzicht formulieren"
+  backToFormOverview: "Terug naar overzicht formulieren"
   backToForm: "Terug naar formulier"
   toOverviewTestForms: "Naar overzicht testbare formulieren"
   tabs:
@@ -41,10 +41,10 @@ table:
     modifiedOn: "Aangepast op"
 
 createForm:
-  title: "Maak je nieuwe formulier"
+  title: "Formulier"
   name: "Naam"
   selectTemplate: "Selecteer een formulier waarvan je wil beginnen"
-  build: "Bouw formulier"
+  build: "Aanmaken"
 
 # Components #
 toolbar:
@@ -52,8 +52,3 @@ toolbar:
   unSavedChanges: "Aanpassingen nog niet bewaard"
   formUpToDate: "Formulier up-to-date"
   codelists: "Codelijsten"
-
-editNameModal:
-  title: "Geef een naam aan je formulier"
-  name: "Naam"
-  createForm: "Bouw formulier"
