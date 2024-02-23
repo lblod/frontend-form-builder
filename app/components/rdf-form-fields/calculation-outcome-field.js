@@ -12,7 +12,7 @@ export default class CalculationOutcomeFieldComponent extends Component {
   constructor() {
     super(...arguments);
 
-    this.args.formStore.registerObserver(() => {
+    this.store.registerObserver(() => {
       // This will potentially run a lot of times. We can probably check the delta and see if the change affects this component, but due to time constraints we're skipping that for now.
       // It's also possible that the delta checking is more intensive than the actual computations, but that would have to be benchmarked.
       this.calculateTotals.perform();
@@ -20,7 +20,7 @@ export default class CalculationOutcomeFieldComponent extends Component {
   }
 
   get fieldName() {
-    return this.args.field.label;
+    return this.field.label;
   }
 
   get formattedTotal() {
@@ -36,19 +36,19 @@ export default class CalculationOutcomeFieldComponent extends Component {
   }
 
   calculateTotals = restartableTask(async () => {
-    const target = this.args.formStore.any(
-      this.args.field.uri,
+    const target = this.store.any(
+      this.field.uri,
       XSD('target'),
       undefined,
-      this.args.graphs.formGraph
+      this.graphs.formGraph
     );
 
     const options = {
       path: target,
-      store: this.args.formStore,
-      formGraph: this.args.graphs.formGraph,
-      sourceGraph: this.args.graphs.sourceGraph,
-      sourceNode: this.args.sourceNode,
+      store: this.store,
+      formGraph: this.graphs.formGraph,
+      sourceGraph: this.graphs.sourceGraph,
+      sourceNode: this.sourceNode,
     };
     const { values } = triplesForPath(options);
 
@@ -60,6 +60,22 @@ export default class CalculationOutcomeFieldComponent extends Component {
 
   willDestroy() {
     super.willDestroy(...arguments);
-    this.args.formStore.deregisterObserver(this.id);
+    this.store.deregisterObserver(this.id);
+  }
+
+  get field() {
+    return this.args.field;
+  }
+
+  get store() {
+    return this.args.formStore;
+  }
+
+  get graphs() {
+    return this.args.graphs;
+  }
+
+  get sourceNode() {
+    return this.args.sourceNode;
   }
 }
