@@ -148,91 +148,6 @@ export default class TableListingConfigurationComponent extends Component {
     );
   }
 
-  get scopePath() {
-    return EXT('outcome');
-  }
-
-  getScopeName(columnUri) {
-    const url = columnUri;
-    const parts = url.split('/');
-    const id = parts[parts.length - 1];
-
-    return `${id}-outcomeS`;
-  }
-
-  getGeneratorName(columnUri) {
-    const url = columnUri;
-    const parts = url.split('/');
-    const id = parts[parts.length - 1];
-
-    return `${id}-generator`;
-  }
-
-  getPrototypeBlankNodeName(columnUri) {
-    const url = columnUri;
-    const parts = url.split('/');
-    const id = parts[parts.length - 1];
-
-    return `${id}-prototype-blankNode`;
-  }
-
-  getShapeBlankNodeName(columnUri) {
-    const url = columnUri;
-    const parts = url.split('/');
-    const id = parts[parts.length - 1];
-
-    return `${id}-shape-blankNode`;
-  }
-  getIdOfuri(columnUri) {
-    const url = columnUri;
-    const parts = url.split('/');
-    const id = parts[parts.length - 1];
-
-    return id;
-  }
-
-  get sortedTables() {
-    return this.tables; // sort them on order, section and columns TODO:
-  }
-
-  get tableOptions() {
-    return sortObjectsOnProperty(
-      this.tables.map((table) => {
-        return {
-          tableListing: table.tableListing,
-          subject: table.section.subject,
-          name: table.section.name,
-          order: table.section.order,
-        };
-      }),
-      'order'
-    );
-  }
-
-  get columnOptions() {
-    if (!this.selectedTable) {
-      return [];
-    }
-
-    const table = this.tables.find(
-      (table) => table.section.subject == this.selectedTable.subject
-    );
-
-    if (!table) {
-      return [];
-    }
-
-    return sortObjectsOnProperty(table.columns, 'order');
-  }
-
-  get columnActions() {
-    return [{ label: 'Geen actie' }, { label: 'Som' }];
-  }
-
-  get graphs() {
-    return GRAPHS;
-  }
-
   getTtlCodeForForm(columnNode, tableListingUri) {
     return `
     @prefix : <#>.
@@ -275,5 +190,90 @@ export default class TableListingConfigurationComponent extends Component {
       undefined,
       this.graphs.sourceGraph
     );
+  }
+
+  getScopeName(columnUri) {
+    const url = columnUri;
+    const parts = url.split('/');
+    const id = parts[parts.length - 1];
+
+    return `${id}-outcomeS`;
+  }
+
+  getGeneratorName(columnUri) {
+    const url = columnUri;
+    const parts = url.split('/');
+    const id = parts[parts.length - 1];
+
+    return `${id}-generator`;
+  }
+
+  getPrototypeBlankNodeName(columnUri) {
+    const url = columnUri;
+    const parts = url.split('/');
+    const id = parts[parts.length - 1];
+
+    return `${id}-prototype-blankNode`;
+  }
+
+  getShapeBlankNodeName(columnUri) {
+    const url = columnUri;
+    const parts = url.split('/');
+    const id = parts[parts.length - 1];
+
+    return `${id}-shape-blankNode`;
+  }
+  getIdOfuri(columnUri) {
+    const url = columnUri;
+    const parts = url.split('/');
+    const id = parts[parts.length - 1];
+
+    return id;
+  }
+
+  get scopePath() {
+    return EXT('outcome');
+  }
+
+  get sortedTables() {
+    return this.tables; // sort them on order, section and columns TODO:
+  }
+
+  get tableOptions() {
+    return sortObjectsOnProperty(
+      this.tables.map((table) => {
+        return {
+          tableListing: table.tableListing,
+          subject: table.section.subject,
+          name: table.section.name,
+          order: table.section.order,
+        };
+      }),
+      'order'
+    );
+  }
+
+  get columnOptions() {
+    if (!this.selectedTable) {
+      return [];
+    }
+
+    const table = this.tables.find(
+      (table) => table.section.subject == this.selectedTable.subject
+    );
+
+    if (!table) {
+      return [];
+    }
+
+    return sortObjectsOnProperty(table.columns, 'order');
+  }
+
+  get columnActions() {
+    return [{ label: 'Geen actie' }, { label: 'Som' }];
+  }
+
+  get graphs() {
+    return GRAPHS;
   }
 }
