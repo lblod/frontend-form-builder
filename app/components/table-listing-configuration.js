@@ -198,14 +198,14 @@ export default class TableListingConfigurationComponent extends Component {
         form:dataGenerator form:addMuUuid;
         form:prototype [
             form:shape [
-              a ext:Expense ;
+              a ext:${this.getShapeName(columnNode.value)} ;
                 ext:amount 0.0
             ]
           ] .
 
     ext:${this.getScopeName(
       columnNode.value
-    )} a form:Scope; sh:path ext:Expense.
+    )} a form:Scope; sh:path ext:${this.getShapeName(columnNode.value)}.
     `;
   }
 
@@ -227,6 +227,10 @@ export default class TableListingConfigurationComponent extends Component {
 
   getGeneratorName(columnUri) {
     return `${this.getIdOfuri(columnUri)}-generator`;
+  }
+
+  getShapeName(columnUri) {
+    return `${this.getIdOfuri(columnUri)}-shape`;
   }
 
   getIdOfuri(uri) {
