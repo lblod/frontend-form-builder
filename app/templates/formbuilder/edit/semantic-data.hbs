@@ -1,4 +1,16 @@
 {{page-title "Semantic Data"}}
 <div class="semantic-data">
-  <SemanticDataTables />
+  {{#each this.data as |data|}}
+    <AuTable>
+      <:title>{{data.name.value}}</:title>
+      <:header>
+        <tr>
+        </tr>
+      </:header>
+      <:body>
+        <tr>
+        </tr>
+      </:body>
+    </AuTable>
+  {{/each}}
 </div>
