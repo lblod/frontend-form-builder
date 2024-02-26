@@ -1,16 +1,28 @@
 {{page-title "Semantic Data"}}
 <div class="semantic-data">
-  {{#each this.data as |data|}}
-    <AuTable>
-      <:title>{{data.name.value}}</:title>
-      <:header>
-        <tr>
-        </tr>
-      </:header>
-      <:body>
-        <tr>
-        </tr>
-      </:body>
-    </AuTable>
-  {{/each}}
+  <div class="semantic-data--table">
+    {{#each this.data as |data|}}
+      <AuTable>
+        <:title><span
+            class="au-u-word-break-all"
+          >{{data.subject}}</span></:title>
+        <:header>
+          <tr>
+            <th>Predicate</th>
+            <th>Object</th>
+          </tr>
+        </:header>
+        <:body>
+          {{#if data.values}}
+            {{#each data.values as |value|}}
+              <tr>
+                <td class="au-u-word-break-all">{{value.predicate}}</td>
+                <td class="au-u-word-break-all">{{value.object}}</td>
+              </tr>
+            {{/each}}
+          {{/if}}
+        </:body>
+      </AuTable>
+    {{/each}}
+  </div>
 </div>

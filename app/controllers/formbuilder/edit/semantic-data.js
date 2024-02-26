@@ -3,71 +3,46 @@ import Controller from '@ember/controller';
 import { restartableTask } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { GRAPHS } from '../edit';
-import { RDF, FORM } from '@lblod/submission-form-helpers';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
-import { getMinimalNodeInfo } from '../../../utils/forking-store-helpers';
 
 export default class FormbuilderEditSemanticDataController extends Controller {
   model;
   @tracked data = A([]);
 
-  mapFormData = restartableTask(async () => {
+  mapFormData = restartableTask(async (formTtlCode) => {
     const store = new ForkingStore();
-    store.parse(this.formTtl, this.graphs.sourceGraph, 'text/turtle');
+    store.parse(formTtlCode, this.graphs.sourceGraph, 'text/turtle');
 
-    const sections = this.getSectionsInForm(store);
-    this.mapSectionsToKey(sections, store);
+    const allStatements = store.match(
+      undefined,
+      undefined,
+      undefined,
+      this.graphs.sourceGraph
+    );
+
+    for (const st of allStatements) {
+      const value = { predicate: st.predicate.value, object: st.object.value };
+      const index = this.data.findIndex(
+        (item) => item.subject == st.subject.value
+      );
+      console.log(index);
+      if (!index || index == -1) {
+        this.data.pushObject({
+          subject: st.subject.value,
+          values: A([value]),
+        });
+      } else {
+        this.data[index].values.pushObject(value);
+      }
+    }
   });
 
-  mapSectionsToKey(sections, store) {
-    for (const sectionSubject of sections) {
-      const info = getMinimalNodeInfo(
-        sectionSubject,
-        store,
-        this.graphs.sourceGraph
-      );
-      this.data.pushObject({
-        type: this.dataTypes.section,
-        ...info,
-      });
-    }
-  }
-
-  getSectionsInForm(store) {
-    const sections = store
-      .match(undefined, RDF('type'), FORM('Section'), this.graphs.sourceGraph)
-      .map((st) => st.subject);
-
-    const propertyGroups = store
-      .match(
-        undefined,
-        RDF('type'),
-        FORM('PropertyGroup'),
-        this.graphs.sourceGraph
-      )
-      .map((st) => st.subject);
-
-    return [...sections, ...propertyGroups];
-  }
-
   setup(model) {
-    this.model = model;
-
-    this.mapFormData.perform();
-  }
-
-  get formTtl() {
-    return this.model.ttlCode;
+    this.mapFormData.perform(model.ttlCode);
   }
 
   get graphs() {
     return GRAPHS;
-  }
-
-  get dataTypes() {
-    return {
-      section: 'Section',
-    };
   }
 }
