@@ -28,13 +28,19 @@
   @reversed={{this.reversed}}
   as |Tab|
 >
-  <Tab>
-    <AuLink @route="formbuilder.edit.code" @icon="html">{{t
-        "navigation.tabs.code"
-      }}</AuLink>
-  </Tab>
-  {{#if (is-equal this.formVersion this.formVersionManager.VERSION_ONE)}}
-    <AuButtonGroup class="au-u-margin-left">
+  <AuButtonGroup class="au-u-margin-left">
+
+    <Tab>
+      <AuLink @route="formbuilder.edit.sematic-data" @icon="bookmark">{{t
+          "navigation.tabs.semanticData"
+        }}</AuLink>
+    </Tab>
+    <Tab>
+      <AuLink @route="formbuilder.edit.code" @icon="html">{{t
+          "navigation.tabs.code"
+        }}</AuLink>
+    </Tab>
+    {{#if (is-equal this.formVersion this.formVersionManager.VERSION_ONE)}}
       <Tab>
         <AuButton
           @skin="link-secondary"
@@ -65,25 +71,25 @@
           {{t "navigation.tabs.configuration"}}
         </AuButton>
       </Tab>
-    </AuButtonGroup>
 
-  {{else}}
-    <Tab>
-      <AuLink @route="formbuilder.edit.builder" @icon="sitemap">{{t
-          "navigation.tabs.build"
-        }}</AuLink>
-    </Tab>
-    <Tab>
-      <AuLink @route="formbuilder.edit.validations" @icon="decided">{{t
-          "navigation.tabs.validations"
-        }}</AuLink>
-    </Tab>
-    <Tab>
-      <AuLink @route="formbuilder.edit.configuration" @icon="settings">{{t
-          "navigation.tabs.configuration"
-        }}</AuLink>
-    </Tab>
-  {{/if}}
+    {{else}}
+      <Tab>
+        <AuLink @route="formbuilder.edit.builder" @icon="sitemap">{{t
+            "navigation.tabs.build"
+          }}</AuLink>
+      </Tab>
+      <Tab>
+        <AuLink @route="formbuilder.edit.validations" @icon="decided">{{t
+            "navigation.tabs.validations"
+          }}</AuLink>
+      </Tab>
+      <Tab>
+        <AuLink @route="formbuilder.edit.configuration" @icon="settings">{{t
+            "navigation.tabs.configuration"
+          }}</AuLink>
+      </Tab>
+    {{/if}}
+  </AuButtonGroup>
 
 </AuTabs>
 

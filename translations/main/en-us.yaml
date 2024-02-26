@@ -30,6 +30,7 @@ navigation:
     validations: "Validations"
     configuration: "Configuration"
     codelists: "Codelists"
+    semanticData: "Semantic Data"
 
 table:
   columns:

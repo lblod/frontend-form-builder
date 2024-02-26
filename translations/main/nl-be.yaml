@@ -30,6 +30,7 @@ navigation:
     validations: "Validaties"
     configuration: "Configuratie"
     codelists: "Codelijsten"
+    semanticData: "Data"
 
 table:
   columns:
