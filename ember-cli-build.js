@@ -28,5 +28,8 @@ module.exports = function (defaults) {
     // As a workaround we only enable it for production builds so that we can still use the dev tools for local development
     // while still having a smaller bundle in production.
     staticEmberSource: isProductionBuild,
+    packagerOptions: {
+      webpackConfig: require('@lblod/ember-rdfa-editor/webpack-config'),
+    },
   });
 };
