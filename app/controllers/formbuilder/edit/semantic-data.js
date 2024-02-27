@@ -10,8 +10,10 @@ import { RDF, FORM } from '@lblod/submission-form-helpers';
 
 export default class FormbuilderEditSemanticDataController extends Controller {
   model;
-  @tracked data = A([]);
+  @tracked filteredDataset = A([]);
   @tracked availableFilters = A([]);
+
+  fullDataset = null;
 
   mapFormData = restartableTask(async (formTtlCode) => {
     const store = new ForkingStore();
@@ -27,31 +29,33 @@ export default class FormbuilderEditSemanticDataController extends Controller {
     for (const st of allStatements) {
       const value = { predicate: st.predicate.value, object: st.object.value };
 
-      const index = this.data.findIndex(
+      const index = this.filteredDataset.findIndex(
         (item) => item.subject == st.subject.value
       );
       if (!index || index == -1) {
-        this.data.pushObject({
+        this.filteredDataset.pushObject({
           subject: st.subject.value,
           values: A([value]),
           tags: A([]),
         });
       } else {
-        this.data[index].values.pushObject(value);
+        this.filteredDataset[index].values.pushObject(value);
       }
 
       if (this.isRdfTypePredicate(st)) {
         const tag = this.getTagForType(st.object);
 
         if (tag) {
-          const index = this.data.findIndex(
+          const index = this.filteredDataset.findIndex(
             (item) => item.subject == st.subject.value
           );
-          this.data[index].tags.pushObject(tag);
+          this.filteredDataset[index].tags.pushObject(tag);
         }
       }
     }
-    console.log(this.data);
+    this.fullDataset = this.filteredDataset;
+    console.log(`data`, this.filteredDataset);
+    console.log(`dataset`, this.fullDataset);
   });
 
   @action
@@ -59,12 +63,14 @@ export default class FormbuilderEditSemanticDataController extends Controller {
     const filterIndex = this.availableFilters.findIndex(
       (item) => item.label == filter.label
     );
-    if (!filterIndex || filterIndex == -1) {
+
+    if (filterIndex == null || filterIndex == undefined || filterIndex == -1) {
       throw `Could not find filter (${filter.label})`;
     }
 
     const currentActiveState = this.availableFilters[filterIndex].isActive;
     set(this.availableFilters[filterIndex], 'isActive', !currentActiveState);
+    this.updateFilteredData();
   }
 
   getTagForType(object) {
@@ -133,7 +139,31 @@ export default class FormbuilderEditSemanticDataController extends Controller {
   }
 
   setup(model) {
+    this.availableFilters = A([]);
     this.mapFormData.perform(model.ttlCode);
+  }
+
+  get activeFilterLabelsAsArray() {
+    return this.availableFilters
+      .filter((filter) => filter.isActive)
+      .map((filter) => filter.label);
+  }
+
+  updateFilteredData() {
+    this.filteredDataset = this.fullDataset.filter((item) => {
+      const canShow = item.tags.toArray().some((tag) => {
+        if (this.activeFilterLabelsAsArray.includes(tag)) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      if (!canShow) {
+        return null;
+      }
+
+      return item;
+    });
   }
 
   get graphs() {
@@ -156,7 +186,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
   get filterStyle() {
     return {
       active: {
-        skin: 'link',
+        skin: 'success',
         icon: 'check',
       },
       inactive: {
