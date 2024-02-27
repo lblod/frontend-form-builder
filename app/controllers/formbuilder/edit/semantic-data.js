@@ -72,14 +72,20 @@ export default class FormbuilderEditSemanticDataController extends Controller {
   }
 
   getTagForType(object) {
-    const sections = [FORM('Section').value, FORM('PropertyGroup').value];
-
-    if (sections.includes(object.value)) {
+    if (this.sectionUris.includes(object.value)) {
       const sectionTag = this.filterTags.section;
       this.addTagToFilters(sectionTag);
 
       return sectionTag;
     }
+
+    if (this.validationUris.includes(object.value)) {
+      const validationTag = this.filterTags.validation;
+      this.addTagToFilters(validationTag);
+
+      return validationTag;
+    }
+
     const tagForType = {
       [FORM('Field').value]: this.filterTags.field,
       [FORM('Scope').value]: this.filterTags.scope,
@@ -180,5 +186,28 @@ export default class FormbuilderEditSemanticDataController extends Controller {
         icon: 'cross',
       },
     };
+  }
+
+  get sectionUris() {
+    return [FORM('Section').value, FORM('PropertyGroup').value];
+  }
+
+  get validationUris() {
+    return [
+      FORM('RequiredConstraint').value,
+      FORM('MaxLength').value,
+      FORM('PositiveNumber').value,
+      FORM('ExactValueConstraint').value,
+      FORM('ValidInteger').value,
+      FORM('ValidDateTime').value,
+      FORM('ValidDate').value,
+      FORM('ValidYear').value,
+      FORM('ValidEmail').value,
+      FORM('ValidPhoneNumber').value,
+      FORM('ValidIBAN').value,
+      FORM('ConceptSchemeConstraint').value,
+      FORM('UriConstraint').value,
+      FORM('Codelist').value,
+    ];
   }
 }
