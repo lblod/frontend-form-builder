@@ -5,6 +5,14 @@
   overflow-y: scroll;
 }
 
+.semantic-data--filters {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 2rem 4rem 0rem 4rem;
+}
+
 .semantic-data--table {
   padding: 2rem 1rem;
   display: flex;

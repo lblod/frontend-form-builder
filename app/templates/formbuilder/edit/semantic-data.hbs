@@ -1,5 +1,12 @@
 {{page-title "Semantic Data"}}
 <div class="semantic-data">
+  <div class="semantic-data--filters">
+    {{#each this.availableFilters as |filter|}}
+      <AuPill @skin={{filter.skin}}>
+        {{filter.label}}
+      </AuPill>
+    {{/each}}
+  </div>
   <div class="semantic-data--table">
     {{#each this.data as |data|}}
       <AuTable>
