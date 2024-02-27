@@ -15,7 +15,43 @@ export default class FormbuilderEditSemanticDataController extends Controller {
   model;
   fullDataset = null;
 
-  mapFormData = restartableTask(async (formTtlCode) => {
+  mapFormInputData = restartableTask(async (dataTtl) => {
+    if (!dataTtl) {
+      return;
+    }
+
+    const store = new ForkingStore();
+    store.parse(dataTtl, this.graphs.sourceGraph, 'text/turtle');
+
+    const allStatements = store.match(
+      undefined,
+      undefined,
+      undefined,
+      this.graphs.sourceGraph
+    );
+
+    for (const st of allStatements) {
+      const value = { predicate: st.predicate.value, object: st.object.value };
+
+      const index = this.filteredDataset.findIndex(
+        (item) => item.subject == st.subject.value
+      );
+      if (!index || index == -1) {
+        const inputDataTag = this.filterTags.inputData;
+        this.addTagToFilters(inputDataTag);
+
+        this.filteredDataset.pushObject({
+          subject: st.subject.value,
+          values: A([value]),
+          tags: A([inputDataTag]),
+        });
+      } else {
+        this.filteredDataset[index].values.pushObject(value);
+      }
+    }
+  });
+
+  mapFormTtl = restartableTask(async (formTtlCode) => {
     const store = new ForkingStore();
     store.parse(formTtlCode, this.graphs.sourceGraph, 'text/turtle');
 
@@ -133,7 +169,8 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
   setup(model) {
     this.availableFilters = A([]);
-    this.mapFormData.perform(model.ttlCode);
+    this.mapFormTtl.perform(model.formTtlCode);
+    this.mapFormInputData.perform(model.dataTtlCode);
   }
 
   updateFilteredData() {
@@ -173,6 +210,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
       validation: 'Validation',
       generator: 'Generator',
       scope: 'Scope',
+      inputData: 'Input-data',
       unTagged: 'Unknown types',
     };
   }

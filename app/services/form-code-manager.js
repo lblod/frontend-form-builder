@@ -11,6 +11,15 @@ export default class FormCodeManagerService extends Service {
   referenceVersion = this.startVersion;
 
   formId = null;
+  formInputDataTtl = null;
+
+  setFormInputDataTtl(ttl) {
+    this.formInputDataTtl = ttl;
+  }
+
+  getInputDataForLatestFormVersion() {
+    return this.formInputDataTtl;
+  }
 
   getTtlOfLatestVersion() {
     return this.#getTtlOfVersion(this.latestVersion);
