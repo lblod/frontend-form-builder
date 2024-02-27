@@ -32,7 +32,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
       const index = this.getIndexOfStatement(statement);
 
       if (this.isValidIndex(index)) {
-        const inputDataTag = this.filterTags.inputData;
+        const inputDataTag = this.filterTags.inputData.label;
         this.addTagToFilters(inputDataTag);
         this.filteredDataset[index].tags.pushObject(inputDataTag);
       }
@@ -112,26 +112,26 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
   getTagForType(object) {
     if (this.sectionUris.includes(object.value)) {
-      const sectionTag = this.filterTags.section;
+      const sectionTag = this.filterTags.section.label;
       this.addTagToFilters(sectionTag);
 
       return sectionTag;
     }
 
     if (this.validationUris.includes(object.value)) {
-      const validationTag = this.filterTags.validation;
+      const validationTag = this.filterTags.validation.label;
       this.addTagToFilters(validationTag);
 
       return validationTag;
     }
 
     const tagForType = {
-      [FORM('Field').value]: this.filterTags.field,
-      [FORM('Scope').value]: this.filterTags.scope,
-      [FORM('ListingTable').value]: this.filterTags.table,
-      [FORM('Listing').value]: this.filterTags.listing,
-      [FORM('SubForm').value]: this.filterTags.subform,
-      [FORM('Generator').value]: this.filterTags.generator,
+      [FORM('Field').value]: this.filterTags.field.label,
+      [FORM('Scope').value]: this.filterTags.scope.label,
+      [FORM('ListingTable').value]: this.filterTags.table.label,
+      [FORM('Listing').value]: this.filterTags.listing.label,
+      [FORM('SubForm').value]: this.filterTags.subform.label,
+      [FORM('Generator').value]: this.filterTags.generator.label,
     };
 
     const tag = tagForType[object.value];
@@ -141,8 +141,8 @@ export default class FormbuilderEditSemanticDataController extends Controller {
       return tag;
     }
 
-    this.addTagToFilters(this.filterTags.unTagged);
-    return this.filterTags.unTagged;
+    this.addTagToFilters(this.filterTags.unTagged.label);
+    return this.filterTags.unTagged.label;
   }
 
   addTagToFilters(tag) {
@@ -150,7 +150,10 @@ export default class FormbuilderEditSemanticDataController extends Controller {
       return;
     }
 
-    if (!Object.values(this.filterTags).includes(tag)) {
+    const filterTagLabels = Object.values(this.filterTags).map(
+      (value) => value.label
+    );
+    if (!Object.values(filterTagLabels).includes(tag)) {
       throw `Filter tag is not recognized: (${tag})`;
     }
 
@@ -206,16 +209,24 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
   get filterTags() {
     return {
-      section: this.intl.t('semanticData.filters.section'),
-      subform: this.intl.t('semanticData.filters.subform'),
-      field: this.intl.t('semanticData.filters.field'),
-      table: this.intl.t('semanticData.filters.table'),
-      listing: this.intl.t('semanticData.filters.listing'),
-      validation: this.intl.t('semanticData.filters.validation'),
-      generator: this.intl.t('semanticData.filters.generator'),
-      scope: this.intl.t('semanticData.filters.scope'),
-      inputData: this.intl.t('semanticData.filters.inputData'),
-      unTagged: this.intl.t('semanticData.filters.unTagged'),
+      section: { label: this.intl.t('semanticData.filters.section') },
+      subform: { label: this.intl.t('semanticData.filters.subform') },
+      field: { label: this.intl.t('semanticData.filters.field') },
+      table: { label: this.intl.t('semanticData.filters.table') },
+      listing: { label: this.intl.t('semanticData.filters.listing') },
+      validation: {
+        label: this.intl.t('semanticData.filters.validation'),
+      },
+      generator: {
+        label: this.intl.t('semanticData.filters.generator'),
+      },
+      scope: { label: this.intl.t('semanticData.filters.scope') },
+      inputData: {
+        label: this.intl.t('semanticData.filters.inputData'),
+      },
+      unTagged: {
+        label: this.intl.t('semanticData.filters.unTagged'),
+      },
     };
   }
 
