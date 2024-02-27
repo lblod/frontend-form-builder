@@ -8,13 +8,7 @@ export default class FormbuilderEditSemanticDataRoute extends Route {
 
   async model() {
     try {
-      const formTtl = this.formCodeManager.getTtlOfLatestVersion();
-      const dataTtl = this.formCodeManager.getInputDataForLatestFormVersion();
-
-      return {
-        formTtlCode: formTtl,
-        dataTtlCode: dataTtl,
-      };
+      this.formCodeManager.getTtlOfLatestVersion();
     } catch (error) {
       this.router.transitionTo(
         'formbuilder.edit',

@@ -10,6 +10,7 @@ import { service } from '@ember/service';
 import { RDF, FORM } from '@lblod/submission-form-helpers';
 
 export default class FormbuilderEditSemanticDataController extends Controller {
+  @service('form-code-manager') formCodeManager;
   @service intl;
 
   @tracked filteredDataset = A([]);
@@ -37,9 +38,14 @@ export default class FormbuilderEditSemanticDataController extends Controller {
         this.filteredDataset[index].tags.pushObject(inputDataTag);
       }
     }
+
+    this.updateFilteredData.perform();
   });
 
   mapFormTtl = restartableTask(async (formTtlCode) => {
+    this.fullDataset = A([]);
+    this.filteredDataset = A([]);
+
     const store = new ForkingStore();
     store.parse(formTtlCode, this.graphs.sourceGraph, 'text/turtle');
 
@@ -107,7 +113,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
     const currentActiveState = this.availableFilters[filterIndex].isActive;
     set(this.availableFilters[filterIndex], 'isActive', !currentActiveState);
-    this.updateFilteredData();
+    this.updateFilteredData.perform();
   }
 
   getTagForType(object) {
@@ -181,13 +187,21 @@ export default class FormbuilderEditSemanticDataController extends Controller {
     return false;
   }
 
-  setup(model) {
+  setup() {
     this.availableFilters = A([]);
-    this.mapFormTtl.perform(model.formTtlCode);
-    this.mapFormInputData.perform(model.dataTtlCode);
+    this.mapFormTtl.perform(this.formCodeManager.getTtlOfLatestVersion());
+    this.mapFormInputData.perform(
+      this.formCodeManager.getInputDataForLatestFormVersion()
+    );
   }
 
-  updateFilteredData() {
+  @action
+  addNewFormInputData(dataTtlCode) {
+    this.mapFormTtl.perform(this.formCodeManager.getTtlOfLatestVersion());
+    this.mapFormInputData.perform(dataTtlCode);
+  }
+
+  updateFilteredData = restartableTask(async () => {
     this.filteredDataset = this.fullDataset.filter((item) => {
       const canShow = item.tags.toArray().some((tag) => {
         if (this.activeFilterLabelsAsArray.includes(tag)) {
@@ -202,7 +216,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
       return item;
     });
-  }
+  });
 
   get activeFilterLabelsAsArray() {
     return this.availableFilters

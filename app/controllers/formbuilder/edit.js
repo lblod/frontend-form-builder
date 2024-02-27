@@ -94,6 +94,7 @@ export default class FormbuilderEditController extends Controller {
       );
 
       this.formCodeManager.setFormInputDataTtl(ttl);
+      this.model.passFormInputDataTtl(ttl);
     }, 'formInputData');
 
     this.previewForm = this.previewStore.any(
