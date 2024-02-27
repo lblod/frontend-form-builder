@@ -28,7 +28,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
       const index = this.getIndexOfStatement(statement);
 
-      if (index && index !== -1) {
+      if (this.isValidIndex(index)) {
         const inputDataTag = this.filterTags.inputData;
         this.addTagToFilters(inputDataTag);
         this.filteredDataset[index].tags.pushObject(inputDataTag);
@@ -62,7 +62,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
     };
 
     const index = this.getIndexOfStatement(statement);
-    if (!index || index == -1) {
+    if (!this.isValidIndex(index)) {
       this.filteredDataset.pushObject({
         subject: statement.subject.value,
         values: A([value]),
@@ -86,6 +86,10 @@ export default class FormbuilderEditSemanticDataController extends Controller {
       undefined,
       this.graphs.sourceGraph
     );
+  }
+
+  isValidIndex(index) {
+    return index == 0 || index !== -1;
   }
 
   @action
