@@ -47,6 +47,8 @@ createForm:
 
 semanticData:
   filters:
+    allOn: "All on"
+    allOff: "All off"
     formNode: "Form node"
     section: "Sections"
     subform: "Sub-forms"

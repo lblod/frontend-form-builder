@@ -18,6 +18,11 @@
   }
 }
 
+.semantic-data--filters__first {
+  box-shadow: 0 2px 5px rgb(0 0 0 / 0.2);
+  border-radius: 0.6rem;
+}
+
 .semantic-data--table {
   padding: 2rem 1rem;
   display: flex;

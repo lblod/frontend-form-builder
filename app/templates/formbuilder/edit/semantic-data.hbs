@@ -1,6 +1,16 @@
 {{page-title "Semantic Data"}}
 <div class="semantic-data">
   <div class="semantic-data--filters">
+    <span class="semantic-data--filters__first">
+      <AuPill
+        @skin={{this.filterStyle.toggleAll.skin}}
+        @icon={{this.filterStyle.toggleAll.icon}}
+        @iconAlignment="right"
+        {{on "click" this.toggleAllFilters}}
+      >
+        {{this.toggleAllFiltersLabel}}
+      </AuPill>
+    </span>
     {{#each this.availableFilters as |filter|}}
       {{#if filter.isActive}}
         <AuPill

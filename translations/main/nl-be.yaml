@@ -47,6 +47,8 @@ createForm:
 
 semanticData:
   filters:
+    allOn: "Alles aan"
+    allOff: "Alles uit"
     formNode: "Formulier node"
     section: "Secties"
     subform: "Subformulieren"

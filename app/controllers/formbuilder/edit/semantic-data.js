@@ -15,6 +15,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
   @tracked filteredDataset = A([]);
   @tracked availableFilters = A([]);
+  @tracked toggleAllFiltersLabel = this.filterTags.filtersOff.label;
 
   model;
   fullDataset = null;
@@ -216,6 +217,57 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
       return item;
     });
+
+    this.updateToggleOfAllFiltersLabel.perform();
+  });
+
+  @action
+  toggleAllFilters() {
+    if (this.toggleAllFiltersLabel == this.filterTags.filtersOn.label) {
+      this.toggleAllFiltersLabel = this.filterTags.filtersOff.label;
+      this.toggleAllAvailableFilters(true);
+      this.updateFilteredData.perform();
+
+      return;
+    }
+    if (this.toggleAllFiltersLabel == this.filterTags.filtersOff.label) {
+      this.toggleAllFiltersLabel = this.filterTags.filtersOn.label;
+      this.toggleAllAvailableFilters(false);
+      this.updateFilteredData.perform();
+
+      return;
+    }
+  }
+
+  toggleAllAvailableFilters(toggleState) {
+    for (let index = 0; index < this.availableFilters.length; index++) {
+      set(this.availableFilters[index], 'isActive', toggleState);
+    }
+  }
+
+  updateToggleOfAllFiltersLabel = restartableTask(async () => {
+    console.log(`toggle all filters`);
+    const activeAvailableFilters = this.availableFilters.filter(
+      (filter) => filter.isActive
+    );
+    const inactiveAvailableFilters = this.availableFilters.filter(
+      (filter) => !filter.isActive
+    );
+
+    if (activeAvailableFilters.length == this.availableFilters.length) {
+      this.toggleAllFiltersLabel = this.filterTags.filtersOff.label;
+
+      return;
+    }
+    if (inactiveAvailableFilters.length == this.availableFilters.length) {
+      this.toggleAllFiltersLabel = this.filterTags.filtersOn.label;
+
+      return;
+    }
+
+    if (activeAvailableFilters.length >= 1) {
+      this.toggleAllFiltersLabel = this.filterTags.filtersOff.label;
+    }
   });
 
   get activeFilterLabelsAsArray() {
@@ -230,6 +282,8 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
   get filterTags() {
     return {
+      filtersOn: { label: this.intl.t('semanticData.filters.allOn') },
+      filtersOff: { label: this.intl.t('semanticData.filters.allOff') },
       section: { label: this.intl.t('semanticData.filters.section') },
       subform: { label: this.intl.t('semanticData.filters.subform') },
       field: { label: this.intl.t('semanticData.filters.field') },
@@ -254,6 +308,10 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
   get filterStyle() {
     return {
+      toggleAll: {
+        skin: 'link',
+        icon: 'check',
+      },
       active: {
         skin: 'success',
         icon: 'check',
