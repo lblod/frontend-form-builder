@@ -47,6 +47,7 @@ createForm:
 
 semanticData:
   filters:
+    formNode: "Formulier node"
     section: "Secties"
     subform: "Subformulieren"
     field: "Velden"

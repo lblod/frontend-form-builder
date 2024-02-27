@@ -125,6 +125,13 @@ export default class FormbuilderEditSemanticDataController extends Controller {
       return validationTag;
     }
 
+    if (this.parentNodeFormUris.includes(object.value)) {
+      const formTag = this.filterTags.formNode.label;
+      this.addTagToFilters(formTag);
+
+      return formTag;
+    }
+
     const tagForType = {
       [FORM('Field').value]: this.filterTags.field.label,
       [FORM('Scope').value]: this.filterTags.scope.label,
@@ -224,6 +231,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
       inputData: {
         label: this.intl.t('semanticData.filters.inputData'),
       },
+      formNode: { label: this.intl.t('semanticData.filters.formNode') },
       unTagged: {
         label: this.intl.t('semanticData.filters.unTagged'),
       },
@@ -241,6 +249,10 @@ export default class FormbuilderEditSemanticDataController extends Controller {
         icon: 'cross',
       },
     };
+  }
+
+  get parentNodeFormUris() {
+    return [FORM('Form').value, FORM('TopLevelForm').value];
   }
 
   get sectionUris() {
