@@ -131,6 +131,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
       [FORM('ListingTable').value]: this.filterTags.table,
       [FORM('Listing').value]: this.filterTags.listing,
       [FORM('SubForm').value]: this.filterTags.subform,
+      [FORM('Generator').value]: this.filterTags.generator,
     };
 
     const tag = tagForType[object.value];
