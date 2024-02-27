@@ -45,6 +45,19 @@ createForm:
   selectTemplate: "Selecteer een formulier waarvan je wil beginnen"
   build: "Bouw formulier"
 
+semanticData:
+  filters:
+    section: "Secties"
+    subform: "Subformulieren"
+    field: "Velden"
+    table: "Tabellen"
+    listing: "Listings"
+    validation: "Validaties"
+    generator: "Generatoren"
+    scope: "Scopes"
+    inputData: "Gerbuiker input data"
+    unTagged: "Andere"
+
 # Components #
 toolbar:
   exportCode: "Exporteer code"

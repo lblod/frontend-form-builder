@@ -6,9 +6,12 @@ import { GRAPHS } from '../edit';
 import { tracked } from '@glimmer/tracking';
 import { action, set } from '@ember/object';
 import { A } from '@ember/array';
+import { service } from '@ember/service';
 import { RDF, FORM } from '@lblod/submission-form-helpers';
 
 export default class FormbuilderEditSemanticDataController extends Controller {
+  @service intl;
+
   @tracked filteredDataset = A([]);
   @tracked availableFilters = A([]);
 
@@ -202,16 +205,16 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
   get filterTags() {
     return {
-      section: 'Section',
-      subform: 'Sub-form',
-      field: 'Field',
-      table: 'Table',
-      listing: 'Listing',
-      validation: 'Validation',
-      generator: 'Generator',
-      scope: 'Scope',
-      inputData: 'Input-data',
-      unTagged: 'Unknown types',
+      section: this.intl.t('semanticData.filters.section'),
+      subform: this.intl.t('semanticData.filters.subform'),
+      field: this.intl.t('semanticData.filters.field'),
+      table: this.intl.t('semanticData.filters.table'),
+      listing: this.intl.t('semanticData.filters.listing'),
+      validation: this.intl.t('semanticData.filters.validation'),
+      generator: this.intl.t('semanticData.filters.generator'),
+      scope: this.intl.t('semanticData.filters.scope'),
+      inputData: this.intl.t('semanticData.filters.inputData'),
+      unTagged: this.intl.t('semanticData.filters.unTagged'),
     };
   }
 
