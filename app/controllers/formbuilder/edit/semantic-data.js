@@ -23,14 +23,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
     const store = new ForkingStore();
     store.parse(dataTtl, this.graphs.sourceGraph, 'text/turtle');
 
-    const allStatements = store.match(
-      undefined,
-      undefined,
-      undefined,
-      this.graphs.sourceGraph
-    );
-
-    for (const statement of allStatements) {
+    for (const statement of this.getAllStatementsInStore(store)) {
       this.addStatementToFilteredData(statement);
 
       const index = this.getIndexOfStatement(statement);
@@ -47,14 +40,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
     const store = new ForkingStore();
     store.parse(formTtlCode, this.graphs.sourceGraph, 'text/turtle');
 
-    const allStatements = store.match(
-      undefined,
-      undefined,
-      undefined,
-      this.graphs.sourceGraph
-    );
-
-    for (const statement of allStatements) {
+    for (const statement of this.getAllStatementsInStore(store)) {
       this.addStatementToFilteredData(statement);
 
       if (this.isRdfTypePredicate(statement)) {
@@ -90,6 +76,15 @@ export default class FormbuilderEditSemanticDataController extends Controller {
   getIndexOfStatement(statement) {
     return this.filteredDataset.findIndex(
       (item) => item.subject == statement.subject.value
+    );
+  }
+
+  getAllStatementsInStore(store) {
+    return store.match(
+      undefined,
+      undefined,
+      undefined,
+      this.graphs.sourceGraph
     );
   }
 
