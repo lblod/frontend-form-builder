@@ -94,7 +94,10 @@ export default class FormbuilderEditController extends Controller {
       );
 
       this.formCodeManager.setFormInputDataTtl(ttl);
-      this.model.passFormInputDataTtl(ttl);
+
+      if (this.isCurrentlyOnSemanticDataRoute) {
+        this.model.passFormInputDataTtl(ttl);
+      }
     }, 'formInputData');
 
     this.previewForm = this.previewStore.any(
@@ -180,5 +183,9 @@ export default class FormbuilderEditController extends Controller {
       );
       console.error(`Caught:`, error);
     }
+  }
+
+  get isCurrentlyOnSemanticDataRoute() {
+    return this.router.currentRouteName == 'formbuilder.edit.semantic-data';
   }
 }
