@@ -9,10 +9,10 @@ import { A } from '@ember/array';
 import { RDF, FORM } from '@lblod/submission-form-helpers';
 
 export default class FormbuilderEditSemanticDataController extends Controller {
-  model;
   @tracked filteredDataset = A([]);
   @tracked availableFilters = A([]);
 
+  model;
   fullDataset = null;
 
   mapFormData = restartableTask(async (formTtlCode) => {

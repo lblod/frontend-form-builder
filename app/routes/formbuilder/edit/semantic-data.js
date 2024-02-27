@@ -1,12 +1,13 @@
 import Route from '@ember/routing/route';
-import { getLocalFileContentAsText } from '../../../utils/get-local-file-content';
+
+import { service } from '@ember/service';
 
 export default class FormbuilderEditSemanticDataRoute extends Route {
+  @service('form-code-manager') formCodeManager;
+
   async model() {
     return {
-      ttlCode: await getLocalFileContentAsText(
-        '/forms/templates/contact-info-contact-person.ttl'
-      ),
+      ttlCode: this.formCodeManager.getTtlOfLatestVersion(),
     };
   }
 
