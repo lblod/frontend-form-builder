@@ -30,23 +30,15 @@ export default class FormbuilderEditSemanticDataController extends Controller {
       this.graphs.sourceGraph
     );
 
-    for (const st of allStatements) {
-      const value = { predicate: st.predicate.value, object: st.object.value };
+    for (const statement of allStatements) {
+      this.addStatementToFilteredData(statement);
 
-      const index = this.filteredDataset.findIndex(
-        (item) => item.subject == st.subject.value
-      );
-      if (!index || index == -1) {
+      const index = this.getIndexOfStatement(statement);
+
+      if (index && index !== -1) {
         const inputDataTag = this.filterTags.inputData;
         this.addTagToFilters(inputDataTag);
-
-        this.filteredDataset.pushObject({
-          subject: st.subject.value,
-          values: A([value]),
-          tags: A([inputDataTag]),
-        });
-      } else {
-        this.filteredDataset[index].values.pushObject(value);
+        this.filteredDataset[index].tags.pushObject(inputDataTag);
       }
     }
   });
@@ -62,35 +54,44 @@ export default class FormbuilderEditSemanticDataController extends Controller {
       this.graphs.sourceGraph
     );
 
-    for (const st of allStatements) {
-      const value = { predicate: st.predicate.value, object: st.object.value };
+    for (const statement of allStatements) {
+      this.addStatementToFilteredData(statement);
 
-      const index = this.filteredDataset.findIndex(
-        (item) => item.subject == st.subject.value
-      );
-      if (!index || index == -1) {
-        this.filteredDataset.pushObject({
-          subject: st.subject.value,
-          values: A([value]),
-          tags: A([]),
-        });
-      } else {
-        this.filteredDataset[index].values.pushObject(value);
-      }
-
-      if (this.isRdfTypePredicate(st)) {
-        const tag = this.getTagForType(st.object);
+      if (this.isRdfTypePredicate(statement)) {
+        const tag = this.getTagForType(statement.object);
 
         if (tag) {
-          const index = this.filteredDataset.findIndex(
-            (item) => item.subject == st.subject.value
-          );
+          const index = this.getIndexOfStatement(statement);
           this.filteredDataset[index].tags.pushObject(tag);
         }
       }
     }
     this.fullDataset = this.filteredDataset;
   });
+
+  addStatementToFilteredData(statement) {
+    const value = {
+      predicate: statement.predicate.value,
+      object: statement.object.value,
+    };
+
+    const index = this.getIndexOfStatement(statement);
+    if (!index || index == -1) {
+      this.filteredDataset.pushObject({
+        subject: statement.subject.value,
+        values: A([value]),
+        tags: A([]),
+      });
+    } else {
+      this.filteredDataset[index].values.pushObject(value);
+    }
+  }
+
+  getIndexOfStatement(statement) {
+    return this.filteredDataset.findIndex(
+      (item) => item.subject == statement.subject.value
+    );
+  }
 
   @action
   toggleFilter(filter) {
