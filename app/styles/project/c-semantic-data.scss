@@ -10,7 +10,8 @@
   flex-direction: row;
   gap: 1rem;
   flex-wrap: wrap;
-  padding: 2rem 4rem 0rem 4rem;
+  padding: 2rem;
+  padding-bottom: 0px;
   justify-content: left;
   span {
     cursor: pointer;
