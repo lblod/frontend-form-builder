@@ -101,7 +101,8 @@ export default class FormbuilderEditSemanticDataController extends Controller {
       return tag;
     }
 
-    return null;
+    this.addTagToFilters(this.filterTags.unTagged);
+    return this.filterTags.unTagged;
   }
 
   addTagToFilters(tag) {
@@ -172,6 +173,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
       validation: 'Validation',
       generator: 'Generator',
       scope: 'Scope',
+      unTagged: 'Unknown types',
     };
   }
 
