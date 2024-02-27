@@ -55,7 +55,7 @@ semanticData:
     validation: "Validaties"
     generator: "Generatoren"
     scope: "Scopes"
-    inputData: "Gerbuiker input data"
+    inputData: "Gebruiker input data"
     unTagged: "Andere"
 
 # Components #
