@@ -4,6 +4,7 @@ import { restartableTask } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { GRAPHS } from '../edit';
 import { tracked } from '@glimmer/tracking';
+import { action, set } from '@ember/object';
 import { A } from '@ember/array';
 import { RDF, FORM } from '@lblod/submission-form-helpers';
 
@@ -53,6 +54,19 @@ export default class FormbuilderEditSemanticDataController extends Controller {
     console.log(this.data);
   });
 
+  @action
+  toggleFilter(filter) {
+    const filterIndex = this.availableFilters.findIndex(
+      (item) => item.label == filter.label
+    );
+    if (!filterIndex || filterIndex == -1) {
+      throw `Could not find filter (${filter.label})`;
+    }
+
+    const currentActiveState = this.availableFilters[filterIndex].isActive;
+    set(this.availableFilters[filterIndex], 'isActive', !currentActiveState);
+  }
+
   getTagForType(object) {
     const sections = [FORM('Section').value, FORM('PropertyGroup').value];
 
@@ -68,6 +82,30 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
       return fieldTag;
     }
+    if (object.value == FORM('Scope').value) {
+      const scopeTag = this.filterTags.scope;
+      this.addTagToFilters(scopeTag);
+
+      return scopeTag;
+    }
+    if (object.value == FORM('ListingTable').value) {
+      const tableTag = this.filterTags.table;
+      this.addTagToFilters(tableTag);
+
+      return tableTag;
+    }
+    if (object.value == FORM('Listing').value) {
+      const listingTag = this.filterTags.listing;
+      this.addTagToFilters(listingTag);
+
+      return listingTag;
+    }
+    if (object.value == FORM('SubForm').value) {
+      const subformTag = this.filterTags.subform;
+      this.addTagToFilters(subformTag);
+
+      return subformTag;
+    }
 
     return null;
   }
@@ -79,8 +117,10 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
     if (!this.availableFilters.some((filter) => filter.label == tag)) {
       this.availableFilters.pushObject({
-        skin: this.filterSkin.active,
+        isActive: true,
+        skin: this.filterStyle.active.skin,
         label: tag,
+        icon: this.filterStyle.active.icon,
       });
     }
   }
@@ -103,18 +143,26 @@ export default class FormbuilderEditSemanticDataController extends Controller {
   get filterTags() {
     return {
       section: 'Section',
+      subform: 'Sub-form',
       field: 'Field',
       table: 'Table',
+      listing: 'Listing',
       validation: 'Validation',
       generator: 'Generator',
       scope: 'Scope',
     };
   }
 
-  get filterSkin() {
+  get filterStyle() {
     return {
-      active: 'link',
-      inactive: 'border',
+      active: {
+        skin: 'link',
+        icon: 'check',
+      },
+      inactive: {
+        skin: 'border',
+        icon: 'cross',
+      },
     };
   }
 }

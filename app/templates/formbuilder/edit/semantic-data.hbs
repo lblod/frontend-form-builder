@@ -2,11 +2,28 @@
 <div class="semantic-data">
   <div class="semantic-data--filters">
     {{#each this.availableFilters as |filter|}}
-      <AuPill @skin={{filter.skin}}>
-        {{filter.label}}
-      </AuPill>
+      {{#if filter.isActive}}
+        <AuPill
+          @skin={{this.filterStyle.active.skin}}
+          @icon={{this.filterStyle.active.icon}}
+          @iconAlignment="right"
+          {{on "click" (fn this.toggleFilter filter)}}
+        >
+          {{filter.label}}
+        </AuPill>
+      {{else}}
+        <AuPill
+          @skin={{this.filterStyle.inactive.skin}}
+          @icon={{this.filterStyle.inactive.icon}}
+          @iconAlignment="right"
+          {{on "click" (fn this.toggleFilter filter)}}
+        >
+          {{filter.label}}
+        </AuPill>
+      {{/if}}
     {{/each}}
   </div>
+
   <div class="semantic-data--table">
     {{#each this.data as |data|}}
       <AuTable>
