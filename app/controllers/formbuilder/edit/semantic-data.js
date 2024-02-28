@@ -15,7 +15,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
   @tracked filteredDataset = A([]);
   @tracked availableFilters = A([]);
-  @tracked toggleAllFiltersLabel = this.toggleAllTag.filtersOff.label;
+  @tracked toggleAllFiltersLabel = this.toggleAllFilter.filtersOff.label;
 
   model;
   fullDataset = null;
@@ -34,8 +34,8 @@ export default class FormbuilderEditSemanticDataController extends Controller {
       const index = this.getIndexOfStatement(statement);
 
       if (this.isValidIndex(index)) {
-        const inputDataTag = this.filterTags.inputData;
-        this.addTagToFilters(inputDataTag);
+        const inputDataTag = this.filters.inputData;
+        this.addFilter(inputDataTag);
         this.filteredDataset[index].tags.pushObject(inputDataTag);
       }
     }
@@ -54,11 +54,11 @@ export default class FormbuilderEditSemanticDataController extends Controller {
       this.addStatementToFilteredData(statement);
 
       if (this.isRdfTypePredicate(statement)) {
-        const tag = this.getTagForType(statement.object);
+        const filter = this.getFilterForType(statement.object);
 
-        if (tag) {
+        if (filter) {
           const index = this.getIndexOfStatement(statement);
-          this.filteredDataset[index].tags.pushObject(tag);
+          this.filteredDataset[index].tags.pushObject(filter);
         }
       }
     }
@@ -117,66 +117,70 @@ export default class FormbuilderEditSemanticDataController extends Controller {
     this.updateFilteredData.perform();
   }
 
-  getTagForType(object) {
+  getFilterForType(object) {
     if (this.sectionUris.includes(object.value)) {
-      const sectionTag = this.filterTags.section;
-      this.addTagToFilters(sectionTag);
+      const sectionFilter = this.filters.section;
+      this.addFilter(sectionFilter);
 
-      return sectionTag;
+      return sectionFilter;
     }
 
     if (this.validationUris.includes(object.value)) {
-      const validationTag = this.filterTags.validation;
-      this.addTagToFilters(validationTag);
+      const validationFilter = this.filters.validation;
+      this.addFilter(validationFilter);
 
-      return validationTag;
+      return validationFilter;
     }
 
     if (this.parentNodeFormUris.includes(object.value)) {
-      const formTag = this.filterTags.formNode;
-      this.addTagToFilters(formTag);
+      const formFilter = this.filters.formNode;
+      this.addFilter(formFilter);
 
-      return formTag;
+      return formFilter;
     }
 
-    const tagForType = {
-      [FORM('Field').value]: this.filterTags.field,
-      [FORM('Scope').value]: this.filterTags.scope,
-      [FORM('ListingTable').value]: this.filterTags.table,
-      [FORM('Listing').value]: this.filterTags.listing,
-      [FORM('SubForm').value]: this.filterTags.subform,
-      [FORM('Generator').value]: this.filterTags.generator,
+    const filterForType = {
+      [FORM('Field').value]: this.filters.field,
+      [FORM('Scope').value]: this.filters.scope,
+      [FORM('ListingTable').value]: this.filters.table,
+      [FORM('Listing').value]: this.filters.listing,
+      [FORM('SubForm').value]: this.filters.subform,
+      [FORM('Generator').value]: this.filters.generator,
     };
 
-    const tag = tagForType[object.value];
+    const filter = filterForType[object.value];
 
-    if (tag) {
-      this.addTagToFilters(tag);
-      return tag;
+    if (filter) {
+      this.addFilter(filter);
+      return filter;
     }
 
-    this.addTagToFilters(this.filterTags.unTagged);
-    return this.filterTags.unTagged;
+    this.addFilter(this.filters.unTagged);
+    return this.filters.unTagged;
   }
 
-  addTagToFilters(tag) {
-    if (!tag) {
+  addFilter(filter) {
+    if (!filter) {
       return;
     }
 
-    const filterTagLabels = Object.values(this.filterTags).map(
+    const filterLabels = Object.values(this.filters).map(
       (value) => value.label
     );
-    if (!Object.values(filterTagLabels).includes(tag.label)) {
-      throw `Filter tag is not recognized: (${tag})`;
+    if (!Object.values(filterLabels).includes(filter.label)) {
+      throw `Filter is not recognized: (${filter.label ?? null})`;
     }
 
-    if (!this.availableFilters.some((filter) => filter.label == tag.label)) {
+    if (
+      !this.availableFilters.some(
+        (activeFilter) => activeFilter.label == filter.label
+      )
+    ) {
       this.availableFilters.pushObject({
-        order: tag.order,
+        order: filter.order,
         isActive: true,
         skin: this.filterStyle.active.skin,
-        label: tag.label,
+        label: filter.label,
         icon: this.filterStyle.active.icon,
       });
     }
@@ -205,8 +209,8 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
   updateFilteredData = restartableTask(async () => {
     this.filteredDataset = this.fullDataset.filter((item) => {
-      const canShow = item.tags.toArray().some((tag) => {
-        if (this.activeFilterLabelsAsArray.includes(tag.label)) {
+      const canShow = item.tags.toArray().some((filter) => {
+        if (this.activeFilterLabelsAsArray.includes(filter.label)) {
           return true;
         } else {
           return false;
@@ -224,15 +228,15 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
   @action
   toggleAllFilters() {
-    if (this.toggleAllFiltersLabel == this.toggleAllTag.filtersOn.label) {
-      this.toggleAllFiltersLabel = this.toggleAllTag.filtersOff.label;
+    if (this.toggleAllFiltersLabel == this.toggleAllFilter.filtersOn.label) {
+      this.toggleAllFiltersLabel = this.toggleAllFilter.filtersOff.label;
       this.toggleAllAvailableFilters(true);
       this.updateFilteredData.perform();
 
       return;
     }
-    if (this.toggleAllFiltersLabel == this.toggleAllTag.filtersOff.label) {
-      this.toggleAllFiltersLabel = this.toggleAllTag.filtersOn.label;
+    if (this.toggleAllFiltersLabel == this.toggleAllFilter.filtersOff.label) {
+      this.toggleAllFiltersLabel = this.toggleAllFilter.filtersOn.label;
       this.toggleAllAvailableFilters(false);
       this.updateFilteredData.perform();
 
@@ -255,18 +259,18 @@ export default class FormbuilderEditSemanticDataController extends Controller {
     );
 
     if (activeAvailableFilters.length == this.availableFilters.length) {
-      this.toggleAllFiltersLabel = this.toggleAllTag.filtersOff.label;
+      this.toggleAllFiltersLabel = this.toggleAllFilter.filtersOff.label;
 
       return;
     }
     if (inactiveAvailableFilters.length == this.availableFilters.length) {
-      this.toggleAllFiltersLabel = this.toggleAllTag.filtersOn.label;
+      this.toggleAllFiltersLabel = this.toggleAllFilter.filtersOn.label;
 
       return;
     }
 
     if (activeAvailableFilters.length >= 1) {
-      this.toggleAllFiltersLabel = this.toggleAllTag.filtersOff.label;
+      this.toggleAllFiltersLabel = this.toggleAllFilter.filtersOff.label;
     }
   });
 
@@ -280,7 +284,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
     return GRAPHS;
   }
 
-  get toggleAllTag() {
+  get toggleAllFilter() {
     return {
       filtersOn: {
         label: this.intl.t('semanticData.filters.allOn'),
@@ -291,7 +295,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
     };
   }
 
-  get filterTags() {
+  get filters() {
     return {
       formNode: {
         order: 1,
