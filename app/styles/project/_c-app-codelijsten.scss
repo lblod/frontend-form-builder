@@ -6,17 +6,3 @@
   height: 100%;
   overflow-y: auto;
 }
-
-.codelists-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.codelists-header__createAndSearch {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  align-items: right;
-}
