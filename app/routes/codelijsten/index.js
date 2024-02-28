@@ -10,6 +10,15 @@ export default class CodelijstenIndexRoute extends Route.extend(
   @service store;
 
   queryParams = {
+    sort: {
+      refreshModel: true,
+    },
+    page: {
+      refreshModel: true,
+    },
+    size: {
+      refreshModel: true,
+    },
     formId: {
       refreshModel: true,
     },

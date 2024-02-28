@@ -62,16 +62,11 @@
           <c.header>
             <AuDataTableThSortable
               @label="Naam"
-              @field="label"
+              @field="preflabel"
               @currentSorting={{this.sort}}
               class="au-u-visible-medium-up"
             />
-            <AuDataTableThSortable
-              @label="Id"
-              @field="id"
-              @currentSorting={{this.sort}}
-              class="au-u-visible-small-up"
-            />
+            <th colspan="1">Id</th>
             <th colspan="1"></th>
           </c.header>
           <c.body as |codelist|>
