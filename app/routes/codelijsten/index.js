@@ -19,6 +19,9 @@ export default class CodelijstenIndexRoute extends Route.extend(
     size: {
       refreshModel: true,
     },
+    filter: {
+      refreshModel: true,
+    },
     formId: {
       refreshModel: true,
     },

@@ -12,7 +12,7 @@ export default class CodelijstenController extends Controller.extend(
   @service router;
   @service intl;
 
-  @tracked searchValue;
+  @tracked filter;
 
   sort = '-preflabel';
   size = 20;
@@ -35,12 +35,8 @@ export default class CodelijstenController extends Controller.extend(
   @action
   searchCodelist(event) {
     const inputvalue = event.target.value;
-    if (!inputvalue) {
-      this.searchValue = null;
 
-      return;
-    }
-    this.searchValue = inputvalue;
+    this.filter = inputvalue;
   }
 
   get routeLabel() {
