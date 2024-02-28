@@ -66,6 +66,88 @@ export default class FormbuilderEditSemanticDataController extends Controller {
     this.fullDataset = this.filteredDataset;
   });
 
+  updateFilteredData = restartableTask(async () => {
+    this.filteredDataset = this.fullDataset.filter((item) => {
+      const canShow = item.filters.toArray().some((filter) => {
+        if (this.activeFilterLabelsAsArray.includes(filter.label)) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      if (!canShow) {
+        return null;
+      }
+
+      return item;
+    });
+
+    this.updateToggleOfAllFiltersLabel.perform();
+  });
+
+  updateToggleOfAllFiltersLabel = restartableTask(async () => {
+    const activeAvailableFilters = this.availableFilters.filter(
+      (filter) => filter.isActive
+    );
+    const inactiveAvailableFilters = this.availableFilters.filter(
+      (filter) => !filter.isActive
+    );
+
+    if (activeAvailableFilters.length == this.availableFilters.length) {
+      this.toggleAllFiltersLabel = this.toggleAllFilter.filtersOff.label;
+
+      return;
+    }
+    if (inactiveAvailableFilters.length == this.availableFilters.length) {
+      this.toggleAllFiltersLabel = this.toggleAllFilter.filtersOn.label;
+
+      return;
+    }
+
+    if (activeAvailableFilters.length >= 1) {
+      this.toggleAllFiltersLabel = this.toggleAllFilter.filtersOff.label;
+    }
+  });
+
+  @action
+  toggleFilter(filter) {
+    const filterIndex = this.availableFilters.findIndex(
+      (item) => item.label == filter.label
+    );
+
+    if (filterIndex == null || filterIndex == undefined || filterIndex == -1) {
+      throw `Could not find filter (${filter.label})`;
+    }
+
+    const currentActiveState = this.availableFilters[filterIndex].isActive;
+    set(this.availableFilters[filterIndex], 'isActive', !currentActiveState);
+    this.updateFilteredData.perform();
+  }
+
+  @action
+  addNewFormInputData(dataTtlCode) {
+    this.mapFormTtl.perform(this.formCodeManager.getTtlOfLatestVersion());
+    this.mapFormInputData.perform(dataTtlCode);
+  }
+
+  @action
+  toggleAllFilters() {
+    if (this.toggleAllFiltersLabel == this.toggleAllFilter.filtersOn.label) {
+      this.toggleAllFiltersLabel = this.toggleAllFilter.filtersOff.label;
+      this.toggleAllAvailableFilters(true);
+      this.updateFilteredData.perform();
+
+      return;
+    }
+    if (this.toggleAllFiltersLabel == this.toggleAllFilter.filtersOff.label) {
+      this.toggleAllFiltersLabel = this.toggleAllFilter.filtersOn.label;
+      this.toggleAllAvailableFilters(false);
+      this.updateFilteredData.perform();
+
+      return;
+    }
+  }
+
   addStatementToFilteredData(statement) {
     const value = {
       predicate: statement.predicate.value,
@@ -101,21 +183,6 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
   isValidIndex(index) {
     return index == 0 || index !== -1;
-  }
-
-  @action
-  toggleFilter(filter) {
-    const filterIndex = this.availableFilters.findIndex(
-      (item) => item.label == filter.label
-    );
-
-    if (filterIndex == null || filterIndex == undefined || filterIndex == -1) {
-      throw `Could not find filter (${filter.label})`;
-    }
-
-    const currentActiveState = this.availableFilters[filterIndex].isActive;
-    set(this.availableFilters[filterIndex], 'isActive', !currentActiveState);
-    this.updateFilteredData.perform();
   }
 
   getFilterForType(object) {
@@ -202,78 +269,11 @@ export default class FormbuilderEditSemanticDataController extends Controller {
     );
   }
 
-  @action
-  addNewFormInputData(dataTtlCode) {
-    this.mapFormTtl.perform(this.formCodeManager.getTtlOfLatestVersion());
-    this.mapFormInputData.perform(dataTtlCode);
-  }
-
-  updateFilteredData = restartableTask(async () => {
-    this.filteredDataset = this.fullDataset.filter((item) => {
-      const canShow = item.filters.toArray().some((filter) => {
-        if (this.activeFilterLabelsAsArray.includes(filter.label)) {
-          return true;
-        } else {
-          return false;
-        }
-      });
-      if (!canShow) {
-        return null;
-      }
-
-      return item;
-    });
-
-    this.updateToggleOfAllFiltersLabel.perform();
-  });
-
-  @action
-  toggleAllFilters() {
-    if (this.toggleAllFiltersLabel == this.toggleAllFilter.filtersOn.label) {
-      this.toggleAllFiltersLabel = this.toggleAllFilter.filtersOff.label;
-      this.toggleAllAvailableFilters(true);
-      this.updateFilteredData.perform();
-
-      return;
-    }
-    if (this.toggleAllFiltersLabel == this.toggleAllFilter.filtersOff.label) {
-      this.toggleAllFiltersLabel = this.toggleAllFilter.filtersOn.label;
-      this.toggleAllAvailableFilters(false);
-      this.updateFilteredData.perform();
-
-      return;
-    }
-  }
-
   toggleAllAvailableFilters(toggleState) {
     for (let index = 0; index < this.availableFilters.length; index++) {
       set(this.availableFilters[index], 'isActive', toggleState);
     }
   }
-
-  updateToggleOfAllFiltersLabel = restartableTask(async () => {
-    const activeAvailableFilters = this.availableFilters.filter(
-      (filter) => filter.isActive
-    );
-    const inactiveAvailableFilters = this.availableFilters.filter(
-      (filter) => !filter.isActive
-    );
-
-    if (activeAvailableFilters.length == this.availableFilters.length) {
-      this.toggleAllFiltersLabel = this.toggleAllFilter.filtersOff.label;
-
-      return;
-    }
-    if (inactiveAvailableFilters.length == this.availableFilters.length) {
-      this.toggleAllFiltersLabel = this.toggleAllFilter.filtersOn.label;
-
-      return;
-    }
-
-    if (activeAvailableFilters.length >= 1) {
-      this.toggleAllFiltersLabel = this.toggleAllFilter.filtersOff.label;
-    }
-  });
 
   get orderedAvailableFilters() {
     return sortObjectsOnProperty(Object.values(this.availableFilters), 'order');
