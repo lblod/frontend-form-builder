@@ -37,6 +37,8 @@ table:
     id: "Id"
     label: "Label"
     actions: "Actions"
+    test: "Example"
+    modifiedOn: "Modified on"
 
 createForm:
   title: "Maak je nieuwe formulier"

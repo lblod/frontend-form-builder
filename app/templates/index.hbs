@@ -18,7 +18,7 @@
       <AuDataTable
         @content={{this.model}}
         @isLoading={{this.isLoadingModel}}
-        @noDataMessage={{t "messages.feedback.noFormsFound"}}
+        @noDataMessage={{this.translations.noFormsFound}}
         @sort={{this.sort}}
         @page={{this.page}}
         @size={{this.size}}
@@ -27,13 +27,13 @@
         <t.content as |c|>
           <c.header>
             <AuDataTableThSortable
-              @label="Naam"
+              @label={{this.translations.ColumnName}}
               @field="label"
               @currentSorting={{this.sort}}
               class="au-u-visible-medium-up"
             />
             <AuDataTableThSortable
-              @label="Aangepast op"
+              @label={{this.translations.ColumnModifiedOn}}
               @field="modified"
               @currentSorting={{this.sort}}
               class="au-u-visible-small-up"
@@ -59,7 +59,7 @@
                 @icon="eye"
                 @alignment="left"
               >
-                Voorbeeld
+                {{this.translations.test}}
               </AuLink>
             </td>
             <td class="au-u-visible-medium-up">
@@ -69,7 +69,7 @@
                 @alert={{true}}
                 {{on "click" (fn this.openDeleteModal generatedForm)}}
               >
-                Verwijder
+                {{this.translations.deleteForm}}
               </AuButton>
             </td>
           </c.body>
