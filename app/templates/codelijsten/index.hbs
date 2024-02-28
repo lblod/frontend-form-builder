@@ -46,55 +46,71 @@
   </div>
 </div>
 
-<div class="au-c-main-container__content codelijsten__scroll">
-  <AuTable class="au-u-margin-bottom-small">
-    <:header>
-      <tr>
-        <th>{{t "table.columns.name"}}</th>
-        <th>{{t "table.columns.id"}}</th>
-        <th></th>
-      </tr>
-    </:header>
-    <:body>
-      {{#each this.model as |conceptScheme|}}
-        <tr>
-          <td class="au-u-visible-medium-up au-u-word-break">
-            <AuLink
-              @route="codelijsten.edit"
-              @model={{conceptScheme.id}}
-              @ariaHidden={{true}}
-            >{{conceptScheme.label}}</AuLink>
-          </td>
-          <td class="au-u-visible-medium-up">{{conceptScheme.id}}</td>
-          <td>
-            {{#if conceptScheme.isPublic}}
-              <AuPill
-                @skin="success"
-                @icon="info-circle"
-                @iconAlignment="left"
-              >{{t "codelists.types.isPublic"}}
-              </AuPill>
-              {{#if conceptScheme.isArchived}}
+<main id="main" class="au-c-main-container">
+  <div class="au-c-main-container__content">
+    <div class="au-c-body-container removeTableLines">
+      <AuDataTable
+        @content={{this.model}}
+        @isLoading={{this.isLoadingModel}}
+        @noDataMessage="Geen codelijsten gevonden"
+        @sort={{this.sort}}
+        @page={{this.page}}
+        @size={{this.size}}
+        as |t|
+      >
+        <t.content as |c|>
+          <c.header>
+            <AuDataTableThSortable
+              @label="Naam"
+              @field="label"
+              @currentSorting={{this.sort}}
+              class="au-u-visible-medium-up"
+            />
+            <AuDataTableThSortable
+              @label="Id"
+              @field="id"
+              @currentSorting={{this.sort}}
+              class="au-u-visible-small-up"
+            />
+            <th colspan="1"></th>
+          </c.header>
+          <c.body as |codelist|>
+            <td class="au-u-visible-medium-up au-u-word-break">
+              <AuLink
+                @route="formbuilder.edit"
+                @model={{codelist.id}}
+                @ariaHidden={{true}}
+              >{{codelist.label}}</AuLink>
+            </td>
+            <td class="au-u-visible-medium-up">{{codelist.id}}</td>
+            <td class="au-u-visible-medium-up">
+              {{#if codelist.isPublic}}
                 <AuPill
-                  @skin="default"
-                  @icon="archive"
+                  @skin="success"
+                  @icon="info-circle"
                   @iconAlignment="left"
-                >{{t "codelists.types.isArchived"}}
+                >Generiek
+                </AuPill>
+                {{#if codelist.isArchived}}
+                  <AuPill
+                    @skin="default"
+                    @icon="archive"
+                    @iconAlignment="left"
+                  >Gearchiveerd
+                  </AuPill>
+                {{/if}}
+              {{else}}
+                <AuPill
+                  @skin="warning"
+                  @icon="info-circle"
+                  @iconAlignment="left"
+                >Eigen codelijst
                 </AuPill>
               {{/if}}
-            {{else}}
-              <AuPill
-                @skin="warning"
-                @icon="info-circle"
-                @iconAlignment="left"
-              >{{t "codelists.types.isPrivate"}}
-              </AuPill>
-            {{/if}}
-          </td>
-        </tr>
-      {{/each}}
-    </:body>
-  </AuTable>
-</div>
-
-{{outlet}}
+            </td>
+          </c.body>
+        </t.content>
+      </AuDataTable>
+    </div>
+  </div>
+</main>
