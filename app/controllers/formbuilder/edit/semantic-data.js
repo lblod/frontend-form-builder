@@ -15,7 +15,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
   @tracked filteredDataset = A([]);
   @tracked availableFilters = A([]);
-  @tracked toggleAllFiltersLabel = this.filterTags.filtersOff.label;
+  @tracked toggleAllFiltersLabel = this.toggleAllTag.filtersOff.label;
 
   model;
   fullDataset = null;
@@ -223,15 +223,15 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
   @action
   toggleAllFilters() {
-    if (this.toggleAllFiltersLabel == this.filterTags.filtersOn.label) {
-      this.toggleAllFiltersLabel = this.filterTags.filtersOff.label;
+    if (this.toggleAllFiltersLabel == this.toggleAllTag.filtersOn.label) {
+      this.toggleAllFiltersLabel = this.toggleAllTag.filtersOff.label;
       this.toggleAllAvailableFilters(true);
       this.updateFilteredData.perform();
 
       return;
     }
-    if (this.toggleAllFiltersLabel == this.filterTags.filtersOff.label) {
-      this.toggleAllFiltersLabel = this.filterTags.filtersOn.label;
+    if (this.toggleAllFiltersLabel == this.toggleAllTag.filtersOff.label) {
+      this.toggleAllFiltersLabel = this.toggleAllTag.filtersOn.label;
       this.toggleAllAvailableFilters(false);
       this.updateFilteredData.perform();
 
@@ -246,7 +246,6 @@ export default class FormbuilderEditSemanticDataController extends Controller {
   }
 
   updateToggleOfAllFiltersLabel = restartableTask(async () => {
-    console.log(`toggle all filters`);
     const activeAvailableFilters = this.availableFilters.filter(
       (filter) => filter.isActive
     );
@@ -255,18 +254,18 @@ export default class FormbuilderEditSemanticDataController extends Controller {
     );
 
     if (activeAvailableFilters.length == this.availableFilters.length) {
-      this.toggleAllFiltersLabel = this.filterTags.filtersOff.label;
+      this.toggleAllFiltersLabel = this.toggleAllTag.filtersOff.label;
 
       return;
     }
     if (inactiveAvailableFilters.length == this.availableFilters.length) {
-      this.toggleAllFiltersLabel = this.filterTags.filtersOn.label;
+      this.toggleAllFiltersLabel = this.toggleAllTag.filtersOn.label;
 
       return;
     }
 
     if (activeAvailableFilters.length >= 1) {
-      this.toggleAllFiltersLabel = this.filterTags.filtersOff.label;
+      this.toggleAllFiltersLabel = this.toggleAllTag.filtersOff.label;
     }
   });
 
@@ -280,49 +279,52 @@ export default class FormbuilderEditSemanticDataController extends Controller {
     return GRAPHS;
   }
 
-  get filterTags() {
+  get toggleAllTag() {
     return {
       filtersOn: {
-        order: null,
         label: this.intl.t('semanticData.filters.allOn'),
       },
       filtersOff: {
-        order: null,
         label: this.intl.t('semanticData.filters.allOff'),
       },
-      section: {
-        order: null,
-        label: this.intl.t('semanticData.filters.section'),
-      },
-      subform: {
-        order: null,
-        label: this.intl.t('semanticData.filters.subform'),
-      },
-      field: { order: null, label: this.intl.t('semanticData.filters.field') },
-      table: { order: null, label: this.intl.t('semanticData.filters.table') },
-      listing: {
-        order: null,
-        label: this.intl.t('semanticData.filters.listing'),
-      },
-      validation: {
-        order: null,
-        label: this.intl.t('semanticData.filters.validation'),
-      },
-      generator: {
-        order: null,
-        label: this.intl.t('semanticData.filters.generator'),
-      },
-      scope: { order: null, label: this.intl.t('semanticData.filters.scope') },
-      inputData: {
-        order: null,
-        label: this.intl.t('semanticData.filters.inputData'),
-      },
+    };
+  }
+
+  get filterTags() {
+    return {
       formNode: {
-        order: null,
+        order: 1,
         label: this.intl.t('semanticData.filters.formNode'),
       },
+      section: {
+        order: 2,
+        label: this.intl.t('semanticData.filters.section'),
+      },
+      field: { order: 3, label: this.intl.t('semanticData.filters.field') },
+      validation: {
+        order: 4,
+        label: this.intl.t('semanticData.filters.validation'),
+      },
+      listing: {
+        order: 5,
+        label: this.intl.t('semanticData.filters.listing'),
+      },
+      subform: {
+        order: 6,
+        label: this.intl.t('semanticData.filters.subform'),
+      },
+      table: { order: 7, label: this.intl.t('semanticData.filters.table') },
+      generator: {
+        order: 8,
+        label: this.intl.t('semanticData.filters.generator'),
+      },
+      scope: { order: 9, label: this.intl.t('semanticData.filters.scope') },
+      inputData: {
+        order: 10,
+        label: this.intl.t('semanticData.filters.inputData'),
+      },
       unTagged: {
-        order: null,
+        order: 11,
         label: this.intl.t('semanticData.filters.unTagged'),
       },
     };
