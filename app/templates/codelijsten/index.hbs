@@ -40,6 +40,8 @@
       @iconAlignment="left"
       @width="block"
       id="input-searchCodelist"
+      value={{this.searchValue}}
+      {{on "change" this.searchCodelist}}
     />
   </div>
 </div>
