@@ -8,6 +8,7 @@ import { action, set } from '@ember/object';
 import { A } from '@ember/array';
 import { service } from '@ember/service';
 import { RDF, FORM } from '@lblod/submission-form-helpers';
+import { sortObjectsOnProperty } from '../../../utils/sort-object-on-property';
 
 export default class FormbuilderEditSemanticDataController extends Controller {
   @service('form-code-manager') formCodeManager;
@@ -274,6 +275,10 @@ export default class FormbuilderEditSemanticDataController extends Controller {
     }
   });
 
+  get orderedAvailableFilters() {
+    return sortObjectsOnProperty(Object.values(this.availableFilters), 'order');
+  }
+
   get activeFilterLabelsAsArray() {
     return this.availableFilters
       .filter((filter) => filter.isActive)
@@ -346,7 +351,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
         icon: 'check',
       },
       inactive: {
-        skin: 'border',
+        skin: 'default',
         icon: 'cross',
       },
     };

@@ -11,7 +11,7 @@
         {{this.toggleAllFiltersLabel}}
       </AuPill>
     </span>
-    {{#each this.availableFilters as |filter|}}
+    {{#each this.orderedAvailableFilters as |filter|}}
       {{#if filter.isActive}}
         <AuPill
           @skin={{this.filterStyle.active.skin}}
