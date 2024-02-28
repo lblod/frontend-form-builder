@@ -6,6 +6,7 @@ main:
   brandLink: "https://www.vlaanderen.be/nl"
 
 formBuilder:
+  searchPlaceholder: "Zoek een formulier"
   editCodeForm: "Formulier code bewerken"
 
 userTests:

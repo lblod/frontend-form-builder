@@ -44,3 +44,17 @@
   color: $au-gray-700;
   font-style: italic;
 }
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header__createAndSearch {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: right;
+}

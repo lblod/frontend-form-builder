@@ -15,6 +15,7 @@ export default class IndexController extends Controller {
   formToDelete;
 
   @tracked showDeleteModal = false;
+  @tracked filter;
 
   @action
   openDeleteModal(generatedForm) {
@@ -46,6 +47,13 @@ export default class IndexController extends Controller {
       );
       console.error(err);
     }
+  }
+
+  @action
+  searchForm(event) {
+    const inputvalue = event.target.value;
+
+    this.filter = inputvalue;
   }
 
   get translations() {
