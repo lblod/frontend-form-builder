@@ -2,8 +2,12 @@ import Controller from '@ember/controller';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+// eslint-disable-next-line ember/no-mixins
+import DefaultQueryParamsMixin from 'ember-data-table/mixins/default-query-params';
 
-export default class CodelijstenController extends Controller {
+export default class CodelijstenController extends Controller.extend(
+  DefaultQueryParamsMixin
+) {
   @service features;
   @service router;
   @service intl;
@@ -12,6 +16,12 @@ export default class CodelijstenController extends Controller {
 
   sort = '-preflabel';
   size = 20;
+
+  @action
+  mergeQueryOptions(params) {
+    console.log('params', params);
+    return { included: 'author' };
+  }
 
   @action
   routeToFormWithId() {
