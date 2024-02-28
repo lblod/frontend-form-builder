@@ -34,9 +34,9 @@ export default class FormbuilderEditSemanticDataController extends Controller {
       const index = this.getIndexOfStatement(statement);
 
       if (this.isValidIndex(index)) {
-        const inputDataTag = this.filters.inputData;
-        this.addFilter(inputDataTag);
-        this.filteredDataset[index].tags.pushObject(inputDataTag);
+        const inputDataFilter = this.filters.inputData;
+        this.addFilter(inputDataFilter);
+        this.filteredDataset[index].filters.pushObject(inputDataFilter);
       }
     }
 
@@ -58,7 +58,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
         if (filter) {
           const index = this.getIndexOfStatement(statement);
-          this.filteredDataset[index].tags.pushObject(filter);
+          this.filteredDataset[index].filters.pushObject(filter);
         }
       }
     }
@@ -76,7 +76,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
       this.filteredDataset.pushObject({
         subject: statement.subject.value,
         values: A([value]),
-        tags: A([]),
+        filters: A([]),
       });
     } else {
       this.filteredDataset[index].values.pushObject(value);
@@ -155,8 +155,8 @@ export default class FormbuilderEditSemanticDataController extends Controller {
       return filter;
     }
 
-    this.addFilter(this.filters.unTagged);
-    return this.filters.unTagged;
+    this.addFilter(this.filters.noFilter);
+    return this.filters.noFilter;
   }
 
   addFilter(filter) {
@@ -209,7 +209,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
   updateFilteredData = restartableTask(async () => {
     this.filteredDataset = this.fullDataset.filter((item) => {
-      const canShow = item.tags.toArray().some((filter) => {
+      const canShow = item.filters.toArray().some((filter) => {
         if (this.activeFilterLabelsAsArray.includes(filter.label)) {
           return true;
         } else {
@@ -328,9 +328,9 @@ export default class FormbuilderEditSemanticDataController extends Controller {
         order: 10,
         label: this.intl.t('semanticData.filters.inputData'),
       },
-      unTagged: {
+      noFilter: {
         order: 11,
-        label: this.intl.t('semanticData.filters.unTagged'),
+        label: this.intl.t('semanticData.filters.noFilter'),
       },
     };
   }

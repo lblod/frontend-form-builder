@@ -59,7 +59,7 @@ semanticData:
     generator: "Generators"
     scope: "Scopes"
     inputData: "User input data"
-    unTagged: "Others"
+    noFilter: "Others"
 
 # Components #
 toolbar:
