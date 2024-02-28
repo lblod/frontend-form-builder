@@ -1,4 +1,5 @@
 codelists:
+  searchPlaceholder: "Search a codelist"
   addConcept: "Add concept to the list"
   nameOfCodelist: "Name of codelist"
   descriptionOfCodelist: "Description"

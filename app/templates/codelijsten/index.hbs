@@ -18,23 +18,29 @@
   </Group>
 </AuToolbar>
 
-<div class="au-c-toolbar au-c-toolbar--bottom au-c-toolbar--large">
+<div class="au-c-toolbar--bottom au-c-toolbar--large codelists-header">
   <div class="au-c-toolbar__group">
     <AuHeading @level="1" @skin="2">
       {{t "navigation.tabs.codelists"}}
     </AuHeading>
   </div>
-  <div class="au-c-toolbar__group">
-    <AuButtonGroup>
-      {{#if this.features.CAN_CREATE_OWN_CODELIST}}
-        <AuLink
-          @route="codelijsten.new"
-          @skin="button"
-          @icon="plus"
-          @iconAlignment="left"
-        >{{t "codelists.createCodelist"}}</AuLink>
-      {{/if}}
-    </AuButtonGroup>
+  <div class="codelists-header__createAndSearch">
+    {{#if this.features.CAN_CREATE_OWN_CODELIST}}
+      <AuLink
+        class="au-u-margin-left-large"
+        @route="codelijsten.new"
+        @skin="button"
+        @icon="plus"
+        @iconAlignment="left"
+      >{{t "codelists.createCodelist"}}</AuLink>
+    {{/if}}
+    <AuInput
+      placeholder={{t "codelists.searchPlaceholder"}}
+      @icon="search"
+      @iconAlignment="left"
+      @width="block"
+      id="input-searchCodelist"
+    />
   </div>
 </div>
 

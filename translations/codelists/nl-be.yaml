@@ -1,4 +1,5 @@
 codelists:
+  searchPlaceholder: "Zoek een codelijst"
   addConcept: "Voeg een concept toe aan de lijst"
   nameOfCodelist: "Naam van de codelijst"
   descriptionOfCodelist: "Beschrijving"
