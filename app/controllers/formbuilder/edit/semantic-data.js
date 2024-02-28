@@ -282,25 +282,47 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
   get filterTags() {
     return {
-      filtersOn: { label: this.intl.t('semanticData.filters.allOn') },
-      filtersOff: { label: this.intl.t('semanticData.filters.allOff') },
-      section: { label: this.intl.t('semanticData.filters.section') },
-      subform: { label: this.intl.t('semanticData.filters.subform') },
-      field: { label: this.intl.t('semanticData.filters.field') },
-      table: { label: this.intl.t('semanticData.filters.table') },
-      listing: { label: this.intl.t('semanticData.filters.listing') },
+      filtersOn: {
+        order: null,
+        label: this.intl.t('semanticData.filters.allOn'),
+      },
+      filtersOff: {
+        order: null,
+        label: this.intl.t('semanticData.filters.allOff'),
+      },
+      section: {
+        order: null,
+        label: this.intl.t('semanticData.filters.section'),
+      },
+      subform: {
+        order: null,
+        label: this.intl.t('semanticData.filters.subform'),
+      },
+      field: { order: null, label: this.intl.t('semanticData.filters.field') },
+      table: { order: null, label: this.intl.t('semanticData.filters.table') },
+      listing: {
+        order: null,
+        label: this.intl.t('semanticData.filters.listing'),
+      },
       validation: {
+        order: null,
         label: this.intl.t('semanticData.filters.validation'),
       },
       generator: {
+        order: null,
         label: this.intl.t('semanticData.filters.generator'),
       },
-      scope: { label: this.intl.t('semanticData.filters.scope') },
+      scope: { order: null, label: this.intl.t('semanticData.filters.scope') },
       inputData: {
+        order: null,
         label: this.intl.t('semanticData.filters.inputData'),
       },
-      formNode: { label: this.intl.t('semanticData.filters.formNode') },
+      formNode: {
+        order: null,
+        label: this.intl.t('semanticData.filters.formNode'),
+      },
       unTagged: {
+        order: null,
         label: this.intl.t('semanticData.filters.unTagged'),
       },
     };
