@@ -166,25 +166,6 @@ export default class FormbuilderEditSemanticDataController extends Controller {
     }
   }
 
-  getIndexOfStatement(statement) {
-    return this.filteredDataset.findIndex(
-      (item) => item.subject == statement.subject.value
-    );
-  }
-
-  getAllStatementsInStore(store) {
-    return store.match(
-      undefined,
-      undefined,
-      undefined,
-      this.graphs.sourceGraph
-    );
-  }
-
-  isValidIndex(index) {
-    return index == 0 || index !== -1;
-  }
-
   getFilterForType(object) {
     if (this.sectionUris.includes(object.value)) {
       const sectionFilter = this.filters.section;
@@ -273,6 +254,29 @@ export default class FormbuilderEditSemanticDataController extends Controller {
     for (let index = 0; index < this.availableFilters.length; index++) {
       set(this.availableFilters[index], 'isActive', toggleState);
     }
+  }
+
+  getAllStatementsInStore(store) {
+    return store.match(
+      undefined,
+      undefined,
+      undefined,
+      this.graphs.sourceGraph
+    );
+  }
+
+  isValidIndex(index) {
+    return index == 0 || index !== -1;
+  }
+
+  getIndexOfStatement(statement) {
+    return this.filteredDataset.findIndex(
+      (item) => item.subject == statement.subject.value
+    );
+  }
+
+  get datasetWithAppliedFilter() {
+    return this.filteredDataset ?? [];
   }
 
   get orderedAvailableFilters() {
