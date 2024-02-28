@@ -34,7 +34,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
       const index = this.getIndexOfStatement(statement);
 
       if (this.isValidIndex(index)) {
-        const inputDataTag = this.filterTags.inputData.label;
+        const inputDataTag = this.filterTags.inputData;
         this.addTagToFilters(inputDataTag);
         this.filteredDataset[index].tags.pushObject(inputDataTag);
       }
@@ -119,33 +119,33 @@ export default class FormbuilderEditSemanticDataController extends Controller {
 
   getTagForType(object) {
     if (this.sectionUris.includes(object.value)) {
-      const sectionTag = this.filterTags.section.label;
+      const sectionTag = this.filterTags.section;
       this.addTagToFilters(sectionTag);
 
       return sectionTag;
     }
 
     if (this.validationUris.includes(object.value)) {
-      const validationTag = this.filterTags.validation.label;
+      const validationTag = this.filterTags.validation;
       this.addTagToFilters(validationTag);
 
       return validationTag;
     }
 
     if (this.parentNodeFormUris.includes(object.value)) {
-      const formTag = this.filterTags.formNode.label;
+      const formTag = this.filterTags.formNode;
       this.addTagToFilters(formTag);
 
       return formTag;
     }
 
     const tagForType = {
-      [FORM('Field').value]: this.filterTags.field.label,
-      [FORM('Scope').value]: this.filterTags.scope.label,
-      [FORM('ListingTable').value]: this.filterTags.table.label,
-      [FORM('Listing').value]: this.filterTags.listing.label,
-      [FORM('SubForm').value]: this.filterTags.subform.label,
-      [FORM('Generator').value]: this.filterTags.generator.label,
+      [FORM('Field').value]: this.filterTags.field,
+      [FORM('Scope').value]: this.filterTags.scope,
+      [FORM('ListingTable').value]: this.filterTags.table,
+      [FORM('Listing').value]: this.filterTags.listing,
+      [FORM('SubForm').value]: this.filterTags.subform,
+      [FORM('Generator').value]: this.filterTags.generator,
     };
 
     const tag = tagForType[object.value];
@@ -155,8 +155,8 @@ export default class FormbuilderEditSemanticDataController extends Controller {
       return tag;
     }
 
-    this.addTagToFilters(this.filterTags.unTagged.label);
-    return this.filterTags.unTagged.label;
+    this.addTagToFilters(this.filterTags.unTagged);
+    return this.filterTags.unTagged;
   }
 
   addTagToFilters(tag) {
@@ -167,15 +167,16 @@ export default class FormbuilderEditSemanticDataController extends Controller {
     const filterTagLabels = Object.values(this.filterTags).map(
       (value) => value.label
     );
-    if (!Object.values(filterTagLabels).includes(tag)) {
+    if (!Object.values(filterTagLabels).includes(tag.label)) {
       throw `Filter tag is not recognized: (${tag})`;
     }
 
-    if (!this.availableFilters.some((filter) => filter.label == tag)) {
+    if (!this.availableFilters.some((filter) => filter.label == tag.label)) {
       this.availableFilters.pushObject({
+        order: tag.order,
         isActive: true,
         skin: this.filterStyle.active.skin,
-        label: tag,
+        label: tag.label,
         icon: this.filterStyle.active.icon,
       });
     }
@@ -205,7 +206,7 @@ export default class FormbuilderEditSemanticDataController extends Controller {
   updateFilteredData = restartableTask(async () => {
     this.filteredDataset = this.fullDataset.filter((item) => {
       const canShow = item.tags.toArray().some((tag) => {
-        if (this.activeFilterLabelsAsArray.includes(tag)) {
+        if (this.activeFilterLabelsAsArray.includes(tag.label)) {
           return true;
         } else {
           return false;
