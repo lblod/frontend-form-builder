@@ -53,8 +53,8 @@ export default class IndexController extends Controller {
       test: this.intl.t('table.columns.test'),
       deleteForm: this.intl.t('crud.delete'),
       noFormsFound: this.intl.t('messages.feedback.noFormsFound'),
-      ColumnName: this.intl.t('table.columns.name'),
-      ColumnModifiedOn: this.intl.t('table.columns.modifiedOn'),
+      columnName: this.intl.t('table.columns.name'),
+      columnModifiedOn: this.intl.t('table.columns.modifiedOn'),
     };
   }
 }
