@@ -37,6 +37,8 @@ messages:
     codelistUpdated: "Updated codelist"
   loading:
     downloading: "Downloading"
+  feedback:
+    noCodelistsFound: "No codelists found"
 
 actions:
   exportCodelist: "Export"

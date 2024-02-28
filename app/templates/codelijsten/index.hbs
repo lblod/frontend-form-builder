@@ -52,7 +52,7 @@
       <AuDataTable
         @content={{this.model}}
         @isLoading={{this.isLoadingModel}}
-        @noDataMessage="Geen codelijsten gevonden"
+        @noDataMessage={{this.translations.noCodelistsFound}}
         @sort={{this.sort}}
         @page={{this.page}}
         @size={{this.size}}
@@ -61,12 +61,12 @@
         <t.content as |c|>
           <c.header>
             <AuDataTableThSortable
-              @label="Naam"
+              @label={{this.translations.columnName}}
               @field="preflabel"
               @currentSorting={{this.sort}}
               class="au-u-visible-medium-up"
             />
-            <th colspan="1">Id</th>
+            <th colspan="1">{{this.translations.columnId}}</th>
             <th colspan="1"></th>
           </c.header>
           <c.body as |codelist|>
@@ -84,14 +84,14 @@
                   @skin="success"
                   @icon="info-circle"
                   @iconAlignment="left"
-                >Generiek
+                >{{this.translations.publicType}}
                 </AuPill>
                 {{#if codelist.isArchived}}
                   <AuPill
                     @skin="default"
                     @icon="archive"
                     @iconAlignment="left"
-                  >Gearchiveerd
+                  >{{this.translations.archivedType}}
                   </AuPill>
                 {{/if}}
               {{else}}
@@ -99,7 +99,7 @@
                   @skin="warning"
                   @icon="info-circle"
                   @iconAlignment="left"
-                >Eigen codelijst
+                >{{this.translations.privateType}}
                 </AuPill>
               {{/if}}
             </td>

@@ -46,4 +46,15 @@ export default class CodelijstenController extends Controller.extend(
       return this.intl.t('navigation.backToFormOverview');
     }
   }
+
+  get translations() {
+    return {
+      publicType: this.intl.t('codelists.types.isPublic'),
+      privateType: this.intl.t('codelists.types.isPrivate'),
+      archivedType: this.intl.t('codelists.types.isArchived'),
+      noCodelistsFound: this.intl.t('messages.feedback.noCodelistsFound'),
+      columnName: this.intl.t('table.columns.name'),
+      columnId: this.intl.t('table.columns.id'),
+    };
+  }
 }

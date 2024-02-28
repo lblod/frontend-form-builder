@@ -37,6 +37,8 @@ messages:
     codelistUpdated: "Codelijst bijgewerkt"
   loading:
     downloading: "Downloaden"
+  feedback:
+    noCodelistsFound: "Geen codelijsten gevonden"
 
 actions:
   exportCodelist: "Exporteer"
