@@ -24,6 +24,11 @@ export default class CodelijstenController extends Controller {
   @action
   searchCodelist(event) {
     const inputvalue = event.target.value;
+    if (!inputvalue) {
+      this.filter = null;
+
+      return;
+    }
 
     this.filter = inputvalue;
   }
