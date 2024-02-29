@@ -61,7 +61,10 @@
         </div>
       </Group>
       <Group class="au-c-toolbar__group--actions">
-        <AuLink @route="codelijsten" @query={{hash formId=@model.id}}>{{t "toolbar.codelists"}}</AuLink>
+        <AuLink
+          @route="codelijsten"
+          @query={{hash formId=@model.id filter=""}}
+        >{{t "toolbar.codelists"}}</AuLink>
         <div class="saveSplitButton">
           <AuButton
             id="saveSplitButton_save"
