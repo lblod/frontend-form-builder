@@ -23,10 +23,10 @@ Router.map(function () {
       this.route('validations');
       this.route('configuration');
     });
+    this.route('editor', { path: '/:id/editor' });
   });
   this.route('user-tests', function () {
     this.route('new');
     this.route('edit', { path: '/:id/edit' });
   });
-  this.route('builder', function () {});
 });

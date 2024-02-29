@@ -1,0 +1,9 @@
+{{page-title "Editor"}}
+
+<Toolbar
+  @model={{this.model.generatedForm}}
+  @code={{this.formCode}}
+  @formChanged={{this.formChanged}}
+  @onCodeChange={{this.handleCodeChange}}
+  @setFormChanged={{this.setFormChanged}}
+/>
