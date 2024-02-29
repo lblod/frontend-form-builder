@@ -1,7 +1,24 @@
 {{page-title "Code editor"}}
 
-<div
-  {{editor this.formCode (perform this.handleCodeChange)}}
+<AuBodyContainer class="au-u-margin-bottom-none">
   {{!template-lint-disable no-inline-styles}}
-  style="overflow: auto; height: 100%; width:100%"
-> </div>
+  <AuBodyContainer
+    @scroll={{true}}
+  >
+    <AuContent
+      @skin="small"
+      {{editor this.formCode (perform this.handleCodeChange)}}>
+    </AuContent>
+  </AuBodyContainer>
+  
+  <AuBodyContainer class="au-u-background-gray-100 ">
+    <AuButton class="au-u-margin"></AuButton>
+    <AuBodyContainer class="au-u-background-gray-200 au-u-margin-left au-u-margin-right au-u-margin-bottom">
+      <AuContent 
+        class="console au-u-margin"
+      >
+        content
+      </AuContent>
+    </AuBodyContainer>
+  </AuBodyContainer>
+</AuBodyContainer>
