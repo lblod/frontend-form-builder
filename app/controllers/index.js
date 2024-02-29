@@ -52,6 +52,11 @@ export default class IndexController extends Controller {
   @action
   searchForm(event) {
     const inputvalue = event.target.value;
+    if (!inputvalue) {
+      this.filter = null;
+
+      return;
+    }
 
     this.filter = inputvalue;
   }
