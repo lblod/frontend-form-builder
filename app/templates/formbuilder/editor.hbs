@@ -7,3 +7,30 @@
   @onCodeChange={{this.handleCodeChange}}
   @setFormChanged={{this.setFormChanged}}
 />
+
+<main class="au-c-main-container formbuilder-editor">
+  <div class="formbuilder-editor__main-side-bar">
+    <AuButton
+      class="formbuilder-editor__main-side-bar--first-button"
+      @skin="secondary"
+      @icon="plus"
+      @hideText={{true}}
+    >
+      {{this.text}}
+    </AuButton>
+    <AuButton @skin="naked" @icon="folder" @hideText={{true}} />
+    <AuButton @skin="naked" @icon="link-external" @hideText={{true}} />
+  </div>
+  <div class="formbuilder-editor__side-bar formbuilder-editor__side-bar--left">
+    <div class="formbuilder-editor__side-bar--title">
+      <span>Basis elementen</span>
+    </div>
+    <div class="au-u-margin-left au-u-margin-right">
+      <AuHr />
+    </div>
+  </div>
+  <div class="au-c-main-container__content"></div>
+  <div
+    class="formbuilder-editor__side-bar formbuilder-editor__side-bar--right"
+  ></div>
+</main>

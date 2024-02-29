@@ -1,0 +1,59 @@
+.formbuilder-editor {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 6rem 20vw auto 20vw;
+}
+
+.formbuilder-editor__main-side-bar {
+  height: 100%;
+  background-color: $au-gray-400;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+  gap: 1rem;
+
+  button:hover {
+    scale: 1.05;
+    background-color: $au-gray-100;
+    color: $au-gray-500 !important;
+  }
+
+  .au-c-button--secondary {
+    border-color: $au-gray-200 !important;
+    color: $au-gray-100 !important;
+
+    &:hover {
+      border-color: $au-gray-500 !important;
+    }
+  }
+  .au-c-button--naked {
+    color: $au-gray-100 !important;
+  }
+}
+
+.formbuilder-editor__main-side-bar--first-button {
+  margin-bottom: 1.5rem;
+}
+
+.formbuilder-editor__side-bar {
+  height: 100%;
+}
+
+.formbuilder-editor__side-bar--title {
+  padding: 1rem 2rem;
+  background-color: $au-gray-400;
+  font-weight: $au-medium;
+  font-size: $au-h6;
+  width: 100%;
+  color: $au-gray-100;
+}
+
+.formbuilder-editor__side-bar--left {
+  border-right: 2px solid $au-gray-100;
+}
+
+.formbuilder-editor__side-bar--right {
+  border-left: 2px solid $au-gray-100;
+}
