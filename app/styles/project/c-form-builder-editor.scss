@@ -7,7 +7,7 @@
 
 .formbuilder-editor__main-side-bar {
   height: 100%;
-  background-color: $au-gray-400;
+  background-color: $au-gray-500;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -43,11 +43,11 @@
 
 .formbuilder-editor__side-bar--title {
   padding: 1rem 2rem;
-  background-color: $au-gray-400;
+  background-color: $au-white;
   font-weight: $au-medium;
-  font-size: $au-h6;
+  font-size: $au-h5;
+  color: $au-gray-400;
   width: 100%;
-  color: $au-gray-100;
 }
 
 .formbuilder-editor__side-bar--left {
@@ -56,4 +56,33 @@
 
 .formbuilder-editor__side-bar--right {
   border-left: 2px solid $au-gray-100;
+}
+
+.formbuilder-editor__side-bar--big-elements-in-grid {
+  width: 100%;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.formbuilder-editor__side-bar--clickable-element {
+  padding: 2rem;
+  border-radius: $au-radius;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  word-break: break-all;
+  flex: 1;
+  background-color: $au-gray-400;
+  color: $au-gray-100;
+  font-weight: $au-medium;
+  font-size: $au-h6;
+
+  &:hover {
+    scale: 1.05;
+    background-color: $au-gray-300;
+    color: $au-gray-500;
+  }
 }

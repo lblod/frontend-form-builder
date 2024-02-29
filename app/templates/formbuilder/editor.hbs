@@ -25,9 +25,16 @@
     <div class="formbuilder-editor__side-bar--title">
       <span>Basis elementen</span>
     </div>
-    <div class="au-u-margin-left au-u-margin-right">
-      <AuHr />
+    <div class="formbuilder-editor__side-bar--big-elements-in-grid">
+      {{#each this.sortedBasicElements as |basicElement|}}
+        <div class="formbuilder-editor__side-bar--clickable-element">
+          {{basicElement.label}}
+        </div>
+      {{/each}}
     </div>
+    {{! <div class="au-u-margin-left au-u-margin-right">
+      <AuHr />
+    </div> }}
   </div>
   <div class="au-c-main-container__content"></div>
   <div
