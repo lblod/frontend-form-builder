@@ -5,6 +5,7 @@ import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { GRAPHS } from '../../controllers/formbuilder/edit';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
+import { FORM, RDF } from '@lblod/submission-form-helpers';
 
 export default class EditorBuildingViewComponent extends Component {
   @tracked mappedFormData = A([]);
@@ -33,11 +34,46 @@ export default class EditorBuildingViewComponent extends Component {
     if (!this.isValidIndex(index)) {
       this.mappedFormData.pushObject({
         subject: statement.subject.value,
+        type: this.componentTypes.invisible,
         statements: A([statement]),
       });
     } else {
       this.mappedFormData[index].statements.pushObject(statement);
     }
+
+    this.assignTypeToSubject(statement);
+  }
+
+  assignTypeToSubject(statement) {
+    if (this.isRdfTypePredicate(statement)) {
+      const type = this.getTypeFromObjectValue(statement.object);
+
+      if (type) {
+        const index = this.getIndexOfStatement(statement);
+        this.mappedFormData[index].type = type;
+      }
+    }
+  }
+
+  getTypeFromObjectValue(object) {
+    if (this.sectionUris.includes(object.value)) {
+      return this.componentTypes.section;
+    }
+
+    const typeForRdfType = {
+      [FORM('Field').value]: this.componentTypes.field,
+      [FORM('ListingTable').value]: this.componentTypes.table,
+      [FORM('Listing').value]: this.componentTypes.listing,
+      [FORM('SubForm').value]: this.componentTypes.subform,
+    };
+
+    const type = typeForRdfType[object.value];
+
+    if (type) {
+      return type;
+    }
+
+    return this.componentTypes.invisble;
   }
 
   async getAllStatementsInStore(store) {
@@ -53,6 +89,13 @@ export default class EditorBuildingViewComponent extends Component {
     });
   }
 
+  isRdfTypePredicate(statement) {
+    if (statement.predicate.value == RDF('type').value) {
+      return true;
+    }
+    return false;
+  }
+
   isValidIndex(index) {
     return index == 0 || index !== -1;
   }
@@ -61,6 +104,39 @@ export default class EditorBuildingViewComponent extends Component {
     return this.mappedFormData.findIndex(
       (item) => item.subject == statement.subject.value
     );
+  }
+
+  get sectionUris() {
+    return [FORM('Section').value, FORM('PropertyGroup').value];
+  }
+
+  get componentTypes() {
+    return {
+      invisible: {
+        type: 'Invisble',
+        component: null,
+      },
+      section: {
+        type: 'Section',
+        component: null,
+      },
+      field: {
+        type: 'Field',
+        component: null,
+      },
+      listing: {
+        type: 'Listing',
+        component: null,
+      },
+      table: {
+        type: 'Table',
+        component: null,
+      },
+      subForm: {
+        type: 'Sub-form',
+        component: null,
+      },
+    };
   }
 
   get formCode() {
