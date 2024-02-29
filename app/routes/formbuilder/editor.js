@@ -28,6 +28,12 @@ export default class FormbuilderEditorRoute extends Route {
     };
   }
 
+  setupController(controller, model) {
+    super.setupController(...arguments);
+
+    controller.setup(model);
+  }
+
   async getGeneratedFormById(generatedFormId) {
     try {
       const form = await this.store.findRecord(
