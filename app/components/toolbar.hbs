@@ -13,6 +13,7 @@
             @icon="arrow-left"
             @iconAlignment="left"
             @hideText={{true}}
+            @query={{hash filter=null sort=null page=0}}
           >
             {{t "navigation.backToFormOverview"}}
           </AuLink>
@@ -61,7 +62,9 @@
         </div>
       </Group>
       <Group class="au-c-toolbar__group--actions">
-        <AuLink @route="codelijsten" @query={{hash formId=@model.id}}>{{t "toolbar.codelists"}}</AuLink>
+        <AuLink @route="codelijsten" @query={{hash formId=@model.id}}>{{t
+            "toolbar.codelists"
+          }}</AuLink>
         <div class="saveSplitButton">
           <AuButton
             id="saveSplitButton_save"
