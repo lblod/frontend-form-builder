@@ -81,6 +81,7 @@
   font-size: $au-h6;
 
   &:hover {
+    cursor: grab;
     scale: 1.05;
     background-color: $au-gray-300;
     color: $au-gray-500;
