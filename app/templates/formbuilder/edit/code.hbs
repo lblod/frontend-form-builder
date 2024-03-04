@@ -10,11 +10,17 @@
       {{editor this.formCode (perform this.handleCodeChange)}}>
     </AuContent>
   </AuBodyContainer>
-  <AuButton 
-    {{!-- class="au-u-margin" --}}
-    {{on "click" this.toggleCollapsed}}
-  >Console</AuButton>
-  <AuBodyContainer class="au-u-background-gray-100 {{if this.collapsed 'au-u-hidden'}}">
+  <div>
+    <AuButton 
+      {{!-- class="au-u-margin" --}}
+      @width="block"
+      {{on "click" this.toggleCollapsed}}
+    >
+      Console
+    </AuButton>
+  </div>
+  {{#unless this.collapsed}}
+  <AuBodyContainer class="au-u-background-gray-100">
     <AuBodyContainer class="au-u-background-gray-200 au-u-margin">
       <AuContent 
         class="console au-u-margin"
@@ -23,4 +29,5 @@
       </AuContent>
     </AuBodyContainer>
   </AuBodyContainer>
+  {{/unless}}
 </div>
