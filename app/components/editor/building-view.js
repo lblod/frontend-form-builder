@@ -5,7 +5,7 @@ import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { GRAPHS } from '../../controllers/formbuilder/edit';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
-import { FORM, RDF } from '@lblod/submission-form-helpers';
+import { FORM, RDF, SHACL } from '@lblod/submission-form-helpers';
 import EditorBlocksFieldComponent from './blocks/field';
 import { isNamedNode } from 'rdflib';
 
@@ -38,26 +38,14 @@ export default class EditorBuildingViewComponent extends Component {
         subject: statement.subject.value,
         type: this.componentTypes.invisible,
         statements: A([statement]),
-        children: A(this.getReferencedNodesOfStatement(statement)),
+        partOf: A([]),
       });
     } else {
       this.mappedFormData[index].statements.pushObject(statement);
     }
 
     this.assignTypeToSubject(statement);
-  }
-
-  getReferencedNodesOfStatement(statement) {
-    console.log(`Statement`, statement);
-    const statementObject = statement.object;
-
-    // check part of ? included TODO:
-
-    if (isNamedNode(statementObject)) {
-      console.log(`referenced named node`, statementObject);
-    }
-
-    return [];
+    this.assignAsPartOf(statement, index);
   }
 
   assignTypeToSubject(statement) {
@@ -68,6 +56,17 @@ export default class EditorBuildingViewComponent extends Component {
         const index = this.getIndexOfStatement(statement);
         this.mappedFormData[index].type = type;
       }
+    }
+  }
+
+  assignAsPartOf(statement, subjectIndex) {
+    if (this.isSubjectTheSourceNode(statement.subject)) {
+      return;
+    }
+
+    const referencedSubject = this.getPartOfSubject(statement);
+    if (referencedSubject && this.isValidIndex(subjectIndex)) {
+      this.mappedFormData[subjectIndex].partOf.pushObject(statement.object);
     }
   }
 
@@ -89,7 +88,7 @@ export default class EditorBuildingViewComponent extends Component {
       return type;
     }
 
-    return this.componentTypes.invisble;
+    return this.componentTypes.invisible;
   }
 
   async getAllStatementsInStore(store) {
@@ -105,11 +104,21 @@ export default class EditorBuildingViewComponent extends Component {
     });
   }
 
+  isReferencePredicate(predicate) {
+    const referencePredicates = [SHACL('group').value, FORM('partOf').value];
+
+    return referencePredicates.includes(predicate.value);
+  }
+
   isRdfTypePredicate(statement) {
     if (statement.predicate.value == RDF('type').value) {
       return true;
     }
     return false;
+  }
+
+  isSubjectTheSourceNode(subject) {
+    return subject.value == `http://ember-submission-form-fields/source-node`;
   }
 
   isValidIndex(index) {
@@ -120,6 +129,18 @@ export default class EditorBuildingViewComponent extends Component {
     return this.mappedFormData.findIndex(
       (item) => item.subject == statement.subject.value
     );
+  }
+
+  getPartOfSubject(statement) {
+    if (!isNamedNode(statement.object)) {
+      return null;
+    }
+
+    if (!this.isReferencePredicate(statement.predicate)) {
+      return null;
+    }
+
+    return statement.subject;
   }
 
   get sectionUris() {
