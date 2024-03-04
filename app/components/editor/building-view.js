@@ -8,9 +8,11 @@ import { A } from '@ember/array';
 import { FORM, RDF, SHACL } from '@lblod/submission-form-helpers';
 import EditorBlocksFieldComponent from './blocks/field';
 import { isNamedNode } from 'rdflib';
+import EditorBlocksSectionComponent from './blocks/section';
 
 export default class EditorBuildingViewComponent extends Component {
   @tracked mappedFormData = A([]);
+  @tracked form = A([]);
 
   constructor() {
     super(...arguments);
@@ -24,11 +26,40 @@ export default class EditorBuildingViewComponent extends Component {
     const store = new ForkingStore();
     store.parse(ttlCode, this.graphs.sourceGraph, 'text/turtle');
 
+    this.mappedFormData = A([]);
+
     const statements = await this.getAllStatementsInStore(store);
     for (const statement of statements) {
       this.addStatementToMappedFormData(statement);
     }
-    console.log(this.mappedFormData);
+
+    this.structureForm.perform();
+  });
+
+  structureForm = restartableTask(async () => {
+    const sourceNodeIndex = this.mappedFormData.findIndex(
+      (item) => item.subject == this.sourceNodeValue
+    );
+
+    if (!this.isValidIndex(sourceNodeIndex)) {
+      return [];
+    }
+
+    for (const node of this.mappedFormData[sourceNodeIndex].partOf) {
+      console.log(`node`, node);
+      const indexOfNode = this.getIndexOfSubjectValue(node.value);
+
+      if (!this.isValidIndex(indexOfNode)) continue;
+
+      const children = this.mappedFormData.filter((data) =>
+        data.partOf.map((st) => st.value).includes(node.value)
+      );
+
+      this.form.pushObject({
+        ...this.mappedFormData[indexOfNode],
+        children: A(children),
+      });
+    }
   });
 
   addStatementToMappedFormData(statement) {
@@ -60,10 +91,6 @@ export default class EditorBuildingViewComponent extends Component {
   }
 
   assignAsPartOf(statement, subjectIndex) {
-    if (this.isSubjectTheSourceNode(statement.subject)) {
-      return;
-    }
-
     const referencedSubject = this.getPartOfSubject(statement);
     if (referencedSubject && this.isValidIndex(subjectIndex)) {
       this.mappedFormData[subjectIndex].partOf.pushObject(statement.object);
@@ -117,10 +144,6 @@ export default class EditorBuildingViewComponent extends Component {
     return false;
   }
 
-  isSubjectTheSourceNode(subject) {
-    return subject.value == `http://ember-submission-form-fields/source-node`;
-  }
-
   isValidIndex(index) {
     return index == 0 || index !== -1;
   }
@@ -128,6 +151,12 @@ export default class EditorBuildingViewComponent extends Component {
   getIndexOfStatement(statement) {
     return this.mappedFormData.findIndex(
       (item) => item.subject == statement.subject.value
+    );
+  }
+
+  getIndexOfSubjectValue(subjectValue) {
+    return this.mappedFormData.findIndex(
+      (item) => item.subject == subjectValue
     );
   }
 
@@ -155,7 +184,7 @@ export default class EditorBuildingViewComponent extends Component {
       },
       section: {
         type: 'Section',
-        component: null,
+        component: EditorBlocksSectionComponent,
       },
       field: {
         type: 'Field',
@@ -182,5 +211,9 @@ export default class EditorBuildingViewComponent extends Component {
 
   get graphs() {
     return GRAPHS;
+  }
+
+  get sourceNodeValue() {
+    return `http://ember-submission-form-fields/source-node`;
   }
 }
