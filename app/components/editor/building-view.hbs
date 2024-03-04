@@ -1,1 +1,8 @@
-<p>{{this.formCode}}</p>
+{{#each this.mappedFormData as |formItem|}}
+  {{#if formItem.type.component}}
+    {{#let formItem.type.component as |componentForElement|}}
+      {{! template-lint-disable no-shadowed-elements }}
+      <componentForElement @data={{formItem}} />
+    {{/let}}
+  {{/if}}
+{{/each}}
