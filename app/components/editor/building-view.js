@@ -7,6 +7,7 @@ import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
 import { FORM, RDF } from '@lblod/submission-form-helpers';
 import EditorBlocksFieldComponent from './blocks/field';
+import { isNamedNode } from 'rdflib';
 
 export default class EditorBuildingViewComponent extends Component {
   @tracked mappedFormData = A([]);
@@ -37,12 +38,26 @@ export default class EditorBuildingViewComponent extends Component {
         subject: statement.subject.value,
         type: this.componentTypes.invisible,
         statements: A([statement]),
+        children: A(this.getReferencedNodesOfStatement(statement)),
       });
     } else {
       this.mappedFormData[index].statements.pushObject(statement);
     }
 
     this.assignTypeToSubject(statement);
+  }
+
+  getReferencedNodesOfStatement(statement) {
+    console.log(`Statement`, statement);
+    const statementObject = statement.object;
+
+    // check part of ? included TODO:
+
+    if (isNamedNode(statementObject)) {
+      console.log(`referenced named node`, statementObject);
+    }
+
+    return [];
   }
 
   assignTypeToSubject(statement) {
