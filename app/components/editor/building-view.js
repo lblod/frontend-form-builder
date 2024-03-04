@@ -6,6 +6,7 @@ import { GRAPHS } from '../../controllers/formbuilder/edit';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
 import { FORM, RDF } from '@lblod/submission-form-helpers';
+import EditorBlocksFieldComponent from './blocks/field';
 
 export default class EditorBuildingViewComponent extends Component {
   @tracked mappedFormData = A([]);
@@ -122,7 +123,7 @@ export default class EditorBuildingViewComponent extends Component {
       },
       field: {
         type: 'Field',
-        component: null,
+        component: EditorBlocksFieldComponent,
       },
       listing: {
         type: 'Listing',
