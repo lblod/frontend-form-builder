@@ -1,5 +1,9 @@
 {{page-title "Test"}}
 
+{{#if this.shared}}
+  <div class="hide-main-header"></div>
+{{/if}}
+
 {{#unless this.shared}}
   <AuToolbar @size="medium" @skin="tint" @border="bottom" as |Group|>
     <Group>
