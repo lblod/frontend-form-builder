@@ -1,8 +1,16 @@
-{{#each this.mappedFormData as |formItem|}}
+{{#each this.form as |formItem|}}
   {{#if formItem.type.component}}
-    {{#let formItem.type.component as |componentForElement|}}
+    {{#let formItem.type.component as |parentComponent|}}
       {{! template-lint-disable no-shadowed-elements }}
-      <componentForElement @data={{formItem}} />
+      <parentComponent @data={{formItem}} />
     {{/let}}
   {{/if}}
+  {{#each formItem.children as |partOf|}}
+    {{#let partOf.type.component as |childComponent|}}
+      {{! template-lint-disable no-shadowed-elements }}
+      <childComponent @data={{partOf}} />
+    {{/let}}
+  {{/each}}
 {{/each}}
+
+{{this.formCode}}
