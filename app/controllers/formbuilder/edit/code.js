@@ -8,6 +8,7 @@ import { cleanupTtlcode } from '../../../utils/clean-up-ttl/clean-up-ttl-code';
 import { shaclValidateTtlCode } from '../../../utils/SHACL/shacl-validate-ttl-code';
 import { formatShaclValidationReport } from '../../../utils/SHACL/format-shacl-validation-report';
 import { INPUT_DEBOUNCE_MS } from '../../../utils/constants';
+import { action } from '@ember/object';
 
 export default class FormbuilderEditCodeController extends Controller {
   @service('form-code-manager') formCodeManager;
@@ -15,6 +16,7 @@ export default class FormbuilderEditCodeController extends Controller {
 
   @tracked formCode;
   @tracked formCodeUpdates;
+  @tracked collapsed = true;
 
   setup() {
     const updatedFormCode = cleanupTtlcode(
@@ -60,4 +62,9 @@ export default class FormbuilderEditCodeController extends Controller {
     this.formCodeUpdates = newCode;
     this.model.handleCodeChange(this.formCodeUpdates);
   });
+
+  @action
+  toggleCollapsed() {
+    this.collapsed = !this.collapsed;
+  }
 }
