@@ -1,3 +1,10 @@
 <div>
   <h1 class="au-u-h4">{{this.fieldName}}</h1>
+  {{#if this.displayTypeUri}}
+    {{#if this.isDefaultInput}}
+      <AuInput />
+    {{else}}
+      not supported
+    {{/if}}
+  {{/if}}
 </div>
