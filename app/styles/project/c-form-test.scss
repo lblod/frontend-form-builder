@@ -57,3 +57,28 @@
   display: flex;
   justify-content: center;
 }
+
+.formTestPage_center--branding {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 3rem;
+
+  h1 {
+    font-size: var(--au-base);
+    line-height: 1;
+    font-weight: var(--au-medium);
+    text-transform: uppercase;
+    position: relative;
+    display: block;
+    padding: 0.6rem;
+    color: var(--au-gray-900);
+    transition: color var(--au-transition),
+      text-decoration-color var(--au-transition);
+    letter-spacing: 0.03ex;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
