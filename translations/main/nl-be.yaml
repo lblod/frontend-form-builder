@@ -4,6 +4,7 @@ main:
   testFormsTitle: "Test semantisch formulier"
   createNewForm: "Maak nieuw semantisch formulier"
   brandLink: "https://www.vlaanderen.be/nl"
+  semanticForms: "Semantische Formulieren"
 
 formBuilder:
   editCodeForm: "Formulier code bewerken"
