@@ -141,3 +141,10 @@ display:conceptSchemeMultiSelector
   core:uuid "ce803ee6-fb61-43f6-a2f7-22968ca9a7e6" ;
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Multi selector"@en .
+
+display:aggregateField
+  rdf:type  rdfs:Class , skos:Concept ;
+  ext:displayType "aggregateField" ;
+  ext:usesConceptScheme "false"^^xsd:boolean ;
+  skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
+  skos:prefLabel  "Som van tabel kolom"@en .
