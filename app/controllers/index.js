@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 export default class IndexController extends Controller {
   @service store;
@@ -48,9 +49,10 @@ export default class IndexController extends Controller {
       console.error(err);
     }
   }
-
-  @action
-  searchForm(event) {
+  
+  @restartableTask
+  *searchForm(event) {
+    yield timeout(400)
     const inputvalue = event.target.value;
     if (!inputvalue) {
       this.filter = null;
