@@ -7,6 +7,7 @@ main:
   semanticForms: "Semantic Forms"
 
 formBuilder:
+  searchPlaceholder: "Find a form"
   editCodeForm: "Edit form code"
 
 userTests:

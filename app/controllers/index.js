@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 export default class IndexController extends Controller {
   @service store;
@@ -15,6 +16,7 @@ export default class IndexController extends Controller {
   formToDelete;
 
   @tracked showDeleteModal = false;
+  @tracked filter;
 
   @action
   openDeleteModal(generatedForm) {
@@ -46,6 +48,19 @@ export default class IndexController extends Controller {
       );
       console.error(err);
     }
+  }
+  
+  @restartableTask
+  *searchForm(event) {
+    yield timeout(400)
+    const inputvalue = event.target.value;
+    if (!inputvalue) {
+      this.filter = null;
+
+      return;
+    }
+
+    this.filter = inputvalue;
   }
 
   get translations() {
