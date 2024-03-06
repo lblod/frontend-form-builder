@@ -5,23 +5,21 @@
     </AuHeading>
   </div>
   <div class="header__createAndSearch">
-    <AuLink
-      @route="formbuilder.new"
-      @skin="button"
-      @icon="pencil"
-      class="au-u-margin-left-large"
-    >
-      {{t "main.createNewForm"}}
-    </AuLink>
     <AuInput
       placeholder={{t "formBuilder.searchPlaceholder"}}
       @icon="search"
       @iconAlignment="left"
-      @width="block"
       id="input-searchForm"
       value={{this.filter}}
-      {{on "change" this.searchForm}}
+      {{on "keyup" this.searchForm.perform}}
     />
+    <AuLink
+      @route="formbuilder.new"
+      @skin="button"
+      @icon="pencil"
+    >
+      {{t "main.createNewForm"}}
+    </AuLink>
   </div>
 </div>
 
