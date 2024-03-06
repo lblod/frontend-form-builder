@@ -5,25 +5,20 @@
   overflow-y: scroll;
 }
 
-.semantic-data--filters {
-  display: flex;
-  background-color: $au-gray-200;
-  flex-direction: row;
-  gap: 1rem;
-  flex-wrap: wrap;
+.builder_filter-bar {
+  display: inline-block;
+  width: 100%;
+  background-color: $au-gray-100;
   padding: 1rem 3rem;
   justify-content: left;
+  border: 1px solid $au-gray-200;
+  border-top: none;
   span {
     cursor: pointer;
   }
 }
 
-.semantic-data--filters__first {
-  box-shadow: 0 2px 5px rgb(0 0 0 / 0.2);
-  border-radius: 0.6rem;
-}
-
-.semantic-data--table {
+.builder_content-container {
   padding: 2rem 3rem;
   display: flex;
   flex-direction: column;

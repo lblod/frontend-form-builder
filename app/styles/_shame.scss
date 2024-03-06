@@ -52,8 +52,36 @@ code {
   display: block;
 }
 
-.removeTableLines {
-  table {
-    border-collapse: unset !important;
-  }
+.logo-container {
+  padding: 18px;
+  background-color: $au-yellow-300; /* Assuming $au-gray-100 is a light gray color, replace with the correct color code */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Updated this line for correct horizontal centering */
+  height: 55px;
+  width: 55px;
+  margin-right: 1rem;
+  border: none;
+}
+
+.logo-svg {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.border {
+  border: solid 1px;
+  border-color: $au-gray-200;
+}
+
+.border-b {
+  border-style: solid;
+  border-color: $au-gray-200;
+  border-bottom-width: 1px;
 }

@@ -1,16 +1,14 @@
 {{page-title "Semantic Data"}}
 <div class="semantic-data">
-  <div class="semantic-data--filters">
-    <span class="semantic-data--filters__first">
-      <AuPill
-        @skin={{this.filterStyle.toggleAll.skin}}
-        @icon={{this.filterStyle.toggleAll.icon}}
-        @iconAlignment="right"
-        {{on "click" this.toggleAllFilters}}
-      >
-        {{this.toggleAllFiltersLabel}}
-      </AuPill>
-    </span>
+  <div class="builder_filter-bar">
+    <AuPill
+      @skin={{this.filterStyle.toggleAll.skin}}
+      @icon={{this.filterStyle.toggleAll.icon}}
+      @iconAlignment="right"
+      {{on "click" this.toggleAllFilters}}
+    >
+      {{this.toggleAllFiltersLabel}}
+    </AuPill>
     {{#each this.orderedAvailableFilters as |filter|}}
       {{#if filter.isActive}}
         <AuPill
@@ -34,7 +32,7 @@
     {{/each}}
   </div>
 
-  <div class="semantic-data--table">
+  <div class="builder_content-container">
     {{#each this.datasetWithAppliedFilter as |data|}}
       <AuTable>
         <:title><span

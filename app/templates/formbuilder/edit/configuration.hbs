@@ -1,61 +1,64 @@
-<div class="formBuilderEdit__configuration au-u-padding-small">
+<div>
   {{#if this.initialise.isRunning}}
     <AuLoader />
   {{else}}
-    <PowerSelect
-      @searchField="name"
-      @searchEnabled={{true}}
-      @selected={{this.selectedSection}}
-      @options={{this.sortedSections}}
-      @onChange={{this.setSelectedSection}}
-      @allowClear={{true}}
-      @loadingMessage={{t "messages.loading.isLoading"}}
-      @noMatchesMessage={{t "messages.feedback.noResults"}}
-      as |section|
-    >
-      <span>
-        {{section.name}}
-      </span>
-    </PowerSelect>
-
-    <AuHr />
-
-    <div class="fieldsOfSection">
-      {{#if (and this.selectedSection this.fieldsForSection)}}
-        {{#each this.sortedFieldsForSection as |field|}}
-          <AuCard @expandable={{false}} as |c|>
-            <c.header>
-              <AuHeading @level="2" @skin="4">
-                {{field.name}}
-              </AuHeading>
-              <p>
-                {{field.displayType}}
-              </p>
-            </c.header>
-            <c.content>
-              <div>
-                <AuLabel for="input-field-path">Path</AuLabel>
-                <AuInput
-                  @width="block"
-                  value={{field.path}}
-                  @disabled={{true}}
-                  id="input-field-path"
-                />
-              </div>
-              {{#if (is-display-type-with-options field.displayType)}}
-                <ConceptSchemeUriSelector
-                  @forField={{field}}
-                  @update={{this.updateFieldOptions}}
-                />
-              {{/if}}
-            </c.content>
-          </AuCard>
-        {{/each}}
-      {{else}}
-        <span class="formBuilderEdit__noFields">
-          <p class="au-u-h3">{{t "messages.feedback.noSectionSelected"}}</p>
+    <div class="builder_filter-bar">
+      <PowerSelect
+        @searchField="name"
+        @searchEnabled={{true}}
+        @selected={{this.selectedSection}}
+        @options={{this.sortedSections}}
+        @onChange={{this.setSelectedSection}}
+        @allowClear={{true}}
+        @loadingMessage={{t "messages.loading.isLoading"}}
+        @noMatchesMessage={{t "messages.feedback.noResults"}}
+        as |section|
+      >
+        <span>
+          {{section.name}}
         </span>
-      {{/if}}
+      </PowerSelect>
+
+    </div>
+
+    <div class="builder_content-container">
+      <div class="fieldsOfSection">
+        {{#if (and this.selectedSection this.fieldsForSection)}}
+          {{#each this.sortedFieldsForSection as |field|}}
+            <AuCard @expandable={{false}} as |c|>
+              <c.header>
+                <AuHeading @level="2" @skin="4">
+                  {{field.name}}
+                </AuHeading>
+                <p>
+                  {{field.displayType}}
+                </p>
+              </c.header>
+              <c.content>
+                <div>
+                  <AuLabel for="input-field-path">Path</AuLabel>
+                  <AuInput
+                    @width="block"
+                    value={{field.path}}
+                    @disabled={{true}}
+                    id="input-field-path"
+                  />
+                </div>
+                {{#if (is-display-type-with-options field.displayType)}}
+                  <ConceptSchemeUriSelector
+                    @forField={{field}}
+                    @update={{this.updateFieldOptions}}
+                  />
+                {{/if}}
+              </c.content>
+            </AuCard>
+          {{/each}}
+        {{else}}
+          <span class="formBuilderEdit__noFields">
+            <p class="au-u-h3">{{t "messages.feedback.noSectionSelected"}}</p>
+          </span>
+        {{/if}}
+      </div>
     </div>
   {{/if}}
 </div>
