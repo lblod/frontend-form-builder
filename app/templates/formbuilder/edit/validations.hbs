@@ -1,13 +1,11 @@
 {{page-title "Validations"}}
 
-<div class="formBuilderEdit__builder au-u-padding-small">
-  {{#if this.formCode}}
-    <AddValidationsToForm
-      @builderTtlCode={{this.formCode}}
-      @sourceNode={{@model.form}}
-      @onNewBuilderForm={{this.handleCodeChange}}
-    />
-  {{else}}
-    <AuLoader />
-  {{/if}}
-</div>
+{{#if this.formCode}}
+  <AddValidationsToForm
+    @builderTtlCode={{this.formCode}}
+    @sourceNode={{@model.form}}
+    @onNewBuilderForm={{this.handleCodeChange}}
+  />
+{{else}}
+  <AuLoader />
+{{/if}}

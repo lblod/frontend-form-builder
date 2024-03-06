@@ -1,7 +1,8 @@
-<div>
+<div class="builder-container">
   {{#if this.initialise.isRunning}}
     <AuLoader />
   {{else}}
+  <div class="builder_filter-bar">
     <PowerSelect
       @searchField="name"
       @searchEnabled={{true}}
@@ -17,9 +18,9 @@
         {{field.name}}
       </span>
     </PowerSelect>
-
-    <AuHr />
-
+  </div>
+ 
+  <div class="builder_content-container">
     {{#if this.selectedField}}
       <FieldValidationsForm
         @fieldSubject={{this.selectedField.subject}}
@@ -33,5 +34,7 @@
         <p class="au-u-h3">{{t "messages.feedback.noFieldSelected"}}</p>
       </span>
     {{/if}}
+  </div>
+  
   {{/if}}
 </div>
