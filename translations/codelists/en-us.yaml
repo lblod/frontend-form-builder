@@ -1,4 +1,5 @@
 codelists:
+  searchPlaceholder: "Search a codelist"
   addConcept: "Add concept to the list"
   nameOfCodelist: "Name of codelist"
   descriptionOfCodelist: "Description"
@@ -36,6 +37,8 @@ messages:
     codelistUpdated: "Updated codelist"
   loading:
     downloading: "Downloading"
+  feedback:
+    noCodelistsFound: "No codelists found"
 
 actions:
   exportCodelist: "Export"

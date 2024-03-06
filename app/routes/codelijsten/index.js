@@ -1,25 +1,28 @@
 import Route from '@ember/routing/route';
 
 import { service } from '@ember/service';
-import { PAGE_SIZE_TO_GET_ALL } from '../../utils/constants';
+// eslint-disable-next-line ember/no-mixins
+import DataTableRouteMixin from 'ember-data-table/mixins/route';
 
-export default class CodelijstenIndexRoute extends Route {
+export default class CodelijstenIndexRoute extends Route.extend(
+  DataTableRouteMixin
+) {
   @service store;
 
   queryParams = {
+    sort: {
+      refreshModel: true,
+    },
+    page: {
+      refreshModel: true,
+    },
+    filter: {
+      refreshModel: true,
+    },
     formId: {
       refreshModel: true,
     },
   };
 
-  async model() {
-    const conceptSchemes = await this.store.query('concept-scheme', {
-      sort: '-preflabel',
-      page: {
-        size: PAGE_SIZE_TO_GET_ALL,
-      },
-    });
-
-    return conceptSchemes;
-  }
+  modelName = 'concept-scheme';
 }
