@@ -44,7 +44,9 @@ export default class FormbuilderEditCodeController extends Controller {
     );
 
     const formattedReport = formatShaclValidationReport(shaclReport);
-    this.warnings = formattedReport.errorDetails.map(error => error.messages[0]);
+    this.warnings = formattedReport.errorDetails.map(
+      (error) => error.messages
+    );
 
     const builderStore = new ForkingStore();
     try {
