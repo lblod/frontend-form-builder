@@ -11,6 +11,7 @@ import { GRAPHS } from '../../controllers/formbuilder/edit';
 import ErrorMessageInputFieldComponent from '../../components/rdf-form-fields/error-message-input-field';
 import { showErrorToasterMessage } from '../../utils/toaster-message-helper';
 import RichTextEditorComponent from '../../components/rdf-form-fields/rich-text-editor';
+import AggregateFieldComponent from '../../components/rdf-form-fields/aggregate-field';
 
 export default class FormbuilderEditRoute extends Route {
   @service store;
@@ -32,11 +33,17 @@ export default class FormbuilderEditRoute extends Route {
       getLocalFileContentAsText('/forms/builder/meta.ttl'),
     ]);
 
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const semanticDataController = this.controllerFor(
+      'formbuilder.edit.semantic-data'
+    );
+
     return {
       generatedForm,
       formTtl,
       metaTtl,
       graphs: GRAPHS,
+      passFormInputDataTtl: semanticDataController.addNewFormInputData,
     };
   }
 
@@ -113,6 +120,10 @@ export default class FormbuilderEditRoute extends Route {
       {
         displayType: 'http://lblod.data.gift/display-types/richTextEditor',
         edit: RichTextEditorComponent,
+      },
+      {
+        displayType: 'http://lblod.data.gift/display-types/aggregateField',
+        edit: AggregateFieldComponent,
       },
     ]);
   }

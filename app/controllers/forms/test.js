@@ -24,6 +24,9 @@ export default class FormsTestController extends Controller {
   @tracked formStore;
 
   @tracked forceShowErrors;
+  @tracked shared;
+
+  queryParams = ['shared'];
 
   setupForm = restartableTask(async () => {
     this.formStore = new ForkingStore();
@@ -59,10 +62,17 @@ export default class FormsTestController extends Controller {
   @action
   copyTestFormUrl() {
     const currentUrl = window.location.href;
-    navigator.clipboard.writeText(currentUrl);
+    let shareUrl = currentUrl;
+    if (currentUrl.includes('?')) {
+      shareUrl += `&shared`;
+    } else {
+      shareUrl += `?shared`;
+    }
+
+    navigator.clipboard.writeText(shareUrl);
     showSuccessToasterMessage(
       this.toaster,
-      currentUrl,
+      shareUrl,
       this.intl.t('messages.subjects.copiedToClipboard'),
       10000
     );

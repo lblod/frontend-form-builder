@@ -18,75 +18,94 @@
   </Group>
 </AuToolbar>
 
-<div class="au-c-toolbar au-c-toolbar--bottom au-c-toolbar--large">
+<div class="au-c-toolbar--bottom au-c-toolbar--large header">
   <div class="au-c-toolbar__group">
     <AuHeading @level="1" @skin="2">
       {{t "navigation.tabs.codelists"}}
     </AuHeading>
   </div>
-  <div class="au-c-toolbar__group">
-    <AuButtonGroup>
-      {{#if this.features.CAN_CREATE_OWN_CODELIST}}
-        <AuLink
-          @route="codelijsten.new"
-          @skin="button"
-          @icon="plus"
-          @iconAlignment="left"
-        >{{t "codelists.createCodelist"}}</AuLink>
-      {{/if}}
-    </AuButtonGroup>
+  <div class="header__createAndSearch">
+    {{#if this.features.CAN_CREATE_OWN_CODELIST}}
+      <AuLink
+        class="au-u-margin-left-large"
+        @route="codelijsten.new"
+        @skin="button"
+        @icon="plus"
+        @iconAlignment="left"
+      >{{t "codelists.createCodelist"}}</AuLink>
+    {{/if}}
+    <AuInput
+      placeholder={{t "codelists.searchPlaceholder"}}
+      @icon="search"
+      @iconAlignment="left"
+      @width="block"
+      id="input-searchCodelist"
+      value={{this.filter}}
+      {{on "change" this.searchCodelist}}
+    />
   </div>
 </div>
 
-<div class="au-c-main-container__content codelijsten__scroll">
-  <AuTable class="au-u-margin-bottom-small">
-    <:header>
-      <tr>
-        <th>{{t "table.columns.name"}}</th>
-        <th>{{t "table.columns.id"}}</th>
-        <th></th>
-      </tr>
-    </:header>
-    <:body>
-      {{#each this.model as |conceptScheme|}}
-        <tr>
-          <td class="au-u-visible-medium-up au-u-word-break">
-            <AuLink
-              @route="codelijsten.edit"
-              @model={{conceptScheme.id}}
-              @ariaHidden={{true}}
-            >{{conceptScheme.label}}</AuLink>
-          </td>
-          <td class="au-u-visible-medium-up">{{conceptScheme.id}}</td>
-          <td>
-            {{#if conceptScheme.isPublic}}
-              <AuPill
-                @skin="success"
-                @icon="info-circle"
-                @iconAlignment="left"
-              >{{t "codelists.types.isPublic"}}
-              </AuPill>
-              {{#if conceptScheme.isArchived}}
+<main id="main" class="au-c-main-container">
+  <div class="au-c-main-container__content">
+    <div class="au-c-body-container removeTableLines">
+      <AuDataTable
+        @content={{this.model}}
+        @isLoading={{this.isLoadingModel}}
+        @noDataMessage={{this.translations.noCodelistsFound}}
+        @sort={{this.sort}}
+        @page={{this.page}}
+        @size={{this.size}}
+        as |t|
+      >
+        <t.content as |c|>
+          <c.header>
+            <AuDataTableThSortable
+              @label={{this.translations.columnName}}
+              @field="preflabel"
+              @currentSorting={{this.sort}}
+              class="au-u-visible-medium-up"
+            />
+            <th colspan="1">{{this.translations.columnId}}</th>
+            <th colspan="1"></th>
+          </c.header>
+          <c.body as |codelist|>
+            <td class="au-u-visible-medium-up au-u-word-break">
+              <AuLink
+                @route="codelijsten.edit"
+                @model={{codelist.id}}
+                @ariaHidden={{true}}
+              >{{codelist.label}}</AuLink>
+            </td>
+            <td class="au-u-visible-medium-up">{{codelist.id}}</td>
+            <td class="au-u-visible-medium-up">
+              {{#if codelist.isPublic}}
                 <AuPill
-                  @skin="default"
-                  @icon="archive"
+                  @skin="success"
+                  @icon="info-circle"
                   @iconAlignment="left"
-                >{{t "codelists.types.isArchived"}}
+                >{{this.translations.publicType}}
+                </AuPill>
+                {{#if codelist.isArchived}}
+                  <AuPill
+                    @skin="default"
+                    @icon="archive"
+                    @iconAlignment="left"
+                  >{{this.translations.archivedType}}
+                  </AuPill>
+                {{/if}}
+              {{else}}
+                <AuPill
+                  @skin="warning"
+                  @icon="info-circle"
+                  @iconAlignment="left"
+                >{{this.translations.privateType}}
                 </AuPill>
               {{/if}}
-            {{else}}
-              <AuPill
-                @skin="warning"
-                @icon="info-circle"
-                @iconAlignment="left"
-              >{{t "codelists.types.isPrivate"}}
-              </AuPill>
-            {{/if}}
-          </td>
-        </tr>
-      {{/each}}
-    </:body>
-  </AuTable>
-</div>
-
-{{outlet}}
+            </td>
+          </c.body>
+        </t.content>
+      </AuDataTable>
+    </div>
+  </div>
+</main>

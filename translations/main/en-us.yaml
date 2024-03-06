@@ -4,6 +4,7 @@ main:
   testFormsTitle: "Test semantisch formulier"
   createNewForm: "Create new semantic form"
   brandLink: "https://www.vlaanderen.be/nl"
+  semanticForms: "Semantic Forms"
 
 formBuilder:
   searchPlaceholder: "Find a form"
@@ -31,6 +32,7 @@ navigation:
     validations: "Validations"
     configuration: "Configuration"
     codelists: "Codelists"
+    semanticData: "Semantic Data"
 
 table:
   columns:
@@ -46,6 +48,22 @@ createForm:
   name: "Naam"
   selectTemplate: "Selecteer een formulier waarvan je wil beginnen"
   build: "Bouw formulier"
+
+semanticData:
+  filters:
+    allOn: "All on"
+    allOff: "All off"
+    formNode: "Form node"
+    section: "Sections"
+    subform: "Sub-forms"
+    field: "Fields"
+    table: "Tables"
+    listing: "Listings"
+    validation: "Validations"
+    generator: "Generators"
+    scope: "Scopes"
+    inputData: "User input data"
+    noFilter: "Others"
 
 # Components #
 toolbar:
