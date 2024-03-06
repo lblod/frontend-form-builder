@@ -1,33 +1,45 @@
 {{page-title "Test"}}
-<AuToolbar @size="medium" @skin="tint" @border="bottom" as |Group|>
-  <Group>
-    <ul class="au-c-list-horizontal au-c-list-horizontal--small">
-      <li class="au-c-list-horizontal__item">
-        <AuLink
-          @route="index"
-          @skin="primary"
-          @icon="arrow-left"
-          @iconAlignment="left"
-        >{{t "navigation.backToFormOverview"}}</AuLink>
-      </li>
-      <li class="au-c-list-horizontal__item au-u-word-break">
-        {{this.model.form.title}}
-      </li>
-    </ul>
-  </Group>
-</AuToolbar>
+
+{{#if this.shared}}
+  <div class="hide-main-header"></div>
+{{/if}}
+
+{{#unless this.shared}}
+  <AuToolbar @size="medium" @skin="tint" @border="bottom" as |Group|>
+    <Group>
+      <ul class="au-c-list-horizontal au-c-list-horizontal--small">
+        <li class="au-c-list-horizontal__item">
+          <AuLink
+            @route="index"
+            @skin="primary"
+            @icon="arrow-left"
+            @iconAlignment="left"
+          >{{t "navigation.backToFormOverview"}}</AuLink>
+        </li>
+        <li class="au-c-list-horizontal__item au-u-word-break">
+          {{this.model.form.title}}
+        </li>
+      </ul>
+    </Group>
+  </AuToolbar>
+{{/unless}}
+
 <div class="formTestPage">
   <div class="formTestPage_center">
     <div class="formTestPage_center--title">
       <h1 class="au-u-h3">
         {{this.model.form.title}}
       </h1>
-      <AuButton
-        @icon="link"
-        @skin="naked"
-        @hideText={{true}}
-        {{on "click" this.copyTestFormUrl}}
-      />
+
+      {{#unless this.shared}}
+        <AuButton
+          @icon="link"
+          @skin="naked"
+          @hideText={{true}}
+          {{on "click" this.copyTestFormUrl}}
+        />
+      {{/unless}}
+
     </div>
     <div class="formTestPage_center--form">
       {{#if (and this.formStore this.form)}}
@@ -59,5 +71,12 @@
         </AuButton>
       </AuButtonGroup>
     </div>
+
+    {{#if this.shared}}
+      <div class="formTestPage_center--branding">
+        <img src="/assets/images/transparant_logo.svg" alt="" />
+        <h1>{{t "main.semanticForms"}}</h1>
+      </div>
+    {{/if}}
   </div>
 </div>
