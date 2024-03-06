@@ -7,11 +7,11 @@
 
 .semantic-data--filters {
   display: flex;
+  background-color: $au-gray-200;
   flex-direction: row;
   gap: 1rem;
   flex-wrap: wrap;
-  padding: 2rem;
-  padding-bottom: 0px;
+  padding: 1rem 3rem;
   justify-content: left;
   span {
     cursor: pointer;
@@ -24,7 +24,7 @@
 }
 
 .semantic-data--table {
-  padding: 2rem 1rem;
+  padding: 2rem 3rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
