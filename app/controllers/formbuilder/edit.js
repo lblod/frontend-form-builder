@@ -88,6 +88,18 @@ export default class FormbuilderEditController extends Controller {
       );
     }
 
+    this.previewStore.registerObserver(() => {
+      const ttl = this.previewStore.serializeDataMergedGraph(
+        this.model.graphs.sourceGraph
+      );
+
+      this.formCodeManager.setFormInputDataTtl(ttl);
+
+      if (this.isCurrentlyOnSemanticDataRoute) {
+        this.model.passFormInputDataTtl(ttl);
+      }
+    }, 'formInputData');
+
     this.previewForm = this.previewStore.any(
       undefined,
       RDF('type'),
@@ -171,5 +183,9 @@ export default class FormbuilderEditController extends Controller {
       );
       console.error(`Caught:`, error);
     }
+  }
+
+  get isCurrentlyOnSemanticDataRoute() {
+    return this.router.currentRouteName == 'formbuilder.edit.semantic-data';
   }
 }

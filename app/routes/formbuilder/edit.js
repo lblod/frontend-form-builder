@@ -33,11 +33,17 @@ export default class FormbuilderEditRoute extends Route {
       getLocalFileContentAsText('/forms/builder/meta.ttl'),
     ]);
 
+    // eslint-disable-next-line ember/no-controller-access-in-routes
+    const semanticDataController = this.controllerFor(
+      'formbuilder.edit.semantic-data'
+    );
+
     return {
       generatedForm,
       formTtl,
       metaTtl,
       graphs: GRAPHS,
+      passFormInputDataTtl: semanticDataController.addNewFormInputData,
     };
   }
 

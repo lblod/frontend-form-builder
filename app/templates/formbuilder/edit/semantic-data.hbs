@@ -1,0 +1,62 @@
+{{page-title "Semantic Data"}}
+<div class="semantic-data">
+  <div class="semantic-data--filters">
+    <span class="semantic-data--filters__first">
+      <AuPill
+        @skin={{this.filterStyle.toggleAll.skin}}
+        @icon={{this.filterStyle.toggleAll.icon}}
+        @iconAlignment="right"
+        {{on "click" this.toggleAllFilters}}
+      >
+        {{this.toggleAllFiltersLabel}}
+      </AuPill>
+    </span>
+    {{#each this.orderedAvailableFilters as |filter|}}
+      {{#if filter.isActive}}
+        <AuPill
+          @skin={{this.filterStyle.active.skin}}
+          @icon={{this.filterStyle.active.icon}}
+          @iconAlignment="right"
+          {{on "click" (fn this.toggleFilter filter)}}
+        >
+          {{filter.label}}
+        </AuPill>
+      {{else}}
+        <AuPill
+          @skin={{this.filterStyle.inactive.skin}}
+          @icon={{this.filterStyle.inactive.icon}}
+          @iconAlignment="right"
+          {{on "click" (fn this.toggleFilter filter)}}
+        >
+          {{filter.label}}
+        </AuPill>
+      {{/if}}
+    {{/each}}
+  </div>
+
+  <div class="semantic-data--table">
+    {{#each this.datasetWithAppliedFilter as |data|}}
+      <AuTable>
+        <:title><span
+            class="au-u-word-break-all"
+          >{{data.subject}}</span></:title>
+        <:header>
+          <tr>
+            <th>Predicate</th>
+            <th>Object</th>
+          </tr>
+        </:header>
+        <:body>
+          {{#if data.values}}
+            {{#each data.values as |value|}}
+              <tr>
+                <td class="au-u-word-break-all">{{value.predicate}}</td>
+                <td class="au-u-word-break-all">{{value.object}}</td>
+              </tr>
+            {{/each}}
+          {{/if}}
+        </:body>
+      </AuTable>
+    {{/each}}
+  </div>
+</div>

@@ -22,6 +22,7 @@ Router.map(function () {
       this.route('builder');
       this.route('validations');
       this.route('configuration');
+      this.route('semantic-data');
     });
   });
   this.route('user-tests', function () {

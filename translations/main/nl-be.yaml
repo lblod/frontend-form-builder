@@ -31,6 +31,7 @@ navigation:
     validations: "Validaties"
     configuration: "Configuratie"
     codelists: "Codelijsten"
+    semanticData: "Data"
 
 table:
   columns:
@@ -46,6 +47,22 @@ createForm:
   name: "Naam"
   selectTemplate: "Selecteer een formulier waarvan je wil beginnen"
   build: "Bouw formulier"
+
+semanticData:
+  filters:
+    allOn: "Alles aan"
+    allOff: "Alles uit"
+    formNode: "Formulier node"
+    section: "Secties"
+    subform: "Subformulieren"
+    field: "Velden"
+    table: "Tabellen"
+    listing: "Listings"
+    validation: "Validaties"
+    generator: "Generatoren"
+    scope: "Scopes"
+    inputData: "Gebruiker input data"
+    noFilter: "Andere"
 
 # Components #
 toolbar:
