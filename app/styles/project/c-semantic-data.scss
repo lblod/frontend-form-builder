@@ -11,6 +11,8 @@
   background-color: $au-gray-100;
   padding: 1rem 3rem;
   justify-content: left;
+  border: 1px solid $au-gray-200;
+  border-top: none;
   span {
     cursor: pointer;
   }

@@ -11,6 +11,9 @@
   overflow-y: auto;
   overflow-x: hidden;
   background-color: $au-gray-100;
+  border-style: solid;
+  border-left-width: 1px;
+  border-color: $au-gray-200;
 }
 
 .formBuilderEdit__builder {
