@@ -1,6 +1,6 @@
 main:
-  appTitle: "Semantic form builder"
-  formsTitle: "Semantische Formulierenbouwer Loket"
+  appTitle: "Gelinkte formulieren"
+  formsTitle: "Gelinkte formulieren bouwer"
   testFormsTitle: "Test semantisch formulier"
   createNewForm: "Create new semantic form"
   brandLink: "https://www.vlaanderen.be/nl"
