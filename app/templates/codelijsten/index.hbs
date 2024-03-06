@@ -31,24 +31,21 @@
     </AuHeading>
   </div>
   <div class="header__createAndSearch">
-    {{#if this.features.CAN_CREATE_OWN_CODELIST}}
-      <AuLink
-        class="au-u-margin-left-large"
-        @route="codelijsten.new"
-        @skin="button"
-        @icon="plus"
-        @iconAlignment="left"
-      >{{t "codelists.createCodelist"}}</AuLink>
-    {{/if}}
     <AuInput
       placeholder={{t "codelists.searchPlaceholder"}}
       @icon="search"
       @iconAlignment="left"
-      @width="block"
       id="input-searchCodelist"
       value={{this.filter}}
-      {{on "change" this.searchCodelist}}
+      {{on "keyup" this.searchCodelist.perform}}
     />
+    <AuLink
+      @route="codelijsten.new"
+      @skin="button"
+      @icon="plus"
+      @iconAlignment="left"
+    >{{t "codelists.createCodelist"}}
+    </AuLink>
   </div>
 </div>
 

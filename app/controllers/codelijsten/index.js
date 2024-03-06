@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { restartableTask, timeout } from 'ember-concurrency';
 
 export default class CodelijstenController extends Controller {
   @service features;
@@ -21,8 +22,9 @@ export default class CodelijstenController extends Controller {
     }
   }
 
-  @action
-  searchCodelist(event) {
+  searchCodelist = restartableTask(async (event) => {
+    await timeout(400);
+
     const inputvalue = event.target.value;
     if (!inputvalue) {
       this.filter = null;
@@ -31,7 +33,7 @@ export default class CodelijstenController extends Controller {
     }
 
     this.filter = inputvalue;
-  }
+  });
 
   get routeLabel() {
     if (this.formId) {
