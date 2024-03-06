@@ -19,12 +19,17 @@
   </div>
   {{#unless this.collapsed}}
   <AuBodyContainer class="au-u-background-gray-100">
-    <AuBodyContainer class="au-u-background-gray-200 au-u-margin">
-      <AuContent 
-        class="console au-u-margin"
-      >
-        content
-      </AuContent>
+    <AuBodyContainer 
+      class="au-u-background-gray-200 au-u-margin"
+      @scroll={{true}}
+    >
+      {{#each this.warnings as |warning|}}
+        <AuContent
+          class="au-o-box--flush au-u-background-gray-100 au-u-margin-top-tiny"
+        >
+          {{warning}}
+        </AuContent>
+      {{/each}}
     </AuBodyContainer>
   </AuBodyContainer>
   {{/unless}}

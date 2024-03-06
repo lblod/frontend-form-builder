@@ -17,6 +17,7 @@ export default class FormbuilderEditCodeController extends Controller {
   @tracked formCode;
   @tracked formCodeUpdates;
   @tracked collapsed = true;
+  @tracked warnings;
 
   setup() {
     const updatedFormCode = cleanupTtlcode(
@@ -41,6 +42,9 @@ export default class FormbuilderEditCodeController extends Controller {
       'Formatted SHACL report: ',
       formatShaclValidationReport(shaclReport)
     );
+
+    const formattedReport = formatShaclValidationReport(shaclReport);
+    this.warnings = formattedReport.errorDetails.map(error => error.messages[0]);
 
     const builderStore = new ForkingStore();
     try {
