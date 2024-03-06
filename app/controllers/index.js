@@ -49,10 +49,9 @@ export default class IndexController extends Controller {
       console.error(err);
     }
   }
-  
-  @restartableTask
-  *searchForm(event) {
-    yield timeout(400)
+
+  searchForm = restartableTask(async (event) => {
+    await timeout(400);
     const inputvalue = event.target.value;
     if (!inputvalue) {
       this.filter = null;
@@ -61,7 +60,7 @@ export default class IndexController extends Controller {
     }
 
     this.filter = inputvalue;
-  }
+  });
 
   get translations() {
     return {
