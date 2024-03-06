@@ -25,7 +25,7 @@
 
 <main id="main" class="au-c-main-container">
   <div class="au-c-main-container__content">
-    <div class="au-c-body-container removeTableLines">
+    <div class="au-c-body-container">
       <AuDataTable
         @content={{this.model}}
         @isLoading={{this.isLoadingModel}}
@@ -73,7 +73,7 @@
                 {{this.translations.test}}
               </AuLink>
             </td>
-            <td class="au-u-visible-medium-up">
+            <td class="au-width-small">
               <AuButton
                 @skin="link"
                 @icon="bin"
