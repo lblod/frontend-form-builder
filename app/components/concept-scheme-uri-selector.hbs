@@ -1,9 +1,11 @@
-<AuLabel>{{t "codelists.chooseConcept"}}</AuLabel>
-<PowerSelect
-  @options={{this.options}}
-  @selected={{this.selected}}
-  @onChange={{this.setSelected}}
-  as |conceptScheme|
->
-  {{conceptScheme.label}}
-</PowerSelect>
+<div>
+  <AuLabel>{{t "codelists.chooseConcept"}}</AuLabel>
+  <PowerSelect
+    @options={{this.options}}
+    @selected={{this.selected}}
+    @onChange={{this.setSelected}}
+    as |conceptScheme|
+  >
+    {{conceptScheme.label}}
+  </PowerSelect>
+</div>
