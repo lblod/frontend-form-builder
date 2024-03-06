@@ -33,15 +33,20 @@
               </p>
             </c.header>
             <c.content>
+              <div>
+                <AuLabel for="input-field-path">Path</AuLabel>
+                <AuInput
+                  @width="block"
+                  value={{field.path}}
+                  @disabled={{true}}
+                  id="input-field-path"
+                />
+              </div>
               {{#if (is-display-type-with-options field.displayType)}}
                 <ConceptSchemeUriSelector
                   @forField={{field}}
                   @update={{this.updateFieldOptions}}
                 />
-              {{else}}
-                <p
-                  class="au-u-muted au-u-h-functional au-u-medium au-u-italic"
-                >{{t "messages.feedback.noConfigPossible"}}</p>
               {{/if}}
             </c.content>
           </AuCard>

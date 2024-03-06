@@ -36,6 +36,7 @@ export function getMinimalNodeInfo(node, store, graph) {
     graph
   );
 
+  const nodePath = store.any(node, SHACL('path'), undefined, graph);
   const nodeName = store.any(node, SHACL('name'), undefined, graph);
   let nodeOrder = store.any(node, SHACL('order'), undefined, graph);
 
@@ -48,5 +49,6 @@ export function getMinimalNodeInfo(node, store, graph) {
     name: nodeName,
     order: Number(nodeOrder),
     displayType: nodeDisplayType,
+    path: nodePath,
   };
 }

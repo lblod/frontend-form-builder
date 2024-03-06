@@ -77,6 +77,7 @@ export default class FormbuilderConfigurationController extends Controller {
         subject: child,
         conceptSchemeUriOption: nodeConceptSchemeUriOption,
         displayType: nodeInfo.displayType,
+        path: nodeInfo.path,
       });
     }
 
