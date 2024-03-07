@@ -157,6 +157,33 @@ export default class FormbuilderConfigurationController extends Controller {
     return JSON.parse(option.value).conceptScheme ?? null;
   }
 
+  get sectionHasOneTableListing() {
+    const tableListings = this.builderStore
+      .match(
+        undefined,
+        RDF('type'),
+        FORM('ListingTable'),
+        this.model.graphs.sourceGraph
+      )
+      .map((triple) => triple.subject);
+
+    if (!tableListings || tableListings.length == 0) return false;
+
+    for (const tableListing of tableListings) {
+      const isPartOf = this.builderStore.any(
+        tableListing,
+        FORM('partOf'),
+        this.selectedSection.parent
+      );
+
+      if (!isPartOf) continue;
+
+      return true;
+    }
+
+    return false;
+  }
+
   setup() {
     this.fieldsForSection = null;
     this.setSelectedSection(null);
