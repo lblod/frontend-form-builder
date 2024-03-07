@@ -64,7 +64,8 @@ export default class CodelijstenEditController extends Controller {
       !this.isPrivateConceptScheme &&
       this.hasConcepts &&
       this.isValidConceptSchemeName() &&
-      !this.isArchivedConceptScheme
+      !this.isArchivedConceptScheme &&
+      this.isSaveDisabled
     );
   }
 
@@ -72,7 +73,8 @@ export default class CodelijstenEditController extends Controller {
     return (
       !this.isPrivateConceptScheme &&
       this.hasConcepts &&
-      this.isValidConceptSchemeName()
+      this.isValidConceptSchemeName() &&
+      this.isSaveDisabled
     );
   }
 
