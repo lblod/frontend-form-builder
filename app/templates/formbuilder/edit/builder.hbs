@@ -1,6 +1,7 @@
 {{page-title "Builder"}}
 
-<div class="builder_content-container">
+<div class="builder_container">
+  <div class="builder_content-container">
   {{#if (and this.builderStore this.builderForm)}}
     <RdfForm
       @groupClass="au-o-grid__item"
@@ -14,4 +15,5 @@
   {{else}}
     <AuLoader />
   {{/if}}
+  </div>
 </div>
