@@ -20,12 +20,12 @@
   {{#unless this.collapsed}}
   <AuBodyContainer class="code-edit-console__container">
     <AuBodyContainer 
-      class="code-edit-console au-u-margin"
+      class="code-edit-console au-u-margin-tiny"
       @scroll={{true}}
     >
       {{#each this.warnings as |warning|}}
         <AuContent
-          class="code-edit-warning au-u-margin-top-tiny"
+          class="code-edit-warning au-u-margin-top-small"
         >
           <AuIcon @icon="alert-triangle" @size="large" @alignment="left"/>
           <span>WARNING {{warning.subject}}</span>
