@@ -50,6 +50,13 @@ export default class ConfigurationTableComponent extends Component {
 
     this.minValue = event.target.value;
     if (this.minValue) {
+      if (this.minValue > this.limits.max) {
+        this.minValue = this.limits.max;
+      }
+      if (this.minValue < this.limits.min) {
+        this.minValue = this.limits.min;
+      }
+
       this.args.store.addAll([
         new Statement(
           tableSubject,
@@ -78,6 +85,13 @@ export default class ConfigurationTableComponent extends Component {
 
     this.maxValue = event.target.value;
     if (this.maxValue) {
+      if (this.maxValue > this.limits.max) {
+        this.maxValue = this.limits.max;
+      }
+      if (this.maxValue < this.limits.min) {
+        this.maxValue = this.limits.min;
+      }
+
       this.store.addAll([
         new Statement(
           tableSubject,
