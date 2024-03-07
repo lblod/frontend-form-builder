@@ -8,6 +8,8 @@ import { Statement } from 'rdflib';
 export default class ConfigurationTableComponent extends Component {
   @tracked minValue;
   @tracked maxValue;
+  @tracked isShowingTableIndices;
+  @tracked indexColumnLabel;
 
   constructor() {
     super(...arguments);
@@ -33,6 +35,64 @@ export default class ConfigurationTableComponent extends Component {
     if (maxColumnsValueStatement) {
       this.maxValue = Number(maxColumnsValueStatement.value);
     }
+    const showIndicesStatement = this.store.any(
+      tableSubject,
+      FORM('showTableRowIndex'),
+      undefined,
+      this.graphs.sourceGraph
+    );
+    if (showIndicesStatement) {
+      this.isShowingTableIndices = Boolean(showIndicesStatement.value);
+    }
+  }
+
+  @action
+  updateIndexLabel(event) {
+    const tableSubject = this.tableListingInSection;
+    const currentIndexColumnLabel = this.store.match(
+      tableSubject,
+      FORM('tableIndexLabel'),
+      undefined,
+      this.graphs.sourceGraph
+    );
+    if (currentIndexColumnLabel) {
+      this.args.store.removeStatements(currentIndexColumnLabel);
+    }
+
+    this.indexColumnLabel = event.target.value.trim() ?? '';
+    this.args.store.addAll([
+      new Statement(
+        tableSubject,
+        FORM('tableIndexLabel'),
+        this.indexColumnLabel,
+        this.graphs.sourceGraph
+      ),
+    ]);
+  }
+
+  @action
+  showIndicesInTable(checkBoxState) {
+    const tableSubject = this.tableListingInSection;
+    const showIndices = this.store.match(
+      tableSubject,
+      FORM('showTableRowIndex'),
+      undefined,
+      this.graphs.sourceGraph
+    );
+
+    if (showIndices.length >= 1) {
+      this.store.removeStatements(showIndices);
+    }
+    this.args.store.addAll([
+      new Statement(
+        tableSubject,
+        FORM('showTableRowIndex'),
+        checkBoxState,
+        this.graphs.sourceGraph
+      ),
+    ]);
+    this.isShowingTableIndices = checkBoxState;
+    this.args.updatedTtl(this.ttlForStore);
   }
 
   @action

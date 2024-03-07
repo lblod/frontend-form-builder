@@ -80,3 +80,4 @@ editNameModal:
 tableConfiguration:
   minColumnsLabel: "Min kolommen"
   maxColumnsLabel: "Max kolommen"
+  showIndices: "Show indices"
