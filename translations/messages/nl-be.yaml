@@ -14,6 +14,7 @@ messages:
     cannotAddValidationsToEmptyForm: "Kan geen validaties toevoegen aan een leeg formulier"
     duplicateValidationType: "Validatietype {type} is duplicaat"
     couldNotGetFormIdIsNotSet: "Kan form id niet vinden. Id niet ingesteld."
+    valueMustBeBoolean: "The gegeven waarde is geen boolean waarde {value}"
   success:
     formCreated: "Formulier succesvol aangemaakt"
     formUpdated: "Formulier bijgewerkt"

@@ -59,6 +59,14 @@ export default class CodelijstenEditController extends Controller {
     return this.conceptScheme.isArchived;
   }
 
+  get canArchiveCodelist() {
+    return !this.isPrivateConceptScheme;
+  }
+
+  get canExportCodelist() {
+    return !this.isPrivateConceptScheme;
+  }
+
   setup = restartableTask(async (conceptSchemeId) => {
     this.conceptScheme = await this.getConceptSchemeById(conceptSchemeId);
     this.setValuesFromConceptscheme();
@@ -411,5 +419,20 @@ export default class CodelijstenEditController extends Controller {
         id: conceptSchemeId,
       });
     }
+  }
+
+  @action
+  opposite(boolean) {
+    if (typeof boolean !== 'boolean') {
+      showErrorToasterMessage(
+        this.toaster,
+        this.intl.t('messages.error.valueMustBeBoolean', {
+          value: boolean,
+        })
+      );
+      return false;
+    }
+
+    return !boolean;
   }
 }
