@@ -5,8 +5,8 @@
     </AuHeading>
   </c.header>
   <c.content>
-    <div class="au-u-flex au-u-flex--row au-u-flex--around">
-      <div>
+    <div class="au-u-flex au-u-flex--row au-u-flex--start">
+      <span>
         <AuLabel for="input-column-min-constraint">{{t
             "tableConfiguration.minColumnsLabel"
           }}</AuLabel>
@@ -19,8 +19,8 @@
           id="input-column-min-constraint"
           {{on "blur" this.updateMinValue}}
         />
-      </div>
-      <div>
+      </span>
+      <span>
         <AuLabel for="input-column-max-constraint">{{t
             "tableConfiguration.maxColumnsLabel"
           }}</AuLabel>
@@ -33,7 +33,21 @@
           id="input-column-max-constraint"
           {{on "blur" this.updateMaxValue}}
         />
-      </div>
+      </span>
     </div>
+    <AuCheckbox
+      @checked={{this.isShowingTableIndices}}
+      @onChange={{this.showIndicesInTable}}
+    >
+      {{t "tableConfiguration.showIndices"}}
+    </AuCheckbox>
+    {{#if this.isShowingTableIndices}}
+      <AuInput
+        @width="block"
+        value={{this.indexColumnLabel}}
+        id="input-label-index-column"
+        {{on "blur" this.updateIndexLabel}}
+      />
+    {{/if}}
   </c.content>
 </AuCard>
