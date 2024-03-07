@@ -24,7 +24,6 @@ messages:
     noResults: "Geen resultaten gevonden"
     noFormsFound: "Geen formulieren gevonden"
     remainingCharacters: "Karakters: {currentCount}"
-    onlyFieldsAllowedToDisplayUnderSections: "Velden zijn enkel toeglaten om te tonen onder de sectie"
     warnV1Form: "We hebben gemerkt dat je een {version} formulier aan het editeren bent. Sommige functies zijn gelimiteerd."
     lowestVersionAvailable: "De laagste beschikbare versie: 0"
     highestversionAvailable: "De laatste versie is v{version}"
