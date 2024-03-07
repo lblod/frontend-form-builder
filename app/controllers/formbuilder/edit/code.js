@@ -17,7 +17,7 @@ export default class FormbuilderEditCodeController extends Controller {
   @tracked formCode;
   @tracked formCodeUpdates;
   @tracked collapsed = true;
-  @tracked warnings;
+  @tracked warnings = [];
 
   setup() {
     const updatedFormCode = cleanupTtlcode(
@@ -28,6 +28,7 @@ export default class FormbuilderEditCodeController extends Controller {
     this.formCode = updatedFormCode;
     this.formCodeUpdates = this.formCode;
     this.model.handleCodeChange(this.formCode);
+    this.consoleValidateCode(this.formCode);
   }
 
   handleCodeChange = restartableTask(async (newCode) => {
@@ -37,16 +38,39 @@ export default class FormbuilderEditCodeController extends Controller {
       return;
     }
 
+    this.consoleValidateCode(newCode);
+
+    // The newCode is not assigned to this.fromCode as than the editor
+    // loses focus as you are udpating the content in the editor.
+    // Keeping the changes in another variable and at the end assigning
+    // the formCode to the updated code
+    this.formCodeUpdates = newCode;
+    this.model.handleCodeChange(this.formCodeUpdates);
+  });
+
+  @action
+  toggleCollapsed() {
+    this.collapsed = !this.collapsed;
+  }
+
+  async consoleValidateCode(newCode) {
     const shaclReport = await shaclValidateTtlCode(newCode);
     console.warn(
       'Formatted SHACL report: ',
       formatShaclValidationReport(shaclReport)
     );
 
+    this.warnings = [];
+
     const formattedReport = formatShaclValidationReport(shaclReport);
-    this.warnings = formattedReport.errorDetails.map(
-      (error) => error.messages
-    );
+    formattedReport.errorDetails.forEach((error) => {
+      this.warnings.push({
+        subject: error.subject,
+        message: error.messages,
+      });
+    });
+
+    console.log(this.warnings);
 
     const builderStore = new ForkingStore();
     try {
@@ -60,17 +84,5 @@ export default class FormbuilderEditCodeController extends Controller {
       // This is limiting the errors thrown in the console while editing the code
       return;
     }
-
-    // The newCode is not assigned to this.fromCode as than the editor
-    // loses focus as you are udpating the content in the editor.
-    // Keeping the changes in another variable and at the end assigning
-    // the formCode to the updated code
-    this.formCodeUpdates = newCode;
-    this.model.handleCodeChange(this.formCodeUpdates);
-  });
-
-  @action
-  toggleCollapsed() {
-    this.collapsed = !this.collapsed;
   }
 }
