@@ -125,11 +125,6 @@ export default class FormbuilderConfigurationController extends Controller {
         const rdfType = getRdfTypeOfNode(child, store, graph);
 
         if (rdfType.value != FORM('Field').value) {
-          console.warn(
-            this.intl.t(
-              'messages.feedback.onlyFieldsAllowedToDisplayUnderSections'
-            )
-          );
           continue;
         }
         fieldsSubjectsToDisplay.push(child);
@@ -150,7 +145,6 @@ export default class FormbuilderConfigurationController extends Controller {
     const option = store.any(node, FORM('options'), undefined, graph);
 
     if (!option) {
-      console.error(`Could not get form:options of node ${node.value ?? ''}`);
       return option;
     }
 
