@@ -22,6 +22,11 @@ export default class FormbuilderConfigurationController extends Controller {
   @tracked fieldsForSection = [];
 
   @action
+  updateTtl(ttl) {
+    this.model.handleCodeChange(ttl);
+  }
+
+  @action
   updateFieldOptions(scheme) {
     const conceptSchemeConfig = {
       conceptScheme: scheme.uri,
@@ -47,7 +52,7 @@ export default class FormbuilderConfigurationController extends Controller {
       this.model.graphs.sourceGraph
     );
 
-    this.model.handleCodeChange(ttl);
+    this.updateTtl(ttl);
   }
 
   @action
