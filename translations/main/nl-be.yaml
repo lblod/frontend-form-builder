@@ -79,3 +79,7 @@ editNameModal:
   title: "Geef een naam aan je formulier"
   name: "Naam"
   createForm: "Bouw formulier"
+
+tableConfiguration:
+  minColumnsLabel: "Min kolommen"
+  maxColumnsLabel: "Max kolommen"
