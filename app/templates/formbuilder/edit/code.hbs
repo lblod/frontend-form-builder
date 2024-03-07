@@ -14,20 +14,22 @@
       @width="block"
       {{on "click" this.toggleCollapsed}}
     >
-      Console
+      Console Meldingen: {{this.warnings.length}}
     </AuButton>
   </div>
   {{#unless this.collapsed}}
-  <AuBodyContainer class="au-u-background-gray-100">
+  <AuBodyContainer class="code-edit-console__container">
     <AuBodyContainer 
-      class="au-u-background-gray-200 au-u-margin"
+      class="code-edit-console au-u-margin"
       @scroll={{true}}
     >
       {{#each this.warnings as |warning|}}
         <AuContent
-          class="au-o-box--flush au-u-background-gray-100 au-u-margin-top-tiny"
+          class="code-edit-warning au-u-margin-top-tiny"
         >
-          {{warning.subject}} {{warning.message}}
+          <AuIcon @icon="alert-triangle" @size="large" @alignment="left"/>
+          <span>WARNING {{warning.subject}}</span>
+          <div class="au-u-text-right au-u-margin-top-tiny au-u-bold">{{warning.message}}</div>
         </AuContent>
       {{/each}}
     </AuBodyContainer>

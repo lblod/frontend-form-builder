@@ -1,0 +1,13 @@
+.code-edit-console__container{
+  height: 70%;
+  background-color: $au-gray-800;
+}
+
+.code-edit-console {
+  background-color: $au-gray-800;
+}
+
+.code-edit-warning {
+  background-color: rgba(255, 255, 0, 0.1);
+  color: $au-yellow-300
+}
