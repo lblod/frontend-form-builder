@@ -1,0 +1,35 @@
+<AuCard @expandable={{false}} as |c|>
+  <c.header>
+    <AuHeading @level="2" @skin="4" class="au-u-text-center">
+      {{this.section.name.value}}
+    </AuHeading>
+  </c.header>
+  <c.content>
+    <div class="au-u-flex au-u-flex--row au-u-flex--around">
+      <div>
+        <AuLabel for="input-column-min-constraint">Min kolommen</AuLabel>
+        <AuInput
+          @width="block"
+          type="number"
+          min={{this.limits.min}}
+          max={{this.limits.max}}
+          value={{this.minValue}}
+          id="input-column-min-constraint"
+          {{on "blur" this.updateMinValue}}
+        />
+      </div>
+      <div>
+        <AuLabel for="input-column-max-constraint">Max kolommen</AuLabel>
+        <AuInput
+          @width="block"
+          type="number"
+          min={{this.limits.min}}
+          max={{this.limits.max}}
+          value={{this.maxValue}}
+          id="input-column-max-constraint"
+          {{on "blur" this.updateMaxValue}}
+        />
+      </div>
+    </div>
+  </c.content>
+</AuCard>
