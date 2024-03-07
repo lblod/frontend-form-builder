@@ -34,7 +34,7 @@
         {{t "crud.save"}}
       </AuButton>
 
-      {{#if this.isReadOnly}}
+      {{#if (this.opposite this.splitButtonHasActiveActions)}}
         <span id="saveSplitButton_dropdown">
           <AuButton
             @disabled={{true}}

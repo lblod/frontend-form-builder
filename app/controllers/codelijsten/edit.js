@@ -60,11 +60,24 @@ export default class CodelijstenEditController extends Controller {
   }
 
   get canArchiveCodelist() {
-    return !this.isPrivateConceptScheme;
+    return (
+      !this.isPrivateConceptScheme &&
+      this.concepts.length >= 1 &&
+      this.isValidConceptSchemeName() &&
+      !this.isArchivedConceptScheme
+    );
   }
 
   get canExportCodelist() {
-    return !this.isPrivateConceptScheme;
+    return (
+      !this.isPrivateConceptScheme &&
+      this.concepts.length >= 1 &&
+      this.isValidConceptSchemeName()
+    );
+  }
+
+  get splitButtonHasActiveActions() {
+    return this.canArchiveCodelist || this.canExportCodelist;
   }
 
   setup = restartableTask(async (conceptSchemeId) => {
@@ -75,7 +88,7 @@ export default class CodelijstenEditController extends Controller {
     this.setValuesFromConcepts(conceptArray);
 
     this.setIsSaveButtonDisabled();
-    // Prevent flickering between laoding and showing content if small lists are shown
+    // Prevent flickering between loading and showing content if small lists are shown
     await timeout(100);
   });
 
