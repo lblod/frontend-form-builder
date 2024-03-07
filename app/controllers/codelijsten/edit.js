@@ -62,7 +62,7 @@ export default class CodelijstenEditController extends Controller {
   get canArchiveCodelist() {
     return (
       !this.isPrivateConceptScheme &&
-      this.concepts.length >= 1 &&
+      this.hasConcepts &&
       this.isValidConceptSchemeName() &&
       !this.isArchivedConceptScheme
     );
@@ -71,13 +71,17 @@ export default class CodelijstenEditController extends Controller {
   get canExportCodelist() {
     return (
       !this.isPrivateConceptScheme &&
-      this.concepts.length >= 1 &&
+      this.hasConcepts &&
       this.isValidConceptSchemeName()
     );
   }
 
   get splitButtonHasActiveActions() {
     return this.canArchiveCodelist || this.canExportCodelist;
+  }
+
+  get hasConcepts() {
+    return this.concepts.length >= 1 ?? false;
   }
 
   setup = restartableTask(async (conceptSchemeId) => {
