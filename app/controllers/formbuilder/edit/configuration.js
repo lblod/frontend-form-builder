@@ -151,8 +151,8 @@ export default class FormbuilderConfigurationController extends Controller {
     return JSON.parse(option.value).conceptScheme ?? null;
   }
 
-  get sectionHasOneTableListing() {
-    const tableListings = this.builderStore
+  get tableListingsForSection() {
+    const tableListingsInForm = this.builderStore
       .match(
         undefined,
         RDF('type'),
@@ -161,22 +161,21 @@ export default class FormbuilderConfigurationController extends Controller {
       )
       .map((triple) => triple.subject);
 
-    if (!tableListings || tableListings.length == 0) return false;
+    if (!tableListingsInForm || tableListingsInForm.length == 0) return [];
 
-    let tablelListingsInSection = 0;
-    for (const tableListing of tableListings) {
+    return tableListingsInForm.filter((tableSubject) => {
       const isPartOf = this.builderStore.any(
-        tableListing,
+        tableSubject,
         FORM('partOf'),
         this.selectedSection.parent
       );
 
-      if (!isPartOf) continue;
+      if (!isPartOf) {
+        return false;
+      }
 
-      tablelListingsInSection += 1;
-    }
-
-    return tablelListingsInSection == 1;
+      return tableSubject;
+    });
   }
 
   setup() {
