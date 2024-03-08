@@ -70,8 +70,6 @@ export default class FormbuilderEditCodeController extends Controller {
       });
     });
 
-    console.log(this.warnings);
-
     const builderStore = new ForkingStore();
     try {
       builderStore.parse(
