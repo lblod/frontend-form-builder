@@ -1,7 +1,41 @@
 {{page-title "Code editor"}}
 
-<div
-  {{editor this.formCode (perform this.handleCodeChange)}}
-  {{!template-lint-disable no-inline-styles}}
-  style="overflow: auto; height: 100%; width:100%"
-> </div>
+<div class="au-c-body-container au-u-margin-bottom-none">
+  <AuBodyContainer
+    @scroll={{true}}
+  >
+    <AuContent
+      @skin="small"
+      {{editor this.formCode (perform this.handleCodeChange)}}>
+    </AuContent>
+  </AuBodyContainer>
+  <div class>
+    <AuButton 
+      class="au-u-background-gray-100"
+      @skin="naked"
+      @width="block"
+      {{on "click" this.toggleOpenCloseConsoleState}}
+    >
+      {{t "codeConsole.buttonNotification"}}: {{this.warnings.length}}
+    </AuButton>
+  </div>
+  {{#unless this.consoleClosed}}
+  <AuBodyContainer class="code-edit-console__container">
+    <AuBodyContainer 
+      class="code-edit-console"
+      @scroll={{true}}
+    >
+      {{#each this.warnings as |warning|}}
+        <AuContent
+          class="code-edit-warning"
+        >
+          <AuIcon @icon="alert-triangle" @size="large" @alignment="left"/>
+          <p class="au-u-bold">Subject: </p>
+          <p>{{warning.subject}}</p>
+          <p class="au-u-bold">{{warning.message}}</p>
+        </AuContent>
+      {{/each}}
+    </AuBodyContainer>
+  </AuBodyContainer>
+  {{/unless}}
+</div>
