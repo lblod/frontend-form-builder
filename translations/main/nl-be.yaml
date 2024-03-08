@@ -65,6 +65,9 @@ semanticData:
     inputData: "Gebruiker input data"
     noFilter: "Andere"
 
+codeConsole:
+  buttonNotification: "Console Meldingen"
+
 # Components #
 toolbar:
   exportCode: "Exporteer code"

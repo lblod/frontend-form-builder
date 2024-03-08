@@ -9,22 +9,32 @@
       {{editor this.formCode (perform this.handleCodeChange)}}>
     </AuContent>
   </AuBodyContainer>
-  <div>
+  <div class>
     <AuButton 
+      class="au-u-background-gray-100"
+      @skin="naked"
       @width="block"
-      {{on "click" this.toggleCollapsed}}
+      {{on "click" this.toggleOpenCloseConsoleState}}
     >
-      Console
+      {{t "codeConsole.buttonNotification"}}: {{this.warnings.length}}
     </AuButton>
   </div>
-  {{#unless this.collapsed}}
-  <AuBodyContainer class="au-u-background-gray-100">
-    <AuBodyContainer class="au-u-background-gray-200 au-u-margin">
-      <AuContent 
-        class="console au-u-margin"
-      >
-        content
-      </AuContent>
+  {{#unless this.consoleClosed}}
+  <AuBodyContainer class="code-edit-console__container">
+    <AuBodyContainer 
+      class="code-edit-console"
+      @scroll={{true}}
+    >
+      {{#each this.warnings as |warning|}}
+        <AuContent
+          class="code-edit-warning"
+        >
+          <AuIcon @icon="alert-triangle" @size="large" @alignment="left"/>
+          <p class="au-u-bold">Subject: </p>
+          <p>{{warning.subject}}</p>
+          <p class="au-u-bold">{{warning.message}}</p>
+        </AuContent>
+      {{/each}}
     </AuBodyContainer>
   </AuBodyContainer>
   {{/unless}}
