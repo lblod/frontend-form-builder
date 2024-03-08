@@ -41,7 +41,7 @@ export default class FormbuilderEditCodeController extends Controller {
     this.consoleValidateCode(newCode);
 
     // The newCode is not assigned to this.fromCode as than the editor
-    // loses focus as you are udpating the content in the editor.
+    // loses focus as you are updating the content in the editor.
     // Keeping the changes in another variable and at the end assigning
     // the formCode to the updated code
     this.formCodeUpdates = newCode;

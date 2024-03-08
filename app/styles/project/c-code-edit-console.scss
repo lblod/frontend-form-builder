@@ -1,4 +1,4 @@
-.code-edit-console__container{
+.code-edit-console__container {
   height: 70%;
   background-color: $au-gray-800;
 }
@@ -11,4 +11,13 @@
   background-color: rgba(255, 255, 0, 0.1);
   color: $au-yellow-300;
   font-size: 80%;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  flex-direction: row;
+  gap: 0.5rem;
+
+  p {
+    margin: 0 !important;
+  }
 }
