@@ -83,14 +83,16 @@ export default class ConfigurationTableComponent extends Component {
     if (showIndices.length >= 1) {
       this.store.removeStatements(showIndices);
     }
-    this.args.store.addAll([
-      new Statement(
-        tableSubject,
-        FORM('showTableRowIndex'),
-        checkBoxState,
-        this.graphs.sourceGraph
-      ),
-    ]);
+    if (checkBoxState) {
+      this.args.store.addAll([
+        new Statement(
+          tableSubject,
+          FORM('showTableRowIndex'),
+          true,
+          this.graphs.sourceGraph
+        ),
+      ]);
+    }
     this.isShowingTableIndices = checkBoxState;
     this.args.updatedTtl(this.ttlForStore);
   }
