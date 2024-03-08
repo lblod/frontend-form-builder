@@ -9,7 +9,7 @@ export default class IndexController extends Controller {
   @service toaster;
   @service intl;
 
-  sort = '-created';
+  sort = '-modified';
   page = 0;
   size = 20;
 
