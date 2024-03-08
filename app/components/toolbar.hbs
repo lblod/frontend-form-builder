@@ -80,9 +80,10 @@
           </div>
         </Group>
         <Group class="au-u-flex--vertical-center">
-          <AuLink @route="codelijsten" @query={{hash formId=@model.id}}>{{t
-              "toolbar.codelists"
-            }}</AuLink>
+          <AuLink
+            @route="codelijsten"
+            @query={{hash formId=@model.id filter=null page=0 sort="preflabel"}}
+          >{{t "toolbar.codelists"}}</AuLink>
           <div class="saveSplitButton">
             <AuButton
               id="saveSplitButton_save"
