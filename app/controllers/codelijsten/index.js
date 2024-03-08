@@ -11,6 +11,7 @@ export default class CodelijstenController extends Controller {
 
   @tracked filter;
 
+  sort = 'preflabel';
   size = 20;
 
   @action
