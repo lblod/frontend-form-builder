@@ -26,7 +26,6 @@
         {{#if (and this.selectedSection this.fieldsForSection)}}
           {{#each this.tableListingsForSection as |tableSubject|}}
             <Configuration::Table
-              @section={{this.selectedSection}}
               @store={{this.builderStore}}
               @graphs={{@model.graphs}}
               @updatedTtl={{this.updateTtl}}

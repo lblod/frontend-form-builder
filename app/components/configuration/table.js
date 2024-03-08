@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { SHACL, FORM, RDF } from '@lblod/submission-form-helpers';
+import { SHACL, FORM } from '@lblod/submission-form-helpers';
 import { Statement } from 'rdflib';
 
 export default class ConfigurationTableComponent extends Component {
@@ -174,10 +174,6 @@ export default class ConfigurationTableComponent extends Component {
 
   get tableSubject() {
     return this.args.tableListingSubject;
-  }
-
-  get section() {
-    return this.args.section;
   }
 
   get graphs() {
