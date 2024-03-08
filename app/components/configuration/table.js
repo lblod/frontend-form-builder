@@ -14,10 +14,8 @@ export default class ConfigurationTableComponent extends Component {
   constructor() {
     super(...arguments);
 
-    const tableSubject = this.tableListingInSection;
-
     const minColumnsValueStatement = this.store.any(
-      tableSubject,
+      this.tableSubject,
       SHACL('minCount'),
       undefined,
       this.graphs.sourceGraph
@@ -27,7 +25,7 @@ export default class ConfigurationTableComponent extends Component {
     }
 
     const maxColumnsValueStatement = this.store.any(
-      tableSubject,
+      this.tableSubject,
       SHACL('maxCount'),
       undefined,
       this.graphs.sourceGraph
@@ -36,7 +34,7 @@ export default class ConfigurationTableComponent extends Component {
       this.maxValue = Number(maxColumnsValueStatement.value);
     }
     const showIndicesStatement = this.store.any(
-      tableSubject,
+      this.tableSubject,
       FORM('showTableRowIndex'),
       undefined,
       this.graphs.sourceGraph
@@ -46,7 +44,7 @@ export default class ConfigurationTableComponent extends Component {
       this.isShowingTableIndices = Boolean(showIndicesStatement.value);
     }
     const indicesLabelStatement = this.store.any(
-      tableSubject,
+      this.tableSubject,
       FORM('tableIndexLabel'),
       undefined,
       this.graphs.sourceGraph
@@ -58,9 +56,8 @@ export default class ConfigurationTableComponent extends Component {
 
   @action
   updateIndexLabel(event) {
-    const tableSubject = this.tableListingInSection;
     const currentIndexColumnLabel = this.store.match(
-      tableSubject,
+      this.tableSubject,
       FORM('tableIndexLabel'),
       undefined,
       this.graphs.sourceGraph
@@ -72,7 +69,7 @@ export default class ConfigurationTableComponent extends Component {
     this.indexColumnLabel = event.target.value.trim() ?? '';
     this.args.store.addAll([
       new Statement(
-        tableSubject,
+        this.tableSubject,
         FORM('tableIndexLabel'),
         this.indexColumnLabel,
         this.graphs.sourceGraph
@@ -83,9 +80,8 @@ export default class ConfigurationTableComponent extends Component {
 
   @action
   showIndicesInTable(checkBoxState) {
-    const tableSubject = this.tableListingInSection;
     const showIndices = this.store.match(
-      tableSubject,
+      this.tableSubject,
       FORM('showTableRowIndex'),
       undefined,
       this.graphs.sourceGraph
@@ -97,7 +93,7 @@ export default class ConfigurationTableComponent extends Component {
     if (checkBoxState) {
       this.args.store.addAll([
         new Statement(
-          tableSubject,
+          this.tableSubject,
           FORM('showTableRowIndex'),
           true,
           this.graphs.sourceGraph
@@ -110,9 +106,8 @@ export default class ConfigurationTableComponent extends Component {
 
   @action
   updateMinValue(event) {
-    const tableSubject = this.tableListingInSection;
     const currentMinValue = this.store.match(
-      tableSubject,
+      this.tableSubject,
       SHACL('minCount'),
       undefined,
       this.graphs.sourceGraph
@@ -132,7 +127,7 @@ export default class ConfigurationTableComponent extends Component {
 
       this.args.store.addAll([
         new Statement(
-          tableSubject,
+          this.tableSubject,
           SHACL('minCount'),
           Number(this.minValue),
           this.graphs.sourceGraph
@@ -145,9 +140,8 @@ export default class ConfigurationTableComponent extends Component {
 
   @action
   updateMaxValue(event) {
-    const tableSubject = this.tableListingInSection;
     const currentMaxValue = this.store.match(
-      tableSubject,
+      this.tableSubject,
       SHACL('maxCount'),
       undefined,
       this.graphs.sourceGraph
@@ -167,7 +161,7 @@ export default class ConfigurationTableComponent extends Component {
 
       this.store.addAll([
         new Statement(
-          tableSubject,
+          this.tableSubject,
           SHACL('maxCount'),
           Number(this.maxValue),
           this.graphs.sourceGraph
@@ -178,29 +172,8 @@ export default class ConfigurationTableComponent extends Component {
     this.args.updatedTtl(this.ttlForStore);
   }
 
-  get tableListingInSection() {
-    const tableListings = this.store
-      .match(
-        undefined,
-        RDF('type'),
-        FORM('ListingTable'),
-        this.graphs.sourceGraph
-      )
-      .map((triple) => triple.subject);
-
-    for (const tableListing of tableListings) {
-      const isPartOf = this.store.any(
-        tableListing,
-        FORM('partOf'),
-        this.section.parent
-      );
-
-      if (!isPartOf) continue;
-
-      return tableListing;
-    }
-
-    throw `Could not find table listing in section: ${this.section.parent.value}`;
+  get tableSubject() {
+    return this.args.tableListingSubject;
   }
 
   get section() {
