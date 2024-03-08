@@ -163,6 +163,7 @@ export default class FormbuilderConfigurationController extends Controller {
 
     if (!tableListings || tableListings.length == 0) return false;
 
+    let tablelListingsInSection = 0;
     for (const tableListing of tableListings) {
       const isPartOf = this.builderStore.any(
         tableListing,
@@ -172,10 +173,10 @@ export default class FormbuilderConfigurationController extends Controller {
 
       if (!isPartOf) continue;
 
-      return true;
+      tablelListingsInSection += 1;
     }
 
-    return false;
+    return tablelListingsInSection == 1;
   }
 
   setup() {
