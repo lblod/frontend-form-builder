@@ -41,8 +41,18 @@ export default class ConfigurationTableComponent extends Component {
       undefined,
       this.graphs.sourceGraph
     );
+
     if (showIndicesStatement) {
       this.isShowingTableIndices = Boolean(showIndicesStatement.value);
+    }
+    const indicesLabelStatement = this.store.any(
+      tableSubject,
+      FORM('tableIndexLabel'),
+      undefined,
+      this.graphs.sourceGraph
+    );
+    if (indicesLabelStatement) {
+      this.indexColumnLabel = String(indicesLabelStatement.value);
     }
   }
 
@@ -68,6 +78,7 @@ export default class ConfigurationTableComponent extends Component {
         this.graphs.sourceGraph
       ),
     ]);
+    this.args.updatedTtl(this.ttlForStore);
   }
 
   @action
