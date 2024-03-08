@@ -16,7 +16,7 @@ export default class FormbuilderEditCodeController extends Controller {
 
   @tracked formCode;
   @tracked formCodeUpdates;
-  @tracked collapsed = true;
+  @tracked consoleClosed = true;
   @tracked warnings = [];
 
   setup() {
@@ -49,8 +49,8 @@ export default class FormbuilderEditCodeController extends Controller {
   });
 
   @action
-  toggleCollapsed() {
-    this.collapsed = !this.collapsed;
+  toggleOpenCloseConsoleState() {
+    this.consoleClosed = !this.consoleClosed;
   }
 
   async consoleValidateCode(newCode) {
