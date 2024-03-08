@@ -14,7 +14,7 @@
       @width="block"
       {{on "click" this.toggleOpenCloseConsoleState}}
     >
-      Console Meldingen: {{this.warnings.length}}
+      {{t "codeConsole.buttonNotification"}}: {{this.warnings.length}}
     </AuButton>
   </div>
   {{#unless this.consoleClosed}}
@@ -28,8 +28,10 @@
           class="code-edit-warning au-u-margin-top-tiny"
         >
           <AuIcon @icon="alert-triangle" @size="large" @alignment="left"/>
-          <span>WARNING {{warning.subject}}</span>
-          <div class="au-u-text-right au-u-margin-top-tiny au-u-bold">{{warning.message}}</div>
+          <span class="au-u-margin-right">WARNING</span>
+          <span class="au-u-bold">Subject: </span>
+          <span class="au-u-margin-right">{{warning.subject}}</span>
+          <span class="au-u-text-right au-u-bold">{{warning.message}}</span>
         </AuContent>
       {{/each}}
     </AuBodyContainer>
