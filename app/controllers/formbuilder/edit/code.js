@@ -19,6 +19,7 @@ export default class FormbuilderEditCodeController extends Controller {
   @service('form-code-manager') formCodeManager;
   @service toaster;
   @service features;
+  @service intl;
 
   @tracked formCode;
   @tracked formCodeUpdates;
@@ -48,6 +49,13 @@ export default class FormbuilderEditCodeController extends Controller {
     // the formCode to the updated code
     this.formCodeUpdates = newCode;
     if (this.ttlHasErrors()) {
+      this.consoleMessages.pushObject({
+        severity: this.getConsoleSeverity(SHACL_SEVERITY_TYPE.info),
+        subject: this.intl.t('messages.subjects.preview'),
+        content: this.intl.t(
+          'messages.feedback.previewNotUpdatedBecauseOfErrorsInTtl'
+        ),
+      });
       return;
     }
 
@@ -118,7 +126,9 @@ export default class FormbuilderEditCodeController extends Controller {
     if (!mapping[severity]) {
       showErrorToasterMessage(
         this.toaster,
-        'Unknown shacl severity ' + severity
+        this.intl.t('messages.error.unknownShaclSeverityType', {
+          severityType: severity,
+        })
       );
 
       return mapping[SHACL_SEVERITY_TYPE.error];
@@ -133,9 +143,5 @@ export default class FormbuilderEditCodeController extends Controller {
         (message) => message.severity.type == SHACL_SEVERITY_TYPE.error
       ).length >= 1
     );
-  }
-
-  get consoleMessagesNewLast() {
-    return this.consoleMessages.toArray().reverse();
   }
 }
