@@ -12,7 +12,7 @@ form:Section
       sh:minCount 0 ;
       sh:maxCount 1 ;
       sh:message "Een sectie kan maar 1 naam hebben."@nl ;
-      sh:severity sh:Warning;
+      sh:severity sh:Violation;
     ],
     [
       sh:path sh:order ;
