@@ -1,4 +1,4 @@
-$opacityConsoleMesage: 0.3;
+$opacityConsoleMesage: 0.15;
 
 .code-edit-console__container {
   height: 70%;
@@ -40,9 +40,9 @@ $opacityConsoleMesage: 0.3;
 }
 
 .code-edit-message--bg-info {
-  background-color: rgba(207, 213, 221, $opacityConsoleMesage);
+  background-color: rgba(247, 249, 252, $opacityConsoleMesage);
 }
 
 .code-edit-message--icon-info {
-  color: $au-yellow-300;
+  color: $au-gray-100;
 }
