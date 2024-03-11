@@ -40,17 +40,21 @@ export default class FormbuilderEditCodeController extends Controller {
   handleCodeChange = restartableTask(async (newCode) => {
     await timeout(INPUT_DEBOUNCE_MS);
 
-    if (this.formCodeManager.isTtlTheSameAsLatest(newCode)) {
-      return;
-    }
-
-    this.consoleValidateCode(newCode);
+    await this.consoleValidateCode(newCode);
 
     // The newCode is not assigned to this.fromCode as than the editor
     // loses focus as you are updating the content in the editor.
     // Keeping the changes in another variable and at the end assigning
     // the formCode to the updated code
     this.formCodeUpdates = newCode;
+    if (this.ttlHasErrors()) {
+      return;
+    }
+
+    if (this.formCodeManager.isTtlTheSameAsLatest(newCode)) {
+      return;
+    }
+
     this.model.handleCodeChange(this.formCodeUpdates);
   });
 
@@ -95,16 +99,19 @@ export default class FormbuilderEditCodeController extends Controller {
     const baseClass = 'code-edit-message ';
     const mapping = {
       [SHACL_SEVERITY_TYPE.error]: {
+        type: 'Error',
         icon: 'cross',
         class: baseClass + 'code-edit-message--bg-error',
         iconClass: 'code-edit-message--icon-error',
       },
       [SHACL_SEVERITY_TYPE.warning]: {
+        type: 'Warning',
         icon: 'alert-triangle',
         class: baseClass + 'code-edit-message--bg-warning',
         iconClass: 'code-edit-message--icon-warning',
       },
       [SHACL_SEVERITY_TYPE.info]: {
+        type: 'Info',
         icon: 'info-circle',
         class: baseClass + 'code-edit-message--bg-info',
         iconClass: 'code-edit-message--icon-info',
@@ -121,5 +128,12 @@ export default class FormbuilderEditCodeController extends Controller {
     }
 
     return mapping[severity];
+  }
+
+  ttlHasErrors() {
+    return (
+      this.consoleMessages.filter((message) => message.severity.type == 'Error')
+        .length >= 1
+    );
   }
 }
