@@ -34,7 +34,7 @@
         {{t "crud.save"}}
       </AuButton>
 
-      {{#if this.isReadOnly}}
+      {{#if (this.opposite this.splitButtonHasActiveActions)}}
         <span id="saveSplitButton_dropdown">
           <AuButton
             @disabled={{true}}
@@ -60,7 +60,7 @@
             @icon="archive"
             @iconAlignment="left"
             role="menuitem"
-            @disabled={{this.isPrivateConceptScheme}}
+            @disabled={{this.opposite this.canArchiveCodelist}}
             @loadingMessage={{t "messages.loading.isArchiving"}}
             {{on "click" (fn (mut this.isArchiveModalOpen) true)}}
           >
@@ -71,7 +71,7 @@
             @icon="export"
             @iconAlignment="left"
             role="menuitem"
-            @disabled={{this.isPrivateConceptScheme}}
+            @disabled={{this.opposite this.canExportCodelist}}
             @loadingMessage={{t "messages.loading.downloading"}}
             {{on "click" this.exportCodelist}}
           >

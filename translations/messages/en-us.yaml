@@ -14,6 +14,7 @@ messages:
     cannotAddValidationsToEmptyForm: "Could not add validations to an empty form"
     duplicateValidationType: "Validation type {type} is duplicate"
     couldNotGetFormIdIsNotSet: "Could not get form id. Id is never set."
+    valueMustBeBoolean: "The given value is not a boolean {value}"
   success:
     formCreated: "Form created successfully"
     formUpdated: "Form updated"

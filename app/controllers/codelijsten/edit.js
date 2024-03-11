@@ -59,6 +59,33 @@ export default class CodelijstenEditController extends Controller {
     return this.conceptScheme.isArchived;
   }
 
+  get canArchiveCodelist() {
+    return (
+      !this.isPrivateConceptScheme &&
+      this.hasConcepts &&
+      this.isValidConceptSchemeName() &&
+      !this.isArchivedConceptScheme &&
+      this.isSaveDisabled
+    );
+  }
+
+  get canExportCodelist() {
+    return (
+      !this.isPrivateConceptScheme &&
+      this.hasConcepts &&
+      this.isValidConceptSchemeName() &&
+      this.isSaveDisabled
+    );
+  }
+
+  get splitButtonHasActiveActions() {
+    return this.canArchiveCodelist || this.canExportCodelist;
+  }
+
+  get hasConcepts() {
+    return this.concepts.length >= 1 ?? false;
+  }
+
   setup = restartableTask(async (conceptSchemeId) => {
     this.conceptScheme = await this.getConceptSchemeById(conceptSchemeId);
     this.setValuesFromConceptscheme();
@@ -67,7 +94,7 @@ export default class CodelijstenEditController extends Controller {
     this.setValuesFromConcepts(conceptArray);
 
     this.setIsSaveButtonDisabled();
-    // Prevent flickering between laoding and showing content if small lists are shown
+    // Prevent flickering between loading and showing content if small lists are shown
     await timeout(100);
   });
 
@@ -411,5 +438,20 @@ export default class CodelijstenEditController extends Controller {
         id: conceptSchemeId,
       });
     }
+  }
+
+  @action
+  opposite(boolean) {
+    if (typeof boolean !== 'boolean') {
+      showErrorToasterMessage(
+        this.toaster,
+        this.intl.t('messages.error.valueMustBeBoolean', {
+          value: boolean,
+        })
+      );
+      return false;
+    }
+
+    return !boolean;
   }
 }
