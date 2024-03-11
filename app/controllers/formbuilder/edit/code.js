@@ -65,14 +65,11 @@ export default class FormbuilderEditCodeController extends Controller {
 
   async consoleValidateCode(newCode) {
     const shaclReport = await shaclValidateTtlCode(newCode);
-    console.warn(
-      'Formatted SHACL report: ',
-      formatShaclValidationReport(shaclReport)
-    );
-
     this.consoleMessages = A([]);
 
     const formattedReport = formatShaclValidationReport(shaclReport);
+    console.warn('Formatted SHACL report: ', formattedReport);
+
     formattedReport.errorDetails.forEach((error) => {
       this.consoleMessages.pushObject({
         severity: this.getConsoleSeverity(error.severity),
