@@ -172,6 +172,21 @@ export default class ConfigurationTableComponent extends Component {
     this.args.updatedTtl(this.ttlForStore);
   }
 
+  get tableName() {
+    const name = this.store.any(
+      this.tableSubject,
+      SHACL('name'),
+      undefined,
+      this.graphs.sourceGraph
+    );
+
+    if (name && name.value.trim() !== '') {
+      return name.value;
+    }
+
+    return null;
+  }
+
   get tableSubject() {
     return this.args.tableListingSubject;
   }

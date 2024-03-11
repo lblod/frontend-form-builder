@@ -1,4 +1,12 @@
 <AuCard @expandable={{false}} as |c|>
+  <c.header>
+    <AuHeading @level="2" @skin="4">
+      {{this.tableName}}
+    </AuHeading>
+    <p>
+      {{this.tableSubject.value}}
+    </p>
+  </c.header>
   <c.content>
     <div class="au-u-flex au-u-flex--row au-u-flex--between">
       <span>
