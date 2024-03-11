@@ -136,4 +136,8 @@ export default class FormbuilderEditCodeController extends Controller {
         .length >= 1
     );
   }
+
+  get consoleMessagesNewLast() {
+    return this.consoleMessages.toArray().reverse();
+  }
 }

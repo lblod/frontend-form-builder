@@ -22,7 +22,7 @@
   {{#unless this.consoleClosed}}
     <AuBodyContainer class="code-edit-console__container">
       <AuBodyContainer class="code-edit-console" @scroll={{true}}>
-        {{#each this.consoleMessages as |message|}}
+        {{#each this.consoleMessagesNewLast as |message|}}
           <AuContent class={{message.severity.class}}>
             <AuIcon
               class={{message.severity.iconClass}}
