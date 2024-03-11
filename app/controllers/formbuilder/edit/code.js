@@ -96,19 +96,19 @@ export default class FormbuilderEditCodeController extends Controller {
     const baseClass = 'code-edit-message ';
     const mapping = {
       [SHACL_SEVERITY_TYPE.error]: {
-        type: 'Error',
+        type: SHACL_SEVERITY_TYPE.error,
         icon: 'cross',
         class: baseClass + 'code-edit-message--bg-error',
         iconClass: 'code-edit-message--icon-error',
       },
       [SHACL_SEVERITY_TYPE.warning]: {
-        type: 'Warning',
+        type: SHACL_SEVERITY_TYPE.warning,
         icon: 'alert-triangle',
         class: baseClass + 'code-edit-message--bg-warning',
         iconClass: 'code-edit-message--icon-warning',
       },
       [SHACL_SEVERITY_TYPE.info]: {
-        type: 'Info',
+        type: SHACL_SEVERITY_TYPE.info,
         icon: 'info-circle',
         class: baseClass + 'code-edit-message--bg-info',
         iconClass: 'code-edit-message--icon-info',
@@ -129,8 +129,9 @@ export default class FormbuilderEditCodeController extends Controller {
 
   ttlHasErrors() {
     return (
-      this.consoleMessages.filter((message) => message.severity.type == 'Error')
-        .length >= 1
+      this.consoleMessages.filter(
+        (message) => message.severity.type == SHACL_SEVERITY_TYPE.error
+      ).length >= 1
     );
   }
 
