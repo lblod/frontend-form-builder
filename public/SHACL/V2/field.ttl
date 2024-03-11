@@ -19,14 +19,14 @@ form:Field
       sh:minCount 0 ;
       sh:maxCount 1 ;
       sh:message "Een veld kan maar 1 naam hebben."@nl ;
-      sh:severity sh:Warning;
+      sh:severity sh:Violation;
     ],
     [
       sh:path form:partOf ;
       sh:minCount 0 ;
       sh:maxCount 1 ;
       sh:message "Een veld kan maar aan 1 sectie worden toegewezen."@nl ;
-      sh:severity sh:Warning;
+      sh:severity sh:Violation;
     ],
     [
       sh:path form:validations ;
@@ -40,6 +40,7 @@ form:Field
       sh:minCount 0 ;
       sh:nodeKind sh:BlankNode ;
       sh:message "Validaties moeten de vorm van een blankNode hebben."@nl ;
+      sh:severity sh:Violation ;
     ],
     [
       sh:path sh:order ;
@@ -47,6 +48,7 @@ form:Field
       sh:minCount 1 ;
       sh:maxCount 1 ;
       sh:message "Order moet een getal zijn."@nl ;
+      sh:severity sh:Warning ;
     ],
     [
       sh:path form:displayType ;
@@ -71,4 +73,5 @@ form:Field
       sh:minCount 1 ;
       sh:maxCount 1 ;
       sh:message "Het gegeven input type bestaat niet."@nl ;
+      sh:severity sh:Violation ;
     ] .
