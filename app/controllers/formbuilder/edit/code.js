@@ -7,8 +7,12 @@ import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { cleanupTtlcode } from '../../../utils/clean-up-ttl/clean-up-ttl-code';
 import { shaclValidateTtlCode } from '../../../utils/SHACL/shacl-validate-ttl-code';
 import { formatShaclValidationReport } from '../../../utils/SHACL/format-shacl-validation-report';
-import { INPUT_DEBOUNCE_MS } from '../../../utils/constants';
+import {
+  INPUT_DEBOUNCE_MS,
+  SHACL_SEVERITY_TYPE,
+} from '../../../utils/constants';
 import { action } from '@ember/object';
+import { showErrorToasterMessage } from '../../../utils/toaster-message-helper';
 
 export default class FormbuilderEditCodeController extends Controller {
   @service('form-code-manager') formCodeManager;
@@ -66,6 +70,7 @@ export default class FormbuilderEditCodeController extends Controller {
     const formattedReport = formatShaclValidationReport(shaclReport);
     formattedReport.errorDetails.forEach((error) => {
       this.warnings.push({
+        icon: this.getConsoleSeverityIcon(error.severity),
         subject: error.subject,
         message: error.messages,
       });
@@ -83,5 +88,24 @@ export default class FormbuilderEditCodeController extends Controller {
       // This is limiting the errors thrown in the console while editing the code
       return;
     }
+  }
+
+  getConsoleSeverityIcon(severity) {
+    const mapping = {
+      [SHACL_SEVERITY_TYPE.error]: 'cross',
+      [SHACL_SEVERITY_TYPE.warning]: 'alert-triangle',
+      [SHACL_SEVERITY_TYPE.info]: 'info-circle',
+    };
+
+    if (!mapping[severity]) {
+      showErrorToasterMessage(
+        this.toaster,
+        'Unknown shacl severity ' + severity
+      );
+
+      return mapping[SHACL_SEVERITY_TYPE.error];
+    }
+
+    return mapping[severity];
   }
 }

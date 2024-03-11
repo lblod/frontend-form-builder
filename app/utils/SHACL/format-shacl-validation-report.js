@@ -22,7 +22,7 @@ function formatValidationResult(validationResult) {
   return {
     subject: subject,
     errorOn: predicate,
-    errorType: errorType,
+    severity: errorType,
     messages: messages.map((literal) => literal.value),
   };
 }
