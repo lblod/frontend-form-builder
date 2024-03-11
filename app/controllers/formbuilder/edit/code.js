@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
+import { A } from '@ember/array';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
@@ -22,7 +23,7 @@ export default class FormbuilderEditCodeController extends Controller {
   @tracked formCode;
   @tracked formCodeUpdates;
   @tracked consoleClosed = true;
-  @tracked warnings = [];
+  @tracked consoleMessages = A([]);
 
   setup() {
     const updatedFormCode = cleanupTtlcode(
@@ -65,14 +66,14 @@ export default class FormbuilderEditCodeController extends Controller {
       formatShaclValidationReport(shaclReport)
     );
 
-    this.warnings = [];
+    this.consoleMessages = A([]);
 
     const formattedReport = formatShaclValidationReport(shaclReport);
     formattedReport.errorDetails.forEach((error) => {
-      this.warnings.push({
-        icon: this.getConsoleSeverityIcon(error.severity),
+      this.consoleMessages.pushObject({
+        severity: this.getConsoleSeverity(error.severity),
         subject: error.subject,
-        message: error.messages,
+        content: error.messages,
       });
     });
 
@@ -90,11 +91,24 @@ export default class FormbuilderEditCodeController extends Controller {
     }
   }
 
-  getConsoleSeverityIcon(severity) {
+  getConsoleSeverity(severity) {
+    const baseClass = 'code-edit-message ';
     const mapping = {
-      [SHACL_SEVERITY_TYPE.error]: 'cross',
-      [SHACL_SEVERITY_TYPE.warning]: 'alert-triangle',
-      [SHACL_SEVERITY_TYPE.info]: 'info-circle',
+      [SHACL_SEVERITY_TYPE.error]: {
+        icon: 'cross',
+        class: baseClass + 'code-edit-message--bg-error',
+        iconClass: 'code-edit-message--icon-error',
+      },
+      [SHACL_SEVERITY_TYPE.warning]: {
+        icon: 'alert-triangle',
+        class: baseClass + 'code-edit-message--bg-warning',
+        iconClass: 'code-edit-message--icon-warning',
+      },
+      [SHACL_SEVERITY_TYPE.info]: {
+        icon: 'info-circle',
+        class: baseClass + 'code-edit-message--bg-info',
+        iconClass: 'code-edit-message--icon-info',
+      },
     };
 
     if (!mapping[severity]) {

@@ -1,13 +1,11 @@
 {{page-title "Code editor"}}
 
 <div class="au-c-body-container au-u-margin-bottom-none">
-  <AuBodyContainer
-    @scroll={{true}}
-  >
+  <AuBodyContainer @scroll={{true}}>
     <AuContent
       @skin="small"
-      {{editor this.formCode (perform this.handleCodeChange)}}>
-    </AuContent>
+      {{editor this.formCode (perform this.handleCodeChange)}}
+    />
   </AuBodyContainer>
   {{#if this.features.USE_CONSOLE}}
   <div class>
@@ -17,27 +15,28 @@
       @width="block"
       {{on "click" this.toggleOpenCloseConsoleState}}
     >
-      {{t "codeConsole.buttonNotification"}}: {{this.warnings.length}}
+      {{t "codeConsole.buttonNotification"}}:
+      {{this.consoleMessages.length}}
     </AuButton>
   </div>
   {{#unless this.consoleClosed}}
-  <AuBodyContainer class="code-edit-console__container">
-    <AuBodyContainer
-      class="code-edit-console"
-      @scroll={{true}}
-    >
-      {{#each this.warnings as |warning|}}
-        <AuContent
-          class="code-edit-warning"
-        >
-          <AuIcon @icon="alert-triangle" @size="large" @alignment="left"/>
-          <p class="au-u-bold">Subject: </p>
-          <p>{{warning.subject}}</p>
-          <p class="au-u-bold">{{warning.message}}</p>
-        </AuContent>
-      {{/each}}
+    <AuBodyContainer class="code-edit-console__container">
+      <AuBodyContainer class="code-edit-console" @scroll={{true}}>
+        {{#each this.consoleMessages as |message|}}
+          <AuContent class={{message.severity.class}}>
+            <AuIcon
+              class={{message.severity.iconClass}}
+              @icon={{message.severity.icon}}
+              @size="large"
+              @alignment="left"
+            />
+            <p class="au-u-bold">Subject: </p>
+            <p>{{message.subject}}</p>
+            <p class="au-u-bold">{{message.content}}</p>
+          </AuContent>
+        {{/each}}
+      </AuBodyContainer>
     </AuBodyContainer>
-  </AuBodyContainer>
   {{/unless}}
   {{/if}}
 </div>
