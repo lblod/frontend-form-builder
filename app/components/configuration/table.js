@@ -6,32 +6,32 @@ import { SHACL, FORM } from '@lblod/submission-form-helpers';
 import { Statement } from 'rdflib';
 
 export default class ConfigurationTableComponent extends Component {
-  @tracked minValue;
-  @tracked maxValue;
+  @tracked minRowsValue;
+  @tracked maxRowsValue;
   @tracked isShowingTableIndices;
   @tracked indexColumnLabel;
 
   constructor() {
     super(...arguments);
 
-    const minColumnsValueStatement = this.store.any(
+    const minRowsValueStatement = this.store.any(
       this.tableSubject,
       SHACL('minCount'),
       undefined,
       this.graphs.sourceGraph
     );
-    if (minColumnsValueStatement) {
-      this.minValue = Number(minColumnsValueStatement.value);
+    if (minRowsValueStatement) {
+      this.minRowsValue = Number(minRowsValueStatement.value);
     }
 
-    const maxColumnsValueStatement = this.store.any(
+    const maxRowsValueStatement = this.store.any(
       this.tableSubject,
       SHACL('maxCount'),
       undefined,
       this.graphs.sourceGraph
     );
-    if (maxColumnsValueStatement) {
-      this.maxValue = Number(maxColumnsValueStatement.value);
+    if (maxRowsValueStatement) {
+      this.maxRowsValue = Number(maxRowsValueStatement.value);
     }
     const showIndicesStatement = this.store.any(
       this.tableSubject,
@@ -105,7 +105,7 @@ export default class ConfigurationTableComponent extends Component {
   }
 
   @action
-  updateMinValue(event) {
+  updateMinRowsValue(event) {
     const currentMinValue = this.store.match(
       this.tableSubject,
       SHACL('minCount'),
@@ -116,20 +116,20 @@ export default class ConfigurationTableComponent extends Component {
       this.args.store.removeStatements(currentMinValue);
     }
 
-    this.minValue = event.target.value;
-    if (this.minValue) {
-      if (this.minValue > this.limits.max) {
-        this.minValue = this.limits.max;
+    this.minRowsValue = event.target.value;
+    if (this.minRowsValue) {
+      if (this.minRowsValue > this.limits.max) {
+        this.minRowsValue = this.limits.max;
       }
-      if (this.minValue < this.limits.min) {
-        this.minValue = this.limits.min;
+      if (this.minRowsValue < this.limits.min) {
+        this.minRowsValue = this.limits.min;
       }
 
       this.args.store.addAll([
         new Statement(
           this.tableSubject,
           SHACL('minCount'),
-          Number(this.minValue),
+          Number(this.minRowsValue),
           this.graphs.sourceGraph
         ),
       ]);
@@ -139,7 +139,7 @@ export default class ConfigurationTableComponent extends Component {
   }
 
   @action
-  updateMaxValue(event) {
+  updateMaxRowsValue(event) {
     const currentMaxValue = this.store.match(
       this.tableSubject,
       SHACL('maxCount'),
@@ -150,20 +150,20 @@ export default class ConfigurationTableComponent extends Component {
       this.args.store.removeStatements(currentMaxValue);
     }
 
-    this.maxValue = event.target.value;
-    if (this.maxValue) {
-      if (this.maxValue > this.limits.max) {
-        this.maxValue = this.limits.max;
+    this.maxRowsValue = event.target.value;
+    if (this.maxRowsValue) {
+      if (this.maxRowsValue > this.limits.max) {
+        this.maxRowsValue = this.limits.max;
       }
-      if (this.maxValue < this.limits.min) {
-        this.maxValue = this.limits.min;
+      if (this.maxRowsValue < this.limits.min) {
+        this.maxRowsValue = this.limits.min;
       }
 
       this.store.addAll([
         new Statement(
           this.tableSubject,
           SHACL('maxCount'),
-          Number(this.maxValue),
+          Number(this.maxRowsValue),
           this.graphs.sourceGraph
         ),
       ]);

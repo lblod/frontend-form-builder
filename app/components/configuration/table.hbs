@@ -18,9 +18,9 @@
           type="number"
           min={{this.limits.min}}
           max={{this.limits.max}}
-          value={{this.minValue}}
+          value={{this.minRowsValue}}
           id="input-row-min-constraint"
-          {{on "blur" this.updateMinValue}}
+          {{on "blur" this.updateMinRowsValue}}
         />
       </span>
       <span>
@@ -32,9 +32,9 @@
           type="number"
           min={{this.limits.min}}
           max={{this.limits.max}}
-          value={{this.maxValue}}
+          value={{this.maxRowsValue}}
           id="input-row-max-constraint"
-          {{on "blur" this.updateMaxValue}}
+          {{on "blur" this.updateMaxRowsValue}}
         />
       </span>
     </div>
