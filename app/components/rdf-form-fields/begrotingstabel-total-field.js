@@ -21,10 +21,6 @@ export default class BegrotingstabelTotalFieldComponent extends Component {
     }, this.id);
   }
 
-  get fieldName() {
-    return this.field.label;
-  }
-
   @action
   formatAmount(amount) {
     if (!amount) {
@@ -90,6 +86,10 @@ export default class BegrotingstabelTotalFieldComponent extends Component {
   willDestroy() {
     super.willDestroy(...arguments);
     this.store.deregisterObserver(this.id);
+  }
+
+  get fieldName() {
+    return this.field.label;
   }
 
   get field() {
