@@ -11,6 +11,9 @@ Router.map(function () {
     this.route('playground');
     this.route('test', { path: '/:id/test' });
   });
+  this.route('view', function () {
+    this.route('form', { path: '/:id/form' });
+  });
   this.route('codelijsten', function () {
     this.route('new');
     this.route('edit', { path: '/:id/edit' });
