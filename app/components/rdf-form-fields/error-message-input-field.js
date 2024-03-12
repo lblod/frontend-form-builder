@@ -11,7 +11,7 @@ export default class ErrorMessageInputFieldComponent extends SimpleInputFieldCom
   inputId = 'select-' + guidFor(this);
 
   @tracked value;
-  @tracked useDefaultMessage = false;
+  @tracked useDefaultMessage = true;
   @service features;
 
   constructor() {
@@ -107,6 +107,8 @@ export default class ErrorMessageInputFieldComponent extends SimpleInputFieldCom
       .map((item) => item.object.value);
     if (defaultMessages.includes(this.value)) {
       this.useDefaultMessage = true;
+    } else {
+      this.useDefaultMessage = false;
     }
   }
 
