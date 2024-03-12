@@ -8,8 +8,10 @@ import { XSD, triplesForPath } from '@lblod/submission-form-helpers';
 import { restartableTask } from 'ember-concurrency';
 
 export default class BegrotingstabelTotalFieldComponent extends Component {
-  @tracked totals = A([]);
   id = guidFor(this);
+
+  @tracked totals = A([]);
+  @tracked errorMessage;
 
   constructor() {
     super(...arguments);
@@ -73,6 +75,7 @@ export default class BegrotingstabelTotalFieldComponent extends Component {
         indexOfCollection
       ].values.reduce((a, b) => a + b, 0);
     }
+    this.setErrorMessage();
   });
 
   getIndexOfTotal(collectionId) {
@@ -86,6 +89,26 @@ export default class BegrotingstabelTotalFieldComponent extends Component {
   willDestroy() {
     super.willDestroy(...arguments);
     this.store.deregisterObserver(this.id);
+  }
+
+  setErrorMessage() {
+    if (this.totals.length <= 1) {
+      this.errorMessage = null;
+
+      return;
+    }
+
+    if (
+      !this.totals.every(
+        (item) => item.calculationResult == this.totals[0].calculationResult
+      )
+    ) {
+      this.errorMessage = `Results are not the same`;
+
+      return;
+    }
+
+    this.errorMessage = null;
   }
 
   get fieldName() {
