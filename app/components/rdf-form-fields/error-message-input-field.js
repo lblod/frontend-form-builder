@@ -11,7 +11,7 @@ export default class ErrorMessageInputFieldComponent extends SimpleInputFieldCom
   inputId = 'select-' + guidFor(this);
 
   @tracked value;
-  @tracked useDefaultMessage = true;
+  @tracked useCustomMessage = true;
   @service features;
 
   constructor() {
@@ -38,9 +38,9 @@ export default class ErrorMessageInputFieldComponent extends SimpleInputFieldCom
 
   @action
   toggle() {
-    this.useDefaultMessage = !this.useDefaultMessage;
+    this.useCustomMessage = !this.useCustomMessage;
     this.removeOldMessage();
-    if (this.useDefaultMessage) {
+    if (!this.useCustomMessage) {
       const selectedValidationType = this.args.formStore.any(
         this.storeOptions.sourceNode,
         RDF('type'),
@@ -106,14 +106,14 @@ export default class ErrorMessageInputFieldComponent extends SimpleInputFieldCom
       )
       .map((item) => item.object.value);
     if (defaultMessages.includes(this.value)) {
-      this.useDefaultMessage = true;
+      this.useCustomMessage = false;
     } else {
-      this.useDefaultMessage = false;
+      this.useCustomMessage = true;
     }
   }
 
   get toggleMessage() {
-    if (this.useDefaultMessage) {
+    if (this.useCustomMessage) {
       return 'Toggle om een aangepaste foutmelding te gebruiken.';
     } else {
       return 'Toggle om een standaard foutmelding te gebruiken.';
