@@ -8,34 +8,34 @@
     />
   </AuBodyContainer>
   {{#if this.features.USE_CONSOLE}}
-  <div class>
-    <AuButton
-      class="au-u-background-gray-100 border"
-      @skin="naked"
-      @width="block"
-      {{on "click" this.toggleOpenCloseConsoleState}}
-    >
-      {{t "codeConsole.buttonNotification"}}:
-      {{this.consoleMessages.length}}
-    </AuButton>
-  </div>
-  {{#unless this.consoleClosed}}
-    <AuBodyContainer class="code-edit-console__container">
-      <AuBodyContainer class="code-edit-console" @scroll={{true}}>
-        {{#each this.consoleMessages as |message|}}
-          <AuContent class={{message.severity.class}}>
-            <AuIcon
-              class={{message.severity.iconClass}}
-              @icon={{message.severity.icon}}
-              @size="large"
-              @alignment="left"
-            />
-            <p>{{message.subject}}</p>
-            <p class="au-u-bold">{{message.content}}</p>
-          </AuContent>
-        {{/each}}
+    <div class>
+      <AuButton
+        class="au-u-background-gray-100 border"
+        @skin="naked"
+        @width="block"
+        {{on "click" this.toggleOpenCloseConsoleState}}
+      >
+        {{t "codeConsole.buttonNotification"}}:
+        {{this.consoleMessages.length}}
+      </AuButton>
+    </div>
+    {{#unless this.consoleClosed}}
+      <AuBodyContainer class="code-edit-console__container">
+        <AuBodyContainer class="code-edit-console" @scroll={{true}}>
+          {{#each this.consoleMessages as |message|}}
+            <AuContent class={{message.severity.class}}>
+              <AuIcon
+                class={{message.severity.iconClass}}
+                @icon={{message.severity.icon}}
+                @size="large"
+                @alignment="left"
+              />
+              <p>{{message.subject}}</p>
+              <p class="au-u-bold">{{message.content}}</p>
+            </AuContent>
+          {{/each}}
+        </AuBodyContainer>
       </AuBodyContainer>
-    </AuBodyContainer>
-  {{/unless}}
+    {{/unless}}
   {{/if}}
 </div>
