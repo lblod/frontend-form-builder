@@ -160,31 +160,26 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
 
 fields:validationResultMessageCFG a form:ConditionalFieldGroup ;
   form:conditions
-  [
-    # a form:MatchValues ;
-    a form:SingleCodelistValue ;
+  [ a form:MatchValues ;
     form:grouping form:Bag ;
     sh:path rdf:type ;
-    # form:valuesIn (
-    #   <http://lblod.data.gift/vocabularies/forms/RequiredConstraint>
-    #   <http://lblod.data.gift/vocabularies/forms/MaxLength>
-    #   <http://lblod.data.gift/vocabularies/forms/PositiveNumber>
-    #   <http://lblod.data.gift/vocabularies/forms/ExactValueConstraint>
-    #   <http://lblod.data.gift/vocabularies/forms/ValidInteger>
-    #   <http://lblod.data.gift/vocabularies/forms/ValidDateTime>
-    #   <http://lblod.data.gift/vocabularies/forms/ValidDate>
-    #   <http://lblod.data.gift/vocabularies/forms/ValidYear>
-    #   <http://lblod.data.gift/vocabularies/forms/ValidEmail>
-    #   <http://lblod.data.gift/vocabularies/forms/ValidPhoneNumber>
-    #   <http://lblod.data.gift/vocabularies/forms/ValidIBAN>
-    #   <http://lblod.data.gift/vocabularies/forms/ConceptSchemeConstraint>
-    #   <http://lblod.data.gift/vocabularies/forms/UriConstraint>
-    #   <http://lblod.data.gift/vocabularies/forms/Codelist>
-    # );
-    form:conceptScheme concept:possibleValidations;
-    form:customValue form:RequiredConstraint
-  ];
-
+    form:valuesIn (
+      <http://lblod.data.gift/vocabularies/forms/RequiredConstraint>
+      <http://lblod.data.gift/vocabularies/forms/MaxLength>
+      <http://lblod.data.gift/vocabularies/forms/PositiveNumber>
+      <http://lblod.data.gift/vocabularies/forms/ExactValueConstraint>
+      <http://lblod.data.gift/vocabularies/forms/ValidInteger>
+      <http://lblod.data.gift/vocabularies/forms/ValidDateTime>
+      <http://lblod.data.gift/vocabularies/forms/ValidDate>
+      <http://lblod.data.gift/vocabularies/forms/ValidYear>
+      <http://lblod.data.gift/vocabularies/forms/ValidEmail>
+      <http://lblod.data.gift/vocabularies/forms/ValidPhoneNumber>
+      <http://lblod.data.gift/vocabularies/forms/ValidIBAN>
+      <http://lblod.data.gift/vocabularies/forms/ConceptSchemeConstraint>
+      <http://lblod.data.gift/vocabularies/forms/UriConstraint>
+      <http://lblod.data.gift/vocabularies/forms/Codelist>
+    );
+  ] ;
   form:hasFieldGroup fieldGroups:validationResultMessageFG.
 
 ##########################################################
@@ -202,7 +197,7 @@ fields:validationResultMessageCFG a form:ConditionalFieldGroup ;
         Wanneer je van validatie type veranderd, toggle dan foutmelding aan en uit om de standaard foutmedling te updaten.
       """ ; 
       sh:path sh:resultMessage ;
-      form:displayType displayTypes:defaultInput ;
+      form:displayType displayTypes:errorMessageInputField ;
       form:partOf ext:formFieldS .
 
     ##########################################################

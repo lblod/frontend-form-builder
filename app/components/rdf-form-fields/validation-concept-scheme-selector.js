@@ -184,7 +184,7 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
           this.storeOptions.sourceGraph
         );
 
-        const defaultErrorMessageStatement =
+      const defaultErrorMessageStatement =
         this.createStatementForDefaultErrorMessage(
           this.storeOptions.sourceNode,
           defaultErrorMessage,
@@ -227,14 +227,14 @@ export default class ValidationConceptSchemeSelectorComponent extends InputField
   }
 
   findDefaultErrorMessage(sourceNode, store, graph) {
-    const currentMessage = store.any(
+    const currentMessage = store.match(
       sourceNode,
       SHACL('resultMessage'),
       undefined,
       graph
     );
     if (currentMessage) {
-      return;
+      this.args.formStore.removeStatements(currentMessage);
     }
 
     return getDefaultErrorMessageForValidation(
