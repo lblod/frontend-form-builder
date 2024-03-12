@@ -9,8 +9,9 @@
       {{editor this.formCode (perform this.handleCodeChange)}}>
     </AuContent>
   </AuBodyContainer>
+  {{#if this.features.USE_CONSOLE}}
   <div class>
-    <AuButton 
+    <AuButton
       class="au-u-background-gray-100 border"
       @skin="naked"
       @width="block"
@@ -21,7 +22,7 @@
   </div>
   {{#unless this.consoleClosed}}
   <AuBodyContainer class="code-edit-console__container">
-    <AuBodyContainer 
+    <AuBodyContainer
       class="code-edit-console"
       @scroll={{true}}
     >
@@ -38,4 +39,5 @@
     </AuBodyContainer>
   </AuBodyContainer>
   {{/unless}}
+  {{/if}}
 </div>

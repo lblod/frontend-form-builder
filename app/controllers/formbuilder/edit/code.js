@@ -13,6 +13,7 @@ import { action } from '@ember/object';
 export default class FormbuilderEditCodeController extends Controller {
   @service('form-code-manager') formCodeManager;
   @service toaster;
+  @service features;
 
   @tracked formCode;
   @tracked formCodeUpdates;
