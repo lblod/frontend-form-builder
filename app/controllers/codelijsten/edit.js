@@ -83,7 +83,7 @@ export default class CodelijstenEditController extends Controller {
   }
 
   get hasConcepts() {
-    return this.concepts.length >= 1 ?? false;
+    return this.concepts ? this.concepts.length >= 1 : false;
   }
 
   setup = restartableTask(async (conceptSchemeId) => {
