@@ -1,12 +1,14 @@
 import Component from '@glimmer/component';
 
+import { A } from '@ember/array';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { guidFor } from '@ember/object/internals';
 import { XSD, triplesForPath } from '@lblod/submission-form-helpers';
 import { restartableTask } from 'ember-concurrency';
 
 export default class BegrotingstabelTotalFieldComponent extends Component {
-  @tracked totals;
+  @tracked totals = A([]);
   id = guidFor(this);
 
   constructor() {
@@ -23,10 +25,10 @@ export default class BegrotingstabelTotalFieldComponent extends Component {
     return this.field.label;
   }
 
-  get formattedTotal() {
-    let amount = this.totals;
-    if (!this.totals) {
-      amount = 0.0;
+  @action
+  formatAmount(amount) {
+    if (!amount) {
+      amount = 0;
     }
 
     return new Intl.NumberFormat('nl-BE', {
@@ -49,15 +51,41 @@ export default class BegrotingstabelTotalFieldComponent extends Component {
         sourceNode: this.sourceNode,
       };
 
+      const possibleIndexOfCollection = this.getIndexOfTotal(collection.id);
+
+      if (this.isValidIndex(possibleIndexOfCollection)) {
+        this.totals.removeObject(this.totals[possibleIndexOfCollection]);
+      }
+
+      this.totals.pushObject({
+        id: collection.id,
+        collection: collection,
+        values: A([]),
+        calculationResult: undefined,
+      });
+
       const { values } = triplesForPath(options);
 
-      // this.totals = 0;
+      const indexOfCollection = this.getIndexOfTotal(collection.id);
+
       for (const literal of values) {
-        console.log(`val`, Number(literal.value));
-        // this.totals += Number(literal.value) ?? 0;
+        this.totals[indexOfCollection].values.pushObject(
+          Number(literal.value) ?? 0
+        );
       }
+      this.totals[indexOfCollection].calculationResult = this.totals[
+        indexOfCollection
+      ].values.reduce((a, b) => a + b, 0);
     }
   });
+
+  getIndexOfTotal(collectionId) {
+    return this.totals.findIndex((item) => item.id == collectionId);
+  }
+
+  isValidIndex(index) {
+    return index == 0 || index !== -1;
+  }
 
   willDestroy() {
     super.willDestroy(...arguments);
