@@ -6,7 +6,7 @@
         {{total.id}}
       </AuLabel>
       {{#if total.calculationResult}}
-        <p> <strong>{{total.calculationResult}}</strong></p>
+        <p> <strong>{{this.formatAmount total.calculationResult}}</strong></p>
       {{/if}}
     </div>
   {{/each}}
