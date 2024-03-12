@@ -36,26 +36,26 @@ export default class BegrotingstabelTotalFieldComponent extends Component {
   }
 
   calculateTotals = restartableTask(async () => {
-    const target = this.store.any(
-      this.field.uri,
-      XSD('target'),
-      undefined,
-      this.graphs.formGraph
-    );
+    const collections = this.store
+      .match(this.field.uri, XSD('target'), undefined, this.graphs.formGraph)
+      .map((st) => st.object);
 
-    const options = {
-      path: target,
-      store: this.store,
-      formGraph: this.graphs.formGraph,
-      sourceGraph: this.graphs.sourceGraph,
-      sourceNode: this.sourceNode,
-    };
+    for (const collection of collections) {
+      const options = {
+        path: collection,
+        store: this.store,
+        formGraph: this.graphs.formGraph,
+        sourceGraph: this.graphs.sourceGraph,
+        sourceNode: this.sourceNode,
+      };
 
-    const { values } = triplesForPath(options);
+      const { values } = triplesForPath(options);
 
-    this.totals = 0;
-    for (const literal of values) {
-      this.totals += Number(literal.value) ?? 0;
+      // this.totals = 0;
+      for (const literal of values) {
+        console.log(`val`, Number(literal.value));
+        // this.totals += Number(literal.value) ?? 0;
+      }
     }
   });
 
