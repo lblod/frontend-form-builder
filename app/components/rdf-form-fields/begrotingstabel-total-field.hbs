@@ -1,19 +1,34 @@
 <div id={{this.id}}>
-  <AuLabel
-    @warning={{this.comparisonWarningMessage}}
-  >{{this.fieldName}}</AuLabel>
-  {{#each this.totals as |total|}}
-    <div class="au-u-flex au-u-flex--row au-u-flex--spaced">
-      <AuLabel>
-        Totaal:
-        {{total.id}}
-      </AuLabel>
-      {{#if total.calculationResult}}
-        <p> <strong>{{this.formatAmount total.calculationResult}}</strong></p>
+  <AuTable>
+    <:title><AuLabel
+        class="au-u-padding-top-tiny"
+        @warning={{this.comparisonWarningMessage}}
+      >{{this.fieldName}}</AuLabel></:title>
+    <:header>
+      <tr>
+        <th>{{this.expenseResultColumn.name}}</th>
+        <th>{{this.incomeResultColumn.name}}</th>
+      </tr>
+    </:header>
+    <:body>
+      <tr>
+        <td>{{this.formatAmount this.expenseResultColumn.outcome}}</td>
+        <td>{{this.formatAmount this.incomeResultColumn.outcome}}</td>
+      </tr>
+    </:body>
+    <:footer>
+      {{#if this.comparisonWarningMessage}}
+        <AuHelpText
+          class="au-u-padding-tiny au-u-padding-left"
+          @warning={{this.comparisonWarningMessage}}
+        >{{this.comparisonWarningMessage}}</AuHelpText>
       {{/if}}
-    </div>
-  {{/each}}
-  <AuHelpText
-    @warning={{this.comparisonWarningMessage}}
-  >{{this.comparisonWarningMessage}}</AuHelpText>
+      {{#if this.collectionErrorMessage}}
+        <AuHelpText
+          class="au-u-padding-tiny au-u-padding-left"
+          @error={{this.collectionErrorMessage}}
+        >{{this.collectionErrorMessage}}</AuHelpText>
+      {{/if}}
+    </:footer>
+  </AuTable>
 </div>

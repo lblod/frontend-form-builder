@@ -12,6 +12,7 @@ export default class BegrotingstabelTotalFieldComponent extends Component {
 
   @tracked totals = A([]);
   @tracked comparisonWarningMessage;
+  @tracked collectionErrorMessage;
 
   constructor() {
     super(...arguments);
@@ -39,6 +40,12 @@ export default class BegrotingstabelTotalFieldComponent extends Component {
     const collections = this.store
       .match(this.field.uri, XSD('target'), undefined, this.graphs.formGraph)
       .map((st) => st.object);
+
+    if (collections.length !== 2) {
+      this.collectionErrorMessage = `Tabel wordt niet geupdate omdat er geen twee targets gedifneerd zijn naar de waarde`;
+      return;
+    }
+    this.collectionErrorMessage = null;
 
     for (const collection of collections) {
       const options = {
@@ -129,5 +136,33 @@ export default class BegrotingstabelTotalFieldComponent extends Component {
 
   get sourceNode() {
     return this.args.sourceNode;
+  }
+
+  get expenseResultColumn() {
+    const indexOfExpenseValues = 0;
+    const value = {
+      name: 'Uitgaven',
+      outcome: 0,
+    };
+
+    if (this.totals[indexOfExpenseValues]) {
+      value.outcome = this.totals[indexOfExpenseValues].calculationResult;
+    }
+
+    return value;
+  }
+
+  get incomeResultColumn() {
+    const indexOfIncomeValues = 1;
+    const value = {
+      name: 'Inkomsten',
+      outcome: 0,
+    };
+
+    if (this.totals[indexOfIncomeValues]) {
+      value.outcome = this.totals[indexOfIncomeValues].calculationResult;
+    }
+
+    return value;
   }
 }
