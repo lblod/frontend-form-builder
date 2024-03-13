@@ -56,6 +56,17 @@ export default class FormbuilderEditCodeController extends Controller {
           'messages.feedback.previewNotUpdatedBecauseOfErrorsInTtl'
         ),
       });
+
+      if (!this.features.isEnabled('USE_CONSOLE')) {
+        showErrorToasterMessage(
+          this.toaster,
+          this.intl.t(
+            'messages.feedback.previewNotUpdatedBecauseOfErrorsInTtl'
+          ),
+          this.intl.t('messages.subjects.preview')
+        );
+      }
+
       return;
     }
 
