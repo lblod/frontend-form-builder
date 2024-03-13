@@ -23,7 +23,7 @@ export function getDisplayTypeCompletions() {
       `displayTypes:conceptSchemeRadioButtons`,
       `displayTypes:conceptSchemeMultiSelectCheckboxes`,
       `displayTypes:conceptSchemeMultiSelector`,
-      `displayTypes:aggregateField`,
+      `displayTypes:begrotingstabelTotal`,
       `displayTypes:richTextEditor`,
     ]
   );

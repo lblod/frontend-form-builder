@@ -5,7 +5,7 @@ import { guidFor } from '@ember/object/internals';
 import { XSD, triplesForPath } from '@lblod/submission-form-helpers';
 import { restartableTask } from 'ember-concurrency';
 
-export default class AggregateFieldComponent extends Component {
+export default class BegrotingstabelTotalFieldComponent extends Component {
   @tracked totals;
   id = guidFor(this);
 

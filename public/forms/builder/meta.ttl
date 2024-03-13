@@ -142,9 +142,9 @@ display:conceptSchemeMultiSelector
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
   skos:prefLabel  "Multi selector"@en .
 
-display:aggregateField
+display:begrotingstabelTotal
   rdf:type  rdfs:Class , skos:Concept ;
-  ext:displayType "aggregateField" ;
+  ext:displayType "begrotingstabelTotal" ;
   ext:usesConceptScheme "false"^^xsd:boolean ;
   skos:inScheme <http://lblod.data.gift/concept-schemes/c5a91bd7-3eb5-4d69-a51b-9bac6bf345f6> ;
-  skos:prefLabel  "Som van tabel kolom"@en .
+  skos:prefLabel  "Begrotingstabel totaal"@en .

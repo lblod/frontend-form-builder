@@ -56,7 +56,7 @@ form:Field
         displayTypes:currencyInput
         displayTypes:textArea
         displayTypes:richTextEditor
-        displayTypes:aggregateField
+        displayTypes:begrotingstabelTotal
         displayTypes:switch
         displayTypes:checkbox
         displayTypes:date
