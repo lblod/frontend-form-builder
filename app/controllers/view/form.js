@@ -15,7 +15,7 @@ import {
   showSuccessToasterMessage,
 } from '../../utils/toaster-message-helper';
 
-export default class FormsTestController extends Controller {
+export default class ViewFormController extends Controller {
   @service store;
   @service toaster;
   @service intl;

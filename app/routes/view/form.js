@@ -6,7 +6,7 @@ import {
 } from '../../controllers/formbuilder/edit';
 import { service } from '@ember/service';
 
-export default class FormsTestRoute extends Route {
+export default class ViewFormRoute extends Route {
   @service store;
 
   async model(params) {

@@ -19,11 +19,7 @@
       value={{this.filter}}
       {{on "keyup" this.searchForm.perform}}
     />
-    <AuLink
-      @route="formbuilder.new"
-      @skin="button"
-      @icon="pencil"
-    >
+    <AuLink @route="formbuilder.new" @skin="button" @icon="pencil">
       {{t "main.createNewForm"}}
     </AuLink>
   </div>
@@ -71,7 +67,7 @@
               }}</td>
             <td class="au-u-visible-medium-up">
               <AuLink
-                @route="forms.test"
+                @route="view.form"
                 @model={{generatedForm.id}}
                 @icon="eye"
                 @alignment="left"
