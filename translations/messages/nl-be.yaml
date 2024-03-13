@@ -1,5 +1,6 @@
 messages:
   subjects:
+    preview: "Preview"
     success: "Success"
     error: "Error"
     characters: "Karakters"
@@ -15,6 +16,7 @@ messages:
     duplicateValidationType: "Validatietype {type} is duplicaat"
     couldNotGetFormIdIsNotSet: "Kan form id niet vinden. Id niet ingesteld."
     valueMustBeBoolean: "The gegeven waarde is geen boolean waarde {value}"
+    unknownShaclSeverityType: "SHACL error type niet herkend: {severityType}"
   success:
     formCreated: "Formulier succesvol aangemaakt"
     formUpdated: "Formulier bijgewerkt"
@@ -31,6 +33,7 @@ messages:
     highestversionAvailable: "De laatste versie is v{version}"
     formIsValid: "Je formulier is correct"
     formIsInvalid: "Je formulier is niet correct. Vul al de velden in."
+    previewNotUpdatedBecauseOfErrorsInTtl: "Preview niet geüpdatet door errors in de ttl code"
   loading:
     creatingNewUserTest: "Nieuwe gebruikerstest aan het maken"
     loadingOverview: "Overzicht aan het laden"
