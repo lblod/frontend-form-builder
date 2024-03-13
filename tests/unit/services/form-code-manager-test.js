@@ -187,4 +187,24 @@ module('Unit | Service | form-code-manager', function (hooks) {
     assert.notOk(formCodeManager.isTtlTheSameAsLatest('latest TTL CODE'));
     assert.ok(formCodeManager.isTtlTheSameAsLatest(latestTtl));
   });
+
+  test('The form input data is not set initially', function (assert) {
+    let formCodeManager = this.owner.lookup('service:form-code-manager');
+
+    assert.deepEqual(formCodeManager.formInputDataTtl, null);
+  });
+
+  test('The form input data can be set and get after', function (assert) {
+    let formCodeManager = this.owner.lookup('service:form-code-manager');
+    const inputData = 'form input data';
+
+    assert.deepEqual(formCodeManager.formInputDataTtl, null);
+
+    formCodeManager.setFormInputDataTtl(inputData);
+    assert.deepEqual(formCodeManager.formInputDataTtl, inputData);
+    assert.deepEqual(
+      formCodeManager.getInputDataForLatestFormVersion(),
+      inputData
+    );
+  });
 });
