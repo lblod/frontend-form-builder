@@ -94,4 +94,97 @@ module('Unit | Service | form-code-manager', function (hooks) {
     assert.deepEqual(formCodeManager.referenceVersion, startVersion);
     assert.notOk(formCodeManager.isFormIdSet());
   });
+
+  test('Can add code to the history', function (assert) {
+    let formCodeManager = this.owner.lookup('service:form-code-manager');
+    const ttlCodeV1 = 'ttlCode v1';
+    const ttlCodeV2 = 'ttlCode v2';
+
+    formCodeManager.addFormCode(ttlCodeV1);
+    assert.deepEqual(formCodeManager.formCodeHistory, [ttlCodeV1]);
+
+    formCodeManager.addFormCode(ttlCodeV2);
+    assert.deepEqual(formCodeManager.formCodeHistory, [ttlCodeV1, ttlCodeV2]);
+  });
+
+  test('Adding the first ttl to the manager will be version 0', function (assert) {
+    let formCodeManager = this.owner.lookup('service:form-code-manager');
+    const ttlCodeV1 = 'ttlCode v1';
+
+    formCodeManager.addFormCode(ttlCodeV1);
+
+    assert.deepEqual(formCodeManager.latestVersion, 0);
+    assert.deepEqual(formCodeManager.formCodeHistory, [ttlCodeV1]);
+  });
+
+  test('When adding ttl code that is the same as previous version will not result in a new latest version', function (assert) {
+    let formCodeManager = this.owner.lookup('service:form-code-manager');
+    const ttlCode = 'ttlCode';
+    const versionWhenHistoryHasOneEntree = 0;
+
+    formCodeManager.addFormCode(ttlCode);
+    assert.deepEqual(
+      formCodeManager.latestVersion,
+      versionWhenHistoryHasOneEntree
+    );
+
+    formCodeManager.addFormCode(ttlCode);
+    assert.deepEqual(
+      formCodeManager.latestVersion,
+      versionWhenHistoryHasOneEntree
+    );
+  });
+
+  test('Adding three different ttl versions and pinning the second one as reference', function (assert) {
+    let formCodeManager = this.owner.lookup('service:form-code-manager');
+    const ttlCodeV1 = 'ttlCode v1';
+    const referenceTtl = 'ttlCode referenced';
+    const ttlCodeV3 = 'ttlCode v3';
+
+    formCodeManager.addFormCode(ttlCodeV1);
+    formCodeManager.addFormCode(referenceTtl);
+    formCodeManager.pinLatestVersionAsReference();
+    formCodeManager.addFormCode(ttlCodeV3);
+
+    assert.deepEqual(formCodeManager.referenceVersion, 1);
+    assert.deepEqual(formCodeManager.latestVersion, 2);
+
+    assert.deepEqual(formCodeManager.formCodeHistory, [
+      ttlCodeV1,
+      referenceTtl,
+      ttlCodeV3,
+    ]);
+
+    assert.deepEqual(formCodeManager.getTtlOfLatestVersion(), ttlCodeV3);
+    assert.deepEqual(formCodeManager.getTtlOfReferenceVersion(), referenceTtl);
+  });
+
+  test('Check if latest and reference version is deviating', function (assert) {
+    let formCodeManager = this.owner.lookup('service:form-code-manager');
+    const ttlCodeV1 = 'ttlCode v1';
+    const referenceTtl = 'ttlCode referenced';
+    const ttlCodeV3 = 'ttlCode v3';
+
+    formCodeManager.addFormCode(ttlCodeV1);
+    formCodeManager.addFormCode(referenceTtl);
+    formCodeManager.pinLatestVersionAsReference();
+
+    assert.notOk(formCodeManager.isLatestDeviatingFromReference());
+
+    formCodeManager.addFormCode(ttlCodeV3);
+
+    assert.ok(formCodeManager.isLatestDeviatingFromReference());
+  });
+
+  test('Check if ttl code is the same as the latest ttl code', function (assert) {
+    let formCodeManager = this.owner.lookup('service:form-code-manager');
+    const ttlCodeV1 = 'ttlCode v1';
+    const latestTtl = 'latest ttl';
+
+    formCodeManager.addFormCode(ttlCodeV1);
+    formCodeManager.addFormCode(latestTtl);
+
+    assert.notOk(formCodeManager.isTtlTheSameAsLatest('latest TTL CODE'));
+    assert.ok(formCodeManager.isTtlTheSameAsLatest(latestTtl));
+  });
 });
