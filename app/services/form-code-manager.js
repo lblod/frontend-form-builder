@@ -58,9 +58,14 @@ export default class FormCodeManagerService extends Service {
     );
   }
 
+  resetVersions() {
+    this.latestVersion = this.startVersion;
+    this.referenceVersion = this.startVersion;
+  }
+
   clearHistory() {
     this.formCodeHistory = [];
-    this.latestVersion = this.startVersion;
+    this.resetVersions();
   }
 
   reset() {
