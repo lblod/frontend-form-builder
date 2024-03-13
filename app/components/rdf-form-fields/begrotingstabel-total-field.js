@@ -42,7 +42,7 @@ export default class BegrotingstabelTotalFieldComponent extends Component {
       .map((st) => st.object);
 
     if (collections.length !== 2) {
-      this.collectionErrorMessage = `Tabel wordt niet geupdate omdat er geen twee targets gedifneerd zijn naar de waarde`;
+      this.collectionErrorMessage = `Tabel heeft te weing informatie. Voeg twee xsd:targets toe. bv. xsd:target ( ext:Expense ext:amount ), ( ext:Income ext:amount )`;
       return;
     }
     this.collectionErrorMessage = null;
@@ -110,7 +110,7 @@ export default class BegrotingstabelTotalFieldComponent extends Component {
         (item) => item.calculationResult == this.totals[0].calculationResult
       )
     ) {
-      this.comparisonWarningMessage = `Results are not the same`;
+      this.comparisonWarningMessage = `De resultaten zijn niet gelijk`;
 
       return;
     }
