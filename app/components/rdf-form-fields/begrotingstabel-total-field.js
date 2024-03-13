@@ -42,7 +42,7 @@ export default class BegrotingstabelTotalFieldComponent extends Component {
       .map((st) => st.object);
 
     if (collections.length !== 2) {
-      this.collectionErrorMessage = `Tabel heeft te weing informatie. Voeg twee xsd:targets toe. bv. xsd:target ( ext:Expense ext:amount ), ( ext:Income ext:amount )`;
+      this.collectionErrorMessage = `Tabel heeft te weing informatie. Voeg twee xsd:targets toe. bv. xsd:target ( ext:Expense ext:amount ), ( ext:Income ext:amount );`;
       return;
     }
     this.collectionErrorMessage = null;
