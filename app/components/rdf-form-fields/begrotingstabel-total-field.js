@@ -11,7 +11,7 @@ export default class BegrotingstabelTotalFieldComponent extends Component {
   id = guidFor(this);
 
   @tracked totals = A([]);
-  @tracked errorMessage;
+  @tracked comparisonWarningMessage;
 
   constructor() {
     super(...arguments);
@@ -75,7 +75,7 @@ export default class BegrotingstabelTotalFieldComponent extends Component {
         indexOfCollection
       ].values.reduce((a, b) => a + b, 0);
     }
-    this.setErrorMessage();
+    this.setWarningMessage();
   });
 
   getIndexOfTotal(collectionId) {
@@ -91,9 +91,9 @@ export default class BegrotingstabelTotalFieldComponent extends Component {
     this.store.deregisterObserver(this.id);
   }
 
-  setErrorMessage() {
+  setWarningMessage() {
     if (this.totals.length <= 1) {
-      this.errorMessage = null;
+      this.comparisonWarningMessage = null;
 
       return;
     }
@@ -103,12 +103,12 @@ export default class BegrotingstabelTotalFieldComponent extends Component {
         (item) => item.calculationResult == this.totals[0].calculationResult
       )
     ) {
-      this.errorMessage = `Results are not the same`;
+      this.comparisonWarningMessage = `Results are not the same`;
 
       return;
     }
 
-    this.errorMessage = null;
+    this.comparisonWarningMessage = null;
   }
 
   get fieldName() {

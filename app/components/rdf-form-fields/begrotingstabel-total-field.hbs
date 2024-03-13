@@ -1,5 +1,7 @@
 <div id={{this.id}}>
-  <AuLabel @error={{this.errorMessage}}>{{this.fieldName}}</AuLabel>
+  <AuLabel
+    @warning={{this.comparisonWarningMessage}}
+  >{{this.fieldName}}</AuLabel>
   {{#each this.totals as |total|}}
     <div class="au-u-flex au-u-flex--row au-u-flex--spaced">
       <AuLabel>
@@ -11,5 +13,7 @@
       {{/if}}
     </div>
   {{/each}}
-  <AuHelpText @error={{this.errorMessage}}>{{this.errorMessage}}</AuHelpText>
+  <AuHelpText
+    @warning={{this.comparisonWarningMessage}}
+  >{{this.comparisonWarningMessage}}</AuHelpText>
 </div>
