@@ -74,7 +74,7 @@ ext:formValidationL a form:Listing ;
 
 ext:formValidationValueItem a form:SubForm ;
   form:hasFieldGroup ext:validationsFG ;
-  form:includes ext:validationResultMessageF .
+  form:includes fields:validatonSelectorF .
 
 ext:validationsFG a form:FieldGroup ;
   form:hasField fields:validatonSelectorF .
@@ -99,7 +99,8 @@ fields:validatonSelectorF a form:Field ;
   form:hasConditionalFieldGroup
       fields:maxLengthValidationCFG,
       fields:exactValueConstraintCFG,
-      fields:phoneNumberCountryCodeCFG .
+      fields:phoneNumberCountryCodeCFG,
+      fields:validationResultMessageCFG .
 
 ##########################################################
 #  Validation generator
@@ -120,6 +121,9 @@ fieldGroups:exactValueConstraintFG a form:FieldGroup ;
 
 fieldGroups:phoneNumberCountryCodeFG a form:FieldGroup ;
   form:hasField ext:phoneNumberCountryCodeF .
+
+fieldGroups:validationResultMessageFG a form:FieldGroup ;
+  form:hasField ext:validationResultMessageF .
 
 ##########################################################
 #  Validation type conditions
@@ -154,12 +158,37 @@ fields:phoneNumberCountryCodeCFG a form:ConditionalFieldGroup ;
     ] ;
   form:hasFieldGroup fieldGroups:phoneNumberCountryCodeFG .
 
+fields:validationResultMessageCFG a form:ConditionalFieldGroup ;
+  form:conditions
+  [ a form:MatchValues ;
+    form:grouping form:Bag ;
+    sh:path rdf:type ;
+    form:valuesIn (
+      <http://lblod.data.gift/vocabularies/forms/RequiredConstraint>
+      <http://lblod.data.gift/vocabularies/forms/MaxLength>
+      <http://lblod.data.gift/vocabularies/forms/PositiveNumber>
+      <http://lblod.data.gift/vocabularies/forms/ExactValueConstraint>
+      <http://lblod.data.gift/vocabularies/forms/ValidInteger>
+      <http://lblod.data.gift/vocabularies/forms/ValidDateTime>
+      <http://lblod.data.gift/vocabularies/forms/ValidDate>
+      <http://lblod.data.gift/vocabularies/forms/ValidYear>
+      <http://lblod.data.gift/vocabularies/forms/ValidEmail>
+      <http://lblod.data.gift/vocabularies/forms/ValidPhoneNumber>
+      <http://lblod.data.gift/vocabularies/forms/ValidIBAN>
+      <http://lblod.data.gift/vocabularies/forms/ConceptSchemeConstraint>
+      <http://lblod.data.gift/vocabularies/forms/UriConstraint>
+      <http://lblod.data.gift/vocabularies/forms/Codelist>
+    );
+  ] ;
+  form:hasFieldGroup fieldGroups:validationResultMessageFG.
+
 ##########################################################
 #  All separate fields
 ##########################################################
     ##########################################################
     #  Error message field
     ##########################################################
+
     ext:validationResultMessageF a form:Field ;
       sh:name "Foutmelding" ;
       sh:order 100 ; # I think we always want to show this below the conditional fields?

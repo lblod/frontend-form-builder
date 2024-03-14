@@ -4,14 +4,18 @@
     {{@field.label}}
 </AuLabel>
 
-<AuInput
-  @error={{this.hasErrors}}
-  @disabled={{this.useDefaultMessage}}
-  @width={{if @inTable "block"}}
-  id={{this.inputId}}
-  value={{this.value}}
-  {{on "blur" this.updateValue}}
-/>
 {{#if this.features.USE_DEFAULT_ERROR_MESSAGE}}
-  <AuToggleSwitch @onChange={{this.toggle}} @checked={{this.useDefaultMessage}}>{{this.toggleMessage}}</AuToggleSwitch>
+  <AuCheckbox @onChange={{this.toggle}} @checked={{this.useCustomMessage}}>Gebruik een aangepaste foutmelding</AuCheckbox>
+{{/if}}
+
+{{#if this.useCustomMessage}}
+<div>
+  <AuInput
+    @error={{this.hasErrors}}
+    @width={{if @inTable "block"}}
+    id={{this.inputId}}
+    value={{this.value}}
+    {{on "blur" this.updateValue}}
+  />
+</div>
 {{/if}}
