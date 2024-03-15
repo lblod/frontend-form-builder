@@ -205,8 +205,14 @@ export default class ConfigurationTableComponent extends Component {
 
   get limits() {
     return {
-      min: 0,
-      max: 15,
+      minRows: {
+        min: 0,
+        max: 15,
+      },
+      maxRows: {
+        min: 1,
+        max: 15,
+      },
     };
   }
 }

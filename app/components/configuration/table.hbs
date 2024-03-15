@@ -16,8 +16,8 @@
         <AuInput
           @width="block"
           type="number"
-          min={{this.limits.min}}
-          max={{this.limits.max}}
+          min={{this.limits.minRows.min}}
+          max={{this.limits.minRows.max}}
           value={{this.minRowsValue}}
           id="input-row-min-constraint"
           {{on "blur" this.updateMinRowsValue}}
@@ -30,8 +30,8 @@
         <AuInput
           @width="block"
           type="number"
-          min={{this.limits.min}}
-          max={{this.limits.max}}
+          min={{this.limits.maxRows.min}}
+          max={{this.limits.maxRows.max}}
           value={{this.maxRowsValue}}
           id="input-row-max-constraint"
           {{on "blur" this.updateMaxRowsValue}}
