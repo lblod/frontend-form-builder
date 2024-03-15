@@ -35,9 +35,7 @@ messages:
     formIsInvalid: "Your form is is invalid. Please fill in all the fields."
     previewNotUpdatedBecauseOfErrorsInTtl: "Preview not updated because ttl contains errors"
   loading:
-    creatingNewUserTest: "Creating new user test"
     loadingOverview: "Loading Overview"
-    loadingUserTests: "Loading user test"
     isSaving: "Saving"
     isLoading: "Loading..."
     isDeleting: "Deleting"

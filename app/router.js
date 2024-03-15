@@ -28,8 +28,4 @@ Router.map(function () {
       this.route('semantic-data');
     });
   });
-  this.route('user-tests', function () {
-    this.route('new');
-    this.route('edit', { path: '/:id/edit' });
-  });
 });
