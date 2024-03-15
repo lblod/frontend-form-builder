@@ -19,7 +19,7 @@
     @allowClear={{true}}
     @loadingMessage="Aan het laden..."
     @noMatchesMessage="Geen resultaten gevonden"
-    @disabled={{@show}}
+    @disabled={{if (and this.selectedValidationType (not @show)) true}}
     data-test-field-uri={{@field.uri.value}}
     as |concept|
   >
