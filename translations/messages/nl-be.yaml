@@ -35,9 +35,7 @@ messages:
     formIsInvalid: "Je formulier is niet correct. Vul al de velden in."
     previewNotUpdatedBecauseOfErrorsInTtl: "Preview niet geüpdatet door errors in de ttl code"
   loading:
-    creatingNewUserTest: "Nieuwe gebruikerstest aan het maken"
     loadingOverview: "Overzicht aan het laden"
-    loadingUserTests: "Gebruikerstest aan het laden"
     isSaving: "Bewaren"
     isLoading: "Aan het laden..."
     isDeleting: "Aan het verwijderen"

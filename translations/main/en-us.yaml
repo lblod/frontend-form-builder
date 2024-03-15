@@ -10,9 +10,6 @@ formBuilder:
   searchPlaceholder: "Find a form"
   editCodeForm: "Edit form code"
 
-userTests:
-  createdForms: "Created testable semantic forms"
-
 crud:
   save: "Save"
   delete: "Delete"

@@ -10,9 +10,6 @@ formBuilder:
   searchPlaceholder: "Zoek een formulier"
   editCodeForm: "Formulier code bewerken"
 
-userTests:
-  createdForms: "Aangemaakte testbare gelinkte formulieren"
-
 crud:
   save: "Bewaar"
   delete: "Verwijder"
