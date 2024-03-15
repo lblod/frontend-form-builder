@@ -22,6 +22,11 @@ export default class FormbuilderConfigurationController extends Controller {
   @tracked fieldsForSection = [];
 
   @action
+  updateTtl(ttl) {
+    this.model.handleCodeChange(ttl);
+  }
+
+  @action
   updateFieldOptions(scheme) {
     const conceptSchemeConfig = {
       conceptScheme: scheme.uri,
@@ -47,7 +52,7 @@ export default class FormbuilderConfigurationController extends Controller {
       this.model.graphs.sourceGraph
     );
 
-    this.model.handleCodeChange(ttl);
+    this.updateTtl(ttl);
   }
 
   @action
@@ -120,11 +125,6 @@ export default class FormbuilderConfigurationController extends Controller {
         const rdfType = getRdfTypeOfNode(child, store, graph);
 
         if (rdfType.value != FORM('Field').value) {
-          console.warn(
-            this.intl.t(
-              'messages.feedback.onlyFieldsAllowedToDisplayUnderSections'
-            )
-          );
           continue;
         }
         fieldsSubjectsToDisplay.push(child);
@@ -145,11 +145,37 @@ export default class FormbuilderConfigurationController extends Controller {
     const option = store.any(node, FORM('options'), undefined, graph);
 
     if (!option) {
-      console.error(`Could not get form:options of node ${node.value ?? ''}`);
       return option;
     }
 
     return JSON.parse(option.value).conceptScheme ?? null;
+  }
+
+  get tableListingsForSection() {
+    const tableListingsInForm = this.builderStore
+      .match(
+        undefined,
+        RDF('type'),
+        FORM('ListingTable'),
+        this.model.graphs.sourceGraph
+      )
+      .map((triple) => triple.subject);
+
+    if (!tableListingsInForm || tableListingsInForm.length == 0) return [];
+
+    return tableListingsInForm.filter((tableSubject) => {
+      const isPartOf = this.builderStore.any(
+        tableSubject,
+        FORM('partOf'),
+        this.selectedSection.parent
+      );
+
+      if (!isPartOf) {
+        return false;
+      }
+
+      return tableSubject;
+    });
   }
 
   setup() {

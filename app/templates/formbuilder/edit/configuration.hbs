@@ -24,6 +24,16 @@
     <div class="builder_content-container">
       <div class="fieldsOfSection">
         {{#if (and this.selectedSection this.fieldsForSection)}}
+          {{#each this.tableListingsForSection as |tableSubject|}}
+            <Configuration::Table
+              @store={{this.builderStore}}
+              @graphs={{@model.graphs}}
+              @updatedTtl={{this.updateTtl}}
+              @tableListingSubject={{tableSubject}}
+            />
+            <br />
+          {{/each}}
+
           {{#each this.sortedFieldsForSection as |field|}}
             <AuCard @expandable={{false}} as |c|>
               <c.header>

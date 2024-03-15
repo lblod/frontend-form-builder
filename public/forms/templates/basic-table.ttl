@@ -32,6 +32,7 @@ nodes:b71e037c-7e51-41ea-97f4-e9d34f0b327d
     form:each nodes:c4f530f3-b7d7-41cb-8bae-26ef13f42101;
     form:partOf nodes:d7b33768-3723-4291-a7be-3d8a7d7cdbc1;
     form:scope nodes:a8277ebb-38c7-4e41-9388-6642e9a485ec;
+    sh:name "Eenvoudige tabel";
     sh:order 1 .
 nodes:c4f530f3-b7d7-41cb-8bae-26ef13f42101
     a form:SubForm;

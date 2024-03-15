@@ -76,3 +76,8 @@ editNameModal:
   title: "Geef een naam aan je formulier"
   name: "Naam"
   createForm: "Bouw formulier"
+
+tableConfiguration:
+  minRowsLabel: "Min rijen"
+  maxRowsLabel: "Max rijen"
+  showIndices: "Toon index kolom"

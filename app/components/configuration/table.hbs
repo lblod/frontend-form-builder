@@ -1,0 +1,56 @@
+<AuCard @expandable={{false}} as |c|>
+  <c.header>
+    <AuHeading @level="2" @skin="4">
+      {{this.tableName}}
+    </AuHeading>
+    <p>
+      {{this.tableSubject.value}}
+    </p>
+  </c.header>
+  <c.content>
+    <div class="au-u-flex au-u-flex--row au-u-flex--between">
+      <span>
+        <AuLabel for="input-row-min-constraint">{{t
+            "tableConfiguration.minRowsLabel"
+          }}</AuLabel>
+        <AuInput
+          @width="block"
+          type="number"
+          min={{this.limits.minRows.min}}
+          max={{this.limits.minRows.max}}
+          value={{this.minRowsValue}}
+          id="input-row-min-constraint"
+          {{on "blur" this.updateMinRowsValue}}
+        />
+      </span>
+      <span>
+        <AuLabel for="input-row-max-constraint">{{t
+            "tableConfiguration.maxRowsLabel"
+          }}</AuLabel>
+        <AuInput
+          @width="block"
+          type="number"
+          min={{this.limits.maxRows.min}}
+          max={{this.limits.maxRows.max}}
+          value={{this.maxRowsValue}}
+          id="input-row-max-constraint"
+          {{on "blur" this.updateMaxRowsValue}}
+        />
+      </span>
+    </div>
+    <AuCheckbox
+      @checked={{this.isShowingTableIndices}}
+      @onChange={{this.showIndicesInTable}}
+    >
+      {{t "tableConfiguration.showIndices"}}
+    </AuCheckbox>
+    {{#if this.isShowingTableIndices}}
+      <AuInput
+        @width="block"
+        value={{this.indexColumnLabel}}
+        id="input-label-index-column"
+        {{on "blur" this.updateIndexLabel}}
+      />
+    {{/if}}
+  </c.content>
+</AuCard>

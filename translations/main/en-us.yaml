@@ -76,3 +76,8 @@ editNameModal:
   title: "Enter a name for your form"
   name: "Name"
   createForm: "Build form"
+
+tableConfiguration:
+  minRowsLabel: "Min rows"
+  maxRowsLabel: "Max rows"
+  showIndices: "Show indices"
