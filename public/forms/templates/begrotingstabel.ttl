@@ -1,0 +1,140 @@
+@prefix : <#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix display: <http://lblod.data.gift/display-types/>.
+@prefix form: <http://lblod.data.gift/vocabularies/forms/>.
+@prefix sh: <http://www.w3.org/ns/shacl#>.
+@prefix nodes: <http://data.lblod.info/form-data/nodes/>.
+@prefix emb: <http://ember-submission-form-fields/>.
+@prefix ext: <http://mu.semte.ch/vocabularies/ext/>.
+
+nodes:06bdfd6f-7f3e-4c20-ace3-826aaa5f4a37
+    a form:SubForm;
+    form:includes
+        nodes:31951c5d-7cac-4475-a155-6e3186941759,
+        nodes:69330280-62a3-4677-a2db-5ef739922893,
+        nodes:9be008e5-4326-4c50-b1d7-93d28e66396b;
+    form:removeLabel "Remove row text";
+    sh:name "The subform title".
+
+nodes:31951c5d-7cac-4475-a155-6e3186941759
+    a form:Field;
+    form:displayType display:defaultInput;
+    form:partOf nodes:a4503b20-7c8f-497c-abac-9650691cec75;
+    sh:name "Soort kosten";
+    sh:order 1;
+    sh:path nodes:3fbfa1bd-4e50-41c3-a837-14fad8980e2a.
+
+nodes:355bf424-2a27-4ad4-b37a-a942dce9ba1a
+    a form:SubForm;
+    form:includes
+        nodes:4765e058-407a-4abd-b798-ad06878ffffc,
+        nodes:b90556fb-1d38-403e-a61d-2938846bce95,
+        nodes:c03fd570-9d16-4cf7-8ace-66ff60254dbc;
+    form:removeLabel "Remove row text";
+    sh:name "The subform title".
+
+nodes:3d561f39-85dd-441d-a2a6-98826e6e1dc8
+    a form:Listing, form:ListingTable;
+    form:addLabel "Add row text";
+    form:canAdd true;
+    form:canRemove true;
+    form:createGenerator ext:expenseGenerator;
+    form:each nodes:06bdfd6f-7f3e-4c20-ace3-826aaa5f4a37;
+    form:partOf nodes:a4503b20-7c8f-497c-abac-9650691cec75;
+    form:scope ext:expenseS;
+    sh:maxCount 10;
+    sh:order 1 .
+
+nodes:4765e058-407a-4abd-b798-ad06878ffffc
+    a form:Field;
+    form:displayType display:currencyInput;
+    form:partOf nodes:f9dee3f6-e782-417f-ad89-c54e603a6a04;
+    sh:name "Bedrag in euro";
+    sh:order 2;
+    sh:path ext:amount.
+
+nodes:4ce76f84-e71d-4d2b-8733-7fb02cbb12f7
+    a form:Section;
+    sh:order 3 .
+
+nodes:69330280-62a3-4677-a2db-5ef739922893
+    a form:Field;
+    form:displayType display:currencyInput;
+    form:partOf nodes:a4503b20-7c8f-497c-abac-9650691cec75;
+    sh:name "Bedrag in euro";
+    sh:order 2;
+    sh:path ext:amount.
+
+nodes:7e1ac203-5486-4a7f-bc37-9370e7c5bbc2
+    a form:Listing, form:ListingTable;
+    form:addLabel "Add row text";
+    form:canAdd true;
+    form:canRemove true;
+    form:createGenerator ext:incomeGenerator;
+    form:each nodes:355bf424-2a27-4ad4-b37a-a942dce9ba1a;
+    form:partOf nodes:f9dee3f6-e782-417f-ad89-c54e603a6a04;
+    form:scope ext:incomeS;
+    sh:maxCount 10;
+    sh:order 2 .
+
+nodes:9be008e5-4326-4c50-b1d7-93d28e66396b
+    a form:Field;
+    form:displayType display:textArea;
+    form:partOf nodes:a4503b20-7c8f-497c-abac-9650691cec75;
+    sh:name "Verantwoording";
+    sh:order 3;
+    sh:path nodes:b9ca9f1d-2654-4bce-9240-7b12cfc0424a.
+
+nodes:a4503b20-7c8f-497c-abac-9650691cec75
+a form:Section; sh:name "Uitgaven"; sh:order 1 .
+
+nodes:b90556fb-1d38-403e-a61d-2938846bce95
+    a form:Field;
+    form:displayType display:textArea;
+    form:partOf nodes:f9dee3f6-e782-417f-ad89-c54e603a6a04;
+    sh:name "Verantwoording";
+    sh:order 3;
+    sh:path nodes:d48b66f5-908e-4118-9009-82aacf54814c.
+
+nodes:c03fd570-9d16-4cf7-8ace-66ff60254dbc
+    a form:Field;
+    form:displayType display:defaultInput;
+    form:partOf nodes:f9dee3f6-e782-417f-ad89-c54e603a6a04;
+    sh:name "Soorten inkomsten";
+    sh:order 1.
+
+nodes:f0d14635-879d-44ff-ae9b-2c34ed278f8a
+    a form:Field;
+    form:displayType display:begrotingstabelTotal;
+    form:partOf nodes:4ce76f84-e71d-4d2b-8733-7fb02cbb12f7;
+    xsd:target ( ext:Expense ext:amount ), ( ext:Income ext:amount );
+    sh:name "Totaal";
+    sh:order 2;
+    sh:path nodes:bb4c2c15-efad-4f87-9504-76960bb63978 .
+
+nodes:f9dee3f6-e782-417f-ad89-c54e603a6a04
+a form:Section; sh:name "Inkomsten"; sh:order 2 .
+
+emb:source-node
+    a form:Form, form:TopLevelForm;
+    form:includes
+        nodes:3d561f39-85dd-441d-a2a6-98826e6e1dc8,
+        nodes:7e1ac203-5486-4a7f-bc37-9370e7c5bbc2,
+        nodes:f0d14635-879d-44ff-ae9b-2c34ed278f8a;
+    form:partOf
+        nodes:4ce76f84-e71d-4d2b-8733-7fb02cbb12f7,
+        nodes:a4503b20-7c8f-497c-abac-9650691cec75,
+        nodes:f9dee3f6-e782-417f-ad89-c54e603a6a04 .
+
+ext:expenseGenerator
+    a form:Generator;
+    form:dataGenerator form:addMuUuid;
+    form:prototype [ form:shape [ a ext:Expense; ext:amount 0.0 ] ].
+ext:expenseS a form:Scope; sh:path ext:Expense.
+
+ext:incomeGenerator
+    a form:Generator;
+    form:dataGenerator form:addMuUuid;
+    form:prototype [ form:shape [ a ext:Income; ext:amount 0.0 ] ].
+ext:incomeS a form:Scope; sh:path ext:Income.
+

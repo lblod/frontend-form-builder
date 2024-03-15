@@ -23,6 +23,10 @@ export default class FormbuilderNewRoute extends Route {
           label: 'Simpele tabel',
           path: '/forms/templates/basic-table.ttl',
         },
+        {
+          label: 'Begrotingstabel',
+          path: '/forms/templates/begrotingstabel.ttl',
+        },
       ],
     };
   }

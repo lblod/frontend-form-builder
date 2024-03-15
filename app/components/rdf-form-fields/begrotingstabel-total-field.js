@@ -1,13 +1,18 @@
 import Component from '@glimmer/component';
 
+import { A } from '@ember/array';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { guidFor } from '@ember/object/internals';
 import { XSD, triplesForPath } from '@lblod/submission-form-helpers';
 import { restartableTask } from 'ember-concurrency';
 
 export default class BegrotingstabelTotalFieldComponent extends Component {
-  @tracked totals;
   id = guidFor(this);
+
+  @tracked totals = A([]);
+  @tracked comparisonWarningMessage;
+  @tracked collectionErrorMessage;
 
   constructor() {
     super(...arguments);
@@ -19,14 +24,10 @@ export default class BegrotingstabelTotalFieldComponent extends Component {
     }, this.id);
   }
 
-  get fieldName() {
-    return this.field.label;
-  }
-
-  get formattedTotal() {
-    let amount = this.totals;
-    if (!this.totals) {
-      amount = 0.0;
+  @action
+  formatAmount(amount) {
+    if (!amount) {
+      amount = 0;
     }
 
     return new Intl.NumberFormat('nl-BE', {
@@ -36,32 +37,89 @@ export default class BegrotingstabelTotalFieldComponent extends Component {
   }
 
   calculateTotals = restartableTask(async () => {
-    const target = this.store.any(
-      this.field.uri,
-      XSD('target'),
-      undefined,
-      this.graphs.formGraph
-    );
+    const collections = this.store
+      .match(this.field.uri, XSD('target'), undefined, this.graphs.formGraph)
+      .map((st) => st.object);
 
-    const options = {
-      path: target,
-      store: this.store,
-      formGraph: this.graphs.formGraph,
-      sourceGraph: this.graphs.sourceGraph,
-      sourceNode: this.sourceNode,
-    };
-
-    const { values } = triplesForPath(options);
-
-    this.totals = 0;
-    for (const literal of values) {
-      this.totals += Number(literal.value) ?? 0;
+    if (collections.length !== 2) {
+      this.collectionErrorMessage = `Tabel heeft te weing informatie. Voeg twee xsd:targets toe. bv. xsd:target ( ext:Expense ext:amount ), ( ext:Income ext:amount );`;
+      return;
     }
+    this.collectionErrorMessage = null;
+
+    for (const collection of collections) {
+      const options = {
+        path: collection,
+        store: this.store,
+        formGraph: this.graphs.formGraph,
+        sourceGraph: this.graphs.sourceGraph,
+        sourceNode: this.sourceNode,
+      };
+
+      const possibleIndexOfCollection = this.getIndexOfTotal(collection.id);
+
+      if (this.isValidIndex(possibleIndexOfCollection)) {
+        this.totals.removeObject(this.totals[possibleIndexOfCollection]);
+      }
+
+      this.totals.pushObject({
+        id: collection.id,
+        collection: collection,
+        values: A([]),
+        calculationResult: undefined,
+      });
+
+      const { values } = triplesForPath(options);
+
+      const indexOfCollection = this.getIndexOfTotal(collection.id);
+
+      for (const literal of values) {
+        this.totals[indexOfCollection].values.pushObject(
+          Number(literal.value) ?? 0
+        );
+      }
+      this.totals[indexOfCollection].calculationResult = this.totals[
+        indexOfCollection
+      ].values.reduce((a, b) => a + b, 0);
+    }
+    this.setWarningMessage();
   });
+
+  getIndexOfTotal(collectionId) {
+    return this.totals.findIndex((item) => item.id == collectionId);
+  }
+
+  isValidIndex(index) {
+    return index == 0 || index !== -1;
+  }
 
   willDestroy() {
     super.willDestroy(...arguments);
     this.store.deregisterObserver(this.id);
+  }
+
+  setWarningMessage() {
+    if (this.totals.length <= 1) {
+      this.comparisonWarningMessage = null;
+
+      return;
+    }
+
+    if (
+      !this.totals.every(
+        (item) => item.calculationResult == this.totals[0].calculationResult
+      )
+    ) {
+      this.comparisonWarningMessage = `De resultaten zijn niet gelijk`;
+
+      return;
+    }
+
+    this.comparisonWarningMessage = null;
+  }
+
+  get fieldName() {
+    return this.field.label;
   }
 
   get field() {
@@ -78,5 +136,33 @@ export default class BegrotingstabelTotalFieldComponent extends Component {
 
   get sourceNode() {
     return this.args.sourceNode;
+  }
+
+  get expenseResultColumn() {
+    const indexOfExpenseValues = 0;
+    const value = {
+      name: 'Uitgaven',
+      outcome: 0,
+    };
+
+    if (this.totals[indexOfExpenseValues]) {
+      value.outcome = this.totals[indexOfExpenseValues].calculationResult;
+    }
+
+    return value;
+  }
+
+  get incomeResultColumn() {
+    const indexOfIncomeValues = 1;
+    const value = {
+      name: 'Inkomsten',
+      outcome: 0,
+    };
+
+    if (this.totals[indexOfIncomeValues]) {
+      value.outcome = this.totals[indexOfIncomeValues].calculationResult;
+    }
+
+    return value;
   }
 }
