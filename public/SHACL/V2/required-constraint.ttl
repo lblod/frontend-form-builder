@@ -22,7 +22,16 @@ form:RequiredConstraint
     [
       sh:path sh:resultMessage ;
       sh:maxCount 1 ;
-      sh:datatype xsd:string ;
       sh:message "Er mag maar 1 error bericht op form:Requiredconstraint validatie staan."@nl ;
       sh:severity sh:Warning;
-    ].
+    ],
+    [
+      sh:path sh:resultMessage ;
+      sh:nodeKind sh:Literal ;
+      sh:or (
+        [ sh:datatype xsd:string ]
+        [ sh:datatype rdf:langString ]
+      ) ;
+      sh:message "sh:resultMessage moet een string of taal-getagde string zijn."@nl ;
+      sh:severity sh:Warning ;
+  ] .
