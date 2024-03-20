@@ -76,6 +76,13 @@ function formatTextLeaf(textLeaf) {
 function addIndentationToLines(doc) {
   for (let lineIndex = 0; lineIndex < doc.length; lineIndex++) {
     if (
+      prefixRegex.test(doc[lineIndex]) &&
+      !prefixRegex.test(doc[lineIndex + 1])
+    ) {
+      doc[lineIndex] = doc[lineIndex] + '\n';
+    }
+
+    if (
       predicateWithNodeValueRegex.test(doc[lineIndex]) ||
       predicateWithStringOrNumberValueRegex.test(doc[lineIndex])
     ) {
