@@ -155,7 +155,7 @@ const subjectWithTypeRegex = new RegExp(
   /(\w+):([\w-]+)\s+a\s+(\w+):(\w+)[;,]?/
 );
 const predicateWithNodeValueRegex = new RegExp(
-  /(\w+):(\w+)\s+(\w+):\s*([^;\n\s]+)\s*[;\.]/
+  /(\w+):(\w+)\s+(\w+):\s*([^;\n\s]+)\s*[,;\.]/
 );
 const predicateWithStringOrNumberValueRegex = new RegExp(
   /(\w+):(\w+)\s+("([^"]+)"|(\d+)|(true|false)|"""([^"]+)""")\s*[;,\.]/
@@ -216,6 +216,9 @@ function cleanupDocWhitespaces(doc) {
         const nextLine = doc[lineIndex + 1];
         if (nextLine == '') {
           doc.splice(lineIndex + 1, 1);
+          doc.splice(lineIndex, 1);
+        }
+        if (nextLine.endsWith(';')) {
           doc.splice(lineIndex, 1);
         }
       }
