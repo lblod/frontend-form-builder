@@ -44,9 +44,18 @@ function formatTextLeaf(textLeaf) {
         const value = getFirstMatchWithFormat(text, regex);
         const matchedValue = value[0];
 
-        if (value.index == 0) {
+        if (value.index == 0 && regex !== subjectWithTypeRegex) {
           doc.push(matchedValue);
           text = text.slice(matchedValue.length).trim();
+        }
+
+        if (value.index == 0 && regex == subjectWithTypeRegex) {
+          const type = getFirstMatchWithFormat(matchedValue, aSubbjectRegex);
+          const subject = matchedValue.slice(0, type.index).trim();
+
+          text = text.slice(matchedValue.length).trim();
+          doc.push(subject);
+          doc.push(type[0]);
         }
       }
     }
@@ -90,7 +99,8 @@ function addIndentationToLines(doc) {
 
     if (
       predicateWithNodeValueRegex.test(doc[lineIndex]) ||
-      predicateWithStringOrNumberValueRegex.test(doc[lineIndex])
+      predicateWithStringOrNumberValueRegex.test(doc[lineIndex]) ||
+      aSubbjectRegex.test(doc[lineIndex])
     ) {
       doc[lineIndex] = '\t' + doc[lineIndex];
 
@@ -105,11 +115,16 @@ function addIndentationToLines(doc) {
       inValidationBlankNodes = true;
       continue;
     }
+
+    if (lineIndex !== 0 && doc[lineIndex - 1].endsWith(',')) {
+      doc[lineIndex] = '\t' + doc[lineIndex];
+    }
   }
 }
 
 const prefixRegex = new RegExp(/@prefix\s+([^:]+):\s+<([^>]+)>\s*\.*/);
 const unknownPrefixRegexPattern = new RegExp(/@prefix\s+:\s+<#>\./);
+const aSubbjectRegex = new RegExp(/a\s+(\w+):(\w+)[;,]?/);
 const subjectWithTypeRegex = new RegExp(
   /(\w+):([\w-]+)\s+a\s+(\w+):(\w+)[;,]?/
 );
