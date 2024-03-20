@@ -11,11 +11,11 @@ export default class ConceptSchemeModel extends Model {
   @hasMany('concept', { inverse: null, async: true }) concepts;
 
   get label() {
-    return this.preflabel;
+    return this.preflabel ?? '';
   }
 
   get isPublic() {
-    return this.ispublic;
+    return this.ispublic ?? false;
   }
 
   get isArchived() {
