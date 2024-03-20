@@ -74,12 +74,18 @@ function formatTextLeaf(textLeaf) {
 }
 
 function addIndentationToLines(doc) {
+  let inValidationBlankNodes = false;
   for (let lineIndex = 0; lineIndex < doc.length; lineIndex++) {
+    if (inValidationBlankNodes) {
+      doc[lineIndex] = '\t' + doc[lineIndex];
+    }
+
     if (
       prefixRegex.test(doc[lineIndex]) &&
       !prefixRegex.test(doc[lineIndex + 1])
     ) {
       doc[lineIndex] = doc[lineIndex] + '\n';
+      continue;
     }
 
     if (
@@ -91,6 +97,13 @@ function addIndentationToLines(doc) {
       if (doc[lineIndex].endsWith('.')) {
         doc[lineIndex] = doc[lineIndex] + '\n';
       }
+      continue;
+    }
+
+    if (startOfValidationsRegex.test(doc[lineIndex])) {
+      doc[lineIndex] = '\t' + doc[lineIndex];
+      inValidationBlankNodes = true;
+      continue;
     }
   }
 }
@@ -106,12 +119,14 @@ const predicateWithNodeValueRegex = new RegExp(
 const predicateWithStringOrNumberValueRegex = new RegExp(
   /(\w+):(\w+)\s+("([^"]+)"|(\d+))\s*[;\.]/
 );
+const startOfValidationsRegex = new RegExp(/(\w+):([\w-]+)\s[\[]/);
 const regexFormats = [
   prefixRegex,
   unknownPrefixRegexPattern,
   subjectWithTypeRegex,
   predicateWithNodeValueRegex,
   predicateWithStringOrNumberValueRegex,
+  startOfValidationsRegex,
 ];
 
 function getFirstMatchWithFormat(line, regex) {
