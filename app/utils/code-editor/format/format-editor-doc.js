@@ -68,12 +68,28 @@ function formatTextLeaf(textLeaf) {
     }
   }
 
+  addIndentationToLines(doc);
+
   return doc;
+}
+
+function addIndentationToLines(doc) {
+  for (let lineIndex = 0; lineIndex < doc.length; lineIndex++) {
+    const line = doc[lineIndex];
+    if (
+      predicateWithNodeValueRegex.test(line) ||
+      predicateWithStringOrNumberValueRegex.test(line)
+    ) {
+      doc[lineIndex] = '\t' + line;
+    }
+  }
 }
 
 const prefixRegex = new RegExp(/@prefix\s+([^:]+):\s+<([^>]+)>\s*\.*/);
 const unknownPrefixRegexPattern = new RegExp(/@prefix\s+:\s+<#>\./);
-const subjectWithTypeRegex = new RegExp(/(\w+):([\w-]+)\s+a\s+(\w+):(\w+);/);
+const subjectWithTypeRegex = new RegExp(
+  /(\w+):([\w-]+)\s+a\s+(\w+):(\w+)[;,]?/
+);
 const predicateWithNodeValueRegex = new RegExp(
   /(\w+):(\w+)\s+(\w+):\s*([^;\n\s]+)\s*[;\.]/
 );
