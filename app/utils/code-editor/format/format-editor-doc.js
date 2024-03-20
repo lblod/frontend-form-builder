@@ -72,8 +72,22 @@ function formatTextLeaf(textLeaf) {
       }
 
       const textBeforeMatch = text.slice(0, indexOfClosesMatch).trim();
-      doc.push(textBeforeMatch);
-      text = text.slice(indexOfClosesMatch, undefined).trim();
+      if (lineBeforeValidationSummation.test(textBeforeMatch)) {
+        const endOfBlankNode = getFirstMatchWithFormat(
+          textBeforeMatch,
+          lineBeforeValidationSummation
+        );
+        const restValue = textBeforeMatch.slice(
+          endOfBlankNode.index + endOfBlankNode[0].length,
+          undefined
+        );
+        doc.push('\t' + endOfBlankNode[0]);
+        doc.push(restValue.trim());
+        text = text.replace(textBeforeMatch, '').trim();
+      } else {
+        doc.push(textBeforeMatch);
+        text = text.slice(indexOfClosesMatch, undefined).trim();
+      }
     }
   }
 
@@ -110,10 +124,18 @@ function addIndentationToLines(doc) {
       continue;
     }
 
-    if (startOfValidationsRegex.test(doc[lineIndex])) {
+    if (
+      startOfValidationsRegex.test(doc[lineIndex]) ||
+      (lineIndex !== 0 && doc[lineIndex].endsWith('['))
+    ) {
       doc[lineIndex] = '\t' + doc[lineIndex];
       inValidationBlankNodes = true;
       continue;
+    }
+
+    if (endBlankNodeRegex.test(doc[lineIndex])) {
+      inValidationBlankNodes = false;
+      doc[lineIndex] = '\t' + doc[lineIndex];
     }
 
     if (lineIndex !== 0 && doc[lineIndex - 1].endsWith(',')) {
@@ -135,10 +157,13 @@ const predicateWithStringOrNumberValueRegex = new RegExp(
   /(\w+):(\w+)\s+("([^"]+)"|(\d+))\s*[;\.]/
 );
 const startOfValidationsRegex = new RegExp(/(\w+):([\w-]+)\s[\[]/);
+const lineBeforeValidationSummation = new RegExp(/.*],/);
+const endBlankNodeRegex = new RegExp(/[\]]\s*;/);
 const regexFormats = [
   prefixRegex,
   unknownPrefixRegexPattern,
   subjectWithTypeRegex,
+  aSubbjectRegex,
   predicateWithNodeValueRegex,
   predicateWithStringOrNumberValueRegex,
   startOfValidationsRegex,
