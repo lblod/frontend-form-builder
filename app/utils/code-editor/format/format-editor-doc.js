@@ -52,9 +52,19 @@ function formatTextLeaf(textLeaf) {
     }
 
     if (text == startText) {
-      formatting = false;
-      console.log('Stopped formatting. Ran into an unknown format', text);
-      doc.push(text);
+      const indexOfClosesMatch = findIndexOfNextClosesMatch(text);
+
+      if (!indexOfClosesMatch) {
+        // The loop will stop here
+        // because im setting the formatting boolean to FALSE
+        formatting = false;
+        console.log('Stopped formatting. Ran into an unknown format', text);
+        doc.push(text);
+      }
+
+      const textBeforeMatch = text.slice(0, indexOfClosesMatch).trim();
+      doc.push(textBeforeMatch);
+      text = text.slice(indexOfClosesMatch, undefined).trim();
     }
   }
 
@@ -90,4 +100,26 @@ function textHasAFormatMatch(text) {
     predicateWithNodeValueRegex.test(text) ||
     predicateWithStringOrNumberValueRegex.test(text)
   );
+}
+
+function findIndexOfNextClosesMatch(text) {
+  if (!textHasAFormatMatch(text)) {
+    return null;
+  }
+
+  let index = null;
+  for (const regex of regexFormats) {
+    if (regex.test(text)) {
+      const value = getFirstMatchWithFormat(text, regex);
+      if (!index) {
+        index = value.index;
+      }
+
+      if (value.index < index) {
+        index = value.index;
+      }
+    }
+  }
+
+  return index;
 }
