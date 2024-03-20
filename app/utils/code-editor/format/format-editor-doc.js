@@ -36,6 +36,7 @@ function formatTextLeaf(textLeaf) {
 
     if (!textHasAFormatMatch(text)) {
       formatting = false;
+      doc.push(text);
       continue;
     }
 
