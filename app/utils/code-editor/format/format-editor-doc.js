@@ -8,6 +8,9 @@ export async function getFormattedEditorCode(doc) {
       const formattedLeaf = formatTextLeaf(textLeaf);
       newDocument.push(...formattedLeaf);
     }
+
+    cleanupDocWhitespaces(newDocument);
+
     return newDocument;
   }
 }
@@ -204,4 +207,18 @@ function findIndexOfNextClosesMatch(text) {
   }
 
   return index;
+}
+
+function cleanupDocWhitespaces(doc) {
+  for (let lineIndex = 0; lineIndex < doc.length; lineIndex++) {
+    if (doc[lineIndex] == '' || doc[lineIndex] == undefined) {
+      if (typeof doc[lineIndex + 1] !== 'undefined') {
+        const nextLine = doc[lineIndex + 1];
+        if (nextLine == '') {
+          doc.splice(lineIndex + 1, 1);
+          doc.splice(lineIndex, 1);
+        }
+      }
+    }
+  }
 }
