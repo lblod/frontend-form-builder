@@ -75,12 +75,15 @@ function formatTextLeaf(textLeaf) {
 
 function addIndentationToLines(doc) {
   for (let lineIndex = 0; lineIndex < doc.length; lineIndex++) {
-    const line = doc[lineIndex];
     if (
-      predicateWithNodeValueRegex.test(line) ||
-      predicateWithStringOrNumberValueRegex.test(line)
+      predicateWithNodeValueRegex.test(doc[lineIndex]) ||
+      predicateWithStringOrNumberValueRegex.test(doc[lineIndex])
     ) {
-      doc[lineIndex] = '\t' + line;
+      doc[lineIndex] = '\t' + doc[lineIndex];
+
+      if (doc[lineIndex].endsWith('.')) {
+        doc[lineIndex] = doc[lineIndex] + '\n';
+      }
     }
   }
 }
