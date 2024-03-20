@@ -158,7 +158,7 @@ const predicateWithNodeValueRegex = new RegExp(
   /(\w+):(\w+)\s+(\w+):\s*([^;\n\s]+)\s*[;\.]/
 );
 const predicateWithStringOrNumberValueRegex = new RegExp(
-  /(\w+):(\w+)\s+("([^"]+)"|(\d+)|(true|false))\s*[;,\.]/
+  /(\w+):(\w+)\s+("([^"]+)"|(\d+)|(true|false)|"""([^"]+)""")\s*[;,\.]/
 );
 const startOfValidationsRegex = new RegExp(/(\w+):([\w-]+)\s[\[]/);
 const lineBeforeValidationSummation = new RegExp(/.*],/);
