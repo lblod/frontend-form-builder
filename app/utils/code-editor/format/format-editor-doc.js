@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 export async function getFormattedEditorCode(doc) {
   if (isTextLeaf(doc)) {
     return formatTextLeaf(doc);
