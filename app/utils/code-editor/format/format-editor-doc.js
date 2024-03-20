@@ -151,7 +151,7 @@ function addIndentationToLines(doc) {
 
 const prefixRegex = new RegExp(/@prefix\s+([^:]+):\s+<([^>]+)>\s*\.*/);
 const unknownPrefixRegexPattern = new RegExp(/@prefix\s+:\s+<#>\./);
-const aSubbjectRegex = new RegExp(/a\s+(\w+):(\w+)[;,]?/);
+const aSubbjectRegex = new RegExp(/\sa\s+(\w+):(\w+)[;,]?/);
 const subjectWithTypeRegex = new RegExp(
   /(\w+):([\w-]+)\s+a\s+(\w+):(\w+)[;,]?/
 );
