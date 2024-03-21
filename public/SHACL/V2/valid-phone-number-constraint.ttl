@@ -33,7 +33,7 @@ form:ValidPhoneNumber
         "BE"
         "NL"
       ) ;
-      sh:message "Mogelijke opties voor form:defaultCountry zijn BE of Nl"@nl ;
+      sh:message "Mogelijke opties voor form:defaultCountry zijn BE of Nl."@nl ;
       sh:severity sh:Violation;
     ],
     [
