@@ -12,18 +12,19 @@ form:PositiveNumber
       sh:minCount 1 ;
       sh:maxCount 1 ;
       sh:message "form:Grouping moet de waarde form:MatchEvery zijn."@nl ;
+      sh:severity sh:Warning ;
     ],
     [
       sh:path sh:path ;
       sh:minCount 1 ;
       sh:message "sh:path moet verwijzen naar het subject waar het op toegepast wordt."@nl ;
-      sh:severity sh:Warning;
+      sh:severity sh:Warning ;
     ],
     [
       sh:path sh:resultMessage ;
       sh:maxCount 1 ;
       sh:message "Er mag maar 1 error bericht op form:PositiveNumber validatie staan."@nl ;
-      sh:severity sh:Warning;
+      sh:severity sh:Warning ;
     ],
     [
       sh:path sh:resultMessage ;
