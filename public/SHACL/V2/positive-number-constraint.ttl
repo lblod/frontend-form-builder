@@ -1,0 +1,37 @@
+##################################################
+# Positive number constraint shape for V2 forms ##
+##################################################
+
+form:PositiveNumber
+  a sh:NodeShape ;
+  sh:targetClass form:PositiveNumber ;
+  sh:property
+    [
+      sh:path form:grouping ;
+      sh:hasValue form:MatchEvery ;
+      sh:minCount 1 ;
+      sh:maxCount 1 ;
+      sh:message "form:Grouping moet de waarde form:MatchEvery zijn."@nl ;
+    ],
+    [
+      sh:path sh:path ;
+      sh:minCount 1 ;
+      sh:message "sh:path moet verwijzen naar het subject waar het op toegepast wordt."@nl ;
+      sh:severity sh:Warning;
+    ],
+    [
+      sh:path sh:resultMessage ;
+      sh:maxCount 1 ;
+      sh:message "Er mag maar 1 error bericht op form:PositiveNumber validatie staan."@nl ;
+      sh:severity sh:Warning;
+    ],
+    [
+      sh:path sh:resultMessage ;
+      sh:nodeKind sh:Literal ;
+      sh:or (
+        [ sh:datatype xsd:string ]
+        [ sh:datatype rdf:langString ]
+      ) ;
+      sh:message "sh:resultMessage moet een string of taal-getagde string zijn."@nl ;
+      sh:severity sh:Warning ;
+    ] .
