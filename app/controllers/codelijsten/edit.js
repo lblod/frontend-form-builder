@@ -38,6 +38,8 @@ export default class CodelijstenEditController extends Controller {
   @tracked isArchiveModalOpen;
   @tracked isDuplicateName;
   @tracked isSaveDisabled;
+  @tracked isSaveModalOpen;
+  @tracked nextRoute;
 
   conceptsInDatabase;
 
@@ -96,6 +98,10 @@ export default class CodelijstenEditController extends Controller {
     this.setIsSaveButtonDisabled();
     // Prevent flickering between loading and showing content if small lists are shown
     await timeout(100);
+  });
+
+  saveUnsavedChanges = restartableTask(async () => {
+    console.log('save unsaved changes');
   });
 
   setValuesFromConceptscheme() {
@@ -453,5 +459,30 @@ export default class CodelijstenEditController extends Controller {
     }
 
     return !boolean;
+  }
+
+  @action
+  async discardSave() {
+    this.codelistName = this.conceptScheme.label;
+    this.codelistDescription = this.conceptScheme.description;
+    this.concepts = await this.conceptScheme.getConceptModels();
+    this.conceptsToDelete = [];
+    this.nameErrorMessage = null;
+    this.descriptionErrorMessage = null;
+
+    this.isSaveModalOpen = false;
+    this.setIsSaveButtonDisabled();
+
+    this.goToNextRoute();
+  }
+
+  @action
+  goToNextRoute() {
+    this.router.transitionTo(this.nextRoute);
+  }
+
+  showSaveModal(nextRoute) {
+    this.isSaveModalOpen = true;
+    this.nextRoute = nextRoute;
   }
 }
