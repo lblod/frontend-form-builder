@@ -33,6 +33,7 @@ async function getAllShapesTtl() {
     getLocalFileContentAsText('/SHACL/V2/required-constraint.ttl'),
     getLocalFileContentAsText('/SHACL/V2/max-characters-constraint.ttl'),
     getLocalFileContentAsText('/SHACL/V2/positive-number-constraint.ttl'),
+    getLocalFileContentAsText('/SHACL/V2/exact-value-constraint.ttl'),
   ]);
 
   return allShapes.join('\n');
