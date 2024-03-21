@@ -101,7 +101,9 @@ export default class CodelijstenEditController extends Controller {
   });
 
   saveUnsavedChanges = restartableTask(async () => {
-    console.log('save unsaved changes');
+    await this.save();
+    this.isSaveModalOpen = false;
+    this.goToNextRoute();
   });
 
   setValuesFromConceptscheme() {
@@ -328,33 +330,39 @@ export default class CodelijstenEditController extends Controller {
   });
 
   setIsSaveButtonDisabled() {
-    if (this.conceptScheme.isPublic) {
-      if (this.isBackTheSavedVersion()) {
-        this.isSaveDisabled = true;
-
-        return;
-      }
-      if (
-        this.isValidConceptSchemeName() &&
-        this.isValidConceptSchemeDescription() &&
-        this.isConceptListIncludingEmptyValues()
-      ) {
-        if (
-          this.isCodelistDescriptionDeviating() ||
-          this.isCodelistNameDeviating() ||
-          this.isConceptListChanged() ||
-          this.conceptsToDelete.length >= 1
-        ) {
-          this.isSaveDisabled = false;
-        } else {
-          this.isSaveDisabled = true;
-        }
-      } else {
-        this.isSaveDisabled = true;
-      }
-    } else {
+    if (this.isReadOnly || this.isBackTheSavedVersion()) {
       this.isSaveDisabled = true;
+      return;
     }
+
+    if (this.isCodelistNameDeviating() && this.isValidConceptSchemeName()) {
+      this.isSaveDisabled = false;
+
+      return;
+    }
+
+    if (
+      this.isCodelistDescriptionDeviating() &&
+      this.isValidConceptSchemeDescription()
+    ) {
+      this.isSaveDisabled = false;
+
+      return;
+    }
+
+    if (this.isConceptListChanged()) {
+      this.isSaveDisabled = false;
+
+      return;
+    }
+
+    if (this.conceptsToDelete.length >= 1) {
+      this.isSaveDisabled = false;
+
+      return;
+    }
+
+    this.isSaveDisabled = true;
   }
 
   @action
