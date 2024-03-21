@@ -22,11 +22,17 @@ form:ExactValueConstraint
     ],
     [
       sh:path form:customValue ;
-      sh:datatype xsd:string ;
       sh:minCount 1 ;
       sh:maxCount 1 ;
       sh:message "form:customValue is verplicht voor dit validatie type."@nl ;
       sh:severity sh:Violation;
+    ],
+    [
+      sh:path form:customValue ;
+      sh:datatype xsd:string ;
+      sh:nodeKind sh:Literal ;
+      sh:message "form:customValue moet een string zijn."@nl ;
+      sh:severity sh:Warning;
     ],
     [
       sh:path sh:resultMessage ;
