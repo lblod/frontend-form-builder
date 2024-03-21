@@ -89,10 +89,11 @@ export default class CodelijstenEditController extends Controller {
   }
 
   setup = restartableTask(async (conceptSchemeId) => {
+    this.resetErrors();
     this.conceptScheme = await this.getConceptSchemeById(conceptSchemeId);
     this.setValuesFromConceptscheme();
 
-    const conceptArray = new Array(...(await this.conceptScheme.concepts));
+    const conceptArray = await this.conceptScheme.getConceptModels();
     this.setValuesFromConcepts(conceptArray);
 
     this.setIsSaveButtonDisabled();
@@ -492,5 +493,11 @@ export default class CodelijstenEditController extends Controller {
   showSaveModal(nextRoute) {
     this.isSaveModalOpen = true;
     this.nextRoute = nextRoute;
+  }
+
+  resetErrors() {
+    this.nameErrorMessage = null;
+    this.descriptionErrorMessage = null;
+    this.isDuplicateName = false;
   }
 }
