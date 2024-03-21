@@ -22,15 +22,25 @@ form:ValidPhoneNumber
     ],
     [
       sh:path form:defaultCountry ;
-      sh:datatype xsd:string ;
       sh:minCount 1 ;
-      sh:maxCount 1 ;
+      sh:message "form:defaultCountry is verplicht voor dit validatie type."@nl ;
+      sh:severity sh:Violation;
+    ],
+    [
+      sh:path form:defaultCountry ;
+      sh:datatype xsd:string ;
       sh:in (
         "BE"
         "NL"
       ) ;
-      sh:message "form:defaultCountry is verplicht voor dit validatie type. Opties zijn BE of NL"@nl ;
-      sh:severity sh:Warning;
+      sh:message "Mogelijke opties voor form:defaultCountry zijn BE of Nl"@nl ;
+      sh:severity sh:Violation;
+    ],
+    [
+      sh:path form:defaultCountry ;
+      sh:maxCount 1 ;
+      sh:message "form:defaultCountry kan maar 1 waarde hebben"@nl ;
+      sh:severity sh:Violation;
     ],
     [
       sh:path sh:resultMessage ;
