@@ -26,8 +26,6 @@ export default class CodelijstenEditController extends Controller {
   @service router;
   @service intl;
 
-  @tracked codelistName;
-  @tracked codelistDescription;
   @tracked conceptsToDelete;
 
   @tracked isArchiveModalOpen;
@@ -244,8 +242,8 @@ export default class CodelijstenEditController extends Controller {
       this.isCodelistNameDeviating() ||
       this.isCodelistDescriptionDeviating()
     ) {
-      this.conceptScheme.preflabel = this.codelistName;
-      this.conceptScheme.description = this.codelistDescription;
+      this.conceptScheme.preflabel = this.schemeName;
+      this.conceptScheme.description = this.schemeDescription;
 
       try {
         await this.conceptScheme.save();
@@ -349,7 +347,7 @@ export default class CodelijstenEditController extends Controller {
       this.conceptScheme.reload();
       showSuccessToasterMessage(
         this.toaster,
-        this.codelistName,
+        this.schemeName,
         this.intl.t('messages.subjects.archived')
       );
     } catch (error) {
@@ -426,25 +424,25 @@ export default class CodelijstenEditController extends Controller {
   }
 
   isValidConceptSchemeName() {
-    return this.codelistName.trim() !== '' && !this.isDuplicateName;
+    return this.schemeName.trim() !== '' && !this.isDuplicateName;
   }
 
   isValidConceptSchemeDescription() {
-    return this.codelistDescription.trim() !== '';
+    return this.schemeDescription.trim() !== '';
   }
 
   isCodelistNameDeviating() {
-    return this.conceptScheme.label.trim() !== this.codelistName;
+    return this.conceptScheme.label.trim() !== this.schemeName;
   }
 
   isCodelistDescriptionDeviating() {
-    return this.conceptScheme.description.trim() !== this.codelistDescription;
+    return this.conceptScheme.description.trim() !== this.schemeDescription;
   }
 
   isBackTheSavedVersion() {
     return (
-      this.conceptScheme.description == this.codelistDescription &&
-      this.conceptScheme.label == this.codelistName &&
+      this.conceptScheme.description == this.schemeDescription &&
+      this.conceptScheme.label == this.schemeName &&
       !this.isConceptListChanged() &&
       this.conceptsToDelete.length == 0
     );
@@ -497,8 +495,8 @@ export default class CodelijstenEditController extends Controller {
 
   @action
   async discardSave() {
-    this.codelistName = this.conceptScheme.label;
-    this.codelistDescription = this.conceptScheme.description;
+    this.schemeName = this.conceptScheme.label;
+    this.schemeDescription = this.conceptScheme.description;
     this.concepts = await this.conceptScheme.getConceptModels();
     this.conceptsToDelete = [];
     this.schemeNameErrorMessage = null;
