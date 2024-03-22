@@ -30,8 +30,6 @@ export default class CodelijstenEditController extends Controller {
   @tracked codelistDescription;
   @tracked conceptsToDelete;
 
-  @tracked descriptionErrorMessage;
-
   @tracked isArchiveModalOpen;
   @tracked isDuplicateName;
   @tracked isSaveDisabled;
@@ -44,6 +42,7 @@ export default class CodelijstenEditController extends Controller {
   @tracked schemeNameErrorMessage;
 
   @tracked schemeDescription;
+  @tracked schemeDescriptionErrorMessage;
 
   dbConcepts;
   @tracked conceptList = A([]);
@@ -167,35 +166,45 @@ export default class CodelijstenEditController extends Controller {
     return duplicates.length !== 0;
   }
 
+  @action
+  updateSchemeDescription(event) {
+    this.schemeDescription = event.target.value.trim() ?? '';
+    this.schemeDescriptionErrorMessage = null;
+    this.validateSchemeDescription.perform();
+    console.log(`scheme description validation: `);
+    console.log(
+      `    schemeDescriptionErrorMessage: `,
+      this.schemeDescriptionErrorMessage
+    );
+  }
+
+  validateSchemeDescription = restartableTask(async () => {
+    if (!this.schemeDescription || this.schemeDescription.trim() == '') {
+      this.schemeDescriptionErrorMessage = this.intl.t(
+        'constraints.mandatoryField'
+      );
+      return;
+    }
+
+    if (this.schemeDescription.length > DESCRIPTION_INPUT_CHAR_LIMIT) {
+      this.schemeDescriptionErrorMessage = this.intl.t(
+        'constraints.maxCharactersReachedWithCount',
+        {
+          count: this.schemeDescription.length,
+          maxCount: DESCRIPTION_INPUT_CHAR_LIMIT,
+        }
+      );
+      return;
+    }
+
+    this.schemeDescriptionErrorMessage = null;
+  });
+
   saveUnsavedChanges = restartableTask(async () => {
     await this.save();
     this.isSaveModalOpen = false;
     this.goToNextRoute();
   });
-
-  @action
-  handleDescriptionChange(event) {
-    const newDescription = event.target.value;
-    this.descriptionErrorMessage = null;
-
-    if (!newDescription || newDescription.trim() == '') {
-      this.descriptionErrorMessage = this.intl.t('constraints.mandatoryField');
-    }
-
-    this.codelistDescription = newDescription.trim();
-
-    if (this.codelistDescription.length > DESCRIPTION_INPUT_CHAR_LIMIT) {
-      this.descriptionErrorMessage = this.intl.t(
-        'constraints.maxCharactersReachedWithCount',
-        {
-          count: this.codelistDescription.length,
-          maxCount: DESCRIPTION_INPUT_CHAR_LIMIT,
-        }
-      );
-    }
-
-    this.setIsSaveButtonDisabled();
-  }
 
   @action
   handleConceptChange(concept, event) {
@@ -493,7 +502,7 @@ export default class CodelijstenEditController extends Controller {
     this.concepts = await this.conceptScheme.getConceptModels();
     this.conceptsToDelete = [];
     this.schemeNameErrorMessage = null;
-    this.descriptionErrorMessage = null;
+    this.schemeDescription = null;
 
     this.isSaveModalOpen = false;
     this.setIsSaveButtonDisabled();
@@ -513,7 +522,7 @@ export default class CodelijstenEditController extends Controller {
 
   resetErrors() {
     this.schemeNameErrorMessage = null;
-    this.descriptionErrorMessage = null;
+    this.schemeDescription = null;
     this.isDuplicateName = false;
   }
 }

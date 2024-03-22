@@ -119,7 +119,7 @@
       </div>
       <div class="au-u-3-5 au-u-margin-bottom-large">
         {{#if this.isReadOnly}}
-          <p>{{this.codelistDescription}}</p>
+          <p>{{this.schemeDescription}}</p>
         {{else}}
           <AuLabel for="input-codelist-description" @required={{true}}>
             {{t "codelists.descriptionOfCodelist"}}
@@ -127,15 +127,15 @@
           <AuTextarea
             id="input-codelist-description"
             @width="block"
-            @error={{this.descriptionErrorMessage}}
+            @error={{this.schemeDescriptionErrorMessage}}
             @disabled={{this.isReadOnly}}
-            value={{this.codelistDescription}}
-            {{on "blur" this.handleDescriptionChange}}
+            value={{this.schemeDescription}}
+            {{on "blur" this.updateSchemeDescription}}
           />
-          {{#if this.descriptionErrorMessage}}
+          {{#if this.schemeDescriptionErrorMessage}}
             <AuHelpText
               @error={{true}}
-            >{{this.descriptionErrorMessage}}</AuHelpText>
+            >{{this.schemeDescriptionErrorMessage}}</AuHelpText>
           {{/if}}
         {{/if}}
       </div>
