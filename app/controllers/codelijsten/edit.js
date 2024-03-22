@@ -338,21 +338,24 @@ export default class CodelijstenEditController extends Controller {
 
     if (
       this.isValidConceptSchemeName() &&
-      this.isValidConceptSchemeDescription() &&
-      this.isConceptListIncludingEmptyValues()
+      this.isValidConceptSchemeDescription()
     ) {
       if (
         this.isCodelistDescriptionDeviating() ||
-        this.isCodelistNameDeviating() ||
-        this.isConceptListChanged() ||
-        this.conceptsToDelete.length >= 1
+        this.isCodelistNameDeviating()
       ) {
         this.isSaveDisabled = false;
       } else {
         this.isSaveDisabled = true;
       }
-    } else {
-      this.isSaveDisabled = true;
+    }
+
+    if (this.isConceptListChanged() || this.conceptsToDelete.length >= 1) {
+      if (this.hasNoEmptyValuesInConceptList()) {
+        this.isSaveDisabled = false;
+      } else {
+        this.isSaveDisabled = true;
+      }
     }
   }
 
@@ -384,7 +387,7 @@ export default class CodelijstenEditController extends Controller {
     return isoDate.slice(0, 10);
   }
 
-  isConceptListIncludingEmptyValues() {
+  hasNoEmptyValuesInConceptList() {
     return this.concepts.every((concept) => concept.label.trim() !== '');
   }
 
