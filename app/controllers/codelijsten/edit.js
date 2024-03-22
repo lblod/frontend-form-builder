@@ -398,13 +398,10 @@ export default class CodelijstenEditController extends Controller {
   }
 
   getExportFileName() {
-    return `codelijst-${this.conceptScheme.id}-${this.getIsoDate()}.ttl`;
-  }
-
-  getIsoDate() {
     const isoDate = new Date().toISOString();
+    const date = isoDate.slice(0, 10);
 
-    return isoDate.slice(0, 10);
+    return `codelijst-${this.conceptScheme.id}-${date}.ttl`;
   }
 
   hasNoEmptyValuesInConceptList() {
