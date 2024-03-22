@@ -18,7 +18,7 @@
         >{{t "navigation.backToCodelists"}}</AuLink>
       </li>
       <li class="au-c-list-horizontal__item au-u-word-break">
-        {{this.codelistName}}
+        {{this.schemeName}}
       </li>
     </ul>
   </Group>
@@ -106,13 +106,15 @@
         <AuInput
           id="input-codelist-name"
           @width="block"
-          @error={{this.nameErrorMessage}}
+          @error={{this.schemeNameErrorMessage}}
           @disabled={{this.isReadOnly}}
-          value={{this.codelistName}}
-          {{on "blur" this.handleNameChange}}
+          value={{this.schemeName}}
+          {{on "blur" this.updateSchemeName}}
         />
-        {{#if this.nameErrorMessage}}
-          <AuHelpText @error={{true}}>{{this.nameErrorMessage}}</AuHelpText>
+        {{#if this.schemeNameErrorMessage}}
+          <AuHelpText
+            @error={{true}}
+          >{{this.schemeNameErrorMessage}}</AuHelpText>
         {{/if}}
       </div>
       <div class="au-u-3-5 au-u-margin-bottom-large">

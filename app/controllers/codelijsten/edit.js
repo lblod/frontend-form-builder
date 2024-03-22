@@ -14,10 +14,9 @@ import {
 } from '../../utils/toaster-message-helper';
 import { deleteConcept } from '../../utils/codelijsten/delete-concept';
 import { deleteConceptScheme } from '../../utils/codelijsten/delete-concept-scheme';
-import { isDuplicateConceptSchemeName } from '../../utils/codelijsten/is-duplicate-concept-scheme-name';
 import { updateConcept } from '../../utils/codelijsten/update-concept';
 import { isConceptArrayChanged } from '../../utils/codelijsten/compare-concept-arrays';
-import { restartableTask, timeout } from 'ember-concurrency';
+import { restartableTask } from 'ember-concurrency';
 import { sortObjectsOnProperty } from '../../utils/sort-object-on-property';
 import { downloadTextAsFile } from '../../utils/download-text-as-file';
 
@@ -31,7 +30,6 @@ export default class CodelijstenEditController extends Controller {
   @tracked codelistDescription;
   @tracked conceptsToDelete;
 
-  @tracked nameErrorMessage;
   @tracked descriptionErrorMessage;
 
   @tracked isArchiveModalOpen;
@@ -41,28 +39,31 @@ export default class CodelijstenEditController extends Controller {
   @tracked nextRoute;
 
   dbConceptScheme;
+
   @tracked schemeName;
+  @tracked schemeNameErrorMessage;
+
   @tracked schemeDescription;
 
   dbConcepts;
   @tracked conceptList = A([]);
 
   get isReadOnly() {
-    if (!this.conceptScheme) return true;
+    if (!this.dbConceptScheme) return true;
 
     return this.isPrivateConceptScheme || this.isArchivedConceptScheme;
   }
 
   get isPrivateConceptScheme() {
-    if (!this.conceptScheme) return true;
+    if (!this.dbConceptScheme) return true;
 
-    return !this.conceptScheme.isPublic;
+    return !this.dbConceptScheme.isPublic;
   }
 
   get isArchivedConceptScheme() {
-    if (!this.conceptScheme) return false;
+    if (!this.dbConceptScheme) return false;
 
-    return this.conceptScheme.isArchived;
+    return this.dbConceptScheme.isArchived;
   }
 
   get canArchiveCodelist() {
@@ -119,6 +120,53 @@ export default class CodelijstenEditController extends Controller {
     };
   }
 
+  @action
+  updateSchemeName(event) {
+    this.schemeName = event.target.value.trim() ?? '';
+    this.schemeNameErrorMessage = null;
+    this.validateSchemeName.perform();
+    console.log(`scheme name validation: `);
+    console.log(`    schemeNameErrorMessage: `, this.schemeNameErrorMessage);
+  }
+
+  validateSchemeName = restartableTask(async () => {
+    if (!this.schemeName || this.schemeName.trim() == '') {
+      this.schemeNameErrorMessage = this.intl.t('constraints.mandatoryField');
+      return;
+    }
+
+    if (this.schemeName.length > NAME_INPUT_CHAR_LIMIT) {
+      this.schemeNameErrorMessage = this.intl.t(
+        'constraints.maconstraints.maxCharactersReached'
+      );
+      return;
+    }
+
+    if (
+      (await this.isDuplicateConceptSchemeName()) &&
+      this.schemeName !== this.dbConceptScheme.label
+    ) {
+      this.schemeNameErrorMessage = this.intl.t('constraints.duplicateName');
+      return;
+    }
+
+    this.schemeNameErrorMessage = null;
+  });
+
+  async isDuplicateConceptSchemeName() {
+    const duplicates = await this.store.query('concept-scheme', {
+      filter: {
+        ':exact:preflabel': this.schemeName.trim(),
+      },
+    });
+
+    if (duplicates.length == 1 && duplicates[0].id == self.id) {
+      return false;
+    }
+
+    return duplicates.length !== 0;
+  }
+
   saveUnsavedChanges = restartableTask(async () => {
     await this.save();
     this.isSaveModalOpen = false;
@@ -143,35 +191,6 @@ export default class CodelijstenEditController extends Controller {
           count: this.codelistDescription.length,
           maxCount: DESCRIPTION_INPUT_CHAR_LIMIT,
         }
-      );
-    }
-
-    this.setIsSaveButtonDisabled();
-  }
-
-  @action
-  async handleNameChange(event) {
-    const newName = event.target.value;
-    this.nameErrorMessage = null;
-
-    if (!newName || newName.trim() == '') {
-      this.nameErrorMessage = this.intl.t('constraints.mandatoryField');
-    }
-
-    this.codelistName = newName.trim();
-    this.isDuplicateName = await isDuplicateConceptSchemeName(
-      this.conceptScheme,
-      this.codelistName,
-      this.store
-    );
-
-    if (this.codelistName !== '' && this.isDuplicateName) {
-      this.nameErrorMessage = this.intl.t('constraints.duplicateName');
-    }
-
-    if (this.codelistName.length > NAME_INPUT_CHAR_LIMIT) {
-      this.nameErrorMessage = this.descriptionErrorMessage = this.intl.t(
-        'constraints.maconstraints.maxCharactersReached'
       );
     }
 
@@ -473,7 +492,7 @@ export default class CodelijstenEditController extends Controller {
     this.codelistDescription = this.conceptScheme.description;
     this.concepts = await this.conceptScheme.getConceptModels();
     this.conceptsToDelete = [];
-    this.nameErrorMessage = null;
+    this.schemeNameErrorMessage = null;
     this.descriptionErrorMessage = null;
 
     this.isSaveModalOpen = false;
@@ -493,7 +512,7 @@ export default class CodelijstenEditController extends Controller {
   }
 
   resetErrors() {
-    this.nameErrorMessage = null;
+    this.schemeNameErrorMessage = null;
     this.descriptionErrorMessage = null;
     this.isDuplicateName = false;
   }
