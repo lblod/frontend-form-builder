@@ -87,7 +87,7 @@ export default class CodelijstenEditController extends Controller {
   }
 
   get hasConcepts() {
-    return this.concepts ? this.concepts.length >= 1 : false;
+    return this.conceptList ? this.conceptList.length >= 1 : false;
   }
 
   setup = restartableTask(async (conceptSchemeId) => {
@@ -213,8 +213,8 @@ export default class CodelijstenEditController extends Controller {
       );
     }
 
-    const foundConcept = this.concepts.find((c) => c.id == concept.id);
-    this.concepts[this.concepts.indexOf(foundConcept)].label =
+    const foundConcept = this.conceptList.find((c) => c.id == concept.id);
+    this.conceptList[this.conceptList.indexOf(foundConcept)].label =
       event.target.value.trim();
 
     this.setIsSaveButtonDisabled();
@@ -228,7 +228,7 @@ export default class CodelijstenEditController extends Controller {
     });
     await concept.save();
     await concept.reload();
-    this.concepts.pushObject({
+    this.conceptList.pushObject({
       id: concept.id,
       label: concept.label,
     });
@@ -277,7 +277,7 @@ export default class CodelijstenEditController extends Controller {
   async updateConcepts() {
     await this.removeEmptyConceptsAndScheme();
 
-    for (const concept of this.concepts) {
+    for (const concept of this.conceptList) {
       await updateConcept(concept, this.store, this.toaster);
     }
 
@@ -290,10 +290,12 @@ export default class CodelijstenEditController extends Controller {
 
   @action
   async temporaryDeleteConcept(concept) {
-    const conceptToDelete = this.concepts.find((con) => con.id == concept.id);
+    const conceptToDelete = this.conceptList.find(
+      (con) => con.id == concept.id
+    );
 
     if (conceptToDelete) {
-      this.concepts.removeObject(conceptToDelete);
+      this.conceptList.removeObject(conceptToDelete);
 
       if (!this.conceptsInDatabase.find((con) => con.id == concept.id)) {
         await deleteConcept(concept.id, this.store, this.toaster, true);
@@ -306,7 +308,7 @@ export default class CodelijstenEditController extends Controller {
   }
 
   async removeEmptyConceptsAndScheme() {
-    const emptyConcepts = this.concepts.filter(
+    const emptyConcepts = this.conceptList.filter(
       (concept) => !concept.label || concept.label.trim() == ''
     );
 
@@ -329,12 +331,12 @@ export default class CodelijstenEditController extends Controller {
         this.toaster,
         deleteSilently
       );
-      this.concepts.removeObject(conceptToDelete);
+      this.conceptList.removeObject(conceptToDelete);
     }
   }
 
   async deleteCodelist() {
-    await this.deleteConcepts(this.concepts, true);
+    await this.deleteConcepts(this.conceptList, true);
     await deleteConceptScheme(this.conceptScheme.id, this.store, this.toaster);
     this.router.transitionTo('codelijsten.index');
   }
@@ -420,7 +422,7 @@ export default class CodelijstenEditController extends Controller {
   }
 
   hasNoEmptyValuesInConceptList() {
-    return this.concepts.every((concept) => concept.label.trim() !== '');
+    return this.conceptList.every((concept) => concept.label.trim() !== '');
   }
 
   isValidConceptSchemeName() {
@@ -449,7 +451,7 @@ export default class CodelijstenEditController extends Controller {
   }
 
   isConceptListChanged() {
-    return isConceptArrayChanged(this.conceptsInDatabase, this.concepts);
+    return isConceptArrayChanged(this.conceptsInDatabase, this.conceptList);
   }
 
   mapConceptModels(concepts) {
@@ -495,9 +497,9 @@ export default class CodelijstenEditController extends Controller {
 
   @action
   async discardSave() {
-    this.schemeName = this.conceptScheme.label;
-    this.schemeDescription = this.conceptScheme.description;
-    this.concepts = await this.conceptScheme.getConceptModels();
+    this.schemeName = this.dbConceptScheme.label;
+    this.schemeDescription = this.dbConceptScheme.description;
+    this.conceptList = this.dbConcepts;
     this.conceptsToDelete = [];
     this.schemeNameErrorMessage = null;
     this.schemeDescription = null;
