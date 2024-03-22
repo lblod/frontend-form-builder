@@ -3,6 +3,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
+import { A } from '@ember/array';
 import {
   DESCRIPTION_INPUT_CHAR_LIMIT,
   NAME_INPUT_CHAR_LIMIT,
@@ -28,8 +29,6 @@ export default class CodelijstenEditController extends Controller {
 
   @tracked codelistName;
   @tracked codelistDescription;
-  @tracked conceptScheme;
-  @tracked concepts;
   @tracked conceptsToDelete;
 
   @tracked nameErrorMessage;
@@ -41,7 +40,12 @@ export default class CodelijstenEditController extends Controller {
   @tracked isSaveModalOpen;
   @tracked nextRoute;
 
-  conceptsInDatabase;
+  dbConceptScheme;
+  @tracked schemeName;
+  @tracked schemeDescription;
+
+  dbConcepts;
+  @tracked conceptList = A([]);
 
   get isReadOnly() {
     if (!this.conceptScheme) return true;
@@ -89,36 +93,37 @@ export default class CodelijstenEditController extends Controller {
   }
 
   setup = restartableTask(async (conceptSchemeId) => {
+    console.log(`| SETUP |`);
     this.resetErrors();
-    this.conceptScheme = await this.getConceptSchemeById(conceptSchemeId);
-    this.setValuesFromConceptscheme();
 
-    const conceptArray = await this.conceptScheme.getConceptModels();
-    this.setValuesFromConcepts(conceptArray);
+    this.dbConceptScheme = await this.getConceptSchemeById(conceptSchemeId);
+    this.schemeName = this.dbConceptScheme.label;
+    this.schemeDescription = this.dbConceptScheme.description;
 
-    this.setIsSaveButtonDisabled();
-    // Prevent flickering between loading and showing content if small lists are shown
-    await timeout(100);
+    this.dbConcepts = await this.dbConceptScheme.getConceptModels();
+    this.conceptList.pushObjects(
+      this.dbConcepts.map((concept) => this.conceptModelToListItem(concept))
+    );
+
+    console.log(`dbConceptScheme: `, this.dbConceptScheme);
+    console.log(`    schemeName: `, this.schemeName);
+    console.log(`    schemeDescription: `, this.schemeDescription);
+    console.log(`dbConcepts: `, this.dbConcepts);
+    console.log(`    conceptList: `, this.conceptList);
   });
+
+  conceptModelToListItem(model) {
+    return {
+      id: model.id,
+      label: model.label,
+    };
+  }
 
   saveUnsavedChanges = restartableTask(async () => {
     await this.save();
     this.isSaveModalOpen = false;
     this.goToNextRoute();
   });
-
-  setValuesFromConceptscheme() {
-    this.codelistName = this.conceptScheme.label;
-    this.codelistDescription = this.conceptScheme.description;
-  }
-
-  setValuesFromConcepts(conceptArray) {
-    this.conceptsInDatabase = this.mapConceptModels(conceptArray);
-    const mappedConcepts = this.mapConceptModels(conceptArray);
-    this.concepts = sortObjectsOnProperty(mappedConcepts, 'label');
-
-    this.conceptsToDelete = [];
-  }
 
   @action
   handleDescriptionChange(event) {
@@ -431,16 +436,14 @@ export default class CodelijstenEditController extends Controller {
   }
 
   async getConceptSchemeById(conceptSchemeId) {
+    console.log(`| GET CONCEPTSCHEME BY ID |`);
     try {
       const conceptScheme = await this.store.findRecord(
         'concept-scheme',
-        conceptSchemeId,
-        {
-          include: 'concepts',
-        }
+        conceptSchemeId
       );
-      await conceptScheme.reload();
-
+      console.log(`conceptscheme`, conceptScheme);
+      console.log(`| GET CONCEPTSCHEME BY ID  END |`);
       return conceptScheme;
     } catch (error) {
       throw this.intl.t('constraints.couldNotGetConceptSchemeWithId', {
