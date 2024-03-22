@@ -163,7 +163,7 @@
                       @width="block"
                       id={{concept.id}}
                       value={{concept.label}}
-                      {{on "blur" (fn this.handleConceptChange concept)}}
+                      {{on "blur" (fn this.updateConcept concept)}}
                     /></td>
                 {{/if}}
                 {{#unless this.isReadOnly}}

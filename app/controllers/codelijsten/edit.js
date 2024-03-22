@@ -198,27 +198,27 @@ export default class CodelijstenEditController extends Controller {
     this.schemeDescriptionErrorMessage = null;
   });
 
+  @action
+  updateConcept(concept, event) {
+    const label = event.target.value.trim() ?? '';
+    const foundConcept = this.conceptList.find((c) => c.id == concept.id);
+    const indexOfConcept = this.conceptList.indexOf(foundConcept);
+    this.conceptList[indexOfConcept].label = label;
+
+    if (label == '') {
+      showErrorToasterMessage(
+        this.toaster,
+        this.intl.t('constraints.optionCannotBeEmpty', { label: concept.label })
+      );
+      return;
+    }
+  }
+
   saveUnsavedChanges = restartableTask(async () => {
     await this.save();
     this.isSaveModalOpen = false;
     this.goToNextRoute();
   });
-
-  @action
-  handleConceptChange(concept, event) {
-    if (event.target && event.target.value.trim() == '') {
-      showErrorToasterMessage(
-        this.toaster,
-        this.intl.t('constraints.optionCannotBeEmpty', { label: concept.label })
-      );
-    }
-
-    const foundConcept = this.conceptList.find((c) => c.id == concept.id);
-    this.conceptList[this.conceptList.indexOf(foundConcept)].label =
-      event.target.value.trim();
-
-    this.setIsSaveButtonDisabled();
-  }
 
   @action
   async addNewConcept() {
