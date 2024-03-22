@@ -160,6 +160,7 @@
                 {{else}}
                   <td class="au-u-visible-medium-up">
                     <AuInput
+                      @width="block"
                       id={{concept.id}}
                       value={{concept.label}}
                       {{on "blur" (fn this.handleConceptChange concept)}}
