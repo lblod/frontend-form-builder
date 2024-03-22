@@ -169,7 +169,7 @@ export default class CodelijstenEditController extends Controller {
   async addNewConcept() {
     const concept = this.store.createRecord('concept', {
       preflabel: '',
-      conceptSchemes: [this.conceptScheme],
+      conceptSchemes: [this.dbConceptScheme],
     });
     await concept.save();
     await concept.reload();
@@ -187,12 +187,12 @@ export default class CodelijstenEditController extends Controller {
       this.isCodelistNameDeviating() ||
       this.isCodelistDescriptionDeviating()
     ) {
-      this.conceptScheme.preflabel = this.schemeName;
-      this.conceptScheme.description = this.schemeDescription;
+      this.dbConceptScheme.preflabel = this.schemeName;
+      this.dbConceptScheme.description = this.schemeDescription;
 
       try {
-        await this.conceptScheme.save();
-        this.conceptScheme.reload();
+        await this.dbConceptScheme.save();
+        this.dbConceptScheme.reload();
 
         showSuccessToasterMessage(
           this.toaster,
@@ -214,7 +214,7 @@ export default class CodelijstenEditController extends Controller {
       await this.updateConcepts();
     }
 
-    await this.setup.perform(this.conceptScheme.id);
+    await this.setup.perform(this.dbConceptScheme.id);
 
     this.setSaveButtonState();
   }
@@ -259,7 +259,7 @@ export default class CodelijstenEditController extends Controller {
 
     await this.deleteConcepts(emptyConcepts, true);
 
-    if (this.conceptScheme.label.trim() == '') {
+    if (this.dbConceptScheme.label.trim() == '') {
       await this.deleteCodelist();
     }
   }
@@ -282,16 +282,20 @@ export default class CodelijstenEditController extends Controller {
 
   async deleteCodelist() {
     await this.deleteConcepts(this.conceptList, true);
-    await deleteConceptScheme(this.conceptScheme.id, this.store, this.toaster);
+    await deleteConceptScheme(
+      this.dbConceptScheme.id,
+      this.store,
+      this.toaster
+    );
     this.router.transitionTo('codelijsten.index');
   }
 
   archiveCodelist = restartableTask(async () => {
-    this.conceptScheme.isarchived = true;
+    this.dbConceptScheme.isarchived = true;
 
     try {
-      await this.conceptScheme.save();
-      this.conceptScheme.reload();
+      await this.dbConceptScheme.save();
+      this.dbConceptScheme.reload();
       showSuccessToasterMessage(
         this.toaster,
         this.schemeName,
@@ -312,7 +316,7 @@ export default class CodelijstenEditController extends Controller {
   @action
   async exportCodelist() {
     const latestConceptScheme = await this.getConceptSchemeById(
-      this.conceptScheme.id
+      this.dbConceptScheme.id
     );
     const codelistTtlCode =
       await latestConceptScheme.modelWithConceptsAsTtlCode();
@@ -331,7 +335,7 @@ export default class CodelijstenEditController extends Controller {
     const isoDate = new Date().toISOString();
     const date = isoDate.slice(0, 10);
 
-    return `codelijst-${this.conceptScheme.id}-${date}.ttl`;
+    return `codelijst-${this.dbConceptScheme.id}-${date}.ttl`;
   }
 
   isValidConceptSchemeName() {
@@ -339,24 +343,27 @@ export default class CodelijstenEditController extends Controller {
   }
 
   isCodelistNameDeviating() {
-    return this.conceptScheme.label.trim() !== this.schemeName;
+    return this.dbConceptScheme.label.trim() !== this.schemeName;
   }
 
   isCodelistDescriptionDeviating() {
-    return this.conceptScheme.description.trim() !== this.schemeDescription;
+    return this.dbConceptScheme.description.trim() !== this.schemeDescription;
   }
 
   isBackTheSavedVersion() {
     return (
-      this.conceptScheme.description == this.schemeDescription &&
-      this.conceptScheme.label == this.schemeName &&
+      this.dbConceptScheme.description == this.schemeDescription &&
+      this.dbConceptScheme.label == this.schemeName &&
       !this.isConceptListChanged() &&
       this.conceptsToDelete.length == 0
     );
   }
 
   isConceptListChanged() {
-    return isConceptArrayChanged(this.conceptsInDatabase, this.conceptList);
+    return isConceptArrayChanged(
+      this.conceptsInDatabase ?? [],
+      this.conceptList
+    );
   }
 
   async getConceptSchemeById(conceptSchemeId) {
