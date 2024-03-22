@@ -58,13 +58,6 @@ export default class CodelijstenEditController extends Controller {
     this.setSaveButtonState();
   });
 
-  conceptModelToListItem(model) {
-    return {
-      id: model.id,
-      label: model.label,
-    };
-  }
-
   @action
   updateSchemeName(event) {
     this.schemeName = event.target.value.trim() ?? '';
@@ -331,71 +324,6 @@ export default class CodelijstenEditController extends Controller {
     );
   }
 
-  getExportFileName() {
-    const isoDate = new Date().toISOString();
-    const date = isoDate.slice(0, 10);
-
-    return `codelijst-${this.dbConceptScheme.id}-${date}.ttl`;
-  }
-
-  isValidConceptSchemeName() {
-    return this.schemeName.trim() !== '' && !this.isDuplicateName;
-  }
-
-  isCodelistNameDeviating() {
-    return this.dbConceptScheme.label.trim() !== this.schemeName;
-  }
-
-  isCodelistDescriptionDeviating() {
-    return this.dbConceptScheme.description.trim() !== this.schemeDescription;
-  }
-
-  isBackTheSavedVersion() {
-    return (
-      this.dbConceptScheme.description == this.schemeDescription &&
-      this.dbConceptScheme.label == this.schemeName &&
-      !this.isConceptListChanged() &&
-      this.conceptsToDelete.length == 0
-    );
-  }
-
-  isConceptListChanged() {
-    return isConceptArrayChanged(
-      this.conceptsInDatabase ?? [],
-      this.conceptList
-    );
-  }
-
-  async getConceptSchemeById(conceptSchemeId) {
-    try {
-      const conceptScheme = await this.store.findRecord(
-        'concept-scheme',
-        conceptSchemeId
-      );
-
-      return conceptScheme;
-    } catch (error) {
-      throw this.intl.t('constraints.couldNotGetConceptSchemeWithId', {
-        id: conceptSchemeId,
-      });
-    }
-  }
-
-  @action
-  opposite(boolean) {
-    if (typeof boolean !== 'boolean') {
-      showErrorToasterMessage(
-        this.toaster,
-        this.intl.t('messages.error.valueMustBeBoolean', {
-          value: boolean,
-        })
-      );
-      return false;
-    }
-
-    return !boolean;
-  }
-
   @action
   async discardSave() {
     this.schemeName = this.dbConceptScheme.label;
@@ -457,6 +385,78 @@ export default class CodelijstenEditController extends Controller {
         this.isSaveDisabled = true;
       }
     }
+  }
+
+  @action
+  opposite(boolean) {
+    if (typeof boolean !== 'boolean') {
+      showErrorToasterMessage(
+        this.toaster,
+        this.intl.t('messages.error.valueMustBeBoolean', {
+          value: boolean,
+        })
+      );
+      return false;
+    }
+
+    return !boolean;
+  }
+
+  getExportFileName() {
+    const isoDate = new Date().toISOString();
+    const date = isoDate.slice(0, 10);
+
+    return `codelijst-${this.dbConceptScheme.id}-${date}.ttl`;
+  }
+
+  async getConceptSchemeById(conceptSchemeId) {
+    try {
+      const conceptScheme = await this.store.findRecord(
+        'concept-scheme',
+        conceptSchemeId
+      );
+
+      return conceptScheme;
+    } catch (error) {
+      throw this.intl.t('constraints.couldNotGetConceptSchemeWithId', {
+        id: conceptSchemeId,
+      });
+    }
+  }
+
+  conceptModelToListItem(model) {
+    return {
+      id: model.id,
+      label: model.label,
+    };
+  }
+
+  isValidConceptSchemeName() {
+    return this.schemeName.trim() !== '' && !this.isDuplicateName;
+  }
+
+  isCodelistNameDeviating() {
+    return this.dbConceptScheme.label.trim() !== this.schemeName;
+  }
+
+  isCodelistDescriptionDeviating() {
+    return this.dbConceptScheme.description.trim() !== this.schemeDescription;
+  }
+
+  isBackTheSavedVersion() {
+    return (
+      this.dbConceptScheme.description == this.schemeDescription &&
+      this.dbConceptScheme.label == this.schemeName &&
+      !this.isConceptListChanged() &&
+      this.conceptsToDelete.length == 0
+    );
+  }
+
+  isConceptListChanged() {
+    return isConceptArrayChanged(
+      this.conceptsInDatabase ?? [],
+      this.conceptList
+    );
   }
 
   get isReadOnly() {
