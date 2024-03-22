@@ -358,7 +358,7 @@ export default class CodelijstenEditController extends Controller {
 
     if (
       this.isValidConceptSchemeName() &&
-      this.isValidConceptSchemeDescription()
+      this.schemeDescription.trim() !== ''
     ) {
       if (
         this.isCodelistDescriptionDeviating() ||
@@ -371,7 +371,10 @@ export default class CodelijstenEditController extends Controller {
     }
 
     if (this.isConceptListChanged() || this.conceptsToDelete.length >= 1) {
-      if (this.hasNoEmptyValuesInConceptList()) {
+      const allValuesSet = this.conceptList.every(
+        (concept) => concept.label.trim() !== ''
+      );
+      if (allValuesSet) {
         this.isSaveDisabled = false;
       } else {
         this.isSaveDisabled = true;
@@ -404,16 +407,8 @@ export default class CodelijstenEditController extends Controller {
     return `codelijst-${this.conceptScheme.id}-${date}.ttl`;
   }
 
-  hasNoEmptyValuesInConceptList() {
-    return this.conceptList.every((concept) => concept.label.trim() !== '');
-  }
-
   isValidConceptSchemeName() {
     return this.schemeName.trim() !== '' && !this.isDuplicateName;
-  }
-
-  isValidConceptSchemeDescription() {
-    return this.schemeDescription.trim() !== '';
   }
 
   isCodelistNameDeviating() {
@@ -435,15 +430,6 @@ export default class CodelijstenEditController extends Controller {
 
   isConceptListChanged() {
     return isConceptArrayChanged(this.conceptsInDatabase, this.conceptList);
-  }
-
-  mapConceptModels(concepts) {
-    return concepts.map((concept) => {
-      return {
-        id: concept.id,
-        label: concept.label,
-      };
-    });
   }
 
   async getConceptSchemeById(conceptSchemeId) {
