@@ -91,7 +91,6 @@ export default class CodelijstenEditController extends Controller {
   }
 
   setup = restartableTask(async (conceptSchemeId) => {
-    console.log(`| SETUP |`);
     this.resetErrors();
 
     this.dbConceptScheme = await this.getConceptSchemeById(conceptSchemeId);
@@ -102,12 +101,6 @@ export default class CodelijstenEditController extends Controller {
     this.conceptList.pushObjects(
       this.dbConcepts.map((concept) => this.conceptModelToListItem(concept))
     );
-
-    console.log(`dbConceptScheme: `, this.dbConceptScheme);
-    console.log(`    schemeName: `, this.schemeName);
-    console.log(`    schemeDescription: `, this.schemeDescription);
-    console.log(`dbConcepts: `, this.dbConcepts);
-    console.log(`    conceptList: `, this.conceptList);
   });
 
   conceptModelToListItem(model) {
@@ -122,8 +115,6 @@ export default class CodelijstenEditController extends Controller {
     this.schemeName = event.target.value.trim() ?? '';
     this.schemeNameErrorMessage = null;
     this.validateSchemeName.perform();
-    console.log(`scheme name validation: `);
-    console.log(`    schemeNameErrorMessage: `, this.schemeNameErrorMessage);
   }
 
   validateSchemeName = restartableTask(async () => {
@@ -169,11 +160,6 @@ export default class CodelijstenEditController extends Controller {
     this.schemeDescription = event.target.value.trim() ?? '';
     this.schemeDescriptionErrorMessage = null;
     this.validateSchemeDescription.perform();
-    console.log(`scheme description validation: `);
-    console.log(
-      `    schemeDescriptionErrorMessage: `,
-      this.schemeDescriptionErrorMessage
-    );
   }
 
   validateSchemeDescription = restartableTask(async () => {
@@ -464,14 +450,12 @@ export default class CodelijstenEditController extends Controller {
   }
 
   async getConceptSchemeById(conceptSchemeId) {
-    console.log(`| GET CONCEPTSCHEME BY ID |`);
     try {
       const conceptScheme = await this.store.findRecord(
         'concept-scheme',
         conceptSchemeId
       );
-      console.log(`conceptscheme`, conceptScheme);
-      console.log(`| GET CONCEPTSCHEME BY ID  END |`);
+
       return conceptScheme;
     } catch (error) {
       throw this.intl.t('constraints.couldNotGetConceptSchemeWithId', {
