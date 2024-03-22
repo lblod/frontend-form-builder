@@ -331,7 +331,7 @@ export default class CodelijstenEditController extends Controller {
     this.conceptList = this.dbConcepts;
     this.conceptsToDelete = [];
     this.schemeNameErrorMessage = null;
-    this.schemeDescription = null;
+    this.schemeDescriptionErrorMessage = null;
 
     this.isSaveModalOpen = false;
     this.setSaveButtonState();
