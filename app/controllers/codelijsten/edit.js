@@ -17,7 +17,6 @@ import { deleteConceptScheme } from '../../utils/codelijsten/delete-concept-sche
 import { updateConcept } from '../../utils/codelijsten/update-concept';
 import { isConceptArrayChanged } from '../../utils/codelijsten/compare-concept-arrays';
 import { restartableTask } from 'ember-concurrency';
-import { sortObjectsOnProperty } from '../../utils/sort-object-on-property';
 import { downloadTextAsFile } from '../../utils/download-text-as-file';
 
 export default class CodelijstenEditController extends Controller {
@@ -45,53 +44,8 @@ export default class CodelijstenEditController extends Controller {
   dbConcepts;
   @tracked conceptList = A([]);
 
-  get isReadOnly() {
-    if (!this.dbConceptScheme) return true;
-
-    return this.isPrivateConceptScheme || this.isArchivedConceptScheme;
-  }
-
-  get isPrivateConceptScheme() {
-    if (!this.dbConceptScheme) return true;
-
-    return !this.dbConceptScheme.isPublic;
-  }
-
-  get isArchivedConceptScheme() {
-    if (!this.dbConceptScheme) return false;
-
-    return this.dbConceptScheme.isArchived;
-  }
-
-  get canArchiveCodelist() {
-    return (
-      !this.isPrivateConceptScheme &&
-      this.hasConcepts &&
-      this.isValidConceptSchemeName() &&
-      !this.isArchivedConceptScheme &&
-      this.isSaveDisabled
-    );
-  }
-
-  get canExportCodelist() {
-    return (
-      !this.isPrivateConceptScheme &&
-      this.hasConcepts &&
-      this.isValidConceptSchemeName() &&
-      this.isSaveDisabled
-    );
-  }
-
-  get splitButtonHasActiveActions() {
-    return this.canArchiveCodelist || this.canExportCodelist;
-  }
-
-  get hasConcepts() {
-    return this.conceptList ? this.conceptList.length >= 1 : false;
-  }
-
   setup = restartableTask(async (conceptSchemeId) => {
-    this.resetErrors();
+    this.resetErrorMessages();
 
     this.dbConceptScheme = await this.getConceptSchemeById(conceptSchemeId);
     this.schemeName = this.dbConceptScheme.label;
@@ -487,9 +441,54 @@ export default class CodelijstenEditController extends Controller {
     this.nextRoute = nextRoute;
   }
 
-  resetErrors() {
+  resetErrorMessages() {
     this.schemeNameErrorMessage = null;
     this.schemeDescription = null;
     this.isDuplicateName = false;
+  }
+
+  get isReadOnly() {
+    if (!this.dbConceptScheme) return true;
+
+    return this.isPrivateConceptScheme || this.isArchivedConceptScheme;
+  }
+
+  get isPrivateConceptScheme() {
+    if (!this.dbConceptScheme) return true;
+
+    return !this.dbConceptScheme.isPublic;
+  }
+
+  get isArchivedConceptScheme() {
+    if (!this.dbConceptScheme) return false;
+
+    return this.dbConceptScheme.isArchived;
+  }
+
+  get canArchiveCodelist() {
+    return (
+      !this.isPrivateConceptScheme &&
+      this.hasConcepts &&
+      this.isValidConceptSchemeName() &&
+      !this.isArchivedConceptScheme &&
+      this.isSaveDisabled
+    );
+  }
+
+  get canExportCodelist() {
+    return (
+      !this.isPrivateConceptScheme &&
+      this.hasConcepts &&
+      this.isValidConceptSchemeName() &&
+      this.isSaveDisabled
+    );
+  }
+
+  get splitButtonHasActiveActions() {
+    return this.canArchiveCodelist || this.canExportCodelist;
+  }
+
+  get hasConcepts() {
+    return this.conceptList ? this.conceptList.length >= 1 : false;
   }
 }
