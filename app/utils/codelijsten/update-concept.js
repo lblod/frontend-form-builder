@@ -1,14 +1,13 @@
 import { showErrorToasterMessage } from '../toaster-message-helper';
 
 export async function updateConcept(concept, store, toasterService) {
+  console.log(`concept`, concept.id, concept.label);
   let conceptInDatabase = await store.findRecord('concept', concept.id);
   if (concept.label.trim() == '') {
     await conceptInDatabase.destroyRecord();
   }
-  if (
-    concept.label.trim() == conceptInDatabase.label ||
-    concept.label.trim() == ''
-  ) {
+
+  if (concept.label.trim() == conceptInDatabase.label) {
     return;
   }
 

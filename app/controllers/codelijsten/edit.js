@@ -25,8 +25,6 @@ export default class CodelijstenEditController extends Controller {
   @service router;
   @service intl;
 
-  @tracked conceptsToDelete;
-
   @tracked isArchiveModalOpen;
   @tracked isDuplicateName;
   @tracked isSaveDisabled;
@@ -34,15 +32,14 @@ export default class CodelijstenEditController extends Controller {
   @tracked nextRoute;
 
   dbConceptScheme;
-
   @tracked schemeName;
   @tracked schemeNameErrorMessage;
-
   @tracked schemeDescription;
   @tracked schemeDescriptionErrorMessage;
 
   dbConcepts;
-  @tracked conceptList = A([]);
+  @tracked conceptList;
+  @tracked conceptsToDelete;
 
   setup = restartableTask(async (conceptSchemeId) => {
     this.resetErrorMessages();
@@ -51,6 +48,8 @@ export default class CodelijstenEditController extends Controller {
     this.schemeName = this.dbConceptScheme.label;
     this.schemeDescription = this.dbConceptScheme.description;
 
+    this.conceptsToDelete = [];
+    this.conceptList = A([]);
     this.dbConcepts = await this.dbConceptScheme.getConceptModels();
     this.conceptList.pushObjects(
       this.dbConcepts.map((concept) => this.conceptModelToListItem(concept))
@@ -215,6 +214,7 @@ export default class CodelijstenEditController extends Controller {
   async updateConcepts() {
     await this.removeEmptyConceptsAndScheme();
 
+    console.log(`UPDATE CONCEPTS`, this.conceptList);
     for (const concept of this.conceptList) {
       await updateConcept(concept, this.store, this.toaster);
     }
@@ -235,7 +235,7 @@ export default class CodelijstenEditController extends Controller {
     if (conceptToDelete) {
       this.conceptList.removeObject(conceptToDelete);
 
-      if (!this.conceptsInDatabase.find((con) => con.id == concept.id)) {
+      if (!this.dbConcepts.find((con) => con.id == concept.id)) {
         await deleteConcept(concept.id, this.store, this.toaster, true);
       } else {
         this.conceptsToDelete.push(conceptToDelete);
@@ -453,10 +453,7 @@ export default class CodelijstenEditController extends Controller {
   }
 
   isConceptListChanged() {
-    return isConceptArrayChanged(
-      this.conceptsInDatabase ?? [],
-      this.conceptList
-    );
+    return isConceptArrayChanged(this.dbConcepts, this.conceptList);
   }
 
   get isReadOnly() {
