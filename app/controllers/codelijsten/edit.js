@@ -215,8 +215,9 @@ export default class CodelijstenEditController extends Controller {
       this.conceptScheme.description = this.codelistDescription;
 
       try {
-        this.conceptScheme.save();
+        await this.conceptScheme.save();
         this.conceptScheme.reload();
+
         showSuccessToasterMessage(
           this.toaster,
           this.intl.t('messages.success.codelistUpdated')
@@ -311,7 +312,7 @@ export default class CodelijstenEditController extends Controller {
     this.conceptScheme.isarchived = true;
 
     try {
-      this.conceptScheme.save();
+      await this.conceptScheme.save();
       this.conceptScheme.reload();
       showSuccessToasterMessage(
         this.toaster,
