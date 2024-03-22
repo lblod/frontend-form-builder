@@ -55,6 +55,7 @@ export default class CodelijstenEditController extends Controller {
     this.conceptList.pushObjects(
       this.dbConcepts.map((concept) => this.conceptModelToListItem(concept))
     );
+    this.setSaveButtonState();
   });
 
   conceptModelToListItem(model) {
@@ -68,7 +69,7 @@ export default class CodelijstenEditController extends Controller {
   updateSchemeName(event) {
     this.schemeName = event.target.value.trim() ?? '';
     this.schemeNameErrorMessage = null;
-    this.validateSchemeName.perform();
+    this.validateSchemeName.perform().then(() => this.setSaveButtonState());
   }
 
   validateSchemeName = restartableTask(async () => {
@@ -113,7 +114,9 @@ export default class CodelijstenEditController extends Controller {
   updateSchemeDescription(event) {
     this.schemeDescription = event.target.value.trim() ?? '';
     this.schemeDescriptionErrorMessage = null;
-    this.validateSchemeDescription.perform();
+    this.validateSchemeDescription
+      .perform()
+      .then(() => this.setSaveButtonState());
   }
 
   validateSchemeDescription = restartableTask(async () => {
@@ -152,6 +155,8 @@ export default class CodelijstenEditController extends Controller {
       );
       return;
     }
+
+    this.setSaveButtonState();
   }
 
   saveUnsavedChanges = restartableTask(async () => {
@@ -173,7 +178,7 @@ export default class CodelijstenEditController extends Controller {
       label: concept.label,
     });
 
-    this.setIsSaveButtonDisabled();
+    this.setSaveButtonState();
   }
 
   @action
@@ -211,7 +216,7 @@ export default class CodelijstenEditController extends Controller {
 
     await this.setup.perform(this.conceptScheme.id);
 
-    this.setIsSaveButtonDisabled();
+    this.setSaveButtonState();
   }
 
   async updateConcepts() {
@@ -244,7 +249,7 @@ export default class CodelijstenEditController extends Controller {
       }
     }
 
-    this.setIsSaveButtonDisabled();
+    this.setSaveButtonState();
   }
 
   async removeEmptyConceptsAndScheme() {
@@ -303,38 +308,6 @@ export default class CodelijstenEditController extends Controller {
     this.isArchiveModalOpen = false;
     this.router.transitionTo('codelijsten.index');
   });
-
-  setIsSaveButtonDisabled() {
-    if (this.isReadOnly || this.isBackTheSavedVersion()) {
-      this.isSaveDisabled = true;
-      return;
-    }
-
-    if (
-      this.isValidConceptSchemeName() &&
-      this.schemeDescription.trim() !== ''
-    ) {
-      if (
-        this.isCodelistDescriptionDeviating() ||
-        this.isCodelistNameDeviating()
-      ) {
-        this.isSaveDisabled = false;
-      } else {
-        this.isSaveDisabled = true;
-      }
-    }
-
-    if (this.isConceptListChanged() || this.conceptsToDelete.length >= 1) {
-      const allValuesSet = this.conceptList.every(
-        (concept) => concept.label.trim() !== ''
-      );
-      if (allValuesSet) {
-        this.isSaveDisabled = false;
-      } else {
-        this.isSaveDisabled = true;
-      }
-    }
-  }
 
   @action
   async exportCodelist() {
@@ -426,7 +399,7 @@ export default class CodelijstenEditController extends Controller {
     this.schemeDescription = null;
 
     this.isSaveModalOpen = false;
-    this.setIsSaveButtonDisabled();
+    this.setSaveButtonState();
 
     this.goToNextRoute();
   }
@@ -445,6 +418,38 @@ export default class CodelijstenEditController extends Controller {
     this.schemeNameErrorMessage = null;
     this.schemeDescription = null;
     this.isDuplicateName = false;
+  }
+
+  setSaveButtonState() {
+    if (this.isReadOnly || this.isBackTheSavedVersion()) {
+      this.isSaveDisabled = true;
+      return;
+    }
+
+    if (
+      this.isValidConceptSchemeName() &&
+      this.schemeDescription.trim() !== ''
+    ) {
+      if (
+        this.isCodelistDescriptionDeviating() ||
+        this.isCodelistNameDeviating()
+      ) {
+        this.isSaveDisabled = false;
+      } else {
+        this.isSaveDisabled = true;
+      }
+    }
+
+    if (this.isConceptListChanged() || this.conceptsToDelete.length >= 1) {
+      const allValuesSet = this.conceptList.every(
+        (concept) => concept.label.trim() !== ''
+      );
+      if (allValuesSet) {
+        this.isSaveDisabled = false;
+      } else {
+        this.isSaveDisabled = true;
+      }
+    }
   }
 
   get isReadOnly() {
