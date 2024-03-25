@@ -151,6 +151,15 @@ export default class CodelijstenEditController extends Controller {
   }
 
   saveUnsavedChanges = restartableTask(async () => {
+    if (!this.hasNoEmptyConceptLabels()) {
+      this.isSaveModalOpen = false;
+      showErrorToasterMessage(
+        this.toaster,
+        this.intl.t('messages.error.updateConceptLabelsCannotBeEmpty')
+      );
+      return;
+    }
+
     await this.save();
     this.isSaveModalOpen = false;
     this.goToNextRoute();
