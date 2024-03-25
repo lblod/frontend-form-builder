@@ -209,13 +209,17 @@ export default class CodelijstenEditController extends Controller {
     }
 
     await this.deleteConcepts(this.conceptsToDelete);
-    this.conceptsToDelete = [];
 
     if (this.isConceptListChanged()) {
       await this.updateConcepts();
     }
 
-    await this.setup.perform(this.dbConceptScheme.id);
+    // soft reset of the variables as everything is saved
+    this.resetStateOfErrors();
+    this.dbConcepts = [...this.conceptList];
+    this.conceptsToDelete = [];
+
+    this.setSaveButtonState();
   }
 
   async updateConcepts() {
