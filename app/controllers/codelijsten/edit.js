@@ -220,8 +220,6 @@ export default class CodelijstenEditController extends Controller {
   }
 
   async updateConcepts() {
-    await this.removeEmptyConceptsAndScheme();
-
     for (const concept of this.conceptList) {
       await updateConcept(concept, this.store, this.toaster);
     }
@@ -250,18 +248,6 @@ export default class CodelijstenEditController extends Controller {
     }
 
     this.setSaveButtonState();
-  }
-
-  async removeEmptyConceptsAndScheme() {
-    const emptyConcepts = this.conceptList.filter(
-      (concept) => !concept.label || concept.label.trim() == ''
-    );
-
-    await this.deleteConcepts(emptyConcepts, true);
-
-    if (this.dbConceptScheme.label.trim() == '') {
-      await this.deleteCodelist();
-    }
   }
 
   async deleteConcepts(concepts, deleteSilently) {
