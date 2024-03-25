@@ -54,6 +54,7 @@ export default class CodelijstenEditController extends Controller {
     this.conceptList.pushObjects(
       this.dbConcepts.map((concept) => this.conceptModelToListItem(concept))
     );
+
     this.setSaveButtonState();
   });
 
@@ -215,8 +216,6 @@ export default class CodelijstenEditController extends Controller {
     }
 
     await this.setup.perform(this.dbConceptScheme.id);
-
-    this.setSaveButtonState();
   }
 
   async updateConcepts() {
