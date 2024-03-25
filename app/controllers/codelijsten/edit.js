@@ -402,10 +402,6 @@ export default class CodelijstenEditController extends Controller {
     return !boolean;
   }
 
-  unloadConceptScheme() {
-    this.store.unloadRecord(this.dbConceptScheme);
-  }
-
   getExportFileName() {
     const isoDate = new Date().toISOString();
     const date = isoDate.slice(0, 10);
@@ -415,12 +411,14 @@ export default class CodelijstenEditController extends Controller {
 
   async getConceptSchemeById(conceptSchemeId) {
     try {
-      const conceptScheme = await this.store.findRecord(
-        'concept-scheme',
-        conceptSchemeId
-      );
+      const queryConceptscheme = await this.store.query('concept-scheme', {
+        filter: {
+          id: conceptSchemeId,
+        },
+        include: 'concepts',
+      });
 
-      return conceptScheme;
+      return [...queryConceptscheme][0];
     } catch (error) {
       throw this.intl.t('constraints.couldNotGetConceptSchemeWithId', {
         id: conceptSchemeId,

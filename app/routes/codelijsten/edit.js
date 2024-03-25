@@ -21,11 +21,6 @@ export default class CodelijstenEditRoute extends Route {
     controller.setup.perform(model.conceptSchemeId);
   }
 
-  async resetController(controller) {
-    super.resetController(...arguments);
-    controller.unloadConceptScheme();
-  }
-
   @action
   willTransition(transition) {
     const nextRoute = transition.targetName;
