@@ -134,7 +134,7 @@ export default class CodelijstenEditController extends Controller {
   });
 
   @action
-  updateConcept(concept, event) {
+  updateConceptLabel(concept, event) {
     const label = event.target.value.trim() ?? '';
     const foundConcept = this.conceptList.find((c) => c.id == concept.id);
     const indexOfConcept = this.conceptList.indexOf(foundConcept);
