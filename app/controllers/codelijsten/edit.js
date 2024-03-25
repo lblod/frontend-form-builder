@@ -269,6 +269,7 @@ export default class CodelijstenEditController extends Controller {
     }
   }
 
+  @action
   async deleteCodelist() {
     await this.deleteConcepts(this.conceptList, true);
     await deleteConceptScheme(
