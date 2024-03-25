@@ -22,4 +22,19 @@
       </PowerSelect>
     </div>
   {{/if}}
+
+  <div class="builder_content-container">
+    {{#each this.fieldValidations as |validation|}}
+      <AuCard @expandable={{false}} as |c|>
+        <c.header>
+          <AuHeading @level="2" @skin="4">
+            {{validation.name}}
+          </AuHeading>
+        </c.header>
+        <c.content>
+          <p>CONTENT</p>
+        </c.content>
+      </AuCard>
+    {{/each}}
+  </div>
 </div>
