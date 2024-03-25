@@ -402,6 +402,10 @@ export default class CodelijstenEditController extends Controller {
     return !boolean;
   }
 
+  unloadConceptScheme() {
+    this.store.unloadRecord(this.dbConceptScheme);
+  }
+
   getExportFileName() {
     const isoDate = new Date().toISOString();
     const date = isoDate.slice(0, 10);
