@@ -31,10 +31,7 @@ export default class CodelijstenEditRoute extends Route {
 
     /* eslint ember/no-controller-access-in-routes: "warn" */
     const editController = this.controllerFor('codelijsten.edit');
-    if (
-      !editController.isSaveDisabled ||
-      !editController.hasNoEmptyConceptLabels()
-    ) {
+    if (!editController.isSaveDisabled || editController.hasErrors()) {
       transition.abort();
       editController.showSaveModal(nextRoute);
     }

@@ -40,7 +40,7 @@ messages:
   feedback:
     noCodelistsFound: "Geen codelijsten gevonden"
   error:
-    updateConceptLabelsCannotBeEmpty: "Pas je concepten aan zodat deze geen lege waarden bevat"
+    codelistHasErrors: "Je codelijst heeft bevat nog errors"
 
 actions:
   exportCodelist: "Exporteer"

@@ -40,7 +40,7 @@ messages:
   feedback:
     noCodelistsFound: "No codelists found"
   error:
-    updateConceptLabelsCannotBeEmpty: "Update the concept list so it does not include empty values"
+    codelistHasErrors: "Your codelist has active errors"
 
 actions:
   exportCodelist: "Export"

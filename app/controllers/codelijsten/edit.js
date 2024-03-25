@@ -152,11 +152,11 @@ export default class CodelijstenEditController extends Controller {
   }
 
   saveUnsavedChanges = restartableTask(async () => {
-    if (!this.hasNoEmptyConceptLabels()) {
+    if (this.hasErrors()) {
       this.isSaveModalOpen = false;
       showErrorToasterMessage(
         this.toaster,
-        this.intl.t('messages.error.updateConceptLabelsCannotBeEmpty')
+        this.intl.t('messages.error.codelistHasErrors')
       );
       return;
     }
@@ -356,11 +356,8 @@ export default class CodelijstenEditController extends Controller {
       return;
     }
 
-    if (
-      this.schemeNameErrorMessage ||
-      this.schemeDescriptionErrorMessage ||
-      this.isDuplicateName
-    ) {
+    console.log(`this.hasErrors()`, this.hasErrors());
+    if (this.hasErrors()) {
       this.isSaveDisabled = true;
       return;
     }
@@ -432,6 +429,17 @@ export default class CodelijstenEditController extends Controller {
       id: model.id,
       label: model.label,
     };
+  }
+
+  hasErrors() {
+    const flags = [
+      this.schemeNameErrorMessage,
+      this.schemeDescriptionErrorMessage,
+      this.isDuplicateName,
+      !this.hasNoEmptyConceptLabels(),
+    ];
+    console.log(`flags`, flags);
+    return flags.some((flag) => flag);
   }
 
   hasNoEmptyConceptLabels() {
