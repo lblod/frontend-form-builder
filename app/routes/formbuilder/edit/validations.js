@@ -15,6 +15,6 @@ export default class FormbuilderEditValidationsRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
 
-    controller.setup();
+    controller.setup.perform();
   }
 }

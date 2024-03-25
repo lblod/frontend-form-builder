@@ -1,11 +1,25 @@
 {{page-title "Validations"}}
 
-{{#if this.formCode}}
-  <AddValidationsToForm
-    @builderTtlCode={{this.formCode}}
-    @sourceNode={{@model.form}}
-    @onNewBuilderForm={{this.handleCodeChange}}
-  />
-{{else}}
-  <AuLoader />
-{{/if}}
+<div class="builder_container">
+  {{#if this.setup.isRunning}}
+    <AuLoader />
+  {{else}}
+    <div class="builder_filter-bar">
+      <PowerSelect
+        @searchField="name"
+        @searchEnabled={{true}}
+        @selected={{this.selectedField}}
+        @options={{this.fields}}
+        @onChange={{this.setSelectedField}}
+        @allowClear={{true}}
+        @loadingMessage={{t "messages.loading.isLoading"}}
+        @noMatchesMessage={{t "messages.feedback.noResults"}}
+        as |field|
+      >
+        <span>
+          {{field.name}}
+        </span>
+      </PowerSelect>
+    </div>
+  {{/if}}
+</div>
