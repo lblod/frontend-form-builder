@@ -145,7 +145,6 @@ export default class CodelijstenEditController extends Controller {
         this.toaster,
         this.intl.t('constraints.optionCannotBeEmpty', { label: concept.label })
       );
-      return;
     }
 
     this.setSaveButtonState();
@@ -374,9 +373,8 @@ export default class CodelijstenEditController extends Controller {
     }
 
     if (this.isConceptListChanged() || this.conceptsToDelete.length >= 1) {
-      const hasNoEmptyConceptLabels = this.conceptList.every(
-        (concept) => concept.label.trim() !== ''
-      );
+      const hasNoEmptyConceptLabels = this.hasNoEmptyConceptLabels();
+
       if (hasNoEmptyConceptLabels) {
         this.isSaveDisabled = false;
       } else {
@@ -427,6 +425,10 @@ export default class CodelijstenEditController extends Controller {
       id: model.id,
       label: model.label,
     };
+  }
+
+  hasNoEmptyConceptLabels() {
+    return this.conceptList.every((concept) => concept.label.trim() !== '');
   }
 
   isValidConceptSchemeName() {
