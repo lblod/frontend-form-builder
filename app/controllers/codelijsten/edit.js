@@ -42,7 +42,7 @@ export default class CodelijstenEditController extends Controller {
   @tracked conceptsToDelete;
 
   setup = restartableTask(async (conceptSchemeId) => {
-    this.resetErrorMessages();
+    this.resetStateOfErrors();
 
     this.dbConceptScheme = await this.getConceptSchemeById(conceptSchemeId);
     this.schemeName = this.dbConceptScheme.label;
@@ -214,7 +214,6 @@ export default class CodelijstenEditController extends Controller {
   async updateConcepts() {
     await this.removeEmptyConceptsAndScheme();
 
-    console.log(`UPDATE CONCEPTS`, this.conceptList);
     for (const concept of this.conceptList) {
       await updateConcept(concept, this.store, this.toaster);
     }
@@ -308,11 +307,10 @@ export default class CodelijstenEditController extends Controller {
 
   @action
   async exportCodelist() {
-    const latestConceptScheme = await this.getConceptSchemeById(
+    const conceptScheme = await this.getConceptSchemeById(
       this.dbConceptScheme.id
     );
-    const codelistTtlCode =
-      await latestConceptScheme.modelWithConceptsAsTtlCode();
+    const codelistTtlCode = await conceptScheme.modelWithConceptsAsTtlCode();
 
     downloadTextAsFile(
       {
@@ -349,7 +347,7 @@ export default class CodelijstenEditController extends Controller {
     this.nextRoute = nextRoute;
   }
 
-  resetErrorMessages() {
+  resetStateOfErrors() {
     this.schemeNameErrorMessage = null;
     this.schemeDescription = null;
     this.isDuplicateName = false;
@@ -376,10 +374,10 @@ export default class CodelijstenEditController extends Controller {
     }
 
     if (this.isConceptListChanged() || this.conceptsToDelete.length >= 1) {
-      const allValuesSet = this.conceptList.every(
+      const hasNoEmptyConceptLabels = this.conceptList.every(
         (concept) => concept.label.trim() !== ''
       );
-      if (allValuesSet) {
+      if (hasNoEmptyConceptLabels) {
         this.isSaveDisabled = false;
       } else {
         this.isSaveDisabled = true;
@@ -477,7 +475,7 @@ export default class CodelijstenEditController extends Controller {
   get canArchiveCodelist() {
     return (
       !this.isPrivateConceptScheme &&
-      this.hasConcepts &&
+      this.hasConceptsInList &&
       this.isValidConceptSchemeName() &&
       !this.isArchivedConceptScheme &&
       this.isSaveDisabled
@@ -487,7 +485,7 @@ export default class CodelijstenEditController extends Controller {
   get canExportCodelist() {
     return (
       !this.isPrivateConceptScheme &&
-      this.hasConcepts &&
+      this.hasConceptsInList &&
       this.isValidConceptSchemeName() &&
       this.isSaveDisabled
     );
@@ -497,7 +495,7 @@ export default class CodelijstenEditController extends Controller {
     return this.canArchiveCodelist || this.canExportCodelist;
   }
 
-  get hasConcepts() {
+  get hasConceptsInList() {
     return this.conceptList ? this.conceptList.length >= 1 : false;
   }
 }
