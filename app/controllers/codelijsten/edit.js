@@ -343,12 +343,21 @@ export default class CodelijstenEditController extends Controller {
 
   resetStateOfErrors() {
     this.schemeNameErrorMessage = null;
-    this.schemeDescription = null;
+    this.schemeDescriptionErrorMessage = null;
     this.isDuplicateName = false;
   }
 
   setSaveButtonState() {
     if (this.isReadOnly || this.isBackTheSavedVersion()) {
+      this.isSaveDisabled = true;
+      return;
+    }
+
+    if (
+      this.schemeNameErrorMessage ||
+      this.schemeDescriptionErrorMessage ||
+      this.isDuplicateName
+    ) {
       this.isSaveDisabled = true;
       return;
     }
