@@ -1,5 +1,6 @@
 import Route from '@ember/routing/route';
 import { service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class CodelijstenEditRoute extends Route {
   @service store;
@@ -22,5 +23,21 @@ export default class CodelijstenEditRoute extends Route {
 
   async resetController(controller) {
     await controller.removeEmptyConceptsAndScheme();
+  }
+
+  @action
+  willTransition(transition) {
+    const nextRoute = transition.targetName;
+
+    if (transition.to.parent.name == 'codelijsten.edit') {
+      return;
+    }
+
+    /* eslint ember/no-controller-access-in-routes: "warn" */
+    const editController = this.controllerFor('codelijsten.edit');
+    if (!editController.isSaveDisabled) {
+      transition.abort();
+      editController.showSaveModal(nextRoute);
+    }
   }
 }

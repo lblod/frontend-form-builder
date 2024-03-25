@@ -38,6 +38,8 @@ export default class CodelijstenEditController extends Controller {
   @tracked isArchiveModalOpen;
   @tracked isDuplicateName;
   @tracked isSaveDisabled;
+  @tracked isSaveModalOpen;
+  @tracked nextRoute;
 
   conceptsInDatabase;
 
@@ -87,15 +89,22 @@ export default class CodelijstenEditController extends Controller {
   }
 
   setup = restartableTask(async (conceptSchemeId) => {
+    this.resetErrors();
     this.conceptScheme = await this.getConceptSchemeById(conceptSchemeId);
     this.setValuesFromConceptscheme();
 
-    const conceptArray = new Array(...(await this.conceptScheme.concepts));
+    const conceptArray = await this.conceptScheme.getConceptModels();
     this.setValuesFromConcepts(conceptArray);
 
     this.setIsSaveButtonDisabled();
     // Prevent flickering between loading and showing content if small lists are shown
     await timeout(100);
+  });
+
+  saveUnsavedChanges = restartableTask(async () => {
+    await this.save();
+    this.isSaveModalOpen = false;
+    this.goToNextRoute();
   });
 
   setValuesFromConceptscheme() {
@@ -206,8 +215,9 @@ export default class CodelijstenEditController extends Controller {
       this.conceptScheme.description = this.codelistDescription;
 
       try {
-        this.conceptScheme.save();
+        await this.conceptScheme.save();
         this.conceptScheme.reload();
+
         showSuccessToasterMessage(
           this.toaster,
           this.intl.t('messages.success.codelistUpdated')
@@ -302,7 +312,7 @@ export default class CodelijstenEditController extends Controller {
     this.conceptScheme.isarchived = true;
 
     try {
-      this.conceptScheme.save();
+      await this.conceptScheme.save();
       this.conceptScheme.reload();
       showSuccessToasterMessage(
         this.toaster,
@@ -322,32 +332,31 @@ export default class CodelijstenEditController extends Controller {
   });
 
   setIsSaveButtonDisabled() {
-    if (this.conceptScheme.isPublic) {
-      if (this.isBackTheSavedVersion()) {
-        this.isSaveDisabled = true;
+    if (this.isReadOnly || this.isBackTheSavedVersion()) {
+      this.isSaveDisabled = true;
+      return;
+    }
 
-        return;
-      }
+    if (
+      this.isValidConceptSchemeName() &&
+      this.isValidConceptSchemeDescription()
+    ) {
       if (
-        this.isValidConceptSchemeName() &&
-        this.isValidConceptSchemeDescription() &&
-        this.isConceptListIncludingEmptyValues()
+        this.isCodelistDescriptionDeviating() ||
+        this.isCodelistNameDeviating()
       ) {
-        if (
-          this.isCodelistDescriptionDeviating() ||
-          this.isCodelistNameDeviating() ||
-          this.isConceptListChanged() ||
-          this.conceptsToDelete.length >= 1
-        ) {
-          this.isSaveDisabled = false;
-        } else {
-          this.isSaveDisabled = true;
-        }
+        this.isSaveDisabled = false;
       } else {
         this.isSaveDisabled = true;
       }
-    } else {
-      this.isSaveDisabled = true;
+    }
+
+    if (this.isConceptListChanged() || this.conceptsToDelete.length >= 1) {
+      if (this.hasNoEmptyValuesInConceptList()) {
+        this.isSaveDisabled = false;
+      } else {
+        this.isSaveDisabled = true;
+      }
     }
   }
 
@@ -379,7 +388,7 @@ export default class CodelijstenEditController extends Controller {
     return isoDate.slice(0, 10);
   }
 
-  isConceptListIncludingEmptyValues() {
+  hasNoEmptyValuesInConceptList() {
     return this.concepts.every((concept) => concept.label.trim() !== '');
   }
 
@@ -453,5 +462,36 @@ export default class CodelijstenEditController extends Controller {
     }
 
     return !boolean;
+  }
+
+  @action
+  async discardSave() {
+    this.codelistName = this.conceptScheme.label;
+    this.codelistDescription = this.conceptScheme.description;
+    this.concepts = await this.conceptScheme.getConceptModels();
+    this.conceptsToDelete = [];
+    this.nameErrorMessage = null;
+    this.descriptionErrorMessage = null;
+
+    this.isSaveModalOpen = false;
+    this.setIsSaveButtonDisabled();
+
+    this.goToNextRoute();
+  }
+
+  @action
+  goToNextRoute() {
+    this.router.transitionTo(this.nextRoute);
+  }
+
+  showSaveModal(nextRoute) {
+    this.isSaveModalOpen = true;
+    this.nextRoute = nextRoute;
+  }
+
+  resetErrors() {
+    this.nameErrorMessage = null;
+    this.descriptionErrorMessage = null;
+    this.isDuplicateName = false;
   }
 }

@@ -9,7 +9,7 @@ export function isConceptArrayChanged(dbConcepts, concepts) {
 
   for (const concept of concepts) {
     if (concept.label.trim() == '') {
-      return false;
+      return true;
     }
 
     if (!existingConceptIdsOnScheme.includes(concept.id)) {

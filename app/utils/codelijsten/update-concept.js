@@ -3,7 +3,7 @@ import { showErrorToasterMessage } from '../toaster-message-helper';
 export async function updateConcept(concept, store, toasterService) {
   let conceptInDatabase = await store.findRecord('concept', concept.id);
   if (concept.label.trim() == '') {
-    conceptInDatabase.destroyRecord();
+    await conceptInDatabase.destroyRecord();
   }
   if (
     concept.label.trim() == conceptInDatabase.label ||
@@ -14,7 +14,7 @@ export async function updateConcept(concept, store, toasterService) {
 
   conceptInDatabase.preflabel = concept.label;
   try {
-    conceptInDatabase.save();
+    await conceptInDatabase.save();
     conceptInDatabase.reload();
   } catch (error) {
     showErrorToasterMessage(

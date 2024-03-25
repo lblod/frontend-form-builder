@@ -231,3 +231,28 @@
     </AuButtonGroup>
   </:footer>
 </AuModal>
+
+<AuModal
+  @modalOpen={{this.isSaveModalOpen}}
+  @closeModal={{fn (mut this.isSaveModalOpen) false}}
+>
+  <:title>{{t "confirmation.saveUnsavedChangesTitle"}}</:title>
+  <:body>
+    {{t "confirmation.saveUnsavedChangesQuestion"}}
+  </:body>
+  <:footer>
+    <AuButtonGroup class="au-u-flex--between">
+      <AuButton @alert={{true}} @skin="link" {{on "click" this.discardSave}}>
+        {{t "confirmation.discardChanges"}}
+      </AuButton>
+      <AuButton
+        @loading={{this.saveUnsavedChanges.isRunning}}
+        @loadingMessage={{t "messages.loading.isSaving"}}
+        {{on "click" (perform this.saveUnsavedChanges)}}
+      >
+        {{t "confirmation.saveChanges"}}
+      </AuButton>
+
+    </AuButtonGroup>
+  </:footer>
+</AuModal>

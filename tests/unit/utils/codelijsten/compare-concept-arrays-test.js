@@ -37,7 +37,7 @@ module('Unit | Utility | Codelijsten', function () {
       const dbConcepts = [
         {
           id: 'conceptId',
-          label: '',
+          label: 'label',
         },
       ];
 
