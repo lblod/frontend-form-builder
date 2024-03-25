@@ -249,6 +249,7 @@
         {{t "confirmation.discardChanges"}}
       </AuButton>
       <AuButton
+        @disabled={{this.pageHasErrors}}
         @loading={{this.saveUnsavedChanges.isRunning}}
         @loadingMessage={{t "messages.loading.isSaving"}}
         {{on "click" (perform this.saveUnsavedChanges)}}

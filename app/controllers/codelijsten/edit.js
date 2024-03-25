@@ -356,7 +356,6 @@ export default class CodelijstenEditController extends Controller {
       return;
     }
 
-    console.log(`this.hasErrors()`, this.hasErrors());
     if (this.hasErrors()) {
       this.isSaveDisabled = true;
       return;
@@ -438,7 +437,7 @@ export default class CodelijstenEditController extends Controller {
       this.isDuplicateName,
       !this.hasNoEmptyConceptLabels(),
     ];
-    console.log(`flags`, flags);
+
     return flags.some((flag) => flag);
   }
 
@@ -514,5 +513,9 @@ export default class CodelijstenEditController extends Controller {
 
   get hasConceptsInList() {
     return this.conceptList ? this.conceptList.length >= 1 : false;
+  }
+
+  get pageHasErrors() {
+    return this.hasErrors();
   }
 }
