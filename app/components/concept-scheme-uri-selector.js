@@ -2,8 +2,8 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import { PAGE_SIZE_TO_GET_ALL } from '../utils/constants';
 import { sortObjectsOnProperty } from '../utils/sort-object-on-property';
+import { queryAllItemsInStorePerPage } from '../utils/query-all-items-in-store-per-page';
 
 export default class ConceptSchemeUriSelectorComponent extends Component {
   @service store;
@@ -50,13 +50,12 @@ export default class ConceptSchemeUriSelectorComponent extends Component {
 
   @action
   async loadOptions() {
-    const conceptSchemes = await this.store.query('concept-scheme', {
-      page: {
-        size: PAGE_SIZE_TO_GET_ALL,
-      },
-    });
+    const conceptSchemes = await queryAllItemsInStorePerPage(
+      this.store,
+      'concept-scheme'
+    );
 
-    const notArchivedConceptSchemes = [...conceptSchemes].filter(
+    const notArchivedConceptSchemes = conceptSchemes.filter(
       (scheme) => !scheme.isArchived
     );
 
