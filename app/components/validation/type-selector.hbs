@@ -1,0 +1,18 @@
+<div class="builder_container">
+  <PowerSelect
+    @triggerId={{this.inputId}}
+    @searchField="label"
+    @searchEnabled={{true}}
+    @selected={{this.selectedType}}
+    @options={{this.typeOptions}}
+    @onChange={{this.updatedSelectedValidation}}
+    @allowClear={{false}}
+    @loadingMessage={{t "messages.loading.isLoading"}}
+    @noMatchesMessage={{t "messages.feedback.noResults"}}
+    as |concept|
+  >
+    <span>
+      {{concept.label}}
+    </span>
+  </PowerSelect>
+</div>
