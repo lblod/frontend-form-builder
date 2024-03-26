@@ -6,8 +6,14 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { restartableTask } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { FORM, RDF } from '@lblod/submission-form-helpers';
-import { getMinimalNodeInfo } from '../../../utils/forking-store-helpers';
+import { FORM, RDF, SKOS } from '@lblod/submission-form-helpers';
+import {
+  getMinimalNodeInfo,
+  getPrefLabelOfNode,
+} from '../../../utils/forking-store-helpers';
+import { getPossibleValidationsForDisplayType } from '../../../utils/validation/helpers';
+import { sortObjectsOnProperty } from '../../../utils/sort-object-on-property';
+import { Namespace } from 'rdflib';
 
 export default class FormbuilderEditValidationsController extends Controller {
   @service('form-code-manager') formCodeManager;
@@ -31,6 +37,11 @@ export default class FormbuilderEditValidationsController extends Controller {
     this.builderStore.parse(
       formTtl,
       this.model.graphs.sourceGraph,
+      'text/turtle'
+    );
+    this.builderStore.parse(
+      this.model.validationsTtl,
+      this.metaGraph,
       'text/turtle'
     );
 
@@ -58,6 +69,8 @@ export default class FormbuilderEditValidationsController extends Controller {
         this.model.graphs.sourceGraph
       );
 
+      field.possibleValidationTypes =
+        this.getPossibleValidationTypesForDisplayType(field.displayType);
       this.fields.pushObject(field);
     }
   }
@@ -65,10 +78,10 @@ export default class FormbuilderEditValidationsController extends Controller {
   @action
   setSelectedField(field) {
     this.selectedField = field;
-    this.setFieldvalidations();
+    this.setSelectedFieldValidations();
   }
 
-  setFieldvalidations() {
+  setSelectedFieldValidations() {
     this.fieldValidations = A([]);
 
     if (!this.builderStore || !this.selectedField) {
@@ -105,8 +118,39 @@ export default class FormbuilderEditValidationsController extends Controller {
         };
       }
 
-      this.fieldValidations.pushObject(validation);
+      this.fieldValidations.pushObject(validationConfig);
     }
+  }
+
+  getPossibleValidationTypesForDisplayType(displayType) {
+    const conceptOptions = getPossibleValidationsForDisplayType(
+      displayType,
+      this.builderStore,
+      this.metaGraph
+    );
+    const conceptScheme = new Namespace(
+      'http://lblod.data.gift/concept-schemes/'
+    )('possibleValidations');
+
+    const allOptions = this.builderStore
+      .match(undefined, SKOS('inScheme'), conceptScheme, this.metaGraph)
+      .map((t) => {
+        const label = getPrefLabelOfNode(
+          t.subject,
+          this.builderStore,
+          this.metaGraph
+        );
+
+        return { subject: t.subject, label: label && label.value };
+      });
+
+    const filteredOptions = allOptions.filter((option) => {
+      return conceptOptions
+        .map((concept) => concept.value)
+        .includes(option.subject.value);
+    });
+
+    return sortObjectsOnProperty(filteredOptions, 'label', false);
   }
 
   propertyForUri(uri) {
@@ -125,5 +169,9 @@ export default class FormbuilderEditValidationsController extends Controller {
     };
 
     return mapping[uri] ?? null;
+  }
+
+  get metaGraph() {
+    return this.model.graphs.metaGraph;
   }
 }
