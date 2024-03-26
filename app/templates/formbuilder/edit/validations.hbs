@@ -28,7 +28,10 @@
       <AuCard @expandable={{false}} as |c|>
         <c.header>
           <AuHeading @level="2" @skin="4">
-            {{validation.name}}
+            <Validation::TypeSelector
+              @validationType={{validation.type}}
+              @typeOptions={{this.selectedField.possibleValidationTypes}}
+            />
           </AuHeading>
         </c.header>
         <c.content>
