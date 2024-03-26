@@ -65,6 +65,9 @@ semanticData:
 codeConsole:
   buttonNotification: "Console Meldingen"
 
+validationTab:
+  addValidation: "Voeg validatie toe"
+
 # Components #
 toolbar:
   exportCode: "Exporteer code"

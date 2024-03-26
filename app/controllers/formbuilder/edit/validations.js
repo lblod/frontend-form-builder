@@ -161,6 +161,11 @@ export default class FormbuilderEditValidationsController extends Controller {
     );
   }
 
+  @action
+  addEmptyValidation() {
+    this.fieldValidations.pushObject({ type: null });
+  }
+
   propertyForUri(uri) {
     const mapping = {
       ['http://www.w3.org/ns/shacl#path']: 'path',
