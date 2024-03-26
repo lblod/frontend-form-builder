@@ -322,6 +322,12 @@ export default class CodelijstenEditController extends Controller {
 
   @action
   async discardSave() {
+    const emptyConcepts = this.conceptList.filter(
+      (concept) => !concept.label || concept.label.trim() == ''
+    );
+
+    await this.deleteConcepts(emptyConcepts, true);
+
     this.schemeName = this.dbConceptScheme.label;
     this.schemeDescription = this.dbConceptScheme.description;
     this.conceptList = this.dbConcepts;
