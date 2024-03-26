@@ -21,10 +21,6 @@ export default class CodelijstenEditRoute extends Route {
     controller.setup.perform(model.conceptSchemeId);
   }
 
-  async resetController(controller) {
-    await controller.removeEmptyConceptsAndScheme();
-  }
-
   @action
   willTransition(transition) {
     const nextRoute = transition.targetName;
@@ -35,7 +31,7 @@ export default class CodelijstenEditRoute extends Route {
 
     /* eslint ember/no-controller-access-in-routes: "warn" */
     const editController = this.controllerFor('codelijsten.edit');
-    if (!editController.isSaveDisabled) {
+    if (!editController.isSaveDisabled || editController.hasErrors()) {
       transition.abort();
       editController.showSaveModal(nextRoute);
     }

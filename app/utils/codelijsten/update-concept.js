@@ -5,10 +5,8 @@ export async function updateConcept(concept, store, toasterService) {
   if (concept.label.trim() == '') {
     await conceptInDatabase.destroyRecord();
   }
-  if (
-    concept.label.trim() == conceptInDatabase.label ||
-    concept.label.trim() == ''
-  ) {
+
+  if (concept.label.trim() == conceptInDatabase.label) {
     return;
   }
 

@@ -39,6 +39,8 @@ messages:
     downloading: "Downloaden"
   feedback:
     noCodelistsFound: "Geen codelijsten gevonden"
+  error:
+    codelistHasErrors: "Je codelijst heeft bevat nog errors"
 
 actions:
   exportCodelist: "Exporteer"

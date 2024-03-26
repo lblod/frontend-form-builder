@@ -18,7 +18,7 @@
         >{{t "navigation.backToCodelists"}}</AuLink>
       </li>
       <li class="au-c-list-horizontal__item au-u-word-break">
-        {{this.codelistName}}
+        {{this.schemeName}}
       </li>
     </ul>
   </Group>
@@ -106,18 +106,20 @@
         <AuInput
           id="input-codelist-name"
           @width="block"
-          @error={{this.nameErrorMessage}}
+          @error={{this.schemeNameErrorMessage}}
           @disabled={{this.isReadOnly}}
-          value={{this.codelistName}}
-          {{on "blur" this.handleNameChange}}
+          value={{this.schemeName}}
+          {{on "blur" this.updateSchemeName}}
         />
-        {{#if this.nameErrorMessage}}
-          <AuHelpText @error={{true}}>{{this.nameErrorMessage}}</AuHelpText>
+        {{#if this.schemeNameErrorMessage}}
+          <AuHelpText
+            @error={{true}}
+          >{{this.schemeNameErrorMessage}}</AuHelpText>
         {{/if}}
       </div>
       <div class="au-u-3-5 au-u-margin-bottom-large">
         {{#if this.isReadOnly}}
-          <p>{{this.codelistDescription}}</p>
+          <p>{{this.schemeDescription}}</p>
         {{else}}
           <AuLabel for="input-codelist-description" @required={{true}}>
             {{t "codelists.descriptionOfCodelist"}}
@@ -125,15 +127,15 @@
           <AuTextarea
             id="input-codelist-description"
             @width="block"
-            @error={{this.descriptionErrorMessage}}
+            @error={{this.schemeDescriptionErrorMessage}}
             @disabled={{this.isReadOnly}}
-            value={{this.codelistDescription}}
-            {{on "blur" this.handleDescriptionChange}}
+            value={{this.schemeDescription}}
+            {{on "blur" this.updateSchemeDescription}}
           />
-          {{#if this.descriptionErrorMessage}}
+          {{#if this.schemeDescriptionErrorMessage}}
             <AuHelpText
               @error={{true}}
-            >{{this.descriptionErrorMessage}}</AuHelpText>
+            >{{this.schemeDescriptionErrorMessage}}</AuHelpText>
           {{/if}}
         {{/if}}
       </div>
@@ -149,8 +151,8 @@
           </tr>
         </:header>
         <:body>
-          {{#if this.concepts}}
-            {{#each this.concepts as |concept|}}
+          {{#if this.conceptList}}
+            {{#each this.conceptList as |concept|}}
               <tr>
                 {{#if this.isReadOnly}}
                   <td class="au-u-visible-medium-up">
@@ -158,9 +160,10 @@
                 {{else}}
                   <td class="au-u-visible-medium-up">
                     <AuInput
+                      @width="block"
                       id={{concept.id}}
                       value={{concept.label}}
-                      {{on "blur" (fn this.handleConceptChange concept)}}
+                      {{on "blur" (fn this.updateConceptLabel concept)}}
                     /></td>
                 {{/if}}
                 {{#unless this.isReadOnly}}
@@ -246,6 +249,7 @@
         {{t "confirmation.discardChanges"}}
       </AuButton>
       <AuButton
+        @disabled={{this.pageHasErrors}}
         @loading={{this.saveUnsavedChanges.isRunning}}
         @loadingMessage={{t "messages.loading.isSaving"}}
         {{on "click" (perform this.saveUnsavedChanges)}}
