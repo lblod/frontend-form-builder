@@ -39,5 +39,14 @@
         </c.content>
       </AuCard>
     {{/each}}
+    <AuButton
+      @skin="secondary"
+      @icon="add"
+      @iconAlignment="left"
+      @width="block"
+      {{on "click" this.addEmptyValidation}}
+    >
+      {{t "validationTab.addValidation"}}
+    </AuButton>
   </div>
 </div>
