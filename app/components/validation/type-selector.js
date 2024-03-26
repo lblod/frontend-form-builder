@@ -13,8 +13,14 @@ export default class ValidationTypeSelectorComponent extends Component {
   constructor() {
     super(...arguments);
 
-    this.selectedType = this.args.validationType;
     this.typeOptions = this.args.typeOptions ?? [];
+    const selectedvalidationUri = this.args.validationType.object.value;
+    const validationOption = this.typeOptions.find(
+      (option) => option.subject.value == selectedvalidationUri
+    );
+    if (validationOption) {
+      this.selectedType = validationOption;
+    }
   }
 
   @action
