@@ -22,6 +22,7 @@ export default class FormbuilderEditValidationsController extends Controller {
   @tracked selectedField;
 
   @tracked fieldValidations;
+  @tracked validationsForFieldDisplayType;
 
   builderStore;
 
@@ -32,6 +33,7 @@ export default class FormbuilderEditValidationsController extends Controller {
   setup = restartableTask(async () => {
     this.fields = A([]);
     this.fieldValidations = A([]);
+    this.validationsForFieldDisplayType = [];
     const formTtl = this.formCodeManager.getTtlOfLatestVersion();
     this.builderStore = new ForkingStore();
     this.builderStore.parse(
@@ -69,8 +71,6 @@ export default class FormbuilderEditValidationsController extends Controller {
         this.model.graphs.sourceGraph
       );
 
-      field.possibleValidationTypes =
-        this.getPossibleValidationTypesForDisplayType(field.displayType);
       this.fields.pushObject(field);
     }
   }
@@ -78,6 +78,9 @@ export default class FormbuilderEditValidationsController extends Controller {
   @action
   setSelectedField(field) {
     this.selectedField = field;
+    this.setPossibleValidationTypesForDisplayType(
+      this.selectedField.displayType
+    );
     this.setSelectedFieldValidations();
   }
 
@@ -122,7 +125,8 @@ export default class FormbuilderEditValidationsController extends Controller {
     }
   }
 
-  getPossibleValidationTypesForDisplayType(displayType) {
+  setPossibleValidationTypesForDisplayType(displayType) {
+    this.validationsForFieldDisplayType = [];
     const conceptOptions = getPossibleValidationsForDisplayType(
       displayType,
       this.builderStore,
@@ -150,7 +154,11 @@ export default class FormbuilderEditValidationsController extends Controller {
         .includes(option.subject.value);
     });
 
-    return sortObjectsOnProperty(filteredOptions, 'label', false);
+    this.validationsForFieldDisplayType = sortObjectsOnProperty(
+      filteredOptions,
+      'label',
+      false
+    );
   }
 
   propertyForUri(uri) {
