@@ -67,6 +67,8 @@ codeConsole:
 
 validationTab:
   addValidation: "Voeg validatie toe"
+  resultMessageLabel: "Foutmelding"
+  useCustomResultMessage: "Gebruik een aangepaste foutmelding"
 
 # Components #
 toolbar:

@@ -1,2 +1,21 @@
-<h1> Result message</h1>
-<p>{{this.message}}</p>
+<div>
+  <AuLabel for={{this.inputId}}>
+    {{t "validationTab.resultMessageLabel"}}
+  </AuLabel>
+  <AuCheckbox
+    @onChange={{this.setIsUsingCustomMessage}}
+    @checked={{this.isUsingCustomMessage}}
+  >
+    {{t "validationTab.useCustomResultMessage"}}</AuCheckbox>
+
+  {{#if this.isUsingCustomMessage}}
+    <div>
+      <AuInput
+        @error={{this.hasErrors}}
+        id={{this.inputId}}
+        value={{this.message}}
+        {{on "blur" this.updateMessage}}
+      />
+    </div>
+  {{/if}}
+</div>
