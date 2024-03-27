@@ -49,6 +49,15 @@
               />
             {{/if}}
           </c.content>
+          <c.footer>
+            <div class="au-u-flex au-u-flex--end au-u-margin-top-small">
+              <AuButton
+                @skin="secondary"
+                @alert={{true}}
+                {{on "click" (fn this.deleteValidationFromField validation)}}
+              >{{t "crud.delete"}}</AuButton>
+            </div>
+          </c.footer>
         </AuCard>
       {{/each}}
       {{#if this.selectedField}}
