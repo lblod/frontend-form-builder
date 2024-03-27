@@ -31,6 +31,7 @@ export default class FormbuilderEditValidationsController extends Controller {
   }
 
   setup = restartableTask(async () => {
+    this.selectedField = null;
     this.fields = A([]);
     this.fieldValidations = A([]);
     this.validationsForFieldDisplayType = [];
