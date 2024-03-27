@@ -105,7 +105,12 @@ export default class FormbuilderEditCodeController extends Controller {
         'text/turtle'
       );
     } catch (error) {
-      console.warn({ caught: error });
+      // console.warn({ caught: error });
+      this.consoleMessages.pushObject({
+        severity: this.getConsoleSeverity(error.severity),
+        subject: error,
+        
+      });
       // This is limiting the errors thrown in the console while editing the code
       return;
     }
