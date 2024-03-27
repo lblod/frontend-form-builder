@@ -13,10 +13,16 @@ export default class ValidationResultMessageComponent extends Component {
   constructor() {
     super(...arguments);
 
-    this.message = '';
+    this.message = this.defaultResultMessage;
+    this.isUsingCustomMessage = false;
+
     if (this.args.validationConfig.resultMessage) {
       const { resultMessage } = this.args.validationConfig;
       this.message = resultMessage.object.value;
+    }
+
+    if (this.message !== this.defaultResultMessage) {
+      this.isUsingCustomMessage = true;
     }
   }
 
