@@ -45,6 +45,7 @@
                   validation.type.object
                 }}
                 @update={{perform this.updateValidations}}
+                @isUpdating={{this.updateValidations.isRunning}}
               />
             {{/if}}
           </c.content>
