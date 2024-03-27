@@ -6,7 +6,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { restartableTask } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { FORM, RDF, SKOS } from '@lblod/submission-form-helpers';
+import { FORM, RDF, SKOS, SHACL } from '@lblod/submission-form-helpers';
 import {
   getMinimalNodeInfo,
   getPrefLabelOfNode,
@@ -104,25 +104,20 @@ export default class FormbuilderEditValidationsController extends Controller {
       .map((triple) => triple.object);
 
     for (const subject of validationBlankNodes) {
-      const validationConfig = {};
       const validation = this.builderStore.match(
         subject,
         undefined,
         undefined,
         this.model.graphs.sourceGraph
       );
-      for (const tripleItem of validation) {
-        const propertyName = this.propertyForUri(tripleItem.predicate.value);
 
-        if (!propertyName) {
-          continue;
-        }
+      let validationConfig = this.validationStatementsToConfigObject(
+        validation,
+        {}
+      );
 
-        validationConfig[propertyName] = {
-          predicate: tripleItem.predicate,
-          object: tripleItem.object,
-        };
-      }
+      validationConfig =
+        this.updateConfigWithDefaultResultMessage(validationConfig);
 
       this.fieldValidations.pushObject(validationConfig);
     }
@@ -167,6 +162,45 @@ export default class FormbuilderEditValidationsController extends Controller {
       'label',
       false
     );
+  }
+
+  validationStatementsToConfigObject(validationStatements, config) {
+    for (const tripleItem of validationStatements) {
+      const propertyName = this.propertyForUri(tripleItem.predicate.value);
+
+      if (!propertyName) {
+        continue;
+      }
+
+      config[propertyName] = {
+        predicate: tripleItem.predicate,
+        object: tripleItem.object,
+      };
+    }
+
+    return config;
+  }
+
+  updateConfigWithDefaultResultMessage(config) {
+    let message = '';
+    if (config.type) {
+      const type = config.type.object;
+
+      const messageLiteral = this.builderStore.any(
+        type,
+        SHACL('resultMessage'),
+        undefined,
+        this.model.graphs.metaGraph
+      );
+      if (messageLiteral) {
+        message = messageLiteral.value;
+      }
+    }
+
+    return {
+      ...config,
+      defaultResultMessage: message,
+    };
   }
 
   @action

@@ -35,7 +35,10 @@
           </AuHeading>
         </c.header>
         <c.content>
-          <Validation::ResultMessage @validationConfig={{validation}} />
+          <Validation::ResultMessage
+            @validationConfig={{validation}}
+            @defaultMessage={{validation.defaultErrorMessage}}
+          />
         </c.content>
       </AuCard>
     {{/each}}
