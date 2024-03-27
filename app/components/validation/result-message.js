@@ -59,4 +59,8 @@ export default class ValidationResultMessageComponent extends Component {
   get messageIsDefaultMessage() {
     return this.message == this.defaultResultMessage;
   }
+
+  get isUpdatingResultMessages() {
+    return this.args.isUpdating;
+  }
 }
