@@ -24,34 +24,42 @@
   {{/if}}
 
   <div class="builder_content-container">
-    {{#each this.fieldValidations as |validation|}}
-      <AuCard @expandable={{false}} as |c|>
-        <c.header>
-          <AuHeading @level="2" @skin="4">
-            <Validation::TypeSelector
-              @validationType={{validation.type}}
-              @typeOptions={{this.validationsForFieldDisplayType}}
-            />
-          </AuHeading>
-        </c.header>
-        <c.content>
-          <Validation::ResultMessage
-            @validationConfig={{validation}}
-            @defaultMessage={{validation.defaultErrorMessage}}
-          />
-        </c.content>
-      </AuCard>
-    {{/each}}
-    {{#if this.selectedField}}
-      <AuButton
-        @skin="secondary"
-        @icon="add"
-        @iconAlignment="left"
-        @width="block"
-        {{on "click" this.addEmptyValidation}}
-      >
-        {{t "validationTab.addValidation"}}
-      </AuButton>
+    {{#if this.setup.isRunning}}
+      <AuLoader />
+    {{else}}
+      {{#each this.fieldValidations as |validation|}}
+        <AuCard @expandable={{false}} as |c|>
+          <c.header>
+            <AuHeading @level="2" @skin="4">
+              <Validation::TypeSelector
+                @validationType={{validation.type}}
+                @typeOptions={{this.validationsForFieldDisplayType}}
+              />
+            </AuHeading>
+          </c.header>
+          <c.content>
+            {{#if validation.type}}
+              <Validation::ResultMessage
+                @validationConfig={{validation}}
+                @defaultMessage={{this.getDefaultErrorMessageForType
+                  validation.type.object
+                }}
+              />
+            {{/if}}
+          </c.content>
+        </AuCard>
+      {{/each}}
+      {{#if this.selectedField}}
+        <AuButton
+          @skin="secondary"
+          @icon="add"
+          @iconAlignment="left"
+          @width="block"
+          {{on "click" this.addEmptyValidation}}
+        >
+          {{t "validationTab.addValidation"}}
+        </AuButton>
+      {{/if}}
     {{/if}}
   </div>
 </div>

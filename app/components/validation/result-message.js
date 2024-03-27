@@ -25,6 +25,14 @@ export default class ValidationResultMessageComponent extends Component {
   @action
   setIsUsingCustomMessage(state) {
     this.isUsingCustomMessage = state;
+
+    if (this.isUsingCustomMessage) {
+      this.message = '';
+
+      return;
+    }
+
+    this.message = this.defaultResultMessage;
   }
 
   @action
@@ -40,5 +48,9 @@ export default class ValidationResultMessageComponent extends Component {
 
   get hasErrors() {
     return false;
+  }
+
+  get defaultResultMessage() {
+    return this.args.defaultMessage ?? '';
   }
 }

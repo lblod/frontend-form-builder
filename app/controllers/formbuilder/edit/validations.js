@@ -116,9 +116,6 @@ export default class FormbuilderEditValidationsController extends Controller {
         {}
       );
 
-      validationConfig =
-        this.updateConfigWithDefaultResultMessage(validationConfig);
-
       this.fieldValidations.pushObject(validationConfig);
     }
   }
@@ -181,26 +178,23 @@ export default class FormbuilderEditValidationsController extends Controller {
     return config;
   }
 
-  updateConfigWithDefaultResultMessage(config) {
+  @action
+  getDefaultErrorMessageForType(validationType) {
     let message = '';
-    if (config.type) {
-      const type = config.type.object;
-
+    if (validationType) {
       const messageLiteral = this.builderStore.any(
-        type,
+        validationType,
         SHACL('resultMessage'),
         undefined,
         this.model.graphs.metaGraph
       );
+
       if (messageLiteral) {
         message = messageLiteral.value;
       }
     }
 
-    return {
-      ...config,
-      defaultResultMessage: message,
-    };
+    return message;
   }
 
   @action
