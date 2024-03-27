@@ -68,7 +68,6 @@ codeConsole:
 validationTab:
   addValidation: "Add validation"
   resultMessageLabel: "Error message"
-  useCustomResultMessage: "Use a custom message"
 
 # Components #
 toolbar:

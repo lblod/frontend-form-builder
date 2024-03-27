@@ -8,36 +8,16 @@ export default class ValidationResultMessageComponent extends Component {
   inputId = 'validation-result-message-' + guidFor(this);
 
   @tracked message;
-  @tracked isUsingCustomMessage;
 
   constructor() {
     super(...arguments);
 
     this.message = this.defaultResultMessage;
-    this.isUsingCustomMessage = false;
 
     if (this.args.validationConfig.resultMessage) {
       const { resultMessage } = this.args.validationConfig;
       this.message = resultMessage.object.value;
     }
-
-    if (this.message !== this.defaultResultMessage) {
-      this.isUsingCustomMessage = true;
-    }
-  }
-
-  @action
-  setIsUsingCustomMessage(state) {
-    this.isUsingCustomMessage = state;
-
-    if (this.isUsingCustomMessage) {
-      this.message = '';
-
-      return;
-    }
-
-    this.message = this.defaultResultMessage;
-    this.sendUpdateToParent();
   }
 
   @action

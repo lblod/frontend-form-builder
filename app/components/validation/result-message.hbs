@@ -2,20 +2,12 @@
   <AuLabel for={{this.inputId}}>
     {{t "validationTab.resultMessageLabel"}}
   </AuLabel>
-  <AuCheckbox
-    @onChange={{this.setIsUsingCustomMessage}}
-    @checked={{this.isUsingCustomMessage}}
-  >
-    {{t "validationTab.useCustomResultMessage"}}</AuCheckbox>
 
-  {{#if this.isUsingCustomMessage}}
-    <div class="au-u-margin-top">
-      <AuInput
-        @error={{this.hasErrors}}
-        id={{this.inputId}}
-        value={{this.message}}
-        {{on "blur" this.updateMessage}}
-      />
-    </div>
-  {{/if}}
+  <AuInput
+    @width="block"
+    @error={{this.hasErrors}}
+    id={{this.inputId}}
+    value={{this.message}}
+    {{on "blur" this.updateMessage}}
+  />
 </div>
