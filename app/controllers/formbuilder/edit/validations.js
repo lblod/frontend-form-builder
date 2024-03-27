@@ -59,7 +59,7 @@ export default class FormbuilderEditValidationsController extends Controller {
       const currentResultMessages = this.builderStore.match(
         resultMessage.subject,
         SHACL('resultMessage'),
-        resultMessage.previousObject,
+        undefined,
         this.model.graphs.sourceGraph
       );
       if (currentResultMessages) {
