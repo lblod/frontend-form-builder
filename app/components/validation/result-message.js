@@ -33,18 +33,17 @@ export default class ValidationResultMessageComponent extends Component {
     this.sendUpdateToParent();
   }
 
+  @action
+  resetMessageToDefault() {
+    this.message = this.defaultResultMessage;
+    this.sendUpdateToParent();
+  }
+
   sendUpdateToParent() {
-    let previousObject = null;
-
-    if (this.args.validationConfig.resultMessage) {
-      previousObject = this.args.validationConfig.resultMessage.object;
-    }
-
     this.args.update({
       resultMessage: {
         subject: this.args.validationConfig.subject,
         message: this.message,
-        previousObject: previousObject,
       },
     });
   }
@@ -55,5 +54,9 @@ export default class ValidationResultMessageComponent extends Component {
 
   get defaultResultMessage() {
     return this.args.defaultMessage ?? '';
+  }
+
+  get messageIsDefaultMessage() {
+    return this.message == this.defaultResultMessage;
   }
 }
