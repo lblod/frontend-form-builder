@@ -50,6 +50,10 @@ export default class FormbuilderEditValidationsController extends Controller {
     this.setFields();
   });
 
+  updateValidations = restartableTask(async (config) => {
+    console.log(`update validations in ttl `, config);
+  });
+
   setFields() {
     if (!this.builderStore) {
       return;

@@ -13,8 +13,6 @@ export default class ValidationResultMessageComponent extends Component {
   constructor() {
     super(...arguments);
 
-    console.log(`config`, this.args.validationConfig);
-
     this.message = '';
     if (this.args.validationConfig.resultMessage) {
       const { resultMessage } = this.args.validationConfig;
@@ -33,6 +31,7 @@ export default class ValidationResultMessageComponent extends Component {
     }
 
     this.message = this.defaultResultMessage;
+    this.sendUpdateToParent();
   }
 
   @action
@@ -44,6 +43,12 @@ export default class ValidationResultMessageComponent extends Component {
     } else {
       this.message = inputValue.trim();
     }
+
+    this.sendUpdateToParent();
+  }
+
+  sendUpdateToParent() {
+    this.args.update({ resultMessage: this.message });
   }
 
   get hasErrors() {
