@@ -78,9 +78,12 @@ export default class FormbuilderEditValidationsController extends Controller {
   @action
   setSelectedField(field) {
     this.selectedField = field;
-    this.setPossibleValidationTypesForDisplayType(
-      this.selectedField.displayType
-    );
+    let displayType = null;
+
+    if (this.selectedField) {
+      displayType = this.selectedField.displayType;
+    }
+    this.setPossibleValidationTypesForDisplayType(displayType);
     this.setSelectedFieldValidations();
   }
 
@@ -127,6 +130,11 @@ export default class FormbuilderEditValidationsController extends Controller {
 
   setPossibleValidationTypesForDisplayType(displayType) {
     this.validationsForFieldDisplayType = [];
+
+    if (!displayType) {
+      return;
+    }
+
     const conceptOptions = getPossibleValidationsForDisplayType(
       displayType,
       this.builderStore,
