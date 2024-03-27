@@ -4,7 +4,7 @@ import { A } from '@ember/array';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { restartableTask } from 'ember-concurrency';
+import { enqueueTask, restartableTask } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { FORM, RDF, SKOS, SHACL } from '@lblod/submission-form-helpers';
 import {
@@ -13,7 +13,7 @@ import {
 } from '../../../utils/forking-store-helpers';
 import { getPossibleValidationsForDisplayType } from '../../../utils/validation/helpers';
 import { sortObjectsOnProperty } from '../../../utils/sort-object-on-property';
-import { Namespace } from 'rdflib';
+import { Namespace, Statement } from 'rdflib';
 
 export default class FormbuilderEditValidationsController extends Controller {
   @service('form-code-manager') formCodeManager;
@@ -50,8 +50,31 @@ export default class FormbuilderEditValidationsController extends Controller {
     this.setFields();
   });
 
-  updateValidations = restartableTask(async (config) => {
+  updateValidations = enqueueTask(async (config) => {
     console.log(`update validations in ttl `, config);
+    const { resultMessage } = config;
+
+    if (resultMessage) {
+      const currentResultMessages = this.builderStore.match(
+        resultMessage.subject,
+        SHACL('resultMessage'),
+        resultMessage.previousObject,
+        this.model.graphs.sourceGraph
+      );
+      if (currentResultMessages) {
+        this.builderStore.removeStatements(currentResultMessages);
+      }
+
+      const newResultMessage = new Statement(
+        resultMessage.subject,
+        SHACL('resultMessage'),
+        resultMessage.message,
+        this.model.graphs.sourceGraph
+      );
+
+      this.builderStore.addAll([newResultMessage]);
+      this.updatedTtlCodeInManager();
+    }
   });
 
   setFields() {
@@ -166,6 +189,7 @@ export default class FormbuilderEditValidationsController extends Controller {
   }
 
   validationStatementsToConfigObject(validationStatements, config) {
+    config.subject = validationStatements[0].subject;
     for (const tripleItem of validationStatements) {
       const propertyName = this.propertyForUri(tripleItem.predicate.value);
 
@@ -226,5 +250,12 @@ export default class FormbuilderEditValidationsController extends Controller {
 
   get metaGraph() {
     return this.model.graphs.metaGraph;
+  }
+
+  updatedTtlCodeInManager() {
+    const sourceTtl = this.builderStore.serializeDataMergedGraph(
+      this.model.graphs.sourceGraph
+    );
+    this.model.handleCodeChange(sourceTtl);
   }
 }

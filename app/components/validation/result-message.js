@@ -48,7 +48,19 @@ export default class ValidationResultMessageComponent extends Component {
   }
 
   sendUpdateToParent() {
-    this.args.update({ resultMessage: this.message });
+    let previousObject = null;
+
+    if (this.args.validationConfig.resultMessage) {
+      previousObject = this.args.validationConfig.resultMessage.object;
+    }
+
+    this.args.update({
+      resultMessage: {
+        subject: this.args.validationConfig.subject,
+        message: this.message,
+        previousObject: previousObject,
+      },
+    });
   }
 
   get hasErrors() {
