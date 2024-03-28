@@ -10,6 +10,7 @@ import { getPossibleValidationsForDisplayType } from '../../utils/validation/hel
 import { Literal, Namespace } from 'rdflib';
 import { getPrefLabelOfNode } from '../../utils/forking-store-helpers';
 import { sortObjectsOnProperty } from '../../utils/sort-object-on-property';
+import { isValidationConfigValidForType } from '../../utils/validation/is-validation-config-valid-for-type,js';
 
 export default class ValidationCardComponent extends Component {
   inputId = 'validation-card' + guidFor(this);
@@ -79,7 +80,10 @@ export default class ValidationCardComponent extends Component {
   });
 
   updateValidation = restartableTask(async (config) => {
-    console.log(`update validation in card`, config);
+    config.type = this.validationType;
+    if (isValidationConfigValidForType(config)) {
+      this.args.update(config);
+    }
   });
 
   setup = restartableTask(async () => {

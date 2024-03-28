@@ -1,0 +1,33 @@
+import { FORM } from "@lblod/submission-form-helpers";
+
+export function isValidationConfigValidForType(config) {
+  console.log(`isValidatioNConfigValidaForType | config`, config);
+  if (!config || !config.type) {
+    return false;
+  }
+
+  const type = config.type;
+  const validate = getValidatorForType(type);
+
+  return validate(config);
+}
+
+function getValidatorForType(type) {
+  const uri = type.value;
+
+  const validator = {
+    [FORM("RequiredConstraint").value]: isValidForRequiredValidation,
+  };
+
+  if (!Object.keys(validator).includes(uri)) {
+    throw `Could not find validator for type: ${uri}`;
+  }
+
+  return validator[uri];
+}
+
+function isValidForRequiredValidation(config) {
+  if (config.type) return true;
+
+  return false;
+}
