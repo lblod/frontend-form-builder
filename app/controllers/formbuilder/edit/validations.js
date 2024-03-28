@@ -6,14 +6,8 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { enqueueTask, restartableTask } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { FORM, RDF, SKOS, SHACL } from '@lblod/submission-form-helpers';
-import {
-  getMinimalNodeInfo,
-  getPrefLabelOfNode,
-} from '../../../utils/forking-store-helpers';
-import { getPossibleValidationsForDisplayType } from '../../../utils/validation/helpers';
-import { sortObjectsOnProperty } from '../../../utils/sort-object-on-property';
-import { Namespace, Statement } from 'rdflib';
+import { FORM, RDF } from '@lblod/submission-form-helpers';
+import { getMinimalNodeInfo } from '../../../utils/forking-store-helpers';
 
 export default class FormbuilderEditValidationsController extends Controller {
   @service('form-code-manager') formCodeManager;
@@ -42,40 +36,35 @@ export default class FormbuilderEditValidationsController extends Controller {
       this.model.graphs.sourceGraph,
       'text/turtle'
     );
-    this.builderStore.parse(
-      this.model.validationsTtl,
-      this.metaGraph,
-      'text/turtle'
-    );
 
     this.setFields();
   });
 
   updateValidations = enqueueTask(async (config) => {
     console.log(`update validations in ttl `, config);
-    const { resultMessage } = config;
+    // const { resultMessage } = config;
 
-    if (resultMessage) {
-      const currentResultMessages = this.builderStore.match(
-        resultMessage.subject,
-        SHACL('resultMessage'),
-        undefined,
-        this.model.graphs.sourceGraph
-      );
-      if (currentResultMessages) {
-        this.builderStore.removeStatements(currentResultMessages);
-      }
+    // if (resultMessage) {
+    //   const currentResultMessages = this.builderStore.match(
+    //     resultMessage.subject,
+    //     SHACL('resultMessage'),
+    //     undefined,
+    //     this.model.graphs.sourceGraph
+    //   );
+    //   if (currentResultMessages) {
+    //     this.builderStore.removeStatements(currentResultMessages);
+    //   }
 
-      const newResultMessage = new Statement(
-        resultMessage.subject,
-        SHACL('resultMessage'),
-        resultMessage.message,
-        this.model.graphs.sourceGraph
-      );
+    //   const newResultMessage = new Statement(
+    //     resultMessage.subject,
+    //     SHACL('resultMessage'),
+    //     resultMessage.message,
+    //     this.model.graphs.sourceGraph
+    //   );
 
-      this.builderStore.addAll([newResultMessage]);
-      this.updatedTtlCodeInManager();
-    }
+    //   this.builderStore.addAll([newResultMessage]);
+    //   this.updatedTtlCodeInManager();
+    // }
   });
 
   setFields() {
@@ -106,12 +95,8 @@ export default class FormbuilderEditValidationsController extends Controller {
   @action
   setSelectedField(field) {
     this.selectedField = field;
-    let displayType = null;
+    console.log(`field`, field);
 
-    if (this.selectedField) {
-      displayType = this.selectedField.displayType;
-    }
-    this.setPossibleValidationTypesForDisplayType(displayType);
     this.setSelectedFieldValidations();
   }
 
@@ -148,47 +133,6 @@ export default class FormbuilderEditValidationsController extends Controller {
     }
   }
 
-  setPossibleValidationTypesForDisplayType(displayType) {
-    this.validationsForFieldDisplayType = [];
-
-    if (!displayType) {
-      return;
-    }
-
-    const conceptOptions = getPossibleValidationsForDisplayType(
-      displayType,
-      this.builderStore,
-      this.metaGraph
-    );
-    const conceptScheme = new Namespace(
-      'http://lblod.data.gift/concept-schemes/'
-    )('possibleValidations');
-
-    const allOptions = this.builderStore
-      .match(undefined, SKOS('inScheme'), conceptScheme, this.metaGraph)
-      .map((t) => {
-        const label = getPrefLabelOfNode(
-          t.subject,
-          this.builderStore,
-          this.metaGraph
-        );
-
-        return { subject: t.subject, label: label && label.value };
-      });
-
-    const filteredOptions = allOptions.filter((option) => {
-      return conceptOptions
-        .map((concept) => concept.value)
-        .includes(option.subject.value);
-    });
-
-    this.validationsForFieldDisplayType = sortObjectsOnProperty(
-      filteredOptions,
-      'label',
-      false
-    );
-  }
-
   validationStatementsToConfigObject(validationStatements, config) {
     config.subject = validationStatements[0].subject;
     for (const tripleItem of validationStatements) {
@@ -205,25 +149,6 @@ export default class FormbuilderEditValidationsController extends Controller {
     }
 
     return config;
-  }
-
-  @action
-  getDefaultErrorMessageForType(validationType) {
-    let message = '';
-    if (validationType) {
-      const messageLiteral = this.builderStore.any(
-        validationType,
-        SHACL('resultMessage'),
-        undefined,
-        this.model.graphs.metaGraph
-      );
-
-      if (messageLiteral) {
-        message = messageLiteral.value;
-      }
-    }
-
-    return message;
   }
 
   @action
@@ -278,6 +203,10 @@ export default class FormbuilderEditValidationsController extends Controller {
 
   get metaGraph() {
     return this.model.graphs.metaGraph;
+  }
+
+  get metaTtl() {
+    return this.model.validationsTtl;
   }
 
   updatedTtlCodeInManager() {

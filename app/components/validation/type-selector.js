@@ -9,12 +9,10 @@ export default class ValidationTypeSelectorComponent extends Component {
 
   @tracked selectedType;
   @tracked typeOptions;
-  @tracked isDisabled;
 
   constructor() {
     super(...arguments);
 
-    this.isDisabled = false;
     this.typeOptions = this.args.typeOptions ?? [];
     if (this.args.validationType) {
       const selectedvalidationUri = this.args.validationType.object.value;
@@ -23,7 +21,6 @@ export default class ValidationTypeSelectorComponent extends Component {
       );
       if (validationOption) {
         this.selectedType = validationOption;
-        this.isDisabled = true;
       }
     }
   }
@@ -31,6 +28,6 @@ export default class ValidationTypeSelectorComponent extends Component {
   @action
   updatedSelectedValidation(newValidationType) {
     this.selectedType = newValidationType;
-    this.isDisabled = true;
+    this.args.update({ type: this.selectedType });
   }
 }
