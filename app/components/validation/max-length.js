@@ -25,6 +25,11 @@ export default class ValidationResultMessageComponent extends Component {
     } else {
       this.maxLength = event.target.value;
     }
+
+    this.args.update({
+      subject: this.args.validation.subject,
+      max: this.maxLength,
+    });
   }
 
   get isForValidationType() {
