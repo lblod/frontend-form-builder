@@ -28,37 +28,12 @@
       <AuLoader />
     {{else}}
       {{#each this.fieldValidations as |validation|}}
-        <AuCard @expandable={{false}} as |c|>
-          <c.header>
-            <AuHeading @level="2" @skin="4">
-              <Validation::TypeSelector
-                @validationType={{validation.type}}
-                @typeOptions={{this.validationsForFieldDisplayType}}
-              />
-            </AuHeading>
-          </c.header>
-          <c.content>
-            {{#if validation.type}}
-              <Validation::ResultMessage
-                @validationConfig={{validation}}
-                @defaultMessage={{this.getDefaultErrorMessageForType
-                  validation.type.object
-                }}
-                @update={{perform this.updateValidations}}
-                @isUpdating={{this.updateValidations.isRunning}}
-              />
-            {{/if}}
-          </c.content>
-          <c.footer>
-            <div class="au-u-flex au-u-flex--end au-u-margin-top-small">
-              <AuButton
-                @skin="secondary"
-                @alert={{true}}
-                {{on "click" (fn this.deleteValidationFromField validation)}}
-              >{{t "crud.delete"}}</AuButton>
-            </div>
-          </c.footer>
-        </AuCard>
+        <Validation::Card
+          @fieldType={{this.selectedField.displayType}}
+          @validation={{validation}}
+          @metaTtl={{this.metaTtl}}
+          @graph={{this.metaGraph}}
+        />
       {{/each}}
       {{#if this.selectedField}}
         <AuButton

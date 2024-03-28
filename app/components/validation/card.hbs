@@ -1,0 +1,38 @@
+{{#if this.setup.isRunning}}
+  <AuLoader />
+{{else}}
+  <AuCard @expandable={{false}} as |c|>
+    <c.header>
+      <AuHeading @level="2" @skin="4">
+        <Validation::TypeSelector
+          @validationType={{this.validation.type}}
+          @typeOptions={{this.validationTypes}}
+          @update={{perform this.updateType}}
+        />
+      </AuHeading>
+    </c.header>
+    <c.content>
+      {{#if this.updateType.isRunning}}
+        <AuLoader />
+      {{else}}
+        {{#if this.validation.type}}
+          <Validation::ResultMessage
+            @validationConfig={{this.validation}}
+            @defaultMessage={{this.defaultErrorMessage}}
+            @update={{perform this.updateValidation}}
+            @isUpdating={{this.updateValidation.isRunning}}
+          />
+        {{/if}}
+      {{/if}}
+    </c.content>
+    <c.footer>
+      <div class="au-u-flex au-u-flex--end au-u-margin-top-small">
+        <AuButton
+          @skin="secondary"
+          @alert={{true}}
+          {{on "click" this.deleteValidation}}
+        >{{t "crud.delete"}}</AuButton>
+      </div>
+    </c.footer>
+  </AuCard>
+{{/if}}

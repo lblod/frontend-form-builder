@@ -13,7 +13,6 @@ export default class ValidationResultMessageComponent extends Component {
     super(...arguments);
 
     this.message = this.defaultResultMessage;
-
     if (this.args.validationConfig.resultMessage) {
       const { resultMessage } = this.args.validationConfig;
       this.message = resultMessage.object.value;
@@ -60,7 +59,7 @@ export default class ValidationResultMessageComponent extends Component {
     return this.message == this.defaultResultMessage;
   }
 
-  get isUpdatingResultMessages() {
+  get isUpdating() {
     return this.args.isUpdating;
   }
 }
