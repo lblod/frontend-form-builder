@@ -11,10 +11,9 @@ export default class ValidationResultMessageComponent extends Component {
 
   constructor() {
     super(...arguments);
-
     this.message = this.defaultResultMessage;
-    if (this.args.validationConfig.resultMessage) {
-      const { resultMessage } = this.args.validationConfig;
+    if (this.args.validation.resultMessage) {
+      const { resultMessage } = this.args.validation;
       this.message = resultMessage.object.value;
     }
   }
@@ -41,7 +40,7 @@ export default class ValidationResultMessageComponent extends Component {
   sendUpdateToParent() {
     this.args.update({
       resultMessage: {
-        subject: this.args.validationConfig.subject,
+        subject: this.args.validation.subject,
         message: this.message,
       },
     });
@@ -59,7 +58,7 @@ export default class ValidationResultMessageComponent extends Component {
     return this.message == this.defaultResultMessage;
   }
 
-  get isUpdating() {
-    return this.args.isUpdating;
+  get hasValidationType() {
+    return this.args.validation && this.args.validation.type;
   }
 }
