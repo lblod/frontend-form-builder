@@ -16,6 +16,7 @@ export default class ValidationCardComponent extends Component {
   inputId = 'validation-card' + guidFor(this);
 
   @tracked validation;
+  @tracked validationType;
   @tracked validationTypes;
 
   @tracked defaultErrorMessage;
@@ -33,7 +34,7 @@ export default class ValidationCardComponent extends Component {
     let message = '';
     if (this.validationType) {
       const messageLiteral = this.metaStore.any(
-        this.validationType,
+        this.validationType.object,
         SHACL('resultMessage'),
         undefined,
         this.metaGraph
@@ -55,34 +56,38 @@ export default class ValidationCardComponent extends Component {
     const { type } = config;
 
     if (type) {
-      if (!this.validation.type) {
-        this.validation.type = {
-          object: type.subject,
-          predicate: RDF('type'),
-        };
-      } else {
-        this.validation.type.object = type.subject;
-      }
-
-      this.defaultErrorMessage = this.getDefaultErrorMessage();
-
-      if (!this.validation.resultMessage) {
-        this.validation.resultMessage = {
-          object: new Literal(this.defaultErrorMessage),
-          predicate: SHACL('resultMessage'),
-        };
-      } else {
-        this.validation.resultMessage.object.value = this.defaultErrorMessage;
-      }
+      this.validationType = {
+        object: type.subject,
+        predicate: RDF('type'),
+      };
+      this.validation.type = this.validationType;
     }
+
+    this.defaultErrorMessage = this.getDefaultErrorMessage();
+
+    if (!this.validation.resultMessage) {
+      this.validation.resultMessage = {
+        object: new Literal(this.defaultErrorMessage),
+        predicate: SHACL('resultMessage'),
+      };
+    } else {
+      this.validation.resultMessage.object.value = this.defaultErrorMessage;
+    }
+
     // for updating the data in the child components
     await timeout(1);
   });
 
   updateValidation = restartableTask(async (config) => {
     config.type = this.validationType;
-    if (isValidationConfigValidForType(config)) {
-      this.args.update(config);
+
+    for (const property of Object.keys(config)) {
+      this.validation[property] = config[property];
+    }
+
+    if (isValidationConfigValidForType(this.validation)) {
+      console.log(`CAN UPDATE TO TTL`, this.validation);
+      // this.args.update(config);
     }
   });
 
@@ -90,6 +95,7 @@ export default class ValidationCardComponent extends Component {
     this.metaStore = new ForkingStore();
     this.metaStore.parse(this.args.metaTtl, this.metaGraph, 'text/turtle');
     this.setValidationTypes();
+    this.validationType = this.validation.type;
     this.defaultErrorMessage = this.getDefaultErrorMessage();
   });
 
@@ -141,13 +147,5 @@ export default class ValidationCardComponent extends Component {
 
   get fieldDisplayType() {
     return this.args.fieldType;
-  }
-
-  get validationType() {
-    if (!this.validation.type) {
-      return null;
-    }
-
-    return this.validation.type.object;
   }
 }

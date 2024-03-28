@@ -95,7 +95,6 @@ export default class FormbuilderEditValidationsController extends Controller {
   @action
   setSelectedField(field) {
     this.selectedField = field;
-    console.log(`field`, field);
 
     this.setSelectedFieldValidations();
   }
