@@ -3,11 +3,11 @@ import Component from '@glimmer/component';
 import { guidFor } from '@ember/object/internals';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { SHACL, SKOS } from '@lblod/submission-form-helpers';
+import { SHACL, SKOS, RDF } from '@lblod/submission-form-helpers';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { getPossibleValidationsForDisplayType } from '../../utils/validation/helpers';
-import { Namespace } from 'rdflib';
+import { Literal, Namespace } from 'rdflib';
 import { getPrefLabelOfNode } from '../../utils/forking-store-helpers';
 import { sortObjectsOnProperty } from '../../utils/sort-object-on-property';
 
@@ -51,15 +51,31 @@ export default class ValidationCardComponent extends Component {
   }
 
   updateType = restartableTask(async (config) => {
-    // for updating the data in the child components
-    await timeout(1);
     const { type } = config;
 
     if (type) {
-      this.validation.type.object = type.subject;
+      if (!this.validation.type) {
+        this.validation.type = {
+          object: type.subject,
+          predicate: RDF('type'),
+        };
+      } else {
+        this.validation.type.object = type.subject;
+      }
+
       this.defaultErrorMessage = this.getDefaultErrorMessage();
-      this.validation.resultMessage.object.value = this.defaultErrorMessage;
+
+      if (!this.validation.resultMessage) {
+        this.validation.resultMessage = {
+          object: new Literal(this.defaultErrorMessage),
+          predicate: SHACL('resultMessage'),
+        };
+      } else {
+        this.validation.resultMessage.object.value = this.defaultErrorMessage;
+      }
     }
+    // for updating the data in the child components
+    await timeout(1);
   });
 
   updateValidation = restartableTask(async (config) => {
@@ -124,6 +140,10 @@ export default class ValidationCardComponent extends Component {
   }
 
   get validationType() {
+    if (!this.validation.type) {
+      return null;
+    }
+
     return this.validation.type.object;
   }
 }

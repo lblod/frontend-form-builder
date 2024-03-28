@@ -1,7 +1,5 @@
-<div>
-  {{#if this.isUpdating}}
-    <AuLoader />
-  {{else}}
+{{#if this.hasValidationType}}
+  <div>
     <AuLabel for={{this.inputId}}>
       {{t "validationTab.resultMessageLabel"}}
     </AuLabel>
@@ -21,5 +19,5 @@
         {{on "click" this.resetMessageToDefault}}
       />
     </div>
-  {{/if}}
-</div>
+  </div>
+{{/if}}
