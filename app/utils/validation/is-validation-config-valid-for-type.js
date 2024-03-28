@@ -1,4 +1,4 @@
-import { FORM } from "@lblod/submission-form-helpers";
+import { FORM } from '@lblod/submission-form-helpers';
 
 export function isValidationConfigValidForType(config) {
   console.log(`isValidatioNConfigValidaForType | config`, config);
@@ -15,19 +15,23 @@ export function isValidationConfigValidForType(config) {
 function getValidatorForType(type) {
   const uri = type.value;
 
-  const validator = {
-    [FORM("RequiredConstraint").value]: isValidForRequiredValidation,
-  };
+  switch (uri) {
+    case FORM('MaxLength').value:
+      return isValidForMaxLength;
 
-  if (!Object.keys(validator).includes(uri)) {
-    throw `Could not find validator for type: ${uri}`;
+    default:
+      return isValidBecauseNoRequirements;
   }
-
-  return validator[uri];
 }
 
-function isValidForRequiredValidation(config) {
+function isValidBecauseNoRequirements(config) {
   if (config.type) return true;
+
+  return false;
+}
+
+function isValidForMaxLength(config) {
+  if (config.max && !isNaN(config.max)) return true;
 
   return false;
 }
