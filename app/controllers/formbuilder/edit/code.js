@@ -106,10 +106,10 @@ export default class FormbuilderEditCodeController extends Controller {
       );
     } catch (error) {
       // console.warn({ caught: error });
+      console.log(error);
       this.consoleMessages.pushObject({
-        severity: this.getConsoleSeverity(error.severity),
-        subject: error,
-        
+        severity: this.getConsoleSeverity(SHACL_SEVERITY_TYPE.error),
+        content: error,
       });
       // This is limiting the errors thrown in the console while editing the code
       return;
