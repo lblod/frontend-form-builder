@@ -232,6 +232,23 @@ export default class FormbuilderEditValidationsController extends Controller {
       (config) => config == validationConfig
     );
     if (validationToRemove) {
+      const validationOfField = this.builderStore.match(
+        this.selectedField.subject,
+        FORM('validatedBy'),
+        validationToRemove.subject,
+        this.model.graphs.sourceGraph
+      );
+      const blankNodeToRemove = this.builderStore.match(
+        validationToRemove.subject,
+        undefined,
+        undefined,
+        this.model.graphs.sourceGraph
+      );
+      this.builderStore.removeStatements([
+        ...validationOfField,
+        ...blankNodeToRemove,
+      ]);
+      this.updatedTtlCodeInManager();
       this.fieldValidations.removeObject(validationToRemove);
     }
   }
