@@ -20,6 +20,10 @@
           @defaultMessage={{this.defaultErrorMessage}}
           @update={{perform this.updateValidation}}
         />
+        <Validation::MaxLength
+          @validation={{this.validation}}
+          @update={{perform this.updateValidation}}
+        />
       {{/if}}
     </c.content>
     <c.footer>
