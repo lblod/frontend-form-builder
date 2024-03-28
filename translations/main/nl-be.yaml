@@ -65,6 +65,11 @@ semanticData:
 codeConsole:
   buttonNotification: "Console Meldingen"
 
+validationTab:
+  addValidation: "Voeg validatie toe"
+  resultMessageLabel: "Foutmelding"
+  maxLengthLabel: "Maximum karakters"
+
 # Components #
 toolbar:
   exportCode: "Exporteer code"

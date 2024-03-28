@@ -4,7 +4,6 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { registerFormFields } from '@lblod/ember-submission-form-fields';
 import SectionSelector from '../../components/rdf-form-fields/section-selector';
-import ValidationConceptSchemeSelectorComponent from '../../components/rdf-form-fields/validation-concept-scheme-selector';
 import { getLocalFileContentAsText } from '../../utils/get-local-file-content';
 import CountryCodeConceptSchemeSelectorComponent from '../../components/rdf-form-fields/country-code-concept-scheme-selector';
 import { GRAPHS } from '../../controllers/formbuilder/edit';
@@ -101,11 +100,6 @@ export default class FormbuilderEditRoute extends Route {
       {
         displayType: 'http://lblod.data.gift/display-types/sectionSelector',
         edit: SectionSelector,
-      },
-      {
-        displayType:
-          'http://lblod.data.gift/display-types/validationConceptSchemeSelector',
-        edit: ValidationConceptSchemeSelectorComponent,
       },
       {
         displayType:
