@@ -2,9 +2,30 @@ import Component from '@glimmer/component';
 
 import { guidFor } from '@ember/object/internals';
 import { FORM } from '@lblod/submission-form-helpers';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 
 export default class ValidationResultMessageComponent extends Component {
   inputId = 'validation-max-length-' + guidFor(this);
+
+  @tracked maxLength;
+
+  constructor() {
+    super(...arguments);
+
+    if (this.args.validation.max) {
+      this.maxLength = this.args.validation.max.object.value;
+    }
+  }
+
+  @action
+  updateMaxLength(event) {
+    if (!event.target) {
+      this.maxLength = 0;
+    } else {
+      this.maxLength = event.target.value;
+    }
+  }
 
   get isForValidationType() {
     if (!this.args.validation) {
