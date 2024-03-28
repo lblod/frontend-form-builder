@@ -4,7 +4,7 @@ import { A } from '@ember/array';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { enqueueTask, restartableTask } from 'ember-concurrency';
+import { restartableTask } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { FORM, RDF } from '@lblod/submission-form-helpers';
 import { getMinimalNodeInfo } from '../../../utils/forking-store-helpers';
@@ -40,7 +40,7 @@ export default class FormbuilderEditValidationsController extends Controller {
     this.setFields();
   });
 
-  updateValidations = enqueueTask(async (config) => {
+  updateValidations = restartableTask(async (config) => {
     console.log(`update validations in ttl `, config);
     // const { resultMessage } = config;
 

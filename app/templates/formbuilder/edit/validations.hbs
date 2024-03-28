@@ -34,6 +34,7 @@
           @metaTtl={{this.metaTtl}}
           @graph={{this.metaGraph}}
           @delete={{(fn this.deleteValidationFromField validation)}}
+          @update={{perform this.updateValidations}}
         />
       {{/each}}
       {{#if this.selectedField}}
