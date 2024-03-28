@@ -152,10 +152,11 @@ export default class FormbuilderEditValidationsController extends Controller {
   }
 
   @action
-  deleteValidationFromField(validationConfig) {
+  deleteValidationFromField(validation) {
     const validationToRemove = this.fieldValidations.find(
-      (config) => config == validationConfig
+      (config) => config == validation
     );
+
     if (validationToRemove) {
       const validationOfField = this.builderStore.match(
         this.selectedField.subject,

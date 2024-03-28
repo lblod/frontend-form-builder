@@ -47,7 +47,7 @@ export default class ValidationCardComponent extends Component {
 
   @action
   deleteValidation() {
-    console.log(`delete validation`);
+    this.args.delete(this.validation);
   }
 
   updateType = restartableTask(async (config) => {
@@ -79,7 +79,7 @@ export default class ValidationCardComponent extends Component {
   });
 
   updateValidation = restartableTask(async (config) => {
-    console.log(`update validation`, config);
+    console.log(`update validation in card`, config);
   });
 
   setup = restartableTask(async () => {

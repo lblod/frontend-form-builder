@@ -33,6 +33,7 @@
           @validation={{validation}}
           @metaTtl={{this.metaTtl}}
           @graph={{this.metaGraph}}
+          @delete={{(fn this.deleteValidationFromField validation)}}
         />
       {{/each}}
       {{#if this.selectedField}}
