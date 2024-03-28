@@ -4,6 +4,7 @@ import { guidFor } from '@ember/object/internals';
 import { FORM } from '@lblod/submission-form-helpers';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { Literal } from 'rdflib';
 
 export default class ValidationResultMessageComponent extends Component {
   inputId = 'validation-max-length-' + guidFor(this);
@@ -21,14 +22,19 @@ export default class ValidationResultMessageComponent extends Component {
   @action
   updateMaxLength(event) {
     if (!event.target) {
-      this.maxLength = 0;
+      this.maxLength = null;
     } else {
       this.maxLength = event.target.value;
     }
 
+    let objectValue = null;
+
+    if (this.maxLength && this.maxLength.trim() !== '') {
+      objectValue = new Literal(this.maxLength);
+    }
+
     this.args.update({
-      subject: this.args.validation.subject,
-      max: this.maxLength,
+      max: { object: objectValue, predicate: FORM('max') },
     });
   }
 
@@ -39,7 +45,6 @@ export default class ValidationResultMessageComponent extends Component {
     if (!this.args.validation.type) {
       return false;
     }
-    console.log(this.args.validation);
 
     return this.args.validation.type.object.value == FORM('MaxLength').value;
   }

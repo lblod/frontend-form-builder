@@ -3,6 +3,8 @@ import Component from '@glimmer/component';
 import { guidFor } from '@ember/object/internals';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { SHACL } from '@lblod/submission-form-helpers';
+import { Literal } from 'rdflib';
 
 export default class ValidationResultMessageComponent extends Component {
   inputId = 'validation-result-message-' + guidFor(this);
@@ -11,10 +13,13 @@ export default class ValidationResultMessageComponent extends Component {
 
   constructor() {
     super(...arguments);
+
     this.message = this.defaultResultMessage;
     if (this.args.validation.resultMessage) {
       const { resultMessage } = this.args.validation;
       this.message = resultMessage.object.value;
+    } else {
+      this.sendUpdateToParent();
     }
   }
 
@@ -40,8 +45,8 @@ export default class ValidationResultMessageComponent extends Component {
   sendUpdateToParent() {
     this.args.update({
       resultMessage: {
-        subject: this.args.validation.subject,
-        message: this.message,
+        predicate: SHACL('resultMessage'),
+        object: new Literal(this.message),
       },
     });
   }

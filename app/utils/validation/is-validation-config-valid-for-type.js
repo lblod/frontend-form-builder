@@ -1,12 +1,11 @@
 import { FORM } from '@lblod/submission-form-helpers';
 
 export function isValidationConfigValidForType(config) {
-  console.log(`isValidatioNConfigValidaForType | config`, config);
   if (!config || !config.type) {
     return false;
   }
 
-  const type = config.type;
+  const type = config.type.object;
   const validate = getValidatorForType(type);
 
   return validate(config);
@@ -31,7 +30,7 @@ function isValidBecauseNoRequirements(config) {
 }
 
 function isValidForMaxLength(config) {
-  if (config.max && !isNaN(config.max)) return true;
+  if (config.max && config.max.object !== null) return true;
 
   return false;
 }
