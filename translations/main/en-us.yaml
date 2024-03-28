@@ -68,6 +68,7 @@ codeConsole:
 validationTab:
   addValidation: "Add validation"
   resultMessageLabel: "Error message"
+  maxLengthLabel: "Maximum characters"
 
 # Components #
 toolbar:

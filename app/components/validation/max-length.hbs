@@ -1,3 +1,14 @@
 {{#if this.isForValidationType}}
-  <p>max length fields</p>
+  <AuLabel for={{this.inputId}} @required={{true}}>
+    {{t "validationTab.maxLengthLabel"}}
+  </AuLabel>
+  <AuInput
+    id={{this.inputId}}
+    lang="nl-BE"
+    type="number"
+    value={{this.maxLength}}
+    min={{0}}
+    max={{9999}}
+    {{on "blur" this.updateMaxLength}}
+  />
 {{/if}}
