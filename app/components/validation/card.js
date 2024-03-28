@@ -86,8 +86,7 @@ export default class ValidationCardComponent extends Component {
     }
 
     if (isValidationConfigValidForType(this.validation)) {
-      console.log(`CAN UPDATE TO TTL`, this.validation);
-      // this.args.update(config);
+      this.args.update(this.validation);
     }
   });
 

@@ -8,6 +8,7 @@ import { restartableTask } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { FORM, RDF } from '@lblod/submission-form-helpers';
 import { getMinimalNodeInfo } from '../../../utils/forking-store-helpers';
+import { BlankNode, Statement } from 'rdflib';
 
 export default class FormbuilderEditValidationsController extends Controller {
   @service('form-code-manager') formCodeManager;
@@ -41,30 +42,37 @@ export default class FormbuilderEditValidationsController extends Controller {
   });
 
   updateValidations = restartableTask(async (config) => {
-    console.log(`update validations in ttl `, config);
-    // const { resultMessage } = config;
+    const propertiestoIgnore = ['subject', 'path', 'order'];
+    if (!config.subject) {
+      const newBlankNode = new BlankNode();
+      const statements = [];
+      for (const property of Object.keys(config)) {
+        statements.push(
+          new Statement(
+            newBlankNode,
+            config[property].predicate,
+            config[property].object,
+            this.sourceGraph
+          )
+        );
+      }
+      const statementLinkToField = new Statement(
+        this.selectedField.subject,
+        FORM('validatedBy'),
+        newBlankNode,
+        this.sourceGraph
+      );
+      this.builderStore.addAll([statementLinkToField, ...statements]);
+    } else {
+      for (const property of Object.keys(config)) {
+        if (propertiestoIgnore.includes(property)) {
+          continue;
+        }
+        console.log({ property });
+      }
+    }
 
-    // if (resultMessage) {
-    //   const currentResultMessages = this.builderStore.match(
-    //     resultMessage.subject,
-    //     SHACL('resultMessage'),
-    //     undefined,
-    //     this.model.graphs.sourceGraph
-    //   );
-    //   if (currentResultMessages) {
-    //     this.builderStore.removeStatements(currentResultMessages);
-    //   }
-
-    //   const newResultMessage = new Statement(
-    //     resultMessage.subject,
-    //     SHACL('resultMessage'),
-    //     resultMessage.message,
-    //     this.model.graphs.sourceGraph
-    //   );
-
-    //   this.builderStore.addAll([newResultMessage]);
-    //   this.updatedTtlCodeInManager();
-    // }
+    this.updatedTtlCodeInManager();
   });
 
   setFields() {
@@ -203,6 +211,10 @@ export default class FormbuilderEditValidationsController extends Controller {
 
   get metaGraph() {
     return this.model.graphs.metaGraph;
+  }
+
+  get sourceGraph() {
+    return this.model.graphs.sourceGraph;
   }
 
   get metaTtl() {
