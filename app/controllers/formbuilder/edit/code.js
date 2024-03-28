@@ -153,10 +153,18 @@ export default class FormbuilderEditCodeController extends Controller {
     return mapping[severity];
   }
 
-  ttlHasErrors() {
+  get ttlHasErrors() {
     return (
       this.consoleMessages.filter(
         (message) => message.severity.type == SHACL_SEVERITY_TYPE.error
+      ).length >= 1
+    );
+  }
+
+  get ttlHasWarnings() {
+    return (
+      this.consoleMessages.filter(
+        (message) => message.severity.type == SHACL_SEVERITY_TYPE.warning
       ).length >= 1
     );
   }
