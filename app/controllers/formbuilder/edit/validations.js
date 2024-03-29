@@ -90,7 +90,7 @@ export default class FormbuilderEditValidationsController extends Controller {
           const triplesToRemove = this.builderStore.match(
             validation.subject,
             validationProperty.predicate,
-            currentPredicateObject,
+            undefined,
             this.sourceGraph
           );
 
