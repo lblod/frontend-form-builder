@@ -154,14 +154,25 @@ export default class ValidationCardComponent extends Component {
         return { subject: t.subject, label: label && label.value };
       });
 
-    const filteredOptions = allOptions.filter((option) => {
+    const optionsForFieldType = allOptions.filter((option) => {
       return conceptOptions
         .map((concept) => concept.value)
         .includes(option.subject.value);
     });
 
+    const itemsWithDisabledOptions = optionsForFieldType.map((option) => {
+      if (this.appliedValidationTypes.includes(option.subject.value)) {
+        return {
+          ...option,
+          disabled: true,
+        };
+      }
+
+      return option;
+    });
+
     this.validationTypes = sortObjectsOnProperty(
-      filteredOptions,
+      itemsWithDisabledOptions,
       'label',
       false
     );
@@ -173,5 +184,11 @@ export default class ValidationCardComponent extends Component {
 
   get fieldDisplayType() {
     return this.args.fieldType;
+  }
+
+  get appliedValidationTypes() {
+    return this.args.appliedValidations
+      .filter((validation) => validation)
+      .map((validation) => validation.object.value);
   }
 }

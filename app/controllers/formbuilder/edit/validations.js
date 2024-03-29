@@ -298,6 +298,10 @@ export default class FormbuilderEditValidationsController extends Controller {
     return this.model.validationsTtl;
   }
 
+  get appliedValidations() {
+    return this.fieldValidations.map((validation) => validation.type);
+  }
+
   updatedTtlCodeInManager() {
     const sourceTtl = this.builderStore.serializeDataMergedGraph(
       this.model.graphs.sourceGraph
