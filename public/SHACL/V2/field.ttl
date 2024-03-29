@@ -23,7 +23,12 @@ form:Field
     ],
     [
       sh:path form:partOf ;
-      sh:minCount 0 ;
+      sh:minCount 1 ;
+      sh:message "Een veld moet toegewezen worden aan een sectie."@nl ;
+      sh:severity sh:Violation;
+    ],
+    [
+      sh:path form:partOf ;
       sh:maxCount 1 ;
       sh:message "Een veld kan maar aan 1 sectie worden toegewezen."@nl ;
       sh:severity sh:Violation;
