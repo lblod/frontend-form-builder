@@ -6,11 +6,12 @@ import { action } from '@ember/object';
 import { SHACL, SKOS, RDF, FORM } from '@lblod/submission-form-helpers';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { restartableTask, timeout } from 'ember-concurrency';
-import { getPossibleValidationsForDisplayType } from '../../utils/validation/helpers';
 import { Literal, Namespace } from 'rdflib';
 import { getPrefLabelOfNode } from '../../utils/forking-store-helpers';
 import { sortObjectsOnProperty } from '../../utils/sort-object-on-property';
 import { isValidationConfigValidForType } from '../../utils/validation/is-validation-config-valid-for-type.js';
+
+const EXT = new Namespace('http://mu.semte.ch/vocabularies/ext/');
 
 export default class ValidationCardComponent extends Component {
   inputId = 'validation-card' + guidFor(this);
@@ -132,11 +133,14 @@ export default class ValidationCardComponent extends Component {
       return;
     }
 
-    const conceptOptions = getPossibleValidationsForDisplayType(
-      this.fieldDisplayType,
-      this.metaStore,
-      this.metaGraph
-    );
+    const conceptOptions = this.metaStore
+      .match(
+        this.fieldDisplayType,
+        EXT('canHaveValidation'),
+        undefined,
+        this.metaGraph
+      )
+      .map((triple) => triple.object);
 
     const conceptScheme = new Namespace(
       'http://lblod.data.gift/concept-schemes/'
