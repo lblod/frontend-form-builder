@@ -181,8 +181,8 @@ export default class FormbuilderEditValidationsController extends Controller {
     }
   }
 
-  validationStatementsToConfigObject(validationStatements, config) {
-    config.subject = validationStatements[0].subject;
+  validationStatementsToConfigObject(validationStatements, validation) {
+    validation.subject = validationStatements[0].subject;
     for (const tripleItem of validationStatements) {
       const propertyName = this.propertyForUri(tripleItem.predicate.value);
 
@@ -190,13 +190,13 @@ export default class FormbuilderEditValidationsController extends Controller {
         continue;
       }
 
-      config[propertyName] = {
+      validation[propertyName] = {
         predicate: tripleItem.predicate,
         object: tripleItem.object,
       };
     }
 
-    return config;
+    return validation;
   }
 
   @action

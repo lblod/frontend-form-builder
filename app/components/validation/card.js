@@ -76,8 +76,8 @@ export default class ValidationCardComponent extends Component {
     this.args.delete(this.validation);
   }
 
-  updateType = restartableTask(async (config) => {
-    const { type } = config;
+  updateType = restartableTask(async (validation) => {
+    const { type } = validation;
 
     if (type) {
       this.validationType = {
@@ -105,11 +105,11 @@ export default class ValidationCardComponent extends Component {
     await timeout(1);
   });
 
-  updateValidation = restartableTask(async (config) => {
-    config.type = this.validationType;
+  updateValidation = restartableTask(async (validation) => {
+    validation.type = this.validationType;
 
-    for (const property of Object.keys(config)) {
-      this.validation[property] = config[property];
+    for (const property of Object.keys(validation)) {
+      this.validation[property] = validation[property];
     }
 
     if (isValidationConfigValidForType(this.validation)) {
