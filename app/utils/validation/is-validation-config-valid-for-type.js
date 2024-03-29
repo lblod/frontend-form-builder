@@ -19,6 +19,8 @@ function getValidatorForType(type) {
       return isValidForMaxLength;
     case FORM('ExactValueConstraint').value:
       return isValidForExactValue;
+    case FORM('ValidPhoneNumber').value:
+      return isValidForPhoneNumber;
 
     default:
       return isValidBecauseNoRequirements;
@@ -39,6 +41,12 @@ function isValidForMaxLength(config) {
 
 function isValidForExactValue(config) {
   if (config.customValue && config.customValue.object !== null) return true;
+
+  return false;
+}
+
+function isValidForPhoneNumber(config) {
+  if (config.countryCode && config.countryCode.object !== null) return true;
 
   return false;
 }

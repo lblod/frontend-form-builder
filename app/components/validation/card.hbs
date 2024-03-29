@@ -28,6 +28,11 @@
           @validation={{this.validation}}
           @update={{perform this.updateValidation}}
         />
+        <Validation::ValidPhoneNumber
+          @validation={{this.validation}}
+          @countryCodeOptions={{@countryCodeOptions}}
+          @update={{perform this.updateValidation}}
+        />
       {{/if}}
     </c.content>
     <c.footer>

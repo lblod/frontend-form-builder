@@ -6,9 +6,13 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { restartableTask, task } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { FORM, RDF } from '@lblod/submission-form-helpers';
-import { getMinimalNodeInfo } from '../../../utils/forking-store-helpers';
-import { BlankNode, Statement } from 'rdflib';
+import { FORM, RDF, SKOS } from '@lblod/submission-form-helpers';
+import {
+  getMinimalNodeInfo,
+  getPrefLabelOfNode,
+} from '../../../utils/forking-store-helpers';
+import { BlankNode, Namespace, Statement } from 'rdflib';
+import { sortObjectsOnProperty } from '../../../utils/sort-object-on-property';
 
 export default class FormbuilderEditValidationsController extends Controller {
   @service('form-code-manager') formCodeManager;
@@ -18,6 +22,8 @@ export default class FormbuilderEditValidationsController extends Controller {
 
   @tracked fieldValidations;
   @tracked validationsForFieldDisplayType;
+
+  @tracked countryCodeOptions;
 
   builderStore;
 
@@ -39,6 +45,7 @@ export default class FormbuilderEditValidationsController extends Controller {
     );
 
     this.setFields();
+    this.countryCodeOptions = this.getCountryCodeOptions();
   });
 
   updateValidations = task(async (validation) => {
@@ -233,6 +240,25 @@ export default class FormbuilderEditValidationsController extends Controller {
   @action
   addEmptyValidation() {
     this.fieldValidations.pushObject({ type: null });
+  }
+
+  getCountryCodeOptions() {
+    const conceptScheme = new Namespace(
+      'http://lblod.data.gift/concept-schemes/'
+    )('countryCodes');
+
+    const metaStore = new ForkingStore();
+    metaStore.parse(this.metaTtl, this.metaGraph, 'text/turtle');
+
+    const codeOptions = metaStore
+      .match(undefined, SKOS('inScheme'), conceptScheme, this.metaGraph)
+      .map((t) => {
+        const label = getPrefLabelOfNode(t.subject, metaStore, this.metaGraph);
+
+        return { label: label && label.value };
+      });
+
+    return sortObjectsOnProperty(codeOptions, 'label');
   }
 
   propertyForUri(uri) {

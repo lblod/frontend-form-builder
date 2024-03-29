@@ -70,6 +70,7 @@ validationTab:
   resultMessageLabel: "Foutmelding"
   maxLengthLabel: "Maximum karakters"
   exactValueLabel: "Specifieke waarde"
+  countryCodeLabel: "Landcode"
 
 # Components #
 toolbar:

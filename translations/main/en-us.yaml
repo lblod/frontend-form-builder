@@ -70,6 +70,7 @@ validationTab:
   resultMessageLabel: "Error message"
   maxLengthLabel: "Maximum characters"
   exactValueLabel: "Exact value"
+  countryCodeLabel: "Country code"
 
 # Components #
 toolbar:

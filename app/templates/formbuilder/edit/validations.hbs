@@ -31,6 +31,7 @@
         <Validation::Card
           @fieldType={{this.selectedField.displayType}}
           @validation={{validation}}
+          @countryCodeOptions={{this.countryCodeOptions}}
           @metaTtl={{this.metaTtl}}
           @graph={{this.metaGraph}}
           @delete={{(fn this.deleteValidationFromField validation)}}
