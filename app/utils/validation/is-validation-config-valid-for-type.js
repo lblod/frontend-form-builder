@@ -17,6 +17,8 @@ function getValidatorForType(type) {
   switch (uri) {
     case FORM('MaxLength').value:
       return isValidForMaxLength;
+    case FORM('ExactValueConstraint').value:
+      return isValidForExactValue;
 
     default:
       return isValidBecauseNoRequirements;
@@ -31,6 +33,12 @@ function isValidBecauseNoRequirements(config) {
 
 function isValidForMaxLength(config) {
   if (config.max && config.max.object !== null) return true;
+
+  return false;
+}
+
+function isValidForExactValue(config) {
+  if (config.customValue && config.customValue.object !== null) return true;
 
   return false;
 }

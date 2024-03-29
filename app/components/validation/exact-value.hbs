@@ -1,0 +1,10 @@
+{{#if this.isForValidationType}}
+  <AuLabel for={{this.inputId}} @required={{true}}>
+    {{t "validationTab.exactValueLabel"}}
+  </AuLabel>
+  <AuInput
+    id={{this.inputId}}
+    value={{this.exactValue}}
+    {{on "blur" this.updateExactValue}}
+  />
+{{/if}}

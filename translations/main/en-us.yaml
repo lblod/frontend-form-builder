@@ -69,6 +69,7 @@ validationTab:
   addValidation: "Add validation"
   resultMessageLabel: "Error message"
   maxLengthLabel: "Maximum characters"
+  exactValueLabel: "Exact value"
 
 # Components #
 toolbar:
