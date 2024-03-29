@@ -218,10 +218,12 @@ export default class FormbuilderEditValidationsController extends Controller {
         undefined,
         this.model.graphs.sourceGraph
       );
+
       this.builderStore.removeStatements([
-        ...validationOfField,
         ...blankNodeToRemove,
+        ...validationOfField,
       ]);
+
       this.updatedTtlCodeInManager();
       this.fieldValidations.removeObject(validationToRemove);
     }
