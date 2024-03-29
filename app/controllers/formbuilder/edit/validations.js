@@ -205,7 +205,7 @@ export default class FormbuilderEditValidationsController extends Controller {
       (config) => config == validation
     );
 
-    if (validationToRemove) {
+    if (validationToRemove && validation.subject) {
       const validationOfField = this.builderStore.match(
         this.selectedField.subject,
         FORM('validatedBy'),
@@ -225,8 +225,9 @@ export default class FormbuilderEditValidationsController extends Controller {
       ]);
 
       this.updatedTtlCodeInManager();
-      this.fieldValidations.removeObject(validationToRemove);
     }
+
+    this.fieldValidations.removeObject(validationToRemove);
   }
 
   @action

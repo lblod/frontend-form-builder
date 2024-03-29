@@ -17,6 +17,8 @@ export default class ValidationCardComponent extends Component {
 
   @tracked validation;
   @tracked validationType;
+  @tracked validationSubject;
+
   @tracked validationTypes;
 
   @tracked defaultErrorMessage;
@@ -27,6 +29,7 @@ export default class ValidationCardComponent extends Component {
     super(...arguments);
 
     this.validation = this.args.validation;
+    this.validationSubject = this.validation.subject;
     this.setup.perform();
   }
 
@@ -68,6 +71,8 @@ export default class ValidationCardComponent extends Component {
 
   @action
   deleteValidation() {
+    this.validation.subject = this.validationSubject;
+
     this.args.delete(this.validation);
   }
 
