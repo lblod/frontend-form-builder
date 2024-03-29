@@ -4,7 +4,7 @@ import { A } from '@ember/array';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { restartableTask } from 'ember-concurrency';
+import { restartableTask, task } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { FORM, RDF } from '@lblod/submission-form-helpers';
 import { getMinimalNodeInfo } from '../../../utils/forking-store-helpers';
@@ -41,17 +41,17 @@ export default class FormbuilderEditValidationsController extends Controller {
     this.setFields();
   });
 
-  updateValidations = restartableTask(async (config) => {
+  updateValidations = task(async (validation) => {
     const propertiestoIgnore = ['subject', 'path', 'order'];
-    if (!config.subject) {
+    if (!validation.subject) {
       const newBlankNode = new BlankNode();
       const statements = [];
-      for (const property of Object.keys(config)) {
+      for (const property of Object.keys(validation)) {
         statements.push(
           new Statement(
             newBlankNode,
-            config[property].predicate,
-            config[property].object,
+            validation[property].predicate,
+            validation[property].object,
             this.sourceGraph
           )
         );
@@ -64,12 +64,53 @@ export default class FormbuilderEditValidationsController extends Controller {
       );
       this.builderStore.addAll([statementLinkToField, ...statements]);
     } else {
-      for (const property of Object.keys(config)) {
+      const statementsToAdd = [];
+      const statementsToRemove = [];
+      for (const property of Object.keys(validation)) {
         if (propertiestoIgnore.includes(property)) {
           continue;
         }
-        console.log({ property });
+
+        const validationProperty = validation[property];
+        const currentPredicateObject = this.builderStore.any(
+          validation.subject,
+          validationProperty.predicate,
+          undefined,
+          this.sourceGraph
+        );
+
+        if (
+          currentPredicateObject &&
+          currentPredicateObject.value == validationProperty.object.value
+        ) {
+          continue;
+        }
+
+        if (currentPredicateObject) {
+          const triplesToRemove = this.builderStore.match(
+            validation.subject,
+            validationProperty.predicate,
+            currentPredicateObject,
+            this.sourceGraph
+          );
+
+          if (triplesToRemove) {
+            statementsToRemove.push(...triplesToRemove);
+          }
+        }
+
+        const newTriple = new Statement(
+          validation.subject,
+          validationProperty.predicate,
+          validationProperty.object,
+          this.sourceGraph
+        );
+
+        statementsToAdd.push(newTriple);
       }
+
+      this.builderStore.removeStatements(statementsToRemove);
+      this.builderStore.addAll(statementsToAdd);
     }
 
     this.updatedTtlCodeInManager();
@@ -225,6 +266,7 @@ export default class FormbuilderEditValidationsController extends Controller {
     const sourceTtl = this.builderStore.serializeDataMergedGraph(
       this.model.graphs.sourceGraph
     );
+
     this.model.handleCodeChange(sourceTtl);
   }
 }
