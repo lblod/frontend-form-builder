@@ -6,7 +6,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { restartableTask, task } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
-import { FORM, RDF, SKOS } from '@lblod/submission-form-helpers';
+import { FORM, RDF, SKOS, SHACL } from '@lblod/submission-form-helpers';
 import {
   getMinimalNodeInfo,
   getPrefLabelOfNode,
@@ -49,7 +49,14 @@ export default class FormbuilderEditValidationsController extends Controller {
   });
 
   updateValidations = task(async (validation) => {
-    const propertiestoIgnore = ['subject', 'path', 'order'];
+    if (!validation.path) {
+      validation.path = {
+        object: this.selectedField.path,
+        predicate: SHACL('path'),
+      };
+    }
+
+    const propertiestoIgnore = ['subject', 'order'];
     if (!validation.subject) {
       const newBlankNode = new BlankNode();
       const statements = [];
