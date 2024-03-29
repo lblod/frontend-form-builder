@@ -3,7 +3,7 @@ import Component from '@glimmer/component';
 import { guidFor } from '@ember/object/internals';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { SHACL, SKOS, RDF } from '@lblod/submission-form-helpers';
+import { SHACL, SKOS, RDF, FORM } from '@lblod/submission-form-helpers';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { restartableTask, timeout } from 'ember-concurrency';
 import { getPossibleValidationsForDisplayType } from '../../utils/validation/helpers';
@@ -28,6 +28,25 @@ export default class ValidationCardComponent extends Component {
 
     this.validation = this.args.validation;
     this.setup.perform();
+  }
+
+  getGroupingForValidation(typeNode) {
+    let grouping = FORM('grouping');
+    const groupingFromMeta = this.metaStore.any(
+      typeNode,
+      FORM('grouping'),
+      undefined,
+      this.metaGraph
+    );
+
+    if (groupingFromMeta) {
+      grouping = {
+        object: groupingFromMeta,
+        predicate: FORM('grouping'),
+      };
+    }
+
+    return grouping;
   }
 
   getDefaultErrorMessage() {
@@ -62,6 +81,8 @@ export default class ValidationCardComponent extends Component {
       };
       this.validation.type = this.validationType;
     }
+
+    this.validation.grouping = this.getGroupingForValidation(type.subject);
 
     this.defaultErrorMessage = this.getDefaultErrorMessage();
 
