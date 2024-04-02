@@ -71,6 +71,7 @@ validationTab:
   maxLengthLabel: "Maximum characters"
   exactValueLabel: "Exact value"
   countryCodeLabel: "Country code"
+  removeDuplicate: "Remove duplicate"
 
 # Components #
 toolbar:

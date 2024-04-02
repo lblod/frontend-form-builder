@@ -192,6 +192,15 @@ export default class FormbuilderEditValidationsController extends Controller {
         {}
       );
 
+      if (
+        this.fieldValidations.some(
+          (validation) =>
+            validation.type.object.value == validationConfig.type.object.value
+        )
+      ) {
+        validationConfig.isDuplicate = true;
+      }
+
       this.fieldValidations.pushObject(validationConfig);
     }
   }

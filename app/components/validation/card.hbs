@@ -48,10 +48,10 @@
             @skin="secondary"
             @alert={{true}}
             {{on "click" this.deleteValidation}}
-          >{{t "crud.delete"}}</AuButton>
+          >
+            {{this.deleteButtonText}}</AuButton>
         </div>
       </c.footer>
     </AuCard>
   </div>
-
 {{/if}}

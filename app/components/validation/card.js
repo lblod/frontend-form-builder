@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 
 import { guidFor } from '@ember/object/internals';
 import { tracked } from '@glimmer/tracking';
+import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { SHACL, SKOS, RDF, FORM } from '@lblod/submission-form-helpers';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
@@ -15,6 +16,8 @@ const EXT = new Namespace('http://mu.semte.ch/vocabularies/ext/');
 
 export default class ValidationCardComponent extends Component {
   inputId = 'validation-card' + guidFor(this);
+
+  @service intl;
 
   @tracked validation;
   @tracked validationType;
@@ -214,5 +217,13 @@ export default class ValidationCardComponent extends Component {
 
   get isUpdatingValidations() {
     return this.args.isUpdating ?? false;
+  }
+
+  get deleteButtonText() {
+    if (this.args.validation.isDuplicate) {
+      return this.intl.t('validationTab.removeDuplicate');
+    }
+
+    return this.intl.t('crud.delete');
   }
 }

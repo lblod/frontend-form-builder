@@ -71,6 +71,7 @@ validationTab:
   maxLengthLabel: "Maximum karakters"
   exactValueLabel: "Specifieke waarde"
   countryCodeLabel: "Landcode"
+  removeDuplicate: "Verwijder duplicaat"
 
 # Components #
 toolbar:
