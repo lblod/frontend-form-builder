@@ -12,7 +12,7 @@ export default class ValidationResultMessageComponent extends Component {
   @tracked maxLength;
   @tracked isUpdateOnce;
 
-  minCharacters = 0;
+  minCharacters = 1;
 
   constructor() {
     super(...arguments);
@@ -49,7 +49,7 @@ export default class ValidationResultMessageComponent extends Component {
       return true;
     }
 
-    if (this.maxLength && parseInt(this.maxLength) <= this.minCharacters) {
+    if (this.maxLength && parseInt(this.maxLength) < this.minCharacters) {
       return true;
     }
 
