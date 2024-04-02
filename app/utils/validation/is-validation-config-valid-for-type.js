@@ -34,7 +34,13 @@ function isValidBecauseNoRequirements(config) {
 }
 
 function isValidForMaxLength(config) {
-  if (config.max && config.max.object !== null) return true;
+  if (config.max && config.max.object !== null) {
+    if (parseInt(config.max.object.value) > 0) {
+      return true;
+    }
+
+    return false;
+  }
 
   return false;
 }
