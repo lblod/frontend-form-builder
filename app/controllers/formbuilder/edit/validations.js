@@ -302,6 +302,10 @@ export default class FormbuilderEditValidationsController extends Controller {
     return this.fieldValidations.map((validation) => validation.type);
   }
 
+  get isAddButtonDisabled() {
+    return this.fieldValidations.some((validation) => !validation.type);
+  }
+
   updatedTtlCodeInManager = restartableTask(async () => {
     const sourceTtl = this.builderStore.serializeDataMergedGraph(
       this.model.graphs.sourceGraph

@@ -46,6 +46,7 @@
       {{/each}}
       {{#if this.selectedField}}
         <AuButton
+          @disabled={{this.isAddButtonDisabled}}
           @skin="secondary"
           @icon="add"
           @iconAlignment="left"
