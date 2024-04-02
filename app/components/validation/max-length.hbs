@@ -1,8 +1,13 @@
 {{#if this.isForValidationType}}
-  <AuLabel for={{this.inputId}} @required={{true}}>
+  <AuLabel
+    for={{this.inputId}}
+    @required={{true}}
+    @error={{this.isMaxLengthInputNotValid}}
+  >
     {{t "validationTab.maxLengthLabel"}}
   </AuLabel>
   <AuInput
+    @error={{this.isMaxLengthInputNotValid}}
     id={{this.inputId}}
     lang="nl-BE"
     type="number"
@@ -11,4 +16,11 @@
     max={{9999}}
     {{on "blur" this.updateMaxLength}}
   />
+
+  {{#if this.isMaxLengthInputNotValid}}
+    <AuHelpText @error={{true}}>{{t
+        "constraints.maxLengthMustBeGreaterThan"
+        minCharacters=this.minCharacters
+      }}</AuHelpText>
+  {{/if}}
 {{/if}}

@@ -11,6 +11,8 @@ export default class ValidationResultMessageComponent extends Component {
 
   @tracked maxLength;
 
+  minCharacters = 0;
+
   constructor() {
     super(...arguments);
 
@@ -27,6 +29,10 @@ export default class ValidationResultMessageComponent extends Component {
       this.maxLength = event.target.value;
     }
 
+    if (this.isMaxLengthInputNotValid) {
+      return;
+    }
+
     let objectValue = null;
 
     if (this.maxLength && this.maxLength.trim() !== '') {
@@ -36,6 +42,18 @@ export default class ValidationResultMessageComponent extends Component {
     this.args.update({
       max: { object: objectValue, predicate: FORM('max') },
     });
+  }
+
+  get isMaxLengthInputNotValid() {
+    if (!this.maxLength || this.maxLength == '') {
+      return true;
+    }
+
+    if (this.maxLength && parseInt(this.maxLength) <= this.minCharacters) {
+      return true;
+    }
+
+    return false;
   }
 
   get isForValidationType() {

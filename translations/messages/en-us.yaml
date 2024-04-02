@@ -54,3 +54,4 @@ constraints:
   duplicateName: "This name has already been used once."
   maxCharactersReached: "Max. characters exceeded"
   maxCharactersReachedWithCount: "Max. characters {maxCount} reached. Currrent: {count}"
+  maxLengthMustBeGreaterThan: "Max characters must be greater than {minCharacters}"
