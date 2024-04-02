@@ -10,27 +10,27 @@ export default class ValidationResultMessageComponent extends Component {
   inputId = 'validation-max-length-' + guidFor(this);
 
   @tracked maxLength;
+  @tracked isUpdateOnce;
 
   minCharacters = 0;
 
   constructor() {
     super(...arguments);
 
+    this.isUpdateOnce = false;
     if (this.args.validation.max) {
       this.maxLength = this.args.validation.max.object.value;
+      this.isUpdateOnce = true;
     }
   }
 
   @action
   updateMaxLength(event) {
+    this.isUpdateOnce = true;
     if (!event.target) {
       this.maxLength = null;
     } else {
       this.maxLength = event.target.value;
-    }
-
-    if (this.isMaxLengthInputNotValid) {
-      return;
     }
 
     let objectValue = null;
