@@ -48,7 +48,7 @@ export default class FormbuilderEditCodeController extends Controller {
     // Keeping the changes in another variable and at the end assigning
     // the formCode to the updated code
     this.formCodeUpdates = newCode;
-    if (this.ttlHasErrors()) {
+    if (this.ttlHasErrors) {
       this.consoleMessages.pushObject({
         severity: this.getConsoleSeverity(SHACL_SEVERITY_TYPE.info),
         subject: this.intl.t('messages.subjects.preview'),
@@ -105,8 +105,6 @@ export default class FormbuilderEditCodeController extends Controller {
         'text/turtle'
       );
     } catch (error) {
-      // console.warn({ caught: error });
-      console.log(error);
       this.consoleMessages.pushObject({
         severity: this.getConsoleSeverity(SHACL_SEVERITY_TYPE.error),
         content: error,
