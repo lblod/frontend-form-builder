@@ -12,3 +12,19 @@
     border-bottom-left-radius: 0px;
   }
 }
+
+.validation-tab__card {
+  display: flex;
+  flex-direction: row;
+
+  article {
+    width: 100%;
+  }
+}
+
+.validation-tab__card--visual {
+  border-top-left-radius: $au-radius;
+  border-bottom-left-radius: $au-radius;
+  background-color: $au-red-600;
+  width: 0.3rem;
+}

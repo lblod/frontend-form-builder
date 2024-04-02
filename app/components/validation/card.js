@@ -23,6 +23,7 @@ export default class ValidationCardComponent extends Component {
   @tracked validationTypes;
 
   @tracked defaultErrorMessage;
+  @tracked isCardInError;
 
   metaStore;
 
@@ -114,7 +115,12 @@ export default class ValidationCardComponent extends Component {
     }
 
     if (isValidationConfigValidForType(this.validation)) {
+      this.isCardInError = false;
       this.args.update(this.validation);
+    } else {
+      if (!this.isCardInError) {
+        this.isCardInError = true;
+      }
     }
   });
 
@@ -122,8 +128,14 @@ export default class ValidationCardComponent extends Component {
     this.metaStore = new ForkingStore();
     this.metaStore.parse(this.args.metaTtl, this.metaGraph, 'text/turtle');
     this.setValidationTypes();
-    this.validationType = this.validation.type;
-    this.defaultErrorMessage = this.getDefaultErrorMessage();
+
+    if (this.validation.type) {
+      this.validationType = this.validation.type;
+      this.defaultErrorMessage = this.getDefaultErrorMessage();
+      this.isCardInError = false;
+    } else {
+      this.isCardInError = true;
+    }
   });
 
   setValidationTypes() {
@@ -194,5 +206,9 @@ export default class ValidationCardComponent extends Component {
     return this.args.appliedValidations
       .filter((validation) => validation)
       .map((validation) => validation.object.value);
+  }
+
+  get showErrorVisualization() {
+    return this.isCardInError;
   }
 }

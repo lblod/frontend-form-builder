@@ -1,48 +1,56 @@
 {{#if this.setup.isRunning}}
   <AuLoader />
 {{else}}
-  <AuCard @expandable={{false}} as |c|>
-    <c.header>
-      <AuHeading @level="2" @skin="4">
-        <Validation::TypeSelector
-          @validationType={{this.validationType}}
-          @typeOptions={{this.validationTypes}}
-          @update={{perform this.updateType}}
-        />
-      </AuHeading>
-    </c.header>
-    <c.content>
-      {{#if this.updateType.isRunning}}
-        <AuLoader />
-      {{else}}
-        <Validation::ResultMessage
-          @validation={{this.validation}}
-          @defaultMessage={{this.defaultErrorMessage}}
-          @update={{perform this.updateValidation}}
-        />
-        <Validation::MaxLength
-          @validation={{this.validation}}
-          @update={{perform this.updateValidation}}
-        />
-        <Validation::ExactValue
-          @validation={{this.validation}}
-          @update={{perform this.updateValidation}}
-        />
-        <Validation::ValidPhoneNumber
-          @validation={{this.validation}}
-          @countryCodeOptions={{@countryCodeOptions}}
-          @update={{perform this.updateValidation}}
-        />
-      {{/if}}
-    </c.content>
-    <c.footer>
-      <div class="au-u-flex au-u-flex--end au-u-margin-top-small">
-        <AuButton
-          @skin="secondary"
-          @alert={{true}}
-          {{on "click" this.deleteValidation}}
-        >{{t "crud.delete"}}</AuButton>
+  <div class="validation-tab__card">
+    {{#if this.showErrorVisualization}}
+      <div class="validation-tab__card--visual">
       </div>
-    </c.footer>
-  </AuCard>
+    {{/if}}
+
+    <AuCard @expandable={{false}} as |c|>
+      <c.header>
+        <AuHeading @level="2" @skin="4">
+          <Validation::TypeSelector
+            @validationType={{this.validationType}}
+            @typeOptions={{this.validationTypes}}
+            @update={{perform this.updateType}}
+          />
+        </AuHeading>
+      </c.header>
+      <c.content>
+        {{#if this.updateType.isRunning}}
+          <AuLoader />
+        {{else}}
+          <Validation::ResultMessage
+            @validation={{this.validation}}
+            @defaultMessage={{this.defaultErrorMessage}}
+            @update={{perform this.updateValidation}}
+          />
+          <Validation::MaxLength
+            @validation={{this.validation}}
+            @update={{perform this.updateValidation}}
+          />
+          <Validation::ExactValue
+            @validation={{this.validation}}
+            @update={{perform this.updateValidation}}
+          />
+          <Validation::ValidPhoneNumber
+            @validation={{this.validation}}
+            @countryCodeOptions={{@countryCodeOptions}}
+            @update={{perform this.updateValidation}}
+          />
+        {{/if}}
+      </c.content>
+      <c.footer>
+        <div class="au-u-flex au-u-flex--end au-u-margin-top-small">
+          <AuButton
+            @skin="secondary"
+            @alert={{true}}
+            {{on "click" this.deleteValidation}}
+          >{{t "crud.delete"}}</AuButton>
+        </div>
+      </c.footer>
+    </AuCard>
+  </div>
+
 {{/if}}
