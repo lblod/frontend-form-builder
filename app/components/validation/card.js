@@ -103,7 +103,7 @@ export default class ValidationCardComponent extends Component {
       };
     } else {
       this.validation.resultMessage.object.value = this.defaultErrorMessage;
-      this.updateValidation.perform(this.validation);
+      await this.updateValidation.perform(this.validation);
     }
 
     // for updating the data in the child components
