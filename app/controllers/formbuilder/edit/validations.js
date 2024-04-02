@@ -4,7 +4,7 @@ import { A } from '@ember/array';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { restartableTask, task } from 'ember-concurrency';
+import { enqueueTask, restartableTask } from 'ember-concurrency';
 import { ForkingStore } from '@lblod/ember-submission-form-fields';
 import { FORM, RDF, SKOS, SHACL } from '@lblod/submission-form-helpers';
 import {
@@ -48,7 +48,7 @@ export default class FormbuilderEditValidationsController extends Controller {
     this.countryCodeOptions = this.getCountryCodeOptions();
   });
 
-  updateValidations = task(async (validation) => {
+  updateValidations = enqueueTask(async (validation) => {
     if (!validation.path) {
       validation.path = {
         object: this.selectedField.path,
@@ -77,6 +77,7 @@ export default class FormbuilderEditValidationsController extends Controller {
         this.sourceGraph
       );
       this.builderStore.addAll([statementLinkToField, ...statements]);
+      this.setSelectedFieldValidations();
     } else {
       const statementsToAdd = [];
       const statementsToRemove = [];
@@ -127,7 +128,7 @@ export default class FormbuilderEditValidationsController extends Controller {
       this.builderStore.addAll(statementsToAdd);
     }
 
-    this.updatedTtlCodeInManager();
+    await this.updatedTtlCodeInManager.perform();
   });
 
   setFields() {
@@ -213,8 +214,7 @@ export default class FormbuilderEditValidationsController extends Controller {
     return validation;
   }
 
-  @action
-  deleteValidationFromField(validation) {
+  deleteValidationFromField = enqueueTask(async (validation) => {
     const validationToRemove = this.fieldValidations.find(
       (config) => config == validation
     );
@@ -238,11 +238,11 @@ export default class FormbuilderEditValidationsController extends Controller {
         ...validationOfField,
       ]);
 
-      this.updatedTtlCodeInManager();
+      await this.updatedTtlCodeInManager.perform();
     }
 
     this.fieldValidations.removeObject(validationToRemove);
-  }
+  });
 
   @action
   addEmptyValidation() {
@@ -302,11 +302,11 @@ export default class FormbuilderEditValidationsController extends Controller {
     return this.fieldValidations.map((validation) => validation.type);
   }
 
-  updatedTtlCodeInManager() {
+  updatedTtlCodeInManager = restartableTask(async () => {
     const sourceTtl = this.builderStore.serializeDataMergedGraph(
       this.model.graphs.sourceGraph
     );
 
     this.model.handleCodeChange(sourceTtl);
-  }
+  });
 }

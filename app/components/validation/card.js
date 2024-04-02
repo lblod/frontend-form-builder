@@ -211,4 +211,8 @@ export default class ValidationCardComponent extends Component {
   get showErrorVisualization() {
     return this.isCardInError;
   }
+
+  get isUpdatingValidations() {
+    return this.args.isUpdating ?? false;
+  }
 }

@@ -35,8 +35,13 @@
           @appliedValidations={{this.appliedValidations}}
           @metaTtl={{this.metaTtl}}
           @graph={{this.metaGraph}}
-          @delete={{(fn this.deleteValidationFromField validation)}}
+          @delete={{(perform this.deleteValidationFromField validation)}}
           @update={{perform this.updateValidations}}
+          @isUpdating={{(or
+            this.updateValidations.isRunning
+            this.deleteValidationFromField.isRunning
+            this.updatedTtlCodeInManager.isRunning
+          )}}
         />
       {{/each}}
       {{#if this.selectedField}}
