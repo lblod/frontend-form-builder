@@ -154,6 +154,10 @@ export default class FormbuilderEditValidationsController extends Controller {
 
       this.fields.pushObject(field);
     }
+
+    if (this.fields.length >= 1) {
+      this.setSelectedField(this.fields[0]);
+    }
   }
 
   @action
