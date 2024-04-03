@@ -45,7 +45,8 @@
         <div class="au-u-flex au-u-flex--end au-u-margin-top-small">
           <AuButton
             @disabled={{this.isUpdatingValidations}}
-            @skin="secondary"
+            @skin="naked"
+            @icon="trash"
             @alert={{true}}
             {{on "click" this.deleteValidation}}
           >
