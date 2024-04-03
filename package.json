@@ -26,6 +26,11 @@
     "test": "concurrently \"npm:lint\" \"npm:test:*\" --names \"lint,test:\"",
     "test:ember": "ember test"
   },
+  "overrides": {
+    "@lblod/ember-submission-form-fields": {
+      "ember-modifier": "3.2.7"
+    }
+  },
   "devDependencies": {
     "@appuniversum/ember-appuniversum": "^2.15.0",
     "@babel/core": "^7.22.20",
