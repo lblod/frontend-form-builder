@@ -29,6 +29,9 @@
   "overrides": {
     "@lblod/ember-submission-form-fields": {
       "ember-modifier": "3.2.7"
+    },
+    "@lblod/ember-rdfa-editor": {
+      "ember-focus-trap": "1.1.0"
     }
   },
   "devDependencies": {

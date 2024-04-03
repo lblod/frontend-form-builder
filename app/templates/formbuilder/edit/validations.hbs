@@ -1,11 +1,61 @@
 {{page-title "Validations"}}
 
-{{#if this.formCode}}
-  <AddValidationsToForm
-    @builderTtlCode={{this.formCode}}
-    @sourceNode={{@model.form}}
-    @onNewBuilderForm={{this.handleCodeChange}}
-  />
-{{else}}
-  <AuLoader />
-{{/if}}
+<div class="builder_container">
+  {{#if this.setup.isRunning}}
+    <AuLoader />
+  {{else}}
+    <div class="builder_filter-bar">
+      <PowerSelect
+        @searchField="name"
+        @searchEnabled={{true}}
+        @selected={{this.selectedField}}
+        @options={{this.fields}}
+        @onChange={{this.setSelectedField}}
+        @allowClear={{true}}
+        @loadingMessage={{t "messages.loading.isLoading"}}
+        @noMatchesMessage={{t "messages.feedback.noResults"}}
+        as |field|
+      >
+        <span>
+          {{field.name}}
+        </span>
+      </PowerSelect>
+    </div>
+  {{/if}}
+
+  <div class="builder_content-container">
+    {{#if this.setup.isRunning}}
+      <AuLoader />
+    {{else}}
+      {{#each this.fieldValidations as |validation|}}
+        <Validation::Card
+          @fieldType={{this.selectedField.displayType}}
+          @validation={{validation}}
+          @countryCodeOptions={{this.countryCodeOptions}}
+          @appliedValidations={{this.appliedValidations}}
+          @metaTtl={{this.metaTtl}}
+          @graph={{this.metaGraph}}
+          @delete={{(perform this.deleteValidationFromField validation)}}
+          @update={{perform this.updateValidations}}
+          @isUpdating={{(or
+            this.updateValidations.isRunning
+            this.deleteValidationFromField.isRunning
+            this.updatedTtlCodeInManager.isRunning
+          )}}
+        />
+      {{/each}}
+      {{#if this.selectedField}}
+        <AuButton
+          @disabled={{this.isAddButtonDisabled}}
+          @skin="secondary"
+          @icon="add"
+          @iconAlignment="left"
+          @width="block"
+          {{on "click" this.addEmptyValidation}}
+        >
+          {{t "validationTab.addValidation"}}
+        </AuButton>
+      {{/if}}
+    {{/if}}
+  </div>
+</div>

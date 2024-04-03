@@ -65,6 +65,14 @@ semanticData:
 codeConsole:
   buttonNotification: "Console Meldingen"
 
+validationTab:
+  addValidation: "Voeg validatie toe"
+  resultMessageLabel: "Foutmelding"
+  maxLengthLabel: "Maximum karakters"
+  exactValueLabel: "Specifieke waarde"
+  countryCodeLabel: "Landcode"
+  removeDuplicate: "Verwijder duplicaat"
+
 # Components #
 toolbar:
   exportCode: "Exporteer code"

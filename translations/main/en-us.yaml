@@ -65,6 +65,14 @@ semanticData:
 codeConsole:
   buttonNotification: "Console Notifications"
 
+validationTab:
+  addValidation: "Add validation"
+  resultMessageLabel: "Error message"
+  maxLengthLabel: "Maximum characters"
+  exactValueLabel: "Exact value"
+  countryCodeLabel: "Country code"
+  removeDuplicate: "Remove duplicate"
+
 # Components #
 toolbar:
   exportCode: "Export code"

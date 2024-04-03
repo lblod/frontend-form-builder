@@ -1,0 +1,23 @@
+{{#if this.hasValidationType}}
+  <div>
+    <AuLabel for={{this.inputId}}>
+      {{t "validationTab.resultMessageLabel"}}
+    </AuLabel>
+
+    <div class="validation-tab__result-message-input">
+      <AuInput
+        @width="block"
+        @error={{this.hasErrors}}
+        id={{this.inputId}}
+        value={{this.message}}
+        {{on "blur" this.updateMessage}}
+      />
+      <AuButton
+        @disabled={{this.messageIsDefaultMessage}}
+        @icon="undo"
+        @hideText={{true}}
+        {{on "click" this.resetMessageToDefault}}
+      />
+    </div>
+  </div>
+{{/if}}

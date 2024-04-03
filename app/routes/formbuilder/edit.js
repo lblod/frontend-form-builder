@@ -4,11 +4,8 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { registerFormFields } from '@lblod/ember-submission-form-fields';
 import SectionSelector from '../../components/rdf-form-fields/section-selector';
-import ValidationConceptSchemeSelectorComponent from '../../components/rdf-form-fields/validation-concept-scheme-selector';
 import { getLocalFileContentAsText } from '../../utils/get-local-file-content';
-import CountryCodeConceptSchemeSelectorComponent from '../../components/rdf-form-fields/country-code-concept-scheme-selector';
 import { GRAPHS } from '../../controllers/formbuilder/edit';
-import ErrorMessageInputFieldComponent from '../../components/rdf-form-fields/error-message-input-field';
 import { showErrorToasterMessage } from '../../utils/toaster-message-helper';
 import RichTextEditorComponent from '../../components/rdf-form-fields/rich-text-editor';
 import BegrotingstabelTotalFieldComponent from '../../components/rdf-form-fields/begrotingstabel-total-field';
@@ -101,21 +98,6 @@ export default class FormbuilderEditRoute extends Route {
       {
         displayType: 'http://lblod.data.gift/display-types/sectionSelector',
         edit: SectionSelector,
-      },
-      {
-        displayType:
-          'http://lblod.data.gift/display-types/validationConceptSchemeSelector',
-        edit: ValidationConceptSchemeSelectorComponent,
-      },
-      {
-        displayType:
-          'http://lblod.data.gift/display-types/countryCodeConceptSchemeSelector',
-        edit: CountryCodeConceptSchemeSelectorComponent,
-      },
-      {
-        displayType:
-          'http://lblod.data.gift/display-types/errorMessageInputField',
-        edit: ErrorMessageInputFieldComponent,
       },
       {
         displayType: 'http://lblod.data.gift/display-types/richTextEditor',

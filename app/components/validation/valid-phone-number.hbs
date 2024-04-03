@@ -1,0 +1,21 @@
+{{#if this.isForValidationType}}
+  <AuLabel for={{this.inputId}} @required={{true}}>
+    {{t "validationTab.countryCodeLabel"}}
+  </AuLabel>
+  <PowerSelect
+    @triggerId={{this.inputId}}
+    @searchField="label"
+    @searchEnabled={{true}}
+    @selected={{this.countryCode}}
+    @options={{this.codeOptions}}
+    @onChange={{this.updateCountryCode}}
+    @allowClear={{false}}
+    @loadingMessage={{t "messages.loading.isLoading"}}
+    @noMatchesMessage={{t "messages.feedback.noResults"}}
+    as |concept|
+  >
+    <span>
+      {{concept.label}}
+    </span>
+  </PowerSelect>
+{{/if}}
