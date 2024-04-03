@@ -18,10 +18,10 @@
         {{t "codeConsole.buttonNotification"}}:
         {{this.consoleMessages.length}}
         {{#if this.ttlHasErrors}}
-          <AuPill @skin="error" @icon="cross">Error</AuPill>
+          <AuPill @skin="error">Error</AuPill>
         {{/if}}
         {{#if this.ttlHasWarnings}}
-          <AuPill @skin="warning" @icon="cross">Warning</AuPill>
+          <AuPill @skin="warning">Warning</AuPill>
         {{/if}}
       </AuButton>
     </div>
