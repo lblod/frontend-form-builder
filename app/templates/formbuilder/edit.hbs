@@ -129,11 +129,7 @@
   </:body>
   <:footer>
     <AuButtonGroup class="au-u-flex--between">
-      <AuButton
-        @alert={{true}}
-        @skin="tertiary"
-        {{on "click" this.discardSave}}
-      >
+      <AuButton @alert={{true}} @skin="link" {{on "click" this.discardSave}}>
         {{t "confirmation.discardChanges"}}
       </AuButton>
       <AuButton
