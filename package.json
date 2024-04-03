@@ -42,7 +42,7 @@
     "@embroider/webpack": "^3.2.0",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
-    "@lblod/ember-rdfa-editor": "^9.2.0",
+    "@lblod/ember-rdfa-editor": "^9.5.1",
     "@lblod/ember-submission-form-fields": "^2.18.0",
     "broccoli-asset-rev": "^3.0.0",
     "codemirror": "^6.0.1",
