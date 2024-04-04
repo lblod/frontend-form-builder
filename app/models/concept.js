@@ -19,7 +19,7 @@ export default class ConceptModel extends Model {
       <${this.uri}>
       ${RDF('type')} ${SKOS('Concept')} ;
       ${SKOS('prefLabel')} "${this.label}" ;
-      ${QB('order')} ${this.order} ;
+      ${QB('order')} ${this.order ?? 0} ;
       ${SKOS('inScheme')} <${conceptSchemeUri}> .
     `;
   }
