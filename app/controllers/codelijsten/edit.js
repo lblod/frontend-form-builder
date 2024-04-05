@@ -54,6 +54,7 @@ export default class CodelijstenEditController extends Controller {
     this.conceptList.pushObjects(
       this.dbConcepts.map((concept) => this.conceptModelToListItem(concept))
     );
+    this.conceptList.sort((a, b) => a.order - b.order);
 
     this.setSaveButtonState();
   });
@@ -170,6 +171,7 @@ export default class CodelijstenEditController extends Controller {
   async addNewConcept() {
     const concept = this.store.createRecord('concept', {
       preflabel: '',
+      order: this.conceptList.length + 1,
       conceptSchemes: [this.dbConceptScheme],
     });
     await concept.save();
@@ -408,6 +410,19 @@ export default class CodelijstenEditController extends Controller {
     return !boolean;
   }
 
+  @action
+  updateOrderOfConcepts() {
+    const concepts = this.conceptList;
+    for (let index = 0; index < concepts.length; index++) {
+      const order = index + 1;
+      const foundConcept = this.conceptList.find(
+        (c) => c.id == concepts[index].id
+      );
+      const indexOfConcept = this.conceptList.indexOf(foundConcept);
+      this.conceptList[indexOfConcept].order = order;
+    }
+  }
+
   getExportFileName() {
     const isoDate = new Date().toISOString();
     const date = isoDate.slice(0, 10);
@@ -527,9 +542,5 @@ export default class CodelijstenEditController extends Controller {
 
   get pageHasErrors() {
     return this.hasErrors();
-  }
-
-  get conceptsSortedByOrder() {
-    return this.conceptList.sort((a, b) => a.order - b.order);
   }
 }

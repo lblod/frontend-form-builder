@@ -141,65 +141,87 @@
       </div>
     </span>
     <div>
-      <AuTable class="au-u-margin-bottom-small">
-        <:header>
-          <tr>
-            <th>{{t "table.columns.label"}}</th>
-            {{#unless this.isReadOnly}}
-              <th>{{t "table.columns.actions"}}</th>
-            {{/unless}}
-          </tr>
-        </:header>
-        <:body>
-          {{#if this.conceptList}}
-            {{#each this.conceptsSortedByOrder as |concept|}}
-              <tr>
-                {{#if this.isReadOnly}}
-                  <td class="au-u-visible-medium-up">
-                    {{concept.label}}</td>
-                {{else}}
-                  <td class="au-u-visible-medium-up">
-                    <AuInput
-                      @width="block"
-                      id={{concept.id}}
-                      value={{concept.label}}
-                      {{on "blur" (fn this.updateConceptLabel concept)}}
-                    /></td>
-                {{/if}}
-                {{#unless this.isReadOnly}}
-                  <td class="au-u-visible-medium-up">
-                    <AuButton
-                      @icon="bin"
-                      @hideText={{true}}
-                      @iconAlignment="left"
-                      @alert={{true}}
-                      @loadingMessage={{t "messages.loading.isDeleting"}}
-                      {{on "click" (fn this.temporaryDeleteConcept concept)}}
-                    >
-                      {{t "crud.delete"}}
-                    </AuButton>
-                  </td>
-                {{/unless}}
-              </tr>
-            {{/each}}
-          {{/if}}
-          {{#unless this.isReadOnly}}
+      <SortableObjects
+        @tagName={{"AuTable"}}
+        @sortableObjectList={{this.conceptList}}
+        @enableSort={{true}}
+        @useSwap={{true}}
+        @inPlace={{true}}
+        @sortEndAction={{this.updateOrderOfConcepts}}
+      >
+        <AuTable class="au-u-margin-bottom-small">
+          <:header>
             <tr>
-              <td class="au-u-visible-medium-up">
-                <AuButton
-                  @skin="secondary"
-                  @icon="plus"
-                  @iconAlignment="left"
-                  {{on "click" this.addNewConcept}}
-                >
-                  {{t "codelists.addConcept"}}
-                </AuButton>
-              </td>
-              <td></td>
+              <th>{{t "table.columns.label"}}</th>
+              {{#unless this.isReadOnly}}
+                <th>{{t "table.columns.actions"}}</th>
+              {{/unless}}
             </tr>
-          {{/unless}}
-        </:body>
-      </AuTable>
+          </:header>
+          <:body>
+            {{#if this.conceptList}}
+              {{#each this.conceptList as |concept|}}
+                <DraggableObject
+                  @content={{concept}}
+                  @tagName="tr"
+                  @isSortable={{true}}
+                  @dragHandle=".drag-icon-cell"
+                >
+                  <tr>
+                    {{#if this.isReadOnly}}
+                      <td class="au-u-visible-medium-up">
+                        {{concept.label}}</td>
+                    {{else}}
+                      <td class="drag-icon-cell">
+                        <AuIcon @icon="drag" />
+                      </td>
+                      <td class="au-u-visible-medium-up">
+                        <AuInput
+                          @width="block"
+                          id={{concept.id}}
+                          value={{concept.label}}
+                          {{on "blur" (fn this.updateConceptLabel concept)}}
+                        /></td>
+                    {{/if}}
+                    {{#unless this.isReadOnly}}
+                      <td class="au-u-visible-medium-up">
+                        <AuButton
+                          @icon="bin"
+                          @hideText={{true}}
+                          @iconAlignment="left"
+                          @alert={{true}}
+                          @loadingMessage={{t "messages.loading.isDeleting"}}
+                          {{on
+                            "click"
+                            (fn this.temporaryDeleteConcept concept)
+                          }}
+                        >
+                          {{t "crud.delete"}}
+                        </AuButton>
+                      </td>
+                    {{/unless}}
+                  </tr>
+                </DraggableObject>
+              {{/each}}
+            {{/if}}
+            {{#unless this.isReadOnly}}
+              <tr>
+                <td class="au-u-visible-medium-up">
+                  <AuButton
+                    @skin="secondary"
+                    @icon="plus"
+                    @iconAlignment="left"
+                    {{on "click" this.addNewConcept}}
+                  >
+                    {{t "codelists.addConcept"}}
+                  </AuButton>
+                </td>
+                <td></td>
+              </tr>
+            {{/unless}}
+          </:body>
+        </AuTable>
+      </SortableObjects>
     </div>
   </div>
 {{/if}}
