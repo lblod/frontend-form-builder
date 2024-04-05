@@ -173,9 +173,11 @@
                     <td
                       class="au-u-visible-medium-up column-cell-with-two-items"
                     >
-                      <div class="drag-icon-cell">
-                        <AuIcon @icon="drag" />
-                      </div>
+                      {{#unless this.isReadOnly}}
+                        <div class="drag-icon-cell">
+                          <AuIcon @icon="drag" />
+                        </div>
+                      {{/unless}}
                       <AuInput
                         @width="block"
                         id={{concept.id}}
