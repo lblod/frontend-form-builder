@@ -16,3 +16,8 @@
     padding: 1rem 1.5rem;
   }
 }
+
+.drag-icon-cell:hover {
+  scale: 1.5;
+  cursor: row-resize;
+}
