@@ -16,7 +16,7 @@ export function simpleLinter() {
       });
 
       if (errorPositions.length > 0) {
-        return errorPositions.map(pos => ({
+        return errorPositions.map((pos) => ({
           from: pos,
           to: pos + 1,
           severity: 'error',
