@@ -421,6 +421,8 @@ export default class CodelijstenEditController extends Controller {
       const indexOfConcept = this.conceptList.indexOf(foundConcept);
       this.conceptList[indexOfConcept].order = order;
     }
+
+    this.setSaveButtonState();
   }
 
   getExportFileName() {
