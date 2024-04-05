@@ -6,25 +6,25 @@ export function simpleLinter() {
     const { state } = view;
     const tree = syntaxTree(state);
     if (tree.length === state.doc.length) {
-      let pos = null;
+      const errorPositions = [];
       tree.iterate({
         enter: (n) => {
-          if (pos == null && n.type.isError) {
-            pos = n.from;
-            return false;
+          if (n.type.isError) {
+            errorPositions.push(n.from);
           }
         },
       });
 
-      if (pos != null)
-        return [
-          {
-            from: pos,
-            to: pos + 1,
-            severity: 'error',
-            message: 'syntax error',
-          },
-        ];
+      if (errorPositions.length > 0) {
+        return errorPositions.map(pos => ({
+          from: pos,
+          to: pos + 1,
+          severity: 'error',
+          message: 'syntax error',
+        }));
+      } else {
+        return [];
+      }
     }
 
     return [];
