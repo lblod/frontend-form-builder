@@ -15,7 +15,12 @@ export default class ConceptModel extends Model {
   }
 
   get orderAsNumber() {
-    return this.order ?? 0;
+    const orderAsInt = parseInt(this.order);
+    if (!isNaN(orderAsInt)) {
+      return orderAsInt;
+    }
+
+    return 0;
   }
 
   asTtlCode(conceptSchemeUri) {
