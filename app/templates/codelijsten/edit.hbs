@@ -152,7 +152,7 @@
         </:header>
         <:body>
           {{#if this.conceptList}}
-            {{#each this.conceptList as |concept|}}
+            {{#each this.conceptsSortedByOrder as |concept|}}
               <tr>
                 {{#if this.isReadOnly}}
                   <td class="au-u-visible-medium-up">

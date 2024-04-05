@@ -14,12 +14,21 @@ export default class ConceptModel extends Model {
     return this.preflabel;
   }
 
+  get orderAsNumber() {
+    const orderAsInt = parseInt(this.order);
+    if (!isNaN(orderAsInt)) {
+      return orderAsInt;
+    }
+
+    return 0;
+  }
+
   asTtlCode(conceptSchemeUri) {
     return `
       <${this.uri}>
       ${RDF('type')} ${SKOS('Concept')} ;
       ${SKOS('prefLabel')} "${this.label}" ;
-      ${QB('order')} ${this.order ?? 0} ;
+      ${QB('order')} ${this.orderAsNumber} ;
       ${SKOS('inScheme')} <${conceptSchemeUri}> .
     `;
   }
