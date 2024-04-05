@@ -436,6 +436,7 @@ export default class CodelijstenEditController extends Controller {
     return {
       id: model.id,
       label: model.label,
+      order: model.orderAsNumber,
     };
   }
 
@@ -526,5 +527,9 @@ export default class CodelijstenEditController extends Controller {
 
   get pageHasErrors() {
     return this.hasErrors();
+  }
+
+  get conceptsSortedByOrder() {
+    return this.conceptList.sort((a, b) => a.order - b.order);
   }
 }
