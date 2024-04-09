@@ -218,7 +218,7 @@ export default class CodelijstenEditController extends Controller {
 
     // soft reset of the variables as everything is saved
     this.resetStateOfErrors();
-    this.dbConcepts = [...this.conceptList];
+    this.dbConcepts = await this.dbConceptScheme.getConceptModels();
     this.conceptsToDelete = [];
 
     this.setSaveButtonState();
