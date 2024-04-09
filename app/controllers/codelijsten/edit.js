@@ -162,7 +162,7 @@ export default class CodelijstenEditController extends Controller {
       return;
     }
 
-    await this.save();
+    await this.save.perform();
     this.isSaveModalOpen = false;
     this.goToNextRoute();
   });
@@ -184,8 +184,7 @@ export default class CodelijstenEditController extends Controller {
     this.setSaveButtonState();
   }
 
-  @action
-  async save() {
+  save = restartableTask(async () => {
     if (
       this.isCodelistNameDeviating() ||
       this.isCodelistDescriptionDeviating()
@@ -222,7 +221,7 @@ export default class CodelijstenEditController extends Controller {
     this.conceptsToDelete = [];
 
     this.setSaveButtonState();
-  }
+  });
 
   async updateConcepts() {
     for (const concept of this.conceptList) {

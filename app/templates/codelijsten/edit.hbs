@@ -26,10 +26,10 @@
     <div class="saveSplitButton">
       <AuButton
         id="saveSplitButton_save"
-        @loading={{this.setup.isRunning}}
+        @loading={{(or this.setup.isRunning this.save.isRunning)}}
         @loadingMessage={{t "messages.loading.isLoading"}}
         @disabled={{this.isSaveDisabled}}
-        {{on "click" this.save}}
+        {{on "click" (perform this.save)}}
       >
         {{t "crud.save"}}
       </AuButton>
