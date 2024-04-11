@@ -6,3 +6,18 @@
   height: 100%;
   overflow-y: auto;
 }
+
+.column-cell-with-two-items {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+  div {
+    padding: 1rem 1.5rem;
+  }
+}
+
+.drag-icon-cell:hover {
+  scale: 1.5;
+  cursor: row-resize;
+}
