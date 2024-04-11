@@ -54,8 +54,16 @@ export default class CodelijstenEditController extends Controller {
     this.conceptList.pushObjects(
       this.dbConcepts.map((concept) => this.conceptModelToListItem(concept))
     );
-    this.conceptList.sort((a, b) => a.order - b.order);
 
+    if (
+      !this.isReadOnly &&
+      this.conceptList.some((concept) => !concept.order || concept.order == 0)
+    ) {
+      this.updateOrderOfConcepts();
+      await this.updateConcepts();
+    }
+
+    this.conceptList.sort((a, b) => a.order - b.order);
     this.setSaveButtonState();
   });
 
@@ -480,7 +488,7 @@ export default class CodelijstenEditController extends Controller {
   }
 
   isCodelistDescriptionDeviating() {
-    return this.dbConceptScheme.description.trim() !== this.schemeDescription;
+    return this.dbConceptScheme.description?.trim() !== this.schemeDescription;
   }
 
   isBackTheSavedVersion() {
