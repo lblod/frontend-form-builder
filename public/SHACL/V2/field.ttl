@@ -72,6 +72,7 @@ form:Field
         displayTypes:conceptSchemeSelector
         displayTypes:conceptSchemeRadioButtons
         displayTypes:conceptSchemeMultiSelector
+        displayTypes:conceptSchemeMultiSelectCheckboxes
         displayTypes:files
         displayTypes:remoteUrls
       ) ;
