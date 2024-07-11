@@ -48,7 +48,7 @@ export default class FormbuilderEditCodeController extends Controller {
     // Keeping the changes in another variable and at the end assigning
     // the formCode to the updated code
     this.formCodeUpdates = newCode;
-    if (this.ttlHasErrors()) {
+    if (this.ttlHasErrors) {
       this.consoleMessages.pushObject({
         severity: this.getConsoleSeverity(SHACL_SEVERITY_TYPE.info),
         subject: this.intl.t('messages.subjects.preview'),
@@ -105,7 +105,10 @@ export default class FormbuilderEditCodeController extends Controller {
         'text/turtle'
       );
     } catch (error) {
-      console.warn({ caught: error });
+      this.consoleMessages.pushObject({
+        severity: this.getConsoleSeverity(SHACL_SEVERITY_TYPE.error),
+        content: error,
+      });
       // This is limiting the errors thrown in the console while editing the code
       return;
     }
@@ -148,10 +151,18 @@ export default class FormbuilderEditCodeController extends Controller {
     return mapping[severity];
   }
 
-  ttlHasErrors() {
+  get ttlHasErrors() {
     return (
       this.consoleMessages.filter(
         (message) => message.severity.type == SHACL_SEVERITY_TYPE.error
+      ).length >= 1
+    );
+  }
+
+  get ttlHasWarnings() {
+    return (
+      this.consoleMessages.filter(
+        (message) => message.severity.type == SHACL_SEVERITY_TYPE.warning
       ).length >= 1
     );
   }
