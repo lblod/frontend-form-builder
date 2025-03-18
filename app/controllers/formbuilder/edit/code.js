@@ -66,14 +66,12 @@ export default class FormbuilderEditCodeController extends Controller {
           this.intl.t('messages.subjects.preview')
         );
       }
-
-      return;
     }
 
     if (this.formCodeManager.isTtlTheSameAsLatest(newCode)) {
       return;
     }
-
+    
     this.model.handleCodeChange(this.formCodeUpdates);
   });
 
@@ -105,7 +103,7 @@ export default class FormbuilderEditCodeController extends Controller {
         'text/turtle'
       );
     } catch (error) {
-      console.warn({ caught: error });
+      console.error({ caught: error });
       // This is limiting the errors thrown in the console while editing the code
       return;
     }
